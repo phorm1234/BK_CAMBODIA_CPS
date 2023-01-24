@@ -1,0 +1,89 @@
+<style type="text/css">
+html {  
+    /*font-family:monospace;*/
+	font-size:12px;
+	color:#222;
+}  
+.tbl {  
+        table-layout:fixed;  
+        border-top:0px solid #339999;  
+        border-collapse: collapse;  
+       background-color:#F2F2F2;
+        width:100%;  
+         }  
+.tbl td {  
+        border-bottom: 0px dashed #99CCCC;  
+        padding: 2px 5px;  
+        text-overflow:ellipsis;  
+        overflow:hidden;  
+        white-space:nowrap;  
+        font-size:12px;
+		color:#222;
+ }  
+ .bag_items {
+	text-align:right;
+ 	width:50px;
+ }
+</style>
+<?php 
+	if(!empty($this->arr_bag)){
+?>
+		<table width="100%" border="0"  cellpadding="1" cellspacing="0" class="tbl">
+		<tr>
+		<?php 
+			$i=0;
+			$max_cols=3;
+			foreach($this->arr_bag as $data){
+				$id_tmp=$i."_".$data['product_id'];
+				$pic_name=$data['pic_name'];
+				if($i<$max_cols){
+					?>
+					<td align='center'>
+					<table border="0" cellspacing="0" cellpadding="0" align='center'>					
+					<tr>
+						<td width='30%' align="center"><img src="/sales/img/<?php echo $pic_name;?>"></td>
+					</tr>
+					<tr>
+						<td width='50%' align='center'><?php echo $data['product_desc'];?></td>
+					</tr>
+					<tr>
+						<td width='20%' align="center">
+						
+						
+						<input type='text' size='1' value='' id='<?php echo $id_tmp;?>' class='bag_items inputkey_bag input-text-pos ui-corner-all' onkeypress="return isNumberKey(event)">
+						
+						</td>
+					</tr>
+				</table>
+					</td>
+				<?php 		
+						if($i==($max_cols-1)){
+							echo "</tr><tr>";
+							$i=0;
+						}else{
+							$i++;
+						}
+				}
+				
+			}//foreach
+		?>
+		</tr>
+		</table>
+		<?php 
+	}else{
+		?>
+		<p align='center'><span style='font-size:22px;'>DATA NOT FOUND.</span></p>
+		<?php 		
+	}
+?>
+<script type="text/javascript">
+   <!--
+   function isNumberKey(evt)
+   {
+      var charCode = (evt.which) ? evt.which : event.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+         return false;
+      return true;
+   }
+   //-->
+</script>

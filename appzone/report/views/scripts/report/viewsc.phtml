@@ -1,0 +1,98 @@
+<?php 
+echo "<table border=0 width=550 >
+    
+<tr>
+    <td colspan=10>=====================================================================</td>
+          
+</tr>
+
+<tr align=right>
+          <td width=100># CODE</td>
+          <td>BEGIN</td>
+          <td>SALE</td>
+          <td>DN</td>
+          <td>CN</td>
+          <td>TI</td>
+          <td>TO</td>
+          <td>AI</td>
+          <td>AO</td>
+          <td>BAL</td>
+</tr>          
+<tr>
+          <td colspan=10>=====================================================================</td>
+          
+</tr> ";
+
+if($this->gettrs_data2 <> ""){   // วันที่ มากกว่า 01
+    $trs_data = $this->gettrs_data2 ;
+    foreach($trs_data as $b){
+                    
+                    /*$sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];*/
+                   // $sum_onhand+=$b_onhand;
+              
+                    if($b['sl2'] == 0 and $b['dn2'] == 0 and $b['cn2'] == 0 and $b['ti2'] == 0 and $b['tto2'] == 0 and $b['ai2'] == 0 and $b['ao2'] == 0 ){
+         echo "";}else{
+                    
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $b_balance = $b_onhand+$b['sl2']+$b['dn2']+$b['cn2']+$b['ti2']+$b['tto2']+$b['ai2']+$b['ao2']; // balance set 2
+                    $sum_onhand+=$b_onhand; // รวม begin ใหม่ ( > วันที่ 01)
+                    $sum_sl+=$b['sl2'];
+                    $sum_dn+=$b['dn2'];
+                    $sum_cn+=$b['cn2'];
+                    $sum_ti+=$b['ti2'];
+                    $sum_tto+=$b['tto2'];
+                    $sum_ai+=$b['ai2'];
+                    $sum_ao+=$b['ao2'];
+                    $sum_amount_sl+=$b['amt_sl2'];
+                    $sum_amount_dn+=$b['amt_dn2'];
+                    $sum_amount_cn+=$b['amt_cn2'];
+                    $sum_amount_ti+=$b['amt_ti2'];
+                    $sum_amount_tto+=$b['amt_tto2'];
+                    $sum_amount_ai+=$b['amt_ai2'];
+                    $sum_amount_ao+=$b['amt_ao2'];
+                    $sum_balance+=$b_balance; // รวม balance ใหม่
+                    
+                    $sum_amt_begin += $b_onhand*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_balance*$b['price'];
+                 
+         
+                    
+                    echo "<tr>
+                    <td>".$i++.". ".$b['product_id']."</td>
+                    <td colspan=9>".substr($b['name_product'], 0, 45)."</td>
+                    </tr>
+                    <tr>
+                    <td></td>
+                    <td align='right'>".$b_onhand."</td>      
+                    <td align='right'>".abs($b['sl2'])."</td>
+                    <td align='right'>".abs($b['dn2'])."</td>
+                    <td align='right'>".abs($b['cn2'])."</td>
+                    <td align='right'>".abs($b['ti2'])."</td>
+                    <td align='right'>".abs($b['tto2'])."</td>
+                    <td align='right'>".abs($b['ai2'])."</td>
+                    <td align='right'>".abs($b['ao2'])."</td>
+                    <td align='right'>".$b_balance."</td>
+                 </tr>"; 
+         }
+           } //end foreach
+        
+        echo"</table>";  
+}
+?>
+
+        
+  

@@ -1,0 +1,71 @@
+/* CSS Document */
+
+html,body 
+{
+	height:100%;
+	margin-bottom:-40px;
+}
+.container-middle
+{
+	display:table;
+	overflow:hidden;
+	margin:0px auto;
+	height:100%;
+}
+.content-middle
+{
+	display:table-cell;
+	vertical-align: middle;
+}
+.middle
+{
+	height:auto;
+	padding:20px;
+	text-align:center;
+	background-color:#eee;
+	border: 1px solid #ddd;
+  	-webkit-border-radius: 6px;
+      -moz-border-radius: 6px;
+              border-radius: 6px;
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.middle img
+{
+	margin-bottom:10px;
+}
+.middle-index button
+{
+	float:left;
+	clear:both;
+	padding:10px;
+	margin:10px;
+	width:150px;
+	background-color:#fff;
+	border: 1px solid #ddd;
+  	-webkit-border-radius: 6px;
+      -moz-border-radius: 6px;
+              border-radius: 6px;
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.middle-index button lebel
+{
+	font-size:16px;
+	margin-left:10px;
+}
+.middle-index button:hover
+{
+	text-decoration:none;
+	background-color:#ddd;
+}
+.text-center
+{
+	text-align:center;
+}
+.on-right{
+	float:right;
+	margin-right:10px;
+}

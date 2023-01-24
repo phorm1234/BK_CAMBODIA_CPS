@@ -1,0 +1,45 @@
+<table width="100%" border="0"  cellpadding="3" cellspacing="0" bgcolor="#cccccc">
+<tr bgcolor="#FFE3D1">
+	<td width="20%" align="right">ยอดซื้อ Amout =</td><td width="15%"><?php echo number_format($this->arr_amt[0]['sum_amt'],2,'.',',')?>&nbsp;บาท</td>
+	<td width="15%" align="right">ยอดซื้อ Net = </td><td><?php echo number_format($this->arr_amt[0]['sum_net_amt'],2,'.',',')?>&nbsp;บาท</td>
+</tr>
+</table>
+<table width="100%" border="0"  cellpadding="0" cellspacing="1" bgcolor="#cccccc">
+<tr bgcolor="#DCE8FF">
+	<td align ="center">#</td>
+	<td align ="center">เลขที่บิล</td>
+	<td align ="center">จุดขาย</td>
+	<td align ="center">สถานะ</td>
+	<td align ="center">คะแนน</td>
+	<td align ="center">เวลา update</td>	
+</tr>
+<?php
+	$i=0;
+	foreach($this->arr_member as $data){
+		($i%2==0)?$bg_color="#f2f2f2":$bg_color="#e7e7e7";
+			$i++;
+		?>
+		<tr bgcolor="<?php echo $bg_color;?>">
+			<td align ="center"><?php echo $i;?></td>
+			<td align ="center"><?php echo $data['doc_no'];?></td>
+			<td align ="center"><?php echo $data['shop'];?></td>
+			<td align ="center"><?php echo '';?></td>	
+			<td align ="center"><?php echo $data['point'];?></td>		
+			<td align ="center"><?php echo $data['request_time'];?></td>			
+		</tr>
+		<?php 	
+	} 
+	if($i==0){
+		?>
+		<tr bgcolor="#FFFFFF">
+			<td align ="center">&nbsp;</td>
+			<td align ="center">&nbsp;</td>
+			<td align ="center">&nbsp;</td>
+			<td align ="center">&nbsp;</td>	
+			<td align ="center">&nbsp;</td>		
+			<td align ="center">&nbsp;</td>			
+		</tr>
+		<?php 
+	}
+?>
+</table>

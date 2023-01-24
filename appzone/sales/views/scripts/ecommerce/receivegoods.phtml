@@ -1,0 +1,182 @@
+<style>
+		/** Start: to style navigation tab **/
+		#tabs .ui-widget-header{
+		   position: relative;
+			padding: 0;
+			background: #FFF !important; 
+			
+		}
+		 
+		#tabs.ui-state-default, .ui-widget-content .ui-state-default { 
+		    /*box-shadow:-1px 1px 1px rgba(0,0,0.15,0.15);*/
+		    background:#A0CFEC; 
+		    color:#000000 !important;
+		    font-size:20px;
+		}
+		 
+		#tabs .ui-tabs-nav li {
+		    float: left;
+		    list-style-type: none;
+		    background: #7BCCB5;			   
+		}
+		
+		.ui-tabs-nav li.ui-tabs-selected a, .ui-tabs-nav li.ui-tabs-selected a:hover { 				
+			background:#B9E7CF !important; 
+			border-bottom:0px !important;
+			color: #666666; 
+			font-weight:bold;
+		} 		
+		
+		/** End: to style navigation tab **/
+		.input_receive{
+	   		width:250px;
+	   		height:40px;
+	   		border:1px solid#e4e4e4;
+	   		background-color:#FFFFFF;
+	   }
+	   
+	   	.input_receive_active{
+	   		width:250px;
+	   		height:40px;
+	   		border:2px solid#F2BB66;
+	   		background-color:#F5F5F5;
+	   }
+	</style>
+
+<?php 	
+	$this->doc_date="2017-02-08";
+	$arr_date_show=explode("-", $this->doc_date);
+	$date_show=$arr_date_show[2]."/".$arr_date_show[1]."/".$arr_date_show[0];
+?>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FEFCFF">
+<tr style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+<td valign="TOP">
+	<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+		<tr bgcolor="#B9E7CF" height="40">
+			<td>
+			<img src="http://localhost/sales/img/icon_bag_32x32.png" align="absmiddle"/>
+			&nbsp;<span style='font-size:20px;color:#454545;'>ลูกค้ารับสินค้า(Order Receipt)</span>		
+			</td>
+			<td align="right"><span style='font-size:24px;color:#454545;'>วันที่เอกสาร :</span> <span style='font-size:23px;color:#000000;'><?php echo $this->doc_date_show;?>&nbsp;</span></td>
+		</tr>
+	</table>
+	
+	
+	<div id="tabs" .nav>
+    <ul .nav-tabs>
+        <li><a href="#tab-1">ลูกค้ารับสินค้าเอง</a></li>
+        <li><a href="#tab-2">รับสินค้าแทน</a></li>       
+    </ul>
+    <div id="tab-1">
+       <table width="65%" align="center" border="0" cellpadding="2" cellspacing="2"> 
+    				 	  <tr>	
+						  <td colspan="3" align="left">
+						  		<span style="font-size:26px;">บันทึกเลขที่รับสินค้า</span>
+						  		
+						  </td>							
+						</tr>
+    				 	  <tr>	
+						  <td colspan="3" align="left">
+						  		<input type="text" size="30" id="cst_data" name="cst_data" class="input_receive ui-corner-all"></input>
+						  </td>							
+						</tr>
+						 <tr>	
+						  <td width="45%" align="center">
+						  		<br/>
+						  		<a href="#" name="bws_cnproduct" id="btn_cst_submit" class='btnGreenClean'>บันทึกรับสินค้า</a>
+						  </td>
+							<td width="15%">
+								&nbsp;
+							</td>		
+							<td width="">&nbsp;</td>
+						</tr>
+					</table>
+    </div>
+    <div id="tab-2">
+    
+    
+    <table width="80%" align="center" border="0" cellpadding="2" cellspacing="2"> 
+    <tr>
+    	<td width="50%" valign="TOP">    	
+    		  <table width="98%" align="center" border="0" cellpadding="2" cellspacing="2"> 
+	    				 	 <tr>	
+								  <td align="Left" width="73%">
+								  		<span style="font-size:26px;">รหัสบัตรประชาชน</span>
+								  </td>	
+								  <td>&nbsp;</td>	
+							</tr>
+	    				 	<tr>	
+							  <td align="left">
+							  		<input type="text" size="30" id="cst_idcard" name="cst_idcard" class="input_receive ui-corner-all"></input>
+							  </td>	
+							  <td><span><a href="#" name="bws_orddocno" id="bws_orddocno" class='btnBwsIdCard'></a></span></td>	
+							</tr>
+						
+    				 	  <tr>	
+						  <td align="Left">
+						  		<span style="font-size:26px;">บันทึกเลขที่รับสินค้า</span>
+						  </td>	
+						   <td>&nbsp;</td>							
+						</tr>
+    				 	<tr>	
+						  <td colspan="2" align="Left">
+						  		<input type="text" size="30" id="cst_data2" name="cst_data2" class="input_receive ui-corner-all"></input>
+						  </td>							
+						</tr>
+					</table>    		
+    	</td>
+    	<td width="50%">
+    		  <table width="98%" align="center" border="0" cellpadding="2" cellspacing="2"> 
+    		  <tr>
+    		 	 <td align="center"><img src="/sales/img/camera/icon_webcam_32x32.png" id="webcam"></td>	
+    		  </tr>
+    		   <tr>
+    		 	 <td>
+    		 	 	<div id="show_saved_img" style="width:350px;height:250px;border:1pt solid#CCCCCC;"></div>
+    		 	 </td>
+    		  </tr>
+    		  </table>
+    	</td>
+    </tr>
+      <tr>	
+      	  <td colspan="2">
+      	  	<table width="100%">
+      	  		<tr>
+      	  			<td width="40%">&nbsp;</td>
+      	  			  <td>
+					  		<a href="#" name="bws_cnproduct" id="btn_cst_submit2" class='btnGreenClean'>บันทึกการรับสินค้า</a>
+					  </td>
+      	  		</tr>
+      	  	</table>
+      	  </td>
+		</tr>
+    </table>
+    
+      
+    </div>  
+</div>
+
+
+<div id="divId" title="Dialog Title">
+    <iframe id="modalIframeId" width="100%" height="100%"
+    marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
+    title="Dialog Title">Your browser does not suppr</iframe>
+</div>
+
+	
+	
+	</td>	
+	</tr>	
+</table>
+
+
+<input type="hidden" id="cashier_id" value="<?php echo $this->SESSION_EMPLOYEE_ID;?>"></input>
+</td>
+</tr>
+
+</table>
+<input type="hidden" id="csh_saleman_id" name="csh_saleman_id">
+<input type="hidden" id="doc_date" value="<?php echo $this->doc_date;?>">
+<input type="hidden" id="doc_status" value="">
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+<script type="text/javascript" src="/sales/js/ecommerce/receivegoods.js"></script>

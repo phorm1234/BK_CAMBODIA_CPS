@@ -1,0 +1,118 @@
+<?php 
+$date=$this->date;
+$arr_doc_no=$this->arr_doc_no;
+$doc_no=$this->doc_no;
+/*echo "<pre>";
+print_r($arr_doc_no);
+echo "</pre>";*/
+?>
+<script>
+$(document).ready( function() {
+	viewiq("p");
+	$("#inv").focus();
+});
+function process(event,p){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		if(p=="check_docno"){
+			$("#doc_remark").focus();
+		}
+		if(p=="check_doc_remark"){
+			$("#product_id").focus();
+		}
+
+		if(p=="check_product"){
+			var product_id=$("#product_id").val();
+			chk_product(product_id);
+		}
+
+		if(p=="insert_tdiary_iq"){
+			insert_tdiary_iq();
+		}
+		
+	}
+}
+
+jQuery(document).bind('keydown', 'f8',
+function (evt){
+	search_product();
+});
+
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	tempor2diaryiq();
+});
+
+jQuery(document).bind('keydown', 'f4',
+function (evt){
+	iq_cancel();
+});
+
+</script>
+<div id="dialog_type_product" title="Order Type"></div>
+<div id="dialog_product" title="Product"></div>
+<form id="frm_iq">
+<table width="100%" border="0" cellpadding="0" cellspacing="3" background="/stock/img/bg_header.gif">
+  <tr>
+  	<td colspan="6" height="5"></td>
+  </tr>
+    <tr>
+    <td align="right" class="servBodL_right"><b>Doc. Type : </b></td>
+    <td width="5" colspan="4">
+    <select id="doc_status" name="doc_status" class="NFText">
+    <?php 
+    foreach($arr_doc_no as $val){
+      switch($val[status_no]){
+				case "68": //สินค้าส่งเกินจำนวนจากInvoice
+				$val[description]="Products shipped in excess from invoice.";
+				break;
+				default: //default
+				$val[description]=$val[description];
+			}
+    	echo "<option value='$val[status_no]'>$val[status_no] - $val[description]</option>";
+    }
+    ?>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="15%" align="right" class="servBodL_right"><b>Order Type : </b></td>
+    <td width="5"><input type="text" name="type_dec" id="type_dec" size="13" value="Normal Product" class="NFText_hidden" disabled="disabled" onkeypress=""></td>
+    <td width="2%"></td>
+    <td width="10%" align="right" class="servBodL_right"><b>Date : </b></td>
+    <td width="3%"><input type="text" name="date" id="date" value="<?php echo $date;?>" size="13" disabled="disabled" class="NFText_hidden" onkeypress=""></td>
+ 	<td>&nbsp;</td> 
+  </tr>
+  <tr>
+    <td align="right" class="servBodL_right"><b>Doc. No. :</b></td>
+    <td colspan="5">
+	    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+	    	<tr>
+	    		<td width="21"><input type="text" name="inv" id="inv" size="25 " onkeypress="return process(event,'check_docno')" class="NFText" /></td>
+	    		<td></td>
+	    	</tr>
+	    </table>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" class="servBodL_right"><b>Note :</b></td>
+    <td colspan="5"><input type="text" name="doc_remark" id="doc_remark" size="50" onkeypress="return process(event,'check_doc_remark')" class="NFText" /></td>
+  </tr>
+  <tr>
+    <td width="15%" align="right" class="servBodL_right"><b>Product ID : </b></td>
+    <td width="5"><input type="text" name="product_id" id="product_id" size="13" onkeypress="return process(event,'check_product')" class="NFText" onkeypress=""></td>
+    <td width="2%"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_product();"><span class="ui-icon ui-icon-search"></span> (F8)</a></td>
+    <td width="10%" align="right" class="servBodL_right"><b>Quantity : </b></td>
+    <td width="3%" colspan="2"><input type="text" name="qty" id="qty" size="13" class="NFText" onkeypress="return process(event,'insert_tdiary_iq')"></td>
+  </tr>
+  <tr>
+	 <td colspan="6" height="5"></td>
+  </tr>
+</table>
+</form>
+<table width="100%">
+	<tr>
+		<td><div id="viewproductiq"></div></td>
+	</tr>
+</table>

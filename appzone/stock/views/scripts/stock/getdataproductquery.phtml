@@ -1,0 +1,36 @@
+<?php
+$arr_data=$this->arr_data;
+$page=$this->page;
+$total=$this->total;
+if(empty($arr_data)){
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+}else{
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+	$i=1;
+	foreach($arr_data as $val){
+		$price=number_format($val['price'], 2, '.', ',');
+		$qty=number_format($val['quantity'], 0, '.', ',');
+		$data['rows'][] = 
+		array(
+			'id' => $val['id'],
+			'cell' => 
+					array(
+							$val['doc_date'], 
+							$val['doc_no'], 
+							$val['product_id'], 
+							$val['product_name'], 
+							$price,
+							$qty
+						)
+		);
+		$i++;
+	}
+}
+echo json_encode($data);
+?>

@@ -1,0 +1,117 @@
+ALTER TABLE `member_register` ADD `application_id` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `doc_date` 
+
+ALTER TABLE `member_register` ADD INDEX ( `application_id` ) 
+
+CREATE TABLE IF NOT EXISTS `member_history_offline` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` varchar(50) NOT NULL,
+  `id_card` varchar(30) NOT NULL,
+  `shop` varchar(10) NOT NULL,
+  `member_no` varchar(30) NOT NULL,
+  `apply_date` date NOT NULL,
+  `expire_date` date NOT NULL,
+  `status_active` varchar(1) NOT NULL,
+  `status` int(11) NOT NULL,
+  `ops` varchar(10) NOT NULL,
+  `age_card` decimal(12,2) NOT NULL,
+  `time_up` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `customer_id_new_2` (`member_no`),
+  KEY `member_no` (`member_no`),
+  KEY `apply_date` (`apply_date`),
+  KEY `expire_date` (`expire_date`),
+  KEY `status_active` (`status_active`),
+  KEY `ops` (`ops`),
+  KEY `id_card` (`id_card`),
+  KEY `customer_id` (`customer_id`),
+  KEY `shop` (`shop`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=14 ;
+
+CREATE TABLE IF NOT EXISTS `member_register_offline` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` varchar(50) NOT NULL,
+  `mobile_no` varchar(30) NOT NULL DEFAULT '0',
+  `id_card` varchar(20) NOT NULL DEFAULT '',
+  `prefix` varchar(30) NOT NULL,
+  `name` varchar(50) NOT NULL DEFAULT '0',
+  `surname` varchar(60) NOT NULL DEFAULT '0',
+  `birthday` date NOT NULL DEFAULT '0000-00-00',
+  `shop` varchar(10) NOT NULL DEFAULT '',
+  `application_id` varchar(50) NOT NULL,
+  `send_company` varchar(100) NOT NULL,
+  `send_address` varchar(100) NOT NULL,
+  `send_mu` int(11) NOT NULL,
+  `send_home_name` varchar(100) NOT NULL,
+  `send_soi` varchar(100) NOT NULL,
+  `send_road` varchar(60) NOT NULL,
+  `send_tambon_id` varchar(10) NOT NULL,
+  `send_tambon_name` varchar(50) NOT NULL,
+  `send_amphur_id` varchar(10) NOT NULL,
+  `send_amphur_name` varchar(50) NOT NULL,
+  `send_province_id` varchar(10) NOT NULL,
+  `send_province_name` varchar(50) NOT NULL,
+  `send_postcode` int(11) NOT NULL,
+  `send_tel` varchar(30) NOT NULL,
+  `send_mobile` varchar(30) NOT NULL,
+  `send_fax` varchar(30) NOT NULL,
+  `send_remark` varchar(200) NOT NULL,
+  `time_up` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop` (`shop`),
+  KEY `id_card` (`id_card`),
+  KEY `birthday` (`birthday`),
+  KEY `mobile_no` (`mobile_no`),
+  KEY `send_tambon_id` (`send_tambon_id`),
+  KEY `send_amphur_id` (`send_amphur_id`),
+  KEY `send_province_id` (`send_province_id`),
+  KEY `application_id` (`application_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=12 ;
+
+
+
+CREATE TABLE IF NOT EXISTS `memccs_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(30) NOT NULL,
+  `id_card` varchar(50) NOT NULL,
+  `member_no` varchar(50) NOT NULL,
+  `status_readcard` varchar(10) NOT NULL,
+  `otpcode` varchar(15) NOT NULL,
+  `val1` varchar(50) NOT NULL,
+  `val2` varchar(50) NOT NULL,
+  `reg_date` date NOT NULL,
+  `reg_time` time NOT NULL,
+  `time_up` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ip` (`ip`),
+  KEY `id_card` (`id_card`),
+  KEY `reg_date` (`reg_date`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=60 ;
+
+
+
+
+CREATE TABLE IF NOT EXISTS `memccs_bill` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `doc_no` varchar(50) NOT NULL,
+  `doc_date` date NOT NULL,
+  `doc_time` time NOT NULL,
+  `flag` varchar(5) NOT NULL,
+  `status_readcard` varchar(10) NOT NULL,
+  `otpcode` varchar(15) NOT NULL,
+  `id_card` varchar(50) NOT NULL,
+  `member_no` varchar(50) NOT NULL,
+  `val1` varchar(10) NOT NULL,
+  `val2` varchar(10) NOT NULL,
+  `time_up` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `doc_no_2` (`doc_no`),
+  KEY `doc_no` (`doc_no`),
+  KEY `doc_date` (`doc_date`),
+  KEY `status_readcard` (`status_readcard`),
+  KEY `otpcode` (`otpcode`),
+  KEY `id_card` (`id_card`),
+  KEY `member_no` (`member_no`),
+  KEY `val1` (`val1`),
+  KEY `val2` (`val2`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
+

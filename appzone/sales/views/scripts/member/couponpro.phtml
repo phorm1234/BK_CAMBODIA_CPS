@@ -1,0 +1,109 @@
+      <style type="text/css">  
+			.tableNavCouponPro
+				{
+					width:100%;
+					background:#333;
+				}
+			.tableNavCouponPro ul
+				{
+					float:right;
+					width:100%;
+					margin:0;
+					padding:0;
+					border:1px solid #C9C9C9;
+				}
+         
+          .tableNavCouponPro ul li{
+          		cursor:pointer;
+					list-style-type:none;
+					line-height:40px;
+					font-family:"PSLKittithadaBold","Garuda","Tahoma", "Geneva", "Arial", sans-serif;
+					font-weight: normal;
+					font-size:22px;/*16*/
+					text-decoration:none;
+					color:#303030;
+					padding-left:1em;
+					border-bottom:1px solid  #78777C;
+					text-shadow: 0px 1px 0px #dddddd;
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(     #D4D7E0,     #B0B0B0);;
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.active {
+            		cursor:pointer;
+          			list-style-type:none;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold", "Garuda","Helvetica World","Tahoma", "Geneva", "Arial", sans-serif;
+					font-weight:normal;
+					font-size:25px;
+					text-decoration:none;
+					color:#008080;
+					padding-left:1em;
+					border-bottom:1px solid  #000;
+					text-shadow: 0px 1px 0px #dddddd;
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#F5F5DC;
+					background:  -moz-linear-gradient(#9DDCCF,#265541);
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #D4D7E0), color-stop(1, #F5F5DC));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;
+					-webkit-user-select:none;
+          }
+          ul li.nokeyboard {
+            color: #999;
+            background:#0000ff;
+          }
+        </style>
+    <div class="tableNavCouponPro">
+    	<ul>
+	        <?php 
+	        
+    			if(!empty($this->arr_promo)){ 
+    				
+    				//*WR17082016 for support lucky draw
+    				$card_type='';
+    				if($this->mem_card_info!=''){
+    					$arr_cinfo=explode('#',$this->mem_card_info);
+    					$card_type=strtoupper($arr_cinfo[0]);
+    					switch ($card_type) {
+    						case 'WHITE':$card_type='OPS';	break;
+    						case 'GOLD':$card_type='OPT';	break;
+    						case 'PLATINUM':$card_type='OPP';	break;
+    						default:$card_type='';break;
+    					}
+    				}
+    				
+		        	$i=1;	        
+		        	foreach($this->arr_promo as $data){
+		  				$id_tmp="n_".$i;
+		  				$rows_json=json_encode($data,JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+		  				
+		  				//echo $card_type."==".$data['key_input'];
+		  				if($data['key_input']=='OPS' || $data['key_input']=='OPT' || $data['key_input']=='OPP'){
+		  					if($card_type!='' && $card_type!=$data['key_input']){
+		  						continue;
+		  					}
+		  					
+		  					
+		  					
+		  				}		  				
+			  			echo "<li id='$id_tmp' name='$id_tmp'  idpromo='".$rows_json."'>".$data['promo_code']."&nbsp;&nbsp;".$data['promo_des']."</li>";  
+		  				$i++;
+		  			}//foreach
+    			}else{
+		    			$i=1;
+			  			$str_data="";
+		        		$id_tmp="n_".$i;
+		        		$id_tmp_name='';
+				  		echo "<li id='$id_tmp' pdt_desc='$id_tmp_name'  class='btn_sel' idp='".$str_data."'>PROMOTION NOT FOUND!!</li>"; 	
+		    			//echo "<p align='center'>ไม่พบรายการโปรโมชั่น</p>";
+		    	}
+	        ?>
+	    </ul>
+     </div>

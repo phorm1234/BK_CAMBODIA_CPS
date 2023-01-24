@@ -1,0 +1,59 @@
+<div style="background-color:#ffffff;width:100%;height: 100%;"></div>
+<div id="dlgTimeOpenBill"></div>
+<script type="text/javascript">
+	$(function(){
+		var dialogOpts_timeOpenBill = {
+				autoOpen:true,
+				width:'35%',		
+				height:280,	
+				modal:true,
+				resizable:true,
+				position:['center','center'],
+				title:"ข้อความแจ้งเตือน",
+				closeOnEscape:true,
+				open: function(){ 
+						$(this).parent().children().children('.ui-dialog-titlebar-close').hide();
+						$(this).parents(".ui-dialog:first").css({"padding":"3px","margin":"0 0 0 0","border-color":"#C6D5DC"});
+						$(this).dialog('widget')
+				            .find('.ui-dialog-titlebar')
+				            .removeClass('ui-corner-all')
+				            .addClass('ui-corner-top');
+					    $(this).parents(".ui-dialog:first").find(".ui-dialog-content").css({"background-color":"#ebebeb",
+						    																			"font-size":"23px","color":"#000000","text-align":"center",
+						    																			"padding":"5 0 0 0"});	
+					    $(this).dialog("widget").find(".ui-dialog-buttonpane")
+	                      .css({"padding":".1em .1em .1em 0","margin":"0 0 0 0","background-color":"#C7D9DC"} )
+						    // button style		
+						$(this).dialog("widget").find("button")
+					      .css({"padding":"0 .1em 0 .1em","margin":"0 .1em 0 0"});
+						
+						$("#dlgTimeOpenBill").html("<p>IP ของท่านไม่อยู่ในระบบ ไม่สามารถเปิดบิลได้</p>");						
+				},				
+				close: function() {
+					var sel_closeday=$("#sel_closeday_alternate").val();
+					$('#sel_closeday').datepicker('hide');
+
+					//close iframe
+			        var frameWindow = document.parentWindow || document.defaultView;
+			        var outerDiv = $(frameWindow.frameElement.parentNode.parentNode);
+			        var curWindow = outerDiv.find(".window_top").contents().find("a.window_close");
+			        $(curWindow).closest('div.window').hide();
+					var icons_id=curWindow.attr('href');
+					$(icons_id,window.parent.document).hide('fast');
+					//refresh parent
+					window.parent.location.href = window.parent.location.href;
+			        return false;
+				 },
+				 buttons: {
+							"ตกลง":function(){ 				
+									$(this).dialog("close");
+									return false;
+								}
+						 }
+			};			
+			
+			$('#dlgTimeOpenBill').dialog('destroy');
+			$('#dlgTimeOpenBill').dialog(dialogOpts_timeOpenBill);			
+			$('#dlgTimeOpenBill').dialog('open');
+	});
+</script>

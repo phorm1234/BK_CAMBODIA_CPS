@@ -1,0 +1,49 @@
+<?php 
+$product_id=$this->product_id;
+?>
+<center>
+<table width="10%">
+	<tr>
+		<td><table id="flex1" style="display:none"></table></td>
+	</tr>
+</table>
+</center>
+<script type="text/javascript">
+var pWidth=(screen.width-(screen.width*(20/100)))-10;
+var pWidth=(screen.width-(screen.width*(2/100)))-10;
+var pWidth=(screen.width-(screen.width*(3/100)))-10;
+var txt="FIX STOCK";
+$("#flex1").flexigrid({
+	url: 'getdataproductfixstock?product_id=<?php echo $product_id;?>',
+	dataType: 'json',
+	colModel : [
+		{display: 'PRODUCT', name : 'product_id', width : 50, sortable : true, align: 'center'},
+		{display: 'NORMAL FIX', name : 'quantity_normal', width : 100, sortable : true, align: 'center'},
+		{display: 'PROMO1 FIX', name : 'quantity_promo1', width : 140, sortable : true, align: 'left'},
+		{display: 'START', name : 'start_date1', width : 80, sortable : true, align: 'center'},
+		{display: 'END', name : 'end_date1', width : 80, sortable : true, align: 'center'},
+		{display: 'PROMO2 FIX', name : 'quantity_promo2', width : 140, sortable : false, align: 'center'},
+		{display: 'START', name : 'start_date2', width : 80, sortable : true, align: 'center'},
+		{display: 'END', name : 'end_date2', width : 80, sortable : true, align: 'center'},
+		{display: 'PROMO3 FIX', name : 'quantity_promo3', width : 140, sortable : false, align: 'center'},
+		{display: 'START', name : 'start_date3', width : 80, sortable : true, align: 'center'},
+		{display: 'END', name : 'end_date3', width : 80	, sortable : true, align: 'center'}
+		],
+	sortname: "product_id",
+	sortorder: "asc",
+	usepager: true,
+	title: txt,
+	useRp: true,
+	rp: 30,
+	showTableToggleBtn: true,
+	width: pWidth,
+	onSubmit: addFormData,
+	height: 300
+});
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+</script>

@@ -1,0 +1,27 @@
+<?php 
+$doc_no=$this->jsondata;
+$doc_no=json_decode($doc_no,true);
+if($doc_no=="n"){
+	echo $doc_no;
+}else{
+	if(!empty($doc_no)){
+		echo "
+		<table width='100%' border='0'>
+			<tr>
+				<td align='center'>
+				<select id='doc_no_old'>";
+					foreach($doc_no as $val_doc_no){
+						echo "<option value='".$val_doc_no['doc_no']."'>".$val_doc_no['doc_no']."</option>";
+					}
+				echo "
+				</select>
+				</td>
+			</tr>
+		</table>
+		";
+	}else{
+		echo "ไม่พบเลขที่เอกสาร";
+	}
+}
+
+?>

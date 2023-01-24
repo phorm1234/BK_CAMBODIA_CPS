@@ -1,0 +1,51 @@
+<script>
+$(document).ready( function() {
+	$("#floor_no").focus();
+});
+function process(event,chk){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		if(chk=="floor_name"){
+			$("#floor_desc").focus();
+		}
+
+		if(chk=="floor_desc"){
+			save_floor();
+		}
+	}
+	event.stopPropagation();
+}
+</script>
+<?php
+$checkeditfloor=$this->checkeditfloor;
+$shelf_no=$this->shelf_no;
+$floor=$this->floor;
+$seq=count($floor)+1;
+$seq="00".$seq;
+$seq=substr($seq,-2);
+if($checkeditfloor=="n"){
+	$floor_no_up=$checkeditfloor;
+}else{
+	$floor_no_up=$checkeditfloor[0]['floor_no'];
+}
+?>
+<form name="frm_floor" id="frm_floor">
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+ <tr>
+	<td width="25%" class="sub_text_head_form">รหัส Shelf : </td>
+	<td width="80%"><?php echo $shelf_no;?></td>
+  </tr>
+  <tr>
+	<td class="sub_text_head_form">รหัสชั้นวางสินค้า : </td>
+	<td><span class="sub_text_head_form"><input name="floor_no" id="floor_no" type="text" class="input" value="<?php if(!empty($checkeditfloor[0]['floor_no'])){echo $checkeditfloor[0]['floor_no'];}else{echo $shelf_no."-".$seq;}?>" onKeyPress="return process(event,'floor_name');"></span></td>
+  </tr>
+  <tr>
+	<td valign="top" class="sub_text_head_form">รายละเอียด : </td>
+	<td>
+	<input name="floor_desc" id="floor_desc" type="text" class="input" value="<?php if(!empty($checkeditfloor[0]['desc'])){echo $checkeditfloor[0]['desc'];}?>" onKeyPress="return process(event,'floor_desc');" size="50">
+	</td>
+  </tr>
+</table>
+<input type="hidden" name="shelf_no" id="shelf_no" value="<?php echo $shelf_no;?>">
+<input type="hidden" name="floor_no_up" id="floor_no_up" value="<?php echo $floor_no_up;?>">
+<input type="hidden" name="chk_func_save" id="chk_func_save" value="floor">

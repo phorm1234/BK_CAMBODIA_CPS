@@ -1,0 +1,248 @@
+<?php
+@header("Content-type:text/html; charset=utf=8");
+$content=$this->content;
+$sum=$this->data_sum;
+$doc_remark=$this->doc_remark;
+$status_no=$this->status_no;
+$remark=iconv('UTF-8','cp874',$doc_remark);
+$flag=$this->flag;
+if($flag=="C"){
+	$flag="<ยกเลิก>";
+	$flag=iconv('UTF-8','cp874',$flag);
+}
+//print_r($sum);
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->AddPage();
+$pdf->SetAutoPageBreak("off",1);
+
+$startY=0;
+$startX=0;//4
+$pdf->SetY($startY);
+$pdf->SetX($startX);	
+$line="---------------------------------------------------------------------------------------------------------------------";
+$title1=iconv('UTF-8','cp874',$this->company_name);
+$shop=$this->shop;
+$day=date("d");
+$month=date("m");
+$year=date("Y");
+$time=date("H:i:s");
+$date=date("d/m/Y");
+
+$startY=$startY+1;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Image('/var/www/pos/htdocs/stock/img/logo_op.jpg',8,0,0,0);
+
+$startY=$startY+10;
+/*$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$title1",0,0,'L',0);*/
+
+$line2_col_1=iconv('UTF-8','cp874',"ใบคำขอโอนสินค้าออก");
+//$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line2_col_1",0,0,'L',0);
+
+$line3_col_1=iconv('UTF-8','cp874',"เลขที่เอกสาร");
+$line3_col_2=iconv('UTF-8','cp874',"วันที่เอกสาร");
+$doc_dt=date('d/m/Y', strtotime($this->doc_dt));
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line3_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(28,1,"$this->doc_no",0,0,'L',0);
+$pdf->Cell(11,1,$line3_col_2,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,$doc_dt,0,0,'L',0);
+
+$line4_col_1=iconv('UTF-8','cp874',"เวลาเอกสาร");
+$line4_col_2=iconv('UTF-8','cp874',"วันที่พิมพ์");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line4_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(28,1,$time,0,0,'L',0);
+$pdf->Cell(11,1,$line4_col_2,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,$date,0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"Remark",0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(40,1,$remark,0,0,'L',0);
+$pdf->Cell(50,1,$flag,0,0,'L',0);
+
+$head_desc_doc_no=iconv('UTF-8','cp874',"สถานะ");
+$desc_doc_no=iconv('UTF-8','cp874',$status_no);
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$head_desc_doc_no,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(50,1,$desc_doc_no,0,0,'L',0);
+
+$line6_col_1=iconv('UTF-8','cp874',"อ้างถึงเอกสาร");
+$line6_col_2=iconv('UTF-8','cp874',"User");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line6_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(28,1,'',0,0,'L',0);
+$pdf->Cell(11,1,$line6_col_2,0,0,'R',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,$this->user,0,0,'L',0);
+
+$line7_col_1=iconv('UTF-8','cp874',"รหัสจุดขาย");
+$shop_name=iconv('UTF-8','cp874',$this->branch_name);
+$shop_no=$shop."(".$shop_name.")";
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line7_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(50,1,$shop_no,0,0,'L',0);
+
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(1,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'L',0);
+
+$i=0;
+$count_page=null;
+foreach($content as $val){
+	$qty=number_format($val['quantity']);
+	$price=number_format($val['price'],2);
+	$amount=number_format($val['amount'],2);
+	$startY=$startY+4;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(1,1,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','',10);
+	$pdf->Cell(5,1,number_format($qty, 0, '.', ','),0,0,'L',0);
+	$pdf->Cell(14,1,$val['product_id'],0,0,'L',0);
+	$pdf->Cell(18,1,iconv('UTF-8','cp874',substr($val['name_product'],0,15)),0,0,'L',0);
+	$pdf->Cell(15,1,$price,0,0,'R',0);
+	$pdf->Cell(13,1,$amount,0,0,'R',0);
+	$i++;
+	$count_page=$count_page+1;
+	if($count_page==55){
+		$pdf->AddPage();
+		$pdf->SetAutoPageBreak("off",1);
+		$startY=6;
+		$startX=0;//4
+		$pdf->SetY($startY);
+		$pdf->SetX($startX);	
+		$count_page=0;
+	}
+}
+
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(1,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'L',0);
+
+$line_sum=iconv('UTF-8','cp874',"จำนวนทั้งหมด : ".$i." รายการ");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(5,1,number_format($sum[0]['quantity'], 0, '.', ','),0,0,'L',0);
+$pdf->Cell(50,1,$line_sum,0,0,'L',0);
+$pdf->Cell(10,1,number_format($sum[0]['price'], 2, '.', ','),0,0,'R',0);
+
+$startY=$startY+8;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(25,1,"_________________",0,0,'C',0);
+$pdf->Cell(25,1,"_________________",0,0,'C',0);
+$pdf->Cell(25,1,"_________________",0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(25,1,"_____/_____/_____",0,0,'C',0);
+$pdf->Cell(25,1,"_____/_____/_____",0,0,'C',0);
+$pdf->Cell(25,1,"_____/_____/_____",0,0,'C',0);
+
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(25,1,iconv('UTF-8','cp874',"ผู้เบิกสินค้า"),0,0,'C',0);
+$pdf->Cell(25,1,iconv('UTF-8','cp874',"หัวหน้าอนุมัติ"),0,0,'C',0);
+$pdf->Cell(25,1,iconv('UTF-8','cp874',"ผู้รับสินค้า"),0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(25,1,"_________________",0,0,'C',0);
+$pdf->Cell(25,1,"_________________",0,0,'C',0);
+$pdf->Cell(25,1,"_________________",0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(25,1,"_____/_____/_____",0,0,'C',0);
+$pdf->Cell(25,1,"_____/_____/_____",0,0,'C',0);
+$pdf->Cell(25,1,"_____/_____/_____",0,0,'C',0);
+
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(25,1,iconv('UTF-8','cp874',"ADMIN"),0,0,'C',0);
+$pdf->Cell(25,1,iconv('UTF-8','cp874',"W/H"),0,0,'C',0);
+$pdf->Cell(25,1,iconv('UTF-8','cp874',"IS"),0,0,'C',0);
+
+$startY=$startY+8;
+$pdf->SetY($startY);
+
+$name='billrq.pdf';
+$output=REPORT_PATH.$name;
+$output="/var/www/pos/htdocs/stock/report/".$name;
+@chmod(REPORT_PATH,0777);
+$pdf->Output($output,'F');
+echo shell_exec("lp -o media=Letter $output");
+if(@file_exists($output)){
+	echo shell_exec("rm $output");
+} 
+?>

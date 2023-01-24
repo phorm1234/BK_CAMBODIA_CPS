@@ -1,0 +1,284 @@
+<link href='/sales/css/inventory/pickinglist.css' rel='stylesheet' type='text/css'>
+<style type="text/css">
+		.td{ /*outline: 1pt solid black;*/ text-align:center}
+		.tdborder{ outline: 1pt solid black; text-align:center}
+		.tr{ /*outline: 1pt solid black;*/ text-align:center; background-color: #EBEBEB;}
+		.nhiden{ /*outline: 1pt solid black;*/ 
+			background-color:#EBEBEB;
+   			 border: 1px solid #BFBFBF;
+    		color: #333333;
+    		font: 100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma;
+    		height: 30px;
+    		padding: 0 5px;
+    		text-align: right;
+    		}
+			
+		.nnomal{ /*outline: 1pt solid black;*/ 
+			background: url("/sales/img/text-bg.gif") repeat-x scroll 0 0 #FFFFFF;
+   			 border: 1px solid #BFBFBF;
+    		color: #333333;
+    		font: 100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma;
+    		height: 30px;
+    		padding: 0 5px;
+    		}	
+    	.nbutton{ padding:5px;}	
+	</style>
+<div id="dialog" >
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td valign="top" >
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+		<tr bgcolor="#B9E7CF" height="40">
+			<td colspan="4"><span style='font-size:23px;color:#000000;'> Daily Cash Check Doc.</span></td>
+			<td ><span style='font-size:23px;color:#000000;'></span></td>
+			<td align="right"><span id="number" style='font-size:23px;color:#FF0000;'></span></td>
+		</tr >
+		<tr height="32">
+			<td width="5%" align="right">On Date : </td>
+			<td width="5%">
+				<input style="text-align:left" type="text"  id="mdate" size="30" class="nhiden" value="<?php echo date('d/m/Y');?>" readonly />
+			</td>
+			
+		</tr>
+		<tr height="32">
+			<td width="5%" align="right">Company : </td>
+			<td width="5%">
+				<input style="text-align:left" type="text" name="" id="company" size="20" class="nhiden" style="text-transform:uppercase" value="<?php echo $this->company;?>" readonly />
+			</td>
+			<td width="5%" align="right">Branch  : </td>
+			<td width="20%">
+				<input style="text-align:left" type="text" maxlength="2" name="" id="branch" size="20" class="nhiden" value="<?php echo $this->branch;?>" readonly  />
+			</td>
+			<td width="5%" align="right">Branch ID : </td>
+			<td width="20%">
+				<input style="text-align:left" type="text" maxlength="2" name="" id="branch_id" size="20" class="nhiden" value="<?php echo $this->branch_no;?>" readonly  />
+			</td>
+		</tr>
+		<tr height="32">
+			<td width="5%" align="right">Employee ID : </td>
+			<td width="5%">
+				<input type="text" name="" id="eid" size="20" class="input-text-pos keybarcode nnomal" style="text-transform:uppercase" />
+			</td>
+			<td width="5%" align="right">Position  : </td>
+			<td width="20%">
+				<input type="text" maxlength="2" name="" id="position" size="20" class="input-text-pos keybarcode nnomal" value=""  />
+			</td>
+			<td width="5%" align="right"></td>
+			<td width="20%">
+				
+			</td>
+		</tr>
+		<tr height="32">
+			<td width="5%" align="right">Note : </td>
+			<td colspan="3">
+				<input type="text" name="txt_remark" id="txt_remark" size="50" class="input-text-pos keybarcode nnomal" />
+			</td>
+		</tr>
+		
+	
+	</table>
+	
+	<div class="margin10"></div>
+	
+	<table width="100%" cellspacing="0" cellpadding="2" border="0" >
+	  <tr style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+		<th>Checklist</th>
+		<th>Type</th>
+		<th>Quantity of<br>Cash/Coins</th>
+		<th>Cash from sale</th>
+		<th>Quantity of<br>Cash/Coins</th>
+		<th>Reserve Change</th>
+		<th>Quantity of<br>Cash/Coins</th>
+		<th>Petty Cash</th>
+	  </tr>	
+
+	   <tr>	
+		<td class="td">Cash&nbsp;</td>
+		<td class="td">1,000&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale1000" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s1000" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres1000" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c1000" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash1000" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p1000" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr>
+		<td class="td">&nbsp;</td>
+		<td class="td">500&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale500" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s500" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres500" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c500" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash500" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p500" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr>
+		<td class="td">&nbsp;</td>
+		<td class="td">100&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale100" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s100" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres100" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c100" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash100" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p100" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr >
+		<td class="td">&nbsp;</td>
+		<td class="td">50&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale50" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s50" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres50" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c50" size="10" class="nhiden" value=""  readonly/></td>
+		<td class="td"><input type="text" name="" id="mcash50" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p50" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr >
+		<td class="td">&nbsp;</td>
+		<td class="td">20&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale20" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s20" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres20" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c20" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash20" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p20" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr >
+		<td class="td">Coins&nbsp;</td>
+		<td class="td">10&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale10" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s10" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres10" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c10" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash10" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p10" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr >
+		<td class="td">&nbsp;</td>
+		<td class="td">5&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale5" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s5" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres5" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c5" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash5" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p5" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr >
+		<td class="td">&nbsp;</td>
+		<td class="td">2&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale2" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s2" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres2" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c2" size="10" class="nhiden" value=""  readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash2" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p2" size="10" class="nhiden" value=""  readonly /></td>
+	  </tr>	
+	  
+	   <tr >
+		<td class="td">&nbsp;</td>
+		<td class="td">1&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale1" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s1" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres1" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c1" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash1" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p1" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr >
+		<td class="td">&nbsp;</td>
+		<td class="td">0.50&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale05" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s05" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres05" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c05" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash05" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p05" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr >
+		<td class="td">&nbsp;</td>
+		<td class="td">0.25&nbsp;</td>
+		<td class="td"><input type="text" name="" id="msale025" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="s025" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mres025" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="c025" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"><input type="text" name="" id="mcash025" size="10" class="input-text-pos keybarcode nnomal" value="" /></td>
+		<td class="td"><input type="text" name="" id="p025" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	   <tr class="tr">
+		<td class="td" colspan="3">Amount of cash</td>
+		<td class="td"><input type="text" name="" id="total_s" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"></td>
+		<td class="td"><input type="text" name="" id="total_c" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"></td>
+		<td class="td"><input type="text" name="" id="total_p" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  <!-- 
+	   <tr class="tr">
+		<td class="td" colspan="3">CN ลดหนี้(เงินสด)</td>
+		<td class="td"><input type="text" name="" id="" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"></td>
+		<td class="td"></td>
+		<td class="td"></td>
+		<td class="td"></td>
+	  </tr>	
+	  -->
+	   <tr class="tr">
+		<td class="td" colspan="3">Total of PAY</td>
+		<td class="td"><input type="text" name="" id="pay" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"></td>
+		<td class="td"><input type="text" name="" id="pay_c" size="10" class="nhiden" value="0" readonly /></td>
+		<td class="td"></td>
+		<td class="td"><input type="text" name="" id="pay_p" size="10" class="nhiden" value="0" readonly /></td>
+	  </tr>	
+	  
+	   <tr class="tr">
+		<td class="td" colspan="3">Total of money that not enough/excess</td>
+		<td class="td"><input type="text" name="" id="mnt_s" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"></td>
+		<td class="td"><input type="text" name="" id="mnt_c" size="10" class="nhiden" value="" readonly /></td>
+		<td class="td"></td>
+		<td class="td"><input type="text" name="" id="mnt_p" size="10" class="nhiden" value="" readonly /></td>
+	  </tr>	
+	  
+	</table>	
+	<table width="100%" cellspacing="2" cellpadding="2" border="0" bgcolor="#ecfcf5" align="center">
+		<tbody>
+			<tr>
+			<td class="font_remark" width="100%" background="/stock/img/bg_g.gif" height="35" align="left"> </td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="margin10"></div>
+	<table width="100%" border="0">
+		<tbody>
+			<tr>
+				<td>
+					<input type="hidden" id="chk" value="">
+					<input type="hidden" id="status_no" value="">
+				</td>
+				<td align="right" width="55%">
+					<a href="#" class='btnGrayClean nbutton' id="btnSave" onclick="save_data()">Save(F3)</a>
+					<a href="#" class='btnGrayClean nbutton' id="btnCancel" onclick="cancelTmp()">Cancle</a>
+				</td>
+		    </tr>
+	    </tbody>
+    </table>
+    
+   
+
+
+</td>
+</tr>
+</table>
+<script type="text/javascript" src="/sales/js/countingmoney/counting.js"></script>

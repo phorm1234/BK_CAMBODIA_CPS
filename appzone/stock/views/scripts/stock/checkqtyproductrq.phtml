@@ -1,0 +1,13 @@
+<?php
+$data=$this->data;
+$key_qty=$this->key_qty;
+$qty=$data[0]['qty'];
+$onhand=$data[0]['onhand'];
+$sum_qty=$key_qty+$qty;
+//echo $sum_qty."---".$onhand;
+if($sum_qty>$onhand){
+	$status="n";
+}else{
+	$status="y";
+}
+echo $status;

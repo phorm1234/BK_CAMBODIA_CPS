@@ -1,0 +1,18 @@
+<?php 
+$flag=$this->flag;
+$txt=$this->txt;
+?>
+<script>
+$(document).ready( function() {
+	viewproductquery();
+});
+</script>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td colspan="2">
+		<div id="viewproductquery"></div>
+	</td>
+  </tr>
+</table>
+<input type="hidden" name="flag" id="flag" value="<?php echo $flag;?>"></input>
+<input type="hidden" name="txt" id="txt" value="<?php echo $txt;?>"></input>

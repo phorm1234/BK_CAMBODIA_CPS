@@ -1,0 +1,176 @@
+   <style type="text/css">  
+		.tableNavPercentRange
+			{
+				width:100%;
+				height:360px;
+				overflow:auto;
+				background:#333;
+			}
+		.tableNavPercentRange ul
+			{
+				/*float:right;*/
+				float:left;
+				width:200px;
+				margin:0;
+				padding:0;
+				border:1px solid #C9C9C9;
+			}
+         
+        .tableNavPercentRange ul li{
+          			cursor:pointer;
+					list-style-type:none;
+					line-height:40px;
+					font-family:"PSLKittithadaBold","Garuda","Tahoma","Arial", sans-serif;
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#303030;
+					padding-left:0;/*1em*/
+					
+					border-bottom:1px solid  #78777C;
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(     #D4D7E0,     #B0B0B0);;
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#D4D7E0),color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.active{
+            cursor:pointer;
+          			list-style-type:none;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold","Garuda","Tahoma","Arial", sans-serif;
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#ffffff;/*#303030*/
+					padding-left:0;/*1em*/
+					
+					border-bottom:1px solid  #000;/*78777C*/
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(#9DDCCF,#265541);
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          
+          ul li.nokeyboard {
+            color: #999;
+            background:#0000ff;
+          }
+          
+		.tableNonNav{
+				width:100%;
+				background:#3076A5;
+			}
+		.tableNonNav ul{
+			float:left;
+			width:200px;
+			margin:0;
+			padding:0;
+			border:1px solid #C9C9C9;
+		}
+				
+        .tableNonNav ul li{
+			list-style-type:none;
+			line-height:40px;
+			font-family:"PSLKittithadaBold","Garuda","Tahoma","Geneva","Arial", sans-serif;
+			font-weight: normal;
+			font-size:25px;/*16*/
+			text-decoration:none;
+			color:#FFFFFF;
+			padding-left:0em;
+			border-bottom:1px solid  #000;
+			text-shadow: 0px 1px 0px #dddddd;
+			vertical-align: middle;
+			white-space:nowrap;
+			background:#2173A0;
+			background: -moz-linear-gradient(#2B7A97,#19597B);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#2184A0), color-stop(1,#2B7A97));
+			-moz-user-select:none;
+			-moz-user-select:-moz-none;/*latest ff*/
+			-webkit-user-select:none;
+      }
+      .tableNonNav li td{
+      	 line-height:32px;
+			font-family:"PSLKittithadaBold","Garuda","Tahoma","Arial", sans-serif;
+			font-weight: normal;
+			font-size:25px;
+      		color:#FFFFFF;
+	      	padding:0;
+      }
+	  .tableNavPercentRange li td{
+      	 line-height:30px;
+			font-family:"PSLKittithadaBold","Garuda","Tahoma","Arial", sans-serif;
+			font-weight: normal;
+			font-size:22px;
+      		color:#000000;
+	      	padding:0;
+      }
+    </style>
+    <div class="tableNonNav">
+    	<?php 
+    		$rows_total=count($this->arr_prange);
+    		$p=ceil($rows_total/10);
+    		$i=0;
+    		$j=0;
+    		$limit=10;
+    		for($l=0;$l<$p;$l++){
+    	?>
+    	<ul>
+    		<li>
+	    		<table width='200' border='0'>
+	    			<tr>
+	    				<td width='20%' align='center'>%</td>
+	    				<td width='40%' align='center'>Point</td>
+	    				<td width='40%' align='center'>Discount</td>	    			
+	    			</tr>
+	    		</table>
+    		</li>
+    	</ul>
+    	<?php 
+    		}
+    	?>
+    </div>
+    <div class="tableNavPercentRange">
+    	<?php 
+    		for($k=0;$k<$p;$k++){
+    			$start=$i;
+    			$stop=$start+$limit;
+    	?>
+	    	<ul>
+		        <?php 
+		        	for($i=$start;$i<$stop;$i++){
+		        		if($i>=$rows_total) break;
+		        		$str_prange=$this->arr_prange[$i]['percent'].
+		        					"^".$this->arr_prange[$i]['point'].
+		        					"^".$this->arr_prange[$i]['discount'];      		
+		  				$id_tmp="n_".$i;
+			  			echo "<li id='$id_tmp' name='$id_tmp'  idpromo='".$str_prange."'>"
+			  					."<table width='100%' border='0'><tr>"
+			  					."<td  align='center' width='20%'>"
+			  					.$this->arr_prange[$i]['percent']
+			  					."</td>"
+			  					."<td align='center' width='40%'>"
+			  					.$this->arr_prange[$i]['point']
+			  					."</td>"
+			  					."<td align='center' width='40%'>"
+			  					.$this->arr_prange[$i]['discount']
+			  					."</td>"
+			  					."</tr></table>"
+			  					."</li>";
+		        	}
+		        ?>
+		    </ul>
+		    
+	    <?php }?>
+     </div>

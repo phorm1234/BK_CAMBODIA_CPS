@@ -1,0 +1,111 @@
+      <style type="text/css">  
+			.tableNavMemberPromotion2
+				{
+					width:100%;
+					background:#333;
+				}
+			.tableNavMemberPromotion2 ul
+				{
+					float:right;
+					width:100%;
+					margin:0;
+					padding:0;
+					border:1px solid #C9C9C9;
+				}
+         
+          .tableNavMemberPromotion2 ul li{
+          		cursor:pointer;
+					list-style-type:none;
+					line-height:40px;
+					font-family:"PSLKittithadaBold","Garuda","Tahoma", "Geneva", "Arial", sans-serif;
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#303030;
+					padding-left:1em;
+					border-bottom:1px solid  #78777C;
+					text-shadow: 0px 1px 0px #dddddd;
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(     #D4D7E0,     #B0B0B0);;
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.active {
+            cursor:pointer;
+          			list-style-type:none;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold", "Garuda","Helvetica World","Tahoma", "Geneva", "Arial", sans-serif;
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#ffffff;/*#303030*/
+					padding-left:1em;
+					border-bottom:1px solid  #000;/*78777C*/
+					text-shadow: 0px 1px 0px #dddddd;
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(#9DDCCF,#265541);/*#D4D7E0, #B0B0B0||#777777,#444444*/
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.nokeyboard {
+            color: #999;
+            background:#0000ff;
+          }
+        </style>
+    <?php    	
+    	if($this->arr_promo[0]['chk_status']=='0'){ 
+    ?>
+	    <div class="tableNavMemberPromotion2">
+	    	<ul>
+		        <?php 
+		        	$i=1;
+		        	foreach($this->arr_promo as $data){
+		  				$id_tmp="n_".$i;
+		  				$rows_json=json_encode($data);
+			  			echo "<li id='$id_tmp' name='$id_tmp'  idpromo='".$rows_json."'>".$data['application_id']."&nbsp;&nbsp;".$data['description']."</li>";  
+		  				$i++;
+		  			}//foreach
+		        ?>
+		    </ul>
+	     </div>
+     <?php 
+	    }else if($this->arr_promo[0]['chk_status']=='2'){
+	   		echo "<div class='tableNavMemberPromotion2'>
+				    	<ul>
+				    		<li id='n_1'  idpromo='none'>ไม่พบโปรโมชั่น กรุณาตรวจสอบอีกครั้ง</li>
+				    	</ul>
+			    	</div>";
+	    }else if($this->arr_promo[0]['chk_status']=='3'){
+	   		echo "<div class='tableNavMemberPromotion2'>
+				    	<ul>
+				    		<li id='n_1'  idpromo='none'>คะแนนสะสมไม่พอใช้แลก กรุณาตรวจสอบอีกครั้ง</li>
+				    	</ul>
+			    	</div>";
+	    }else if($this->arr_promo[0]['chk_status']=='4' || $this->arr_promo[0]['chk_status']=='5'){
+	   		echo "<div class='tableNavMemberPromotion2'>
+				    	<ul>
+				    		<li id='n_1'  idpromo='none'>ต่ออายุบัตรสมาชิกภายในเดือน หรือหลังจากบัตรหมดอายุ 1 หรือ 2 เดือนเท่านั้น กรุณาตรวจสอบอีกครั้ง</li>
+				    	</ul>
+			    	</div>";
+	    }else if($this->arr_promo[0]['chk_status']=='6'){
+	   		echo "<div class='tableNavMemberPromotion2'>
+				    	<ul>
+				    		<li id='n_1'  idpromo='none'>ไม่สามารถต่ออายุบัตรสมาชิกก่อนเดือนหมดอายุได้ กรุณาตรวจสอบอีกครั้ง</li>
+				    	</ul>
+			    	</div>";
+	    }else{
+	    	echo "<div class='tableNavMemberPromotion2'>
+				    	<ul>
+				    		<li id='n_1'  idpromo='none'>ไม่พบโปรโมชั่น กรุณาตรวจสอบอีกครั้ง</li>
+				    	</ul>
+			    	</div>";
+	    }   	   
+     ?>

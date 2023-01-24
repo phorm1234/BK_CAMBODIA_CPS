@@ -1,0 +1,92 @@
+ <?php
+    	if(!empty($this->arr_roundexpense)){ 
+    ?>
+     <style type="text/css">  
+			.tableNavRoundExpense
+				{
+					width:100%;
+					background:#333;
+				}
+			.tableNavRoundExpense ul
+				{
+					float:right;
+					width:100%;
+					margin:0;
+					padding:0;
+					border:1px solid #C9C9C9;
+				}
+         
+          .tableNavRoundExpense ul li{
+          		cursor:pointer;
+					list-style-type:none;
+					line-height:40px;
+					font-family:"PSLKittithadaBold","Garuda","Tahoma", "Geneva", "Arial", sans-serif;
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#303030;
+					padding-left:1em;
+					border-bottom:1px solid  #78777C;
+					text-shadow: 0px 1px 0px #dddddd;
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(     #D4D7E0,     #B0B0B0);;
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.active {
+            		cursor:pointer;
+          			list-style-type:none;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold", "Garuda","Helvetica World","Tahoma", "Geneva", "Arial", sans-serif;
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#ffffff;/*#303030*/
+					padding-left:1em;
+					border-bottom:1px solid  #000;/*78777C*/
+					text-shadow: 0px 1px 0px #dddddd;
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(#9DDCCF,#265541);/*#D4D7E0, #B0B0B0||#777777,#444444*/
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.nokeyboard {
+            color: #999;
+            background:#0000ff;
+          }
+        </style>
+    <div class="tableNavRoundExpense">
+    	<ul>
+	        <?php 
+	        	$i=1;
+	        	foreach($this->arr_roundexpense as $data){
+	  				$id_tmp="n_".$i;
+	  				$arr_r=explode("-",$data['doc_dt']);
+	  				$r_exp=intval($arr_r[1]);
+	  				$r_show=$arr_r[2]."/".$arr_r[1]."/".$arr_r[0];
+	  				/*
+	  				$arr_sdate=explode("-",$data['start_date']);
+	  				$s_date=$arr_sdate[2]."/".$arr_sdate[1]."/".$arr_sdate[0];
+	  				$arr_edate=explode("-",$data['end_date']);
+	  				$e_date=$arr_edate[2]."/".$arr_edate[1]."/".$arr_edate[0];
+	  				*/
+	  				$rows_json=json_encode($data);
+		  			echo "<li id='$id_tmp' name='$id_tmp'  idround='".$rows_json."'>&nbsp;&nbsp;[".$r_exp."]&nbsp;&nbsp;".$r_show."</li>";  
+	  				$i++;
+	  			}//foreach
+	        ?>
+	    </ul>
+     </div>
+     <?php 
+    	}else{
+    		echo "<p align='center'>Data not found!</p>";
+    	}
+     ?>

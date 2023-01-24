@@ -1,0 +1,17 @@
+<?php
+$select_province_name=$this->province_name;
+$select_amphur_name=$this->amphur_name;
+$select_tambon_name=$this->tambon_name;
+$iddataamphur=$this->iddataamphur;
+echo "<select class='list1' id='id_amphur_id' onchange=\"changetambon();\" style='width:200px;'>";
+foreach($iddataamphur as $data){
+	$amphur_id=$data['amphur_id'];
+	$amphur_name=$data['amphur_name'];
+	if($amphur_name==$select_amphur_name){
+		echo "<option value=\"$amphur_id\" selected>$amphur_name</option>";
+	}else{
+		echo "<option value=\"$amphur_id\">$amphur_name</option>";
+	}
+}
+echo "</select>";
+?>

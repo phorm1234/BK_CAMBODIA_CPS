@@ -1,0 +1,52 @@
+<?php 
+$apply_date=$this->apply_date;
+$expire_date=$this->expire_date;
+
+function set_formatdate($var){
+	
+	$arr=explode("-",$var);
+	return "$arr[2]/$arr[1]/$arr[0]";
+}
+$show_apply_date=set_formatdate($apply_date);
+$show_expire_date=set_formatdate($expire_date);
+?>
+<link href="/sales/css/promotion/newmember.css" rel="stylesheet">
+<br>
+
+
+<table border="0" align='center'>
+  <tr>
+    <td align='center'>
+				<span class='label4'>ข้อมูลบัตรสมาชิก</span>
+				      <input name="customer_id_new" type="hidden" id="customer_id_new"  />
+				      <input name="id_card" type="hidden" id="id_card" value='' />
+				      <input name="apply_date" type="hidden" id="apply_date" value=<?php echo $apply_date; ?> />
+				      <input name="expire_date" type="hidden" id="expire_date" value=<?php echo $expire_date; ?> >
+				
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<table id='pro_renew' border="0" >
+		  <tr>
+		    <td ><span class='label1'>วันที่สมัคร</span></td>
+			<td ><div align="center"><input name="show_apply_date" type="text" class='text1' id="show_apply_date" value=<?php echo $show_apply_date; ?> readonly='true' /></div></td>
+			<td align='right'><span class='label1'>วันหมดอายุ</span></td>
+			<td ><div align="center"><input name="show_expire_date" type="text" class='text1' id="show_expire_date" value=<?php echo $show_expire_date; ?> readonly='true' /></div></td>
+		  </tr>
+		   <tr>
+		    <td ></td>
+			<td ><br><br><span class='label4'>กรุณายิงบัตรสมาชิก</span></td>
+			<td ><br><br><div align="center"><input name="member_id" type="text" class='text_scan' id="member_id" onKeyDown="if (event.keyCode == 13){registercardsave();}" /></div></td>
+			<td ></td>
+		  </tr> 
+		  <tr>
+		    <td colspan="14">&nbsp;</td>
+		  </tr>
+		 
+		</table>
+    
+    </td>
+  </tr>
+</table>
+

@@ -1,0 +1,131 @@
+<?php 
+$unlockfingerlogin = @$_POST['unlockfingerlogin'];
+//echo $this->session_employee_id;
+?>
+<script type="text/javascript">
+<!--
+	
+//-->
+</script>
+<div id="callsurvey">
+<table cellpadding="1" cellspacing="1" style="border : 0px">
+<input type="hidden" value='4444444444444' id="dialog_idcard" class="input-text-pos ui-corner-all numeric"maxlength="13">
+<!--
+	<tr>
+		<td>บัตรประชาชน</td>
+		<td>:<input type="hidden" value='4444444444444' id="dialog_idcard" class="input-text-pos ui-corner-all numeric"maxlength="13"></td>
+	</tr>
+-->
+	<tr>
+		<td>หมายเลขโทรศัพท์</td>
+		<td>:<input type="text" id="dialog_mobile" class="input-text-pos ui-corner-all numeric" maxlength="10"></td>
+	</tr>
+	<tr>
+		<td colspan="2" align="right">
+			<input id='survey_cancle_btn' type='button' value='ไม่รับแบบสอบถาม'>
+			<input id='survey_accept_btn' type='button' value='รับแบบสอบถาม'>
+		</td>
+	</tr>
+</table>
+</div>
+<div id="sale_confirm">
+	<table cellpadding="1" cellspacing="1" style="border : 0px">
+	<tr>
+		<td>ระบุผู้ขาย</td>
+		<td>:<input type="text" size="25" id="chk_saleman_id" class="input-text-pos ui-corner-all keybarcode"></td>
+	</tr>
+	</table>
+</div>
+<style >
+#btn_group {
+float:right;
+}
+</style>
+<script>
+	$('#sale_confirm').hide();
+	$(".numeric").numeric();
+	$('#survey_cancle_btn').click(function(){
+		$('#sale_confirm').show();
+		$('#callsurvey').hide();
+	});
+
+	$('#survey_accept_btn').click(function(){
+		//alert($('#csh_net').val());
+		if($('#dialog_idcard').val().trim().length==13){
+		
+		}else{
+			jAlert("ระบุบัตรประชาชน 13 หลัก", 'ข้อความแจ้งเตือน',function(){
+				return false;
+			});
+			return false;
+		}
+		if($('#dialog_mobile').val().trim().length==10){
+		
+		}else{
+			jAlert("ระบุหมายเลขโทรศัพท์ 10 หลัก", 'ข้อความแจ้งเตือน',function(){
+				return false;
+			});
+			return false;
+		}
+		$('#csh_id_card').val($('#dialog_idcard').val());
+		$('#csh_mobile_no').val($('#dialog_mobile').val());
+
+		$('#sale_confirm').show();
+		$('#callsurvey').hide();
+	});
+</script>
+<?php if($unlockfingerlogin=="Y"){ ?>
+
+
+<?php }else{ ?>
+<script>
+	$(document).ready(function(){
+		//$("#showsaleman").hide();
+		var cinterval="";
+		cinterval = setInterval('reloadcompare()',1000);
+	});
+
+function reloadcompare(){
+	$.ajax({
+		  type: "POST",
+		  url: "/sales/cashier/getuserid?now="+Math.random(),
+		  data:{id_card:""},
+		  dataType:"json"
+		})
+		  .success(function(msg) { 
+				if(msg.status == "y"){
+					//alert(msg.password);
+					clearInterval(cinterval);
+					$("#chk_saleman_id").val(msg.userid);
+					$("#chk_saleman_id").trigger($.Event("keypress", { keyCode: 13 }));
+				}else if(msg.status == "sk"){
+					$( "#fingerscan" ).html('<iframe src="/finger_shop/index.php/idcard/index?now='+Math.random()+'" width="490" height="350">');
+					setTimeout(function() {
+						reloadcompare();
+					},1000);
+				}else if(msg.status == "f"){
+					$( "#fingerscan" ).html('<iframe src="/finger_shop/index.php/compare/index?now='+Math.random()+'" width="500" height="350">');
+					jAlert("คุณไม่มีสิทธิ์เข้าใช้ระบบ");
+					setTimeout(function() {
+						reloadcompare();
+					},1000);
+				}else if(msg.status == "n" || msg.status==""){
+					setTimeout(function() {
+						//reloadcompare();
+clearInterval(cinterval);
+					},1000);
+				}
+		  	});
+	
+	}
+// $("#user_id").keyup(function(){
+//     if($(this).val().length == 6){
+//       check_user();
+// 	 }
+// });
+
+	
+</script>
+<p id="fingerscan" ></p>
+<input type="hidden" size="25" id="chk_saleman_id" class="input-text-pos ui-corner-all keybarcode">
+<?php }?>

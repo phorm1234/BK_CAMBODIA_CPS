@@ -1,0 +1,8 @@
+<?php
+$data=$this->data;
+if($data[0]['flag']=="C"){
+	$status="UC";
+}else{
+	$status=$data[0]['status_transfer'];
+}
+echo $status;

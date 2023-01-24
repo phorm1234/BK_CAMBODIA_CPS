@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>STOCK</title>
+	<link rel="stylesheet" href="/stock/css/dhtml/demos.css" media="screen" type="text/css">
+	<style type="text/css">
+	h1{
+		margin-top:0px;
+	}
+	#northContent{
+		background-color:#C3DAF9;
+	}
+	#menuDiv{
+		background-image:url('/stock/img/dhtml/left-bg-menustrip.png');
+		background-repeat:no-repeat;
+		padding-left:5px;
+		width:99%;
+		position:relative;
+		padding-right:0px;
+	}
+	#menuDiv #innerDiv{
+		background-image:url('/stock/img/dhtml/center-bg-menustrip.png');
+		background-repeat:repeat-x;	
+	}
+	#menuDiv #rightDiv{
+		background-image:url('/stock/img/dhtml/right-bg-menustrip.png');
+		background-repeat:no-repeat;
+		background-position:top right;
+		height:25px;
+		width:20px;
+		position:absolute;
+		right:0px;
+		top:0px;
+	}
+	h3{
+		margin-top:30px;
+	}
+	
+	.DHTMLSuite_paneContent .paneContentInner p{	
+		margin-top:0px;
+	}	
+	</style>	
+	<script type="text/javascript">var DHTML_SUITE_THEME = 'blue';</script>
+	<script type="text/javascript" src="/stock/js/dhtml/ajax.js"></script>
+	<script type="text/javascript" src="/stock/js/dhtml/dhtml-suite-for-applications.js"></script>
+</head>
+<body>
+<?php echo $this->render('header.phtml');?>
+<?php echo $this->layout()->content;?>
+<?php echo $this->render('footer.phtml');?>
+</body>
+</html>
+
+

@@ -1,0 +1,102 @@
+<style type="text/css">   
+    .div-table{display:table; width: 600px;  }
+    .div-table-row{display:table-row;}
+ 
+    .div-table-col1{display:table-cell; padding-left:  10px; padding-right:  100px; width: 250px;}
+    .div-table-col2{display:table-cell; padding-left:  50px; }
+    .div-table-col3{display:table-cell; padding-left:  50px; float: right;}
+	.div-table-col4{display:table-cell; padding-left:  10px; width: 600px;}
+    
+	.div-table2{display:table; width: 700px;  }
+    .div-table-row2{display:table-row;}
+ 
+    .div-table-coll1{display:table-cell; padding-right:  100px; width: 250px; border: 1px;}
+    
+    
+    
+</style>
+
+
+<p align="center">
+    <img src="/report/img/logo/op/op-logo.gif">
+    <br>รายงานสรุปยอดเงินตามบาร์โค้ด<br>
+    เงื่อนไข : <?php echo $this->dayfrom." - ".$this->tofrom ;?> </p>
+
+<div class="div-table">
+<div class="div-table-row">   
+    <div class="div-table-col1">วันที่พิมพ์เอกสาร <?php echo $this->print_time ;?></div>
+    
+    <div class="div-table-col3">เวลา  <?php echo $this->ptime ;?></div>
+    
+</div>
+<div class="div-table-row">
+    <div class="div-table-col1">สาขา :  <?php echo $this->branch_id.' '.$this->branch_name ;?></div>
+    
+    
+</div>
+</div>
+
+<table align='left' width='650' border='0'>
+	<tr align='right'>
+		<th>ลำดับ</th>
+		<th>รหัสบาร์โค้ด</th>
+		<th>GP</th>
+		<th>จำนวนชิ้น</th>
+		<th>จำนวนเงิน</th>
+		<th>ส่วนลด</th>
+		<th>สุทธิ</th>
+	</tr>
+<?php 	
+	$get_data = $this->gp_data ;
+	$i=1;
+	$sum_gp = 0;	
+	$sum_quan = 0;
+	$sum_amt = 0;
+	$sum_net = 0;
+	$dis = 0;
+	$sum_dis = 0;
+    foreach($get_data as $v){
+    
+	$sum_gp += $v['gp_corner'];	
+	$sum_quan += $v['quantity'];
+	$sum_amt += $v['amount'];
+	$sum_net +=$v['net_amt'];
+	$dis = $v['amount'] - $v['net_amt'];
+	$sum_dis += $dis;
+	echo "
+	<tr align='right'>
+		<td>".$i++."</td>
+		<td>".$v['barcode']."</td>
+		<td>".$v['gp_corner']."</td>
+		<td>".number_format($v['quantity'], 2, '.', ',')."</td>
+		<td>".number_format($v['amount'], 2, '.', ',')."</td>
+		<td>".number_format($dis, 2, '.', ',')."</td>
+		<td>".number_format($v['net_amt'], 2, '.', ',')."</td>
+	</tr>";
+    }
+   echo"
+   		<tr align='right'>
+		<td></td>
+		<td></td>
+		<td>รวม</td>
+		<td>".number_format($sum_quan, 2, '.', ',')."</td>
+		<td>".number_format($sum_amt, 2, '.', ',')."</td>
+		<td>".number_format($sum_dis, 2, '.', ',')."</td>		
+		<td>".number_format($sum_net, 2, '.', ',')."</td>
+	</tr>";
+	
+   ?>	
+</table>
+<br><br>
+<div align='right' margin-right='100' >
+<?php echo"
+<form action='/report/report/printgp' method='post'>
+<input type=hidden  name=data1 value='$this->dayfrom'>
+<input type=hidden  name=data2 value='$this->tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>";
+?>
+
+</div>
+
+    

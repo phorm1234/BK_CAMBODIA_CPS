@@ -1,0 +1,68 @@
+<?php
+$member_no=$this->member_no;
+$profile=$this->profile;
+$arr=explode("#",$profile);
+$chk=$arr[0];
+$date_chk=$arr[6];
+$num_chk=$arr[7];
+if($chk=="Y" || $num_chk>3){
+	echo "have";
+	return false;
+}
+echo "
+<style>
+	#grid{font-family:'Lucida Sans Unicode", "Lucida Grande', Sans-Serif;font-size:18px;width:50%;
+	text-align:left;border-collapse:collapse;border:1px solid #f5f5f5; border-bottom:margin:20px;}
+	#grid th{font-weight:bold;font-size:26px;color:#1e1c82;padding:9px 9px 9px;background:#becfdd;}
+	#grid tbody{background:#e9ecef;}
+	#grid td{color:#6C640D;border-top:1px dashed #cccccc;padding:5px;}
+	#grid tbody tr:hover td{color:#339;background:#d8e6f1;}
+</style>
+";
+
+$customer_id=$arr[1];
+$id_card=$arr[2];
+$name=$arr[3];
+$surname=$arr[4];
+$mobile_no=$arr[5];
+
+$fullname="$name $surname";
+if($num_chk==3){
+
+	$msg1="ในอนาคตทาง OP จะใช้บัตรประชาชนแทนบัตรสมาชิก";
+	$msg2="เมื่อคุณสะดวกสามารถแจ้งข้อมูลเลขขัตรได้ที่ ";
+	echo "<br><br><input type='hidden' id='keep_member_no' value='$member_no'>";
+	echo "<input type='hidden' id='keep_customer_id' value='$customer_id'>";
+	
+	echo "<center>";
+	echo "<span style='font-size:32px;color:#83c43d'>$msg1</span>";
+	echo "<br><span style='font-size:28px;color:#324f51 '>$msg2</span>";
+	echo "<br><br><span style='font-size:28px;color:#bb3805 '>website หรือ beauty line นะคะ</span>";
+
+	echo "</center>";
+
+}else if($num_chk<3){
+	$msg1="เพื่อรักษาสิทธิ์เฉพาะคุณ";
+	$msg2="รบกวนแจ้งเลขที่บัตรประชาชนเพื่อบันทึกลงในฐานข้อมูลด้วยค่ะ";
+	echo "<input type='hidden' id='keep_member_no' value='$member_no'>";
+	echo "<input type='hidden' id='keep_customer_id' value='$customer_id'>";
+	
+	echo "<center>";
+	echo "<span style='font-size:32px;color:#83c43d'>$msg1</span>";
+	echo "<br><span style='font-size:28px;color:#f4bb58 '>$msg2</span>";
+	
+	
+	echo "<table id='grid'>";
+	echo "<tbody>";
+	echo "<tr><th align='center'>ข้อมูลลูกค้า</th></tr>";
+	echo "<tr><td align='center'>คุณ $fullname</td></tr>";
+	echo "<tr><td align='center'>มือถือ $mobile_no</td></tr>";
+	echo "<tr><td align='center'>กรุณาป้อนรหัสบัตรประชาชน 13 หลักครับ</td></tr>";
+	echo "<tr><td align='center'><input class='text_scan' type='text'id='keep_id_card' onKeyDown=\"if (event.keyCode == 13){addidcard();}\"></td></tr>";
+	echo "</tbody>";
+	echo "</table>";
+	echo "</center>";
+}
+
+
+?>

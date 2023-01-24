@@ -1,0 +1,96 @@
+<?php 
+//include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->AddPage();
+$pdf->SetAutoPageBreak("off",1);
+
+$startY=2;
+$startX=0;//4
+$pdf->SetY($startY);
+$pdf->SetX($startX);	
+//--------------------------------------------------------------------
+/*$title0=iconv('UTF-8','cp874',"รายงานการสุ่มเช็ค Stock");
+$title1="O.P. NATURAL PRODUCTS CO.,LTD";
+$title2="89/1 Soi Ratchataphan,Rachaprarop";
+$title2_1="Rd. Makkasun Rachatevee Bangkok 10400.";
+$title4="TAX INVOICE / RECEIPT";
+$head_form="INVENTORY TAG FORM";
+$shop="7777";
+$day=date("d");
+$month=date("m");
+$year=date("Y");
+$date="$day/$month/$year";
+$start_date="01/$month/$year";
+$time=date("h:i:s");*/
+$line="---------------------------------------------------------------------------------------------------------------------";
+
+$line_1=iconv('UTF-8','cp874',"เอกสารประกอบการตรวจนับเงิน ณ จุดขาย");
+$startY=$startY+1;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',8);
+$pdf->Cell(48,1,"$line_1",0,0,'L',0);
+
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(1,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'C',0);
+
+$startY=$startY+2;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(3,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',8);
+$pdf->Cell(25,1,"[    ] OP",0,0,'L',0);
+$pdf->Cell(25,1,"[    ] CPS",0,0,'L',0);
+$pdf->Cell(25,1,"[    ] GNC",0,0,'L',0);
+
+$line_4=iconv('UTF-8','cp874',"ประเภทการตรวจนับ");
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',8);
+$pdf->Cell(48,1,"$line_4",0,0,'L',0);
+
+$line_5_col_1=iconv('UTF-8','cp874',"100% ตามรอบปกติ");
+$line_5_col_2=iconv('UTF-8','cp874',"100% โอนย้าย/ลาออก");
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(3,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',8);
+$pdf->Cell(30,1,"[    ] ".$line_5_col_1,0,0,'L',0);
+$pdf->Cell(30,1,"[    ] ".$line_5_col_2,0,0,'L',0);
+
+$line_6_col_1=iconv('UTF-8','cp874',"สุ่มตรวจนับ 1,2");
+$line_6_col_2=iconv('UTF-8','cp874',"100% ปิด Shop");
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(3,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',8);
+$pdf->Cell(30,1,"[    ] ".$line_6_col_1,0,0,'L',0);
+$pdf->Cell(30,1,"[    ] ".$line_6_col_2,0,0,'L',0);
+
+$line_7_col_1=iconv('UTF-8','cp874',"อื่นๆ..........................................................................................");
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(3,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',8);
+$pdf->Cell(30,1,"[    ] ".$line_7_col_1,0,0,'L',0);
+
+$line_8=iconv('UTF-8','cp874',"จุดขาย..................................................................................................");
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',8);
+$pdf->Cell(48,1,"$line_8",0,0,'L',0);
+
+$pdf->Output();

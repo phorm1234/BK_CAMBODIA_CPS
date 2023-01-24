@@ -1,0 +1,256 @@
+<?php	
+	include(FPDF_PATH."/fpdf.php");       
+	$textColour = array( 0, 0, 0 );
+	$headerColour = array( 100, 100, 100 );
+	$tableHeaderTopTextColour = array( 255, 255, 255 );
+	$tableHeaderTopFillColour = array( 125, 152, 179 );
+	$tableHeaderTopProductTextColour = array( 0, 0, 0 );
+	$tableHeaderTopProductFillColour = array( 143, 173, 204 );
+	$tableHeaderLeftTextColour = array( 99, 42, 57 );
+	$tableHeaderLeftFillColour = array( 184, 207, 229 );
+	$tableBorderColour = array( 50, 50, 50 );
+	$tableRowFillColour = array( 213, 170, 170 );
+	$reportName = "DAILY SALES REPORT";
+	$reportNameYPos =2;//160
+	$logo="/aeon_logo.jpg";
+	$logoFile = LOGO_PATH.$logo;
+	$logoXPos = 10;
+	$logoYPos = 12;
+	$logoWidth = 20;
+	// End configuration
+	
+	/**
+	 Create the title page
+	 **/
+	
+	$pdf = new FPDF( 'P', 'mm', 'A4' );
+	$pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+	$pdf->AddPage();
+	// Report Name
+	$pdf->SetFont( 'Arial', 'B',16 );
+	$pdf->Ln( $reportNameYPos );
+	$pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+	
+	// Logo
+	$pdf->Ln( $reportNameYPos );
+	$pdf->Image( $logoFile, $logoXPos, $logoYPos, $logoWidth );
+	
+	
+	/**
+	 Create the table
+	 **/
+	
+	$pdf->SetDrawColor( $tableBorderColour[0], $tableBorderColour[1], $tableBorderColour[2] );
+	$pdf->Ln(20);//15
+	
+	// Create the table header row
+	$pdf->SetFont( 'Arial', 'B', 11 );
+	
+	
+	
+	// Remaining header cells
+	$pdf->SetTextColor( $tableHeaderTopTextColour[0], $tableHeaderTopTextColour[1], $tableHeaderTopTextColour[2] );
+	$pdf->SetFillColor( $tableHeaderTopFillColour[0], $tableHeaderTopFillColour[1], $tableHeaderTopFillColour[2] );
+	
+	$pdf->Cell( 55,7,"Tenant code", 1, 0, 'C', true );
+	$pdf->Cell( 55,7,"Tenant name", 1, 0, 'C', true );
+	$pdf->Cell( 40,7,"Date", 1, 0, 'C', true );
+	$pdf->Cell( 40,7,"Signature", 1, 0, 'C', true );
+	$pdf->Ln(7);
+	
+	
+	// Create the left header cell
+	$arr_docdate=explode("-",date("Y-m-d"));
+	$doc_date_show=$arr_docdate[2]."/".$arr_docdate[1]."/".$arr_docdate[0];
+	
+	
+	$fill = false;
+	$row = 0;
+	$pdf->SetFont( 'Arial', '', 11 );
+	$pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
+	$pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
+	$pdf->Cell( 55, 8, " " . "10010000287", 1, 0, 'C', $fill );
+	$pdf->Cell( 55, 8,"SSUP(CAMBODIA) CO.LTD.", 1, 0, 'C', $fill );
+	$pdf->Cell( 40, 8,"$doc_date_show", 1, 0, 'C', $fill );
+	$pdf->Cell( 40, 8,"", 1, 0, 'C', $fill );
+	$pdf->Ln(8);
+	$pdf->Ln(2);
+	
+	
+	// Create the table data rows
+	
+	$fill = true;
+	$row = 0;
+	
+	// Create the left header cell
+	$pdf->SetFont( 'Arial', 'B', 11 );
+	$pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
+	$pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
+	$pdf->Cell( 70, 8, " Cash receipt ( Daily Close Report ) ", 1, 0, 'C', $fill);
+	$pdf->Cell( 120, 8, "                 Daily sale report                                          Amount ", 1, 0, 'L', $fill);
+	$pdf->Ln( 8 );	
+	$fill = false;
+	// Test colum	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "1", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Total Sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12, $this->total_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "2", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "VAT", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12,$this->vat_show, 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "3", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Net Sales (1-2)", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12,$this->net_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "4", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Number of customers", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12, $this->total_bill, 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "5", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Settlement number", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12, '1', 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "6", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Cash sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12, $this->total_cash_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "7", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Credit/Debit Sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12, $this->total_credit_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "8", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Number of Credit/Debit Sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12, $this->total_credit_bill, 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "9", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Sales by other means", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12, "0.00", 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->SetFont( 'Arial', 'B', 11 );
+	$pdf->Cell( 70, 12, "Credit/Debit settlement receipt", 1, 0, 'C', true );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "-", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Number of cash voucher sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12, "0.00", 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "11", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Refund/Return Amount", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12, $this->total_cn_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell( 70, 12, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 12, "12", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, 12, "Number of Refund/Return", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, 12,$this->total_cn, 1, 0, 'R', $fill );
+	$pdf->Ln(12);
+	
+	$pdf->Cell(70, 12, "",'LR', 0, 'L', $fill );		
+	$pdf->Cell(120, 12, "      Input of 'Web sales report ' completed.         Check 'Yes' " ,'LT', 0, 'L', $fill );	
+	$pdf->Ln( 12 );
+	
+	//$pdf->Ln(2);
+	$pdf->Cell( 70, 22, "", 'LR', 0, 'L', $fill );	
+	$pdf->Cell( 10, 22, "", 'R', 0, 'C', $fill );	
+	$pdf->Cell( 50,22, " ",'TB', 0, 'C', $fill );
+	$pdf->Cell( 60,22, "", 'RTB', 0, 'R', $fill );
+	//$pdf->Cell( 70,24, "",0, 0, 'L', $fill );	
+	//$pdf->Cell( 10,24, " ",'R', 0, 'C', $fill );
+	//$pdf->Cell( 110,24, "", 1, 0, 'R', $fill );
+	
+	$pdf->SetY(215);
+	$pdf->SetX(90);
+	$pdf->Cell(50,8, " AAAAAAAA",1, 0, 'L', $fill );
+	
+	
+	
+	
+	
+	$pdf->Ln(22);//26
+	
+	//$pdf->Ln(2);
+	$pdf->Cell( 70, 22, "LLLLLLLLLLLLLLLLeft", 'LRB', 0, 'L', $fill );
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 22, "", 'R', 0, 'C', $fill );
+	$pdf->Cell( 50,22, " ",'TB', 0, 'C', $fill );
+	$pdf->Cell( 60,22, "", 'RTB', 0, 'R', $fill );
+	//$pdf->Cell( 70,24, "",0, 0, 'L', $fill );
+	//$pdf->Cell( 10,24, " ",'R', 0, 'C', $fill );
+	//$pdf->Cell( 110,24, "", 1, 0, 'R', $fill );
+	
+	$pdf->SetY(237);
+	$pdf->SetX(90);
+	$pdf->Cell(50,8, " BBBBBBBB",1, 0, 'L', $fill );
+	
+	//FOOTER
+	$pdf->Ln(24);
+	$pdf->Cell(190,15, "GGGGGGGGGGGGG", 1, 0, 'L', $fill );	
+	
+
+	/***
+	 Serve the PDF
+	 ***/
+	
+ 	$pdf->Output( "report.pdf", "I" );
+ 	exit();
+	
+	
+	
+	//START TO PRINT
+	$rpt_name='/rptdailysalesa4.pdf';
+	$output=REPORT_PATH.$rpt_name;
+	@chmod(REPORT_PATH,0777);
+	
+// 	$aa="lp -d $this->printer_name $output";
+// 	echo $aa;exit();
+	
+	
+	$pdf->Output($output,'F');
+	$print2ip=$this->arr_h[0]['print2ip'].":631";
+	
+	if($this->print2ip=='LOCAL'){		
+		echo shell_exec("lp -d {$this->printer_name} $output");
+		//echo "lp -d $this->printer_name $output";
+		//echo shell_exec("lp -d ML-2950-Series $output");
+	}else{
+		echo shell_exec("lpr -H {$this->printer_name} $this->print2ip $output");
+	}
+	if(@file_exists($output)){
+		echo shell_exec("rm $output");
+		//@unlink($output);
+	}
+	
+       
+?>

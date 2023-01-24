@@ -1,0 +1,1108 @@
+<style type="text/css">   
+    .div-table{display:table; }
+    .div-table-row{display:table-row;}
+    .div-table-col1{display:table-cell; padding-right:  100px; }
+    .div-table-col2{display:table-cell; padding-right:  20px; }
+    .div-table-col3{display:table-cell; padding-left:  200px; }
+    
+
+</style>
+
+CUTE PRESS / SSUP (THAILAND) CO.,LTD.<br>
+วันที่พิมพ์ : <?php echo $this->print_time ;?>    <br>        
+จุดขาย :  <?php echo $this->branch_id.' '.$this->branch_name ;?><br>
+เงื่อนไข   : ตั้งแต่วันที่ <?php echo $this->s_date. " - " .$this->e_date ; ?><br>
+
+<?php
+
+echo "รูปแบบ :  ".$this->report_detail."  (".$this->condition.")"  ;
+
+$i = 1;
+//print_r($trs_data);
+$sum_begin = 0 ;
+$sum_sl = 0 ;
+$sum_dn = 0 ;
+$sum_cn = 0 ;
+$sum_ti = 0 ;
+$sum_tto = 0 ;
+$sum_ai = 0 ;
+$sum_ao = 0 ;
+$sum_onhand = 0;
+$sum_amount_sl = 0;
+$sum_amount_dn = 0;
+$sum_amount_cn = 0;
+$sum_amount_ti = 0;
+$sum_amount_tto = 0;
+$sum_amount_ai = 0;
+$sum_amount_ao = 0;
+$sum_amt_begin = 0;
+$sum_amt_onhand = 0;
+$sum_amount_amt_tto = 0;
+$sum_balance = 0;
+
+
+$sale = 0;
+$dn = 0;
+$cn = 0;;
+$ti = 0;
+$tto = 0;
+$ai = 0;
+$ao = 0;
+$bal = 0; 
+
+if($this->condition == "All_Product" and $this->report_detail =="All_Detail"){
+    //echo "all";
+
+
+echo "<table border=0 width=550 >
+    
+<tr>
+    <td colspan=10>=====================================================================</td>
+          
+</tr>
+
+<tr align=right>
+          <td width=100># CODE</td>
+          <td>BEGIN</td>
+          <td>SALE</td>
+          <td>DN</td>
+          <td>CN</td>
+          <td>TI</td>
+          <td>TO</td>
+          <td>AI</td>
+          <td>AO</td>
+          <td>BAL</td>
+</tr>          
+<tr>
+          <td colspan=10>=====================================================================</td>
+          
+</tr> ";
+
+if($this->gettrs_data2 <> ""){   // วันที่ มากกว่า 01
+    $trs_data = $this->gettrs_data2 ;
+    foreach($trs_data as $b){
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    /*$sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];*/
+                   // $sum_onhand+=$b_onhand;
+                    
+                    $b_balance = $b_onhand+$b['sl2']+$b['dn2']+$b['cn2']+$b['ti2']+$b['tto2']+$b['ai2']+$b['ao2']; // balance set 2
+                    $sum_onhand+=$b_onhand; // รวม begin ใหม่ ( > วันที่ 01)
+                    $sum_sl+=$b['sl2'];
+                    $sum_dn+=$b['dn2'];
+                    $sum_cn+=$b['cn2'];
+                    $sum_ti+=$b['ti2'];
+                    $sum_tto+=$b['tto2'];
+                    $sum_ai+=$b['ai2'];
+                    $sum_ao+=$b['ao2'];
+                    $sum_amount_sl+=$b['amt_sl2'];
+                    $sum_amount_dn+=$b['amt_dn2'];
+                    $sum_amount_cn+=$b['amt_cn2'];
+                    $sum_amount_ti+=$b['amt_ti2'];
+                    $sum_amount_tto+=$b['amt_tto2'];
+                    $sum_amount_ai+=$b['amt_ai2'];
+                    $sum_amount_ao+=$b['amt_ao2'];
+                    $sum_balance+=$b_balance; // รวม balance ใหม่
+                    
+                    $sum_amt_begin += $b_onhand*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_balance*$b['price'];
+					if($b_onhand+$b_balance>0 || abs($b['sl2'])+abs($b['dn2'])+abs($b['cn2'])+abs($b['ti2']) +abs($b['tto2'])+abs($b['ai2'])+abs($b['ao2'])>0){
+					 echo " <tr>
+						<td>".$i++.". ".$b['product_id']."</td>
+						<td colspan=9>".substr($b['name_product'], 0, 45)."</td>
+						</tr>
+						<tr>
+						<td></td>
+						<td align='right'>".$b_onhand."</td>      
+						<td align='right'>".abs($b['sl2'])."</td>
+						<td align='right'>".abs($b['dn2'])."</td>
+						<td align='right'>".abs($b['cn2'])."</td>
+						<td align='right'>".abs($b['ti2'])."</td>
+						<td align='right'>".abs($b['tto2'])."</td>
+						<td align='right'>".abs($b['ai2'])."</td>
+						<td align='right'>".abs($b['ao2'])."</td>
+						<td align='right'>".$b_balance."</td>
+					 </tr>"; 				
+					}
+                 
+
+      
+           } //end foreach
+           
+                            $obj=new Model_Reportstock();  
+                            $tmp_data=$obj->getstock_tmp(); // ดึงข้อมูล tmp table
+                            $result = count($tmp_data);
+                            
+                                                             
+                            if ($result >= 1){
+                                //echo "already data";
+                                $trunc=$obj->truncate_tmp(); // empty table
+                                
+                                foreach ($this->gettrs_data2 as $tmp){  // update data
+                                $b_onhand = $tmp['begin']+$tmp['sl']+$tmp['dn']+$tmp['cn']+$tmp['ti']+$tmp['tto']+$tmp['ai']+$tmp['ao']; // balance set แรก
+                                $b_balance = $b_onhand+$tmp['sl2']+$tmp['dn2']+$tmp['cn2']+$tmp['ti2']+$tmp['tto2']+$tmp['ai2']+$tmp['ao2'];
+                                $product_id = $tmp['product_id'];
+                                $month = $this->fmonth;
+                                $year = $this->fyear;
+                                $begin = $b_onhand;
+                                $sale = $tmp['sl2'];
+                                $dn = $tmp['dn2'];
+                                $cn = $tmp['cn2'];
+                                $ti = $tmp['ti2'];
+                                $tto = $tmp['tto2'];
+                                $ai = $tmp['ai2'];
+                                $ao = $tmp['ao2'];
+                                $bal = $b_balance;                          
+                                
+                                $update_data=$obj->update_stock_tmp($product_id,$month,$year,$begin,$sale,$dn,$cn,$ti,$tto,$ai,$ao,$bal);
+                                }
+                            }else{
+                                foreach ($this->gettrs_data2 as $tmp){  // update data
+                                $b_onhand = $tmp['begin']+$tmp['sl']+$tmp['dn']+$tmp['cn']+$tmp['ti']+$tmp['tto']+$tmp['ai']+$tmp['ao']; // balance set แรก
+                                $b_balance = $b_onhand+$tmp['sl2']+$tmp['dn2']+$tmp['cn2']+$tmp['ti2']+$tmp['tto2']+$tmp['ai2']+$tmp['ao2'];
+                                $product_id = $tmp['product_id'];                                
+                                $month = $this->fmonth;
+                                $year = $this->fyear;
+                                $begin = $b_onhand;
+                                $sale = $tmp['sl2'];
+                                $dn = $tmp['dn2'];
+                                $cn = $tmp['cn2'];
+                                $ti = $tmp['ti2'];
+                                $tto = $tmp['tto2'];
+                                $ai = $tmp['ai2'];
+                                $ao = $tmp['ao2'];
+                                $bal = $b_balance;                          
+                                
+                                $update_data=$obj->update_stock_tmp($product_id,$month,$year,$begin,$sale,$dn,$cn,$ti,$tto,$ai,$ao,$bal);
+                                }
+                            }
+        
+        echo"</table>";  
+        
+        echo "<br><br><b>สรุปรายงาน :</b>";
+        echo"<table cellspacing=15>            
+        <tr>
+            <td>ยกมา (ชิ้น)   :  </td><td align='right'>".abs($sum_onhand)."</td>
+            <td>ยกมา (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_begin), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>รับ (ชิ้น)  :  </td><td align='right'>".abs($sum_ti)."</td>
+            <td>รับ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ti), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>ขาย (ชิ้น)  :  </td><td align='right'>".abs($sum_sl)."</td>
+            <td>ขาย (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_sl), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>คืน (ชิ้น)  :  </td><td align='right'>".abs($sum_tto)."</td>
+            <td>คืน (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_amt_tto), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>CN (ชิ้น)  :  </td><td align='right'>".abs($sum_cn)."</td>
+            <td>CN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_cn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>DN (ชิ้น)  :  </td><td align='right'>".abs($sum_dn)."</td>
+            <td>DN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_dn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ เข้า (ชิ้น)  :  </td><td align='right'>".abs($sum_ai)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ai), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ ออก (ชิ้น)  :  </td><td align='right'>".abs($sum_ao)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ao), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ยกไป (ชิ้น)  :  </td><td align='right'>".$sum_balance."</td>
+            <td>ยกไป (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_onhand), 2, '.', ',')."</td>    
+        </tr>";
+       
+    echo"</table>";
+    
+}else{  // เลือกข้อมูลตั้งแต่วันที่ 1
+    
+    $trs_data = $this->gettrs_data1 ;
+    foreach($trs_data as $b){
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];
+                    $sum_onhand+=$b_onhand;
+                    
+                    
+                    
+                    $sum_amt_begin += $b['begin']*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_onhand*$b['price'];
+
+					if($b_onhand+abs($b['begin'])>0 || abs($b['sl'])+abs($b['dn'])+abs($b['cn'])+abs($b['ti']) +abs($b['tto'])+abs($b['ai'])+abs($b['ao'])>0){
+					  echo "<tr>
+								<td>".$i++.". ".$b['product_id']."</td>
+								<td colspan=9>".substr($b['name_product'], 0, 45)."</td>
+								</tr>
+								<tr>
+								<td></td>
+								<td align='right'>".abs($b['begin'])."</td>      
+								<td align='right'>".abs($b['sl'])."</td>
+								<td align='right'>".abs($b['dn'])."</td>
+								<td align='right'>".abs($b['cn'])."</td>
+								<td align='right'>".abs($b['ti'])."</td>
+								<td align='right'>".abs($b['tto'])."</td>
+								<td align='right'>".abs($b['ai'])."</td>
+								<td align='right'>".abs($b['ao'])."</td>
+								<td align='right'>".$b_onhand."</td>
+								</tr>"; 				
+					}
+
+          
+           } //end foreach
+                            
+                                
+                                
+                            $obj=new Model_Reportstock();
+                            $tmp_data=$obj->getstock_tmp();
+                            $result = count($tmp_data);
+                            
+                                
+                            if ($result >= 1){
+                                //echo "already data";
+                                $trunc=$obj->truncate_tmp();
+                                                                                             
+                               
+                                foreach ($this->gettrs_data1 as $tmp){
+                                $b_onhand = $tmp['begin']+$tmp['sl']+$tmp['dn']+$tmp['cn']+$tmp['ti']+$tmp['tto']+$tmp['ai']+$tmp['ao']; // balance set แรก
+                                $product_id = $tmp['product_id'];
+                                $month = $this->fmonth;
+                                $year = $this->fyear;
+                                $begin = $tmp['begin'];
+                                $sale = $tmp['sl'];
+                                $dn = $tmp['dn'];
+                                $cn = $tmp['cn'];
+                                $ti = $tmp['ti'];
+                                $tto = $tmp['tto'];
+                                $ai = $tmp['ai'];
+                                $ao = $tmp['ao'];
+                                $bal = $b_onhand;                          
+                                
+                                $update_data=$obj->update_stock_tmp($product_id,$month,$year,$begin,$sale,$dn,$cn,$ti,$tto,$ai,$ao,$bal);
+                                }
+                            }else{
+                                
+                                foreach ($this->gettrs_data1 as $tmp){
+                                $b_onhand = $tmp['begin']+$tmp['sl']+$tmp['dn']+$tmp['cn']+$tmp['ti']+$tmp['tto']+$tmp['ai']+$tmp['ao']; // balance set แรก
+                                $product_id = $tmp['product_id'];                                                             
+                                $month = $this->fmonth;
+                                $year = $this->fyear;
+                                $begin = $tmp['begin'];
+                                $sale = $tmp['sl'];
+                                $dn = $tmp['dn'];
+                                $cn = $tmp['cn'];
+                                $ti = $tmp['ti'];
+                                $tto = $tmp['tto'];
+                                $ai = $tmp['ai'];
+                                $ao = $tmp['ao'];
+                                $bal = $b_onhand;                          
+                                
+                                $update_data=$obj->update_stock_tmp($product_id,$month,$year,$begin,$sale,$dn,$cn,$ti,$tto,$ai,$ao,$bal);
+                                }
+                          }
+                            
+        
+        echo"</table>";  
+        
+        echo "<br><br><b>สรุปรายงาน :</b>";
+        echo"<table cellspacing=15>            
+        <tr>
+            <td>ยกมา (ชิ้น)   :  </td><td align='right'>".abs($sum_begin)."</td>
+            <td>ยกมา (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_begin), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>รับ (ชิ้น)  :  </td><td align='right'>".abs($sum_ti)."</td>
+            <td>รับ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ti), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>ขาย (ชิ้น)  :  </td><td align='right'>".abs($sum_sl)."</td>
+            <td>ขาย (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_sl), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>คืน (ชิ้น)  :  </td><td align='right'>".abs($sum_tto)."</td>
+            <td>คืน (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_amt_tto), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>CN (ชิ้น)  :  </td><td align='right'>".abs($sum_cn)."</td>
+            <td>CN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_cn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>DN (ชิ้น)  :  </td><td align='right'>".abs($sum_dn)."</td>
+            <td>DN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_dn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ เข้า (ชิ้น)  :  </td><td align='right'>".abs($sum_ai)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ai), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ ออก (ชิ้น)  :  </td><td align='right'>".abs($sum_ao)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ao), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ยกไป (ชิ้น)  :  </td><td align='right'>".$sum_onhand."</td>
+            <td>ยกไป (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_onhand), 2, '.', ',')."</td>    
+        </tr>";
+       
+echo"</table>";
+    
+}    
+}elseif($this->condition == "สินค้าทั้งหมด" and $this->report_detail =="สรุปยอดรวม"){
+
+
+if($this->gettrs_data2 <> ""){
+    $trs_data = $this->gettrs_data2 ;
+    foreach($trs_data as $b){
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    /*$sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];*/
+                   // $sum_onhand+=$b_onhand;
+                    
+                    $b_balance = $b_onhand+$b['sl2']+$b['dn2']+$b['cn2']+$b['ti2']+$b['tto2']+$b['ai2']+$b['ao2']; // balance set 2
+                    $sum_onhand+=$b_onhand; // รวม begin ใหม่ ( > วันที่ 01)
+                    $sum_sl+=$b['sl2'];
+                    $sum_dn+=$b['dn2'];
+                    $sum_cn+=$b['cn2'];
+                    $sum_ti+=$b['ti2'];
+                    $sum_tto+=$b['tto2'];
+                    $sum_ai+=$b['ai2'];
+                    $sum_ao+=$b['ao2'];
+                    $sum_amount_sl+=$b['amt_sl2'];
+                    $sum_amount_dn+=$b['amt_dn2'];
+                    $sum_amount_cn+=$b['amt_cn2'];
+                    $sum_amount_ti+=$b['amt_ti2'];
+                    $sum_amount_tto+=$b['amt_tto2'];
+                    $sum_amount_ai+=$b['amt_ai2'];
+                    $sum_amount_ao+=$b['amt_ao2'];
+                    $sum_balance+=$b_balance; // รวม balance ใหม่
+                    
+                    $sum_amt_begin += $b_onhand*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_balance*$b['price'];
+    }        
+        
+        echo "<br><br><b>สรุปรายงาน :</b>";
+        echo"<table cellspacing=15>            
+        <tr>
+            <td>ยกมา (ชิ้น)   :  </td><td align='right'>".abs($sum_onhand)."</td>
+            <td>ยกมา (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_begin), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>รับ (ชิ้น)  :  </td><td align='right'>".abs($sum_ti)."</td>
+            <td>รับ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ti), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>ขาย (ชิ้น)  :  </td><td align='right'>".abs($sum_sl)."</td>
+            <td>ขาย (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_sl), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>คืน (ชิ้น)  :  </td><td align='right'>".abs($sum_tto)."</td>
+            <td>คืน (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_amt_tto), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>CN (ชิ้น)  :  </td><td align='right'>".abs($sum_cn)."</td>
+            <td>CN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_cn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>DN (ชิ้น)  :  </td><td align='right'>".abs($sum_dn)."</td>
+            <td>DN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_dn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ เข้า (ชิ้น)  :  </td><td align='right'>".abs($sum_ai)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ai), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ ออก (ชิ้น)  :  </td><td align='right'>".abs($sum_ao)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ao), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ยกไป (ชิ้น)  :  </td><td align='right'>".$sum_balance."</td>
+            <td>ยกไป (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_onhand), 2, '.', ',')."</td>    
+        </tr>";
+    }
+
+
+else{  // เลือกข้อมูลตั้งแต่วันที่ 1
+    
+    $trs_data = $this->gettrs_data1 ;
+    foreach($trs_data as $b){
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];
+                    $sum_onhand+=$b_onhand;
+                    
+                    
+                    
+                    $sum_amt_begin += $b['begin']*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_onhand*$b['price'];
+       
+         
+    } 
+        echo "<br><br><b>สรุปรายงาน :</b>";
+        echo"<table cellspacing=15>            
+        <tr>
+            <td>ยกมา (ชิ้น)   :  </td><td align='right'>".abs($sum_begin)."</td>
+            <td>ยกมา (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_begin), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>รับ (ชิ้น)  :  </td><td align='right'>".abs($sum_ti)."</td>
+            <td>รับ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ti), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>ขาย (ชิ้น)  :  </td><td align='right'>".abs($sum_sl)."</td>
+            <td>ขาย (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_sl), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>คืน (ชิ้น)  :  </td><td align='right'>".abs($sum_tto)."</td>
+            <td>คืน (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_amt_tto), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>CN (ชิ้น)  :  </td><td align='right'>".abs($sum_cn)."</td>
+            <td>CN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_cn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>DN (ชิ้น)  :  </td><td align='right'>".abs($sum_dn)."</td>
+            <td>DN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_dn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ เข้า (ชิ้น)  :  </td><td align='right'>".abs($sum_ai)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ai), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ ออก (ชิ้น)  :  </td><td align='right'>".abs($sum_ao)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ao), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ยกไป (ชิ้น)  :  </td><td align='right'>".$sum_onhand."</td>
+            <td>ยกไป (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_onhand), 2, '.', ',')."</td>    
+        </tr>";
+       
+echo"</table>";
+}
+
+}  // end สรุปยอดรวม
+ 
+elseif($this->condition == "เฉพาะสินค้าเคลื่อนไหว" and $this->report_detail =="แสดงรายละเอียด"){
+    //echo "all";
+
+
+echo "<table border=0 width=550 >
+    
+<tr>
+    <td colspan=10>=====================================================================</td>
+          
+</tr>
+
+<tr align=right>
+          <td width=100># CODE</td>
+          <td>BEGIN</td>
+          <td>SALE</td>
+          <td>DN</td>
+          <td>CN</td>
+          <td>TI</td>
+          <td>TO</td>
+          <td>AI</td>
+          <td>AO</td>
+          <td>BAL</td>
+</tr>          
+<tr>
+          <td colspan=10>=====================================================================</td>
+          
+</tr> ";
+
+if($this->gettrs_data2 <> ""){   // วันที่ มากกว่า 01
+    $trs_data = $this->gettrs_data2 ;
+    foreach($trs_data as $b){
+                    
+                    /*$sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];*/
+                   // $sum_onhand+=$b_onhand;
+              
+                    if($b['sl2'] == 0 and $b['dn2'] == 0 and $b['cn2'] == 0 and $b['ti2'] == 0 and $b['tto2'] == 0 and $b['ai2'] == 0 and $b['ao2'] == 0 ){
+         echo "";}else{
+                    
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $b_balance = $b_onhand+$b['sl2']+$b['dn2']+$b['cn2']+$b['ti2']+$b['tto2']+$b['ai2']+$b['ao2']; // balance set 2
+                    $sum_onhand+=$b_onhand; // รวม begin ใหม่ ( > วันที่ 01)
+                    $sum_sl+=$b['sl2'];
+                    $sum_dn+=$b['dn2'];
+                    $sum_cn+=$b['cn2'];
+                    $sum_ti+=$b['ti2'];
+                    $sum_tto+=$b['tto2'];
+                    $sum_ai+=$b['ai2'];
+                    $sum_ao+=$b['ao2'];
+                    $sum_amount_sl+=$b['amt_sl2'];
+                    $sum_amount_dn+=$b['amt_dn2'];
+                    $sum_amount_cn+=$b['amt_cn2'];
+                    $sum_amount_ti+=$b['amt_ti2'];
+                    $sum_amount_tto+=$b['amt_tto2'];
+                    $sum_amount_ai+=$b['amt_ai2'];
+                    $sum_amount_ao+=$b['amt_ao2'];
+                    $sum_balance+=$b_balance; // รวม balance ใหม่
+                    
+                    $sum_amt_begin += $b_onhand*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_balance*$b['price'];
+                 
+         
+                    
+                    echo "<tr>
+                    <td>".$i++.". ".$b['product_id']."</td>
+                    <td colspan=9>".substr($b['name_product'], 0, 45)."</td>
+                    </tr>
+                    <tr>
+                    <td></td>
+                    <td align='right'>".$b_onhand."</td>      
+                    <td align='right'>".abs($b['sl2'])."</td>
+                    <td align='right'>".abs($b['dn2'])."</td>
+                    <td align='right'>".abs($b['cn2'])."</td>
+                    <td align='right'>".abs($b['ti2'])."</td>
+                    <td align='right'>".abs($b['tto2'])."</td>
+                    <td align='right'>".abs($b['ai2'])."</td>
+                    <td align='right'>".abs($b['ao2'])."</td>
+                    <td align='right'>".$b_balance."</td>
+                 </tr>"; 
+         }
+           } //end foreach
+        
+        echo"</table>";  
+        
+        echo "<br><br><b>สรุปรายงาน :</b>";
+        echo"<table cellspacing=15>            
+        <tr>
+            <td>ยกมา (ชิ้น)   :  </td><td align='right'>".abs($sum_onhand)."</td>
+            <td>ยกมา (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_begin), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>รับ (ชิ้น)  :  </td><td align='right'>".abs($sum_ti)."</td>
+            <td>รับ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ti), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>ขาย (ชิ้น)  :  </td><td align='right'>".abs($sum_sl)."</td>
+            <td>ขาย (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_sl), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>คืน (ชิ้น)  :  </td><td align='right'>".abs($sum_tto)."</td>
+            <td>คืน (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_amt_tto), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>CN (ชิ้น)  :  </td><td align='right'>".abs($sum_cn)."</td>
+            <td>CN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_cn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>DN (ชิ้น)  :  </td><td align='right'>".abs($sum_dn)."</td>
+            <td>DN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_dn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ เข้า (ชิ้น)  :  </td><td align='right'>".abs($sum_ai)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ai), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ ออก (ชิ้น)  :  </td><td align='right'>".abs($sum_ao)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ao), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ยกไป (ชิ้น)  :  </td><td align='right'>".$sum_balance."</td>
+            <td>ยกไป (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_onhand), 2, '.', ',')."</td>    
+        </tr>";
+       
+    echo"</table>";
+    
+}else{  // เลือกข้อมูลตั้งแต่วันที่ 1
+    
+    $trs_data = $this->gettrs_data1 ;
+    foreach($trs_data as $b){
+        
+        
+        if($b['sl'] == 0 and $b['dn'] == 0 and $b['cn'] == 0 and $b['ti'] == 0 and $b['tto'] == 0 and $b['ai'] == 0 and $b['ao'] == 0 ){
+         echo "";}else{
+             
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];
+                    $sum_onhand+=$b_onhand;
+                    
+                    
+                    
+                    $sum_amt_begin += $b['begin']*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_onhand*$b['price'];
+                    
+        
+          echo "<tr>
+                    <td>".$i++.". ".$b['product_id']."</td>
+                    <td colspan=9>".substr($b['name_product'], 0, 45)."</td>
+                    </tr>
+                    <tr>
+                    <td></td>
+                    <td align='right'>".abs($b['begin'])."</td>      
+                    <td align='right'>".abs($b['sl'])."</td>
+                    <td align='right'>".abs($b['dn'])."</td>
+                    <td align='right'>".abs($b['cn'])."</td>
+                    <td align='right'>".abs($b['ti'])."</td>
+                    <td align='right'>".abs($b['tto'])."</td>
+                    <td align='right'>".abs($b['ai'])."</td>
+                    <td align='right'>".abs($b['ao'])."</td>
+                    <td align='right'>".$b_onhand."</td>
+                    </tr>"; 
+         } 
+           } //end foreach
+        
+        echo"</table>";  
+        
+        echo "<br><br><b>สรุปรายงาน :</b>";
+        echo"<table cellspacing=15>            
+        <tr>
+            <td>ยกมา (ชิ้น)   :  </td><td align='right'>".abs($sum_begin)."</td>
+            <td>ยกมา (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_begin), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>รับ (ชิ้น)  :  </td><td align='right'>".abs($sum_ti)."</td>
+            <td>รับ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ti), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>ขาย (ชิ้น)  :  </td><td align='right'>".abs($sum_sl)."</td>
+            <td>ขาย (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_sl), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>คืน (ชิ้น)  :  </td><td align='right'>".abs($sum_tto)."</td>
+            <td>คืน (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_amt_tto), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>CN (ชิ้น)  :  </td><td align='right'>".abs($sum_cn)."</td>
+            <td>CN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_cn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>DN (ชิ้น)  :  </td><td align='right'>".abs($sum_dn)."</td>
+            <td>DN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_dn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ เข้า (ชิ้น)  :  </td><td align='right'>".abs($sum_ai)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ai), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ ออก (ชิ้น)  :  </td><td align='right'>".abs($sum_ao)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ao), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ยกไป (ชิ้น)  :  </td><td align='right'>".$sum_onhand."</td>
+            <td>ยกไป (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_onhand), 2, '.', ',')."</td>    
+        </tr>";
+       
+echo"</table>";
+    
+}    
+
+}elseif($this->condition == "เฉพาะสินค้าเคลื่อนไหว" and $this->report_detail =="สรุปยอดรวม"){
+
+
+if($this->gettrs_data2 <> ""){
+    $trs_data = $this->gettrs_data2 ;
+    foreach($trs_data as $b){
+        
+        if($b['sl2'] == 0 and $b['dn2'] == 0 and $b['cn2'] == 0 and $b['ti2'] == 0 and $b['tto2'] == 0 and $b['ai2'] == 0 and $b['ao2'] == 0 ){
+         echo "";}else{
+            
+         
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก                    
+                    $b_balance = $b_onhand+$b['sl2']+$b['dn2']+$b['cn2']+$b['ti2']+$b['tto2']+$b['ai2']+$b['ao2']; // balance set 2
+                    $sum_onhand+=$b_onhand; // รวม begin ใหม่ ( > วันที่ 01)
+                    $sum_sl+=$b['sl2'];
+                    $sum_dn+=$b['dn2'];
+                    $sum_cn+=$b['cn2'];
+                    $sum_ti+=$b['ti2'];
+                    $sum_tto+=$b['tto2'];
+                    $sum_ai+=$b['ai2'];
+                    $sum_ao+=$b['ao2'];
+                    $sum_amount_sl+=$b['amt_sl2'];
+                    $sum_amount_dn+=$b['amt_dn2'];
+                    $sum_amount_cn+=$b['amt_cn2'];
+                    $sum_amount_ti+=$b['amt_ti2'];
+                    $sum_amount_tto+=$b['amt_tto2'];
+                    $sum_amount_ai+=$b['amt_ai2'];
+                    $sum_amount_ao+=$b['amt_ao2'];
+                    $sum_balance+=$b_balance; // รวม balance ใหม่
+                    
+                    $sum_amt_begin += $b_onhand*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_balance*$b['price'];
+            }        
+    } 
+        echo "<br><br><b>สรุปรายงาน :</b>";
+        echo"<table cellspacing=15>            
+        <tr>
+            <td>ยกมา (ชิ้น)   :  </td><td align='right'>".abs($sum_onhand)."</td>
+            <td>ยกมา (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_begin), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>รับ (ชิ้น)  :  </td><td align='right'>".abs($sum_ti)."</td>
+            <td>รับ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ti), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>ขาย (ชิ้น)  :  </td><td align='right'>".abs($sum_sl)."</td>
+            <td>ขาย (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_sl), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>คืน (ชิ้น)  :  </td><td align='right'>".abs($sum_tto)."</td>
+            <td>คืน (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_amt_tto), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>CN (ชิ้น)  :  </td><td align='right'>".abs($sum_cn)."</td>
+            <td>CN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_cn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>DN (ชิ้น)  :  </td><td align='right'>".abs($sum_dn)."</td>
+            <td>DN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_dn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ เข้า (ชิ้น)  :  </td><td align='right'>".abs($sum_ai)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ai), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ ออก (ชิ้น)  :  </td><td align='right'>".abs($sum_ao)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ao), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ยกไป (ชิ้น)  :  </td><td align='right'>".$sum_balance."</td>
+            <td>ยกไป (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_onhand), 2, '.', ',')."</td>    
+        </tr>";
+    }
+
+
+else{  // เลือกข้อมูลตั้งแต่วันที่ 1
+    
+    $trs_data = $this->gettrs_data1 ;
+    foreach($trs_data as $b){
+        
+         if($b['sl'] == 0 and $b['dn'] == 0 and $b['cn'] == 0 and $b['ti'] == 0 and $b['tto'] == 0 and $b['ai'] == 0 and $b['ao'] == 0 ){
+         echo "";}else{
+            
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];
+                    $sum_onhand+=$b_onhand;
+                                       
+                    
+                    $sum_amt_begin += $b['begin']*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_onhand*$b['price'];
+         }
+         
+    } 
+        echo "<br><br><b>สรุปรายงาน :</b>";
+        echo"<table cellspacing=15>            
+        <tr>
+            <td>ยกมา (ชิ้น)   :  </td><td align='right'>".abs($sum_begin)."</td>
+            <td>ยกมา (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_begin), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>รับ (ชิ้น)  :  </td><td align='right'>".abs($sum_ti)."</td>
+            <td>รับ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ti), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>ขาย (ชิ้น)  :  </td><td align='right'>".abs($sum_sl)."</td>
+            <td>ขาย (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_sl), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>คืน (ชิ้น)  :  </td><td align='right'>".abs($sum_tto)."</td>
+            <td>คืน (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_amt_tto), 2, '.', ',')."</td>
+        </tr>
+        <tr>
+            <td>CN (ชิ้น)  :  </td><td align='right'>".abs($sum_cn)."</td>
+            <td>CN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_cn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>DN (ชิ้น)  :  </td><td align='right'>".abs($sum_dn)."</td>
+            <td>DN (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_dn), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ เข้า (ชิ้น)  :  </td><td align='right'>".abs($sum_ai)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ai), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ADJ ออก (ชิ้น)  :  </td><td align='right'>".abs($sum_ao)."</td>
+            <td>ADJ (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amount_ao), 2, '.', ',')."</td>    
+        </tr>
+        <tr>
+            <td>ยกไป (ชิ้น)  :  </td><td align='right'>".$sum_onhand."</td>
+            <td>ยกไป (เงิน)  :  </td><td align='right'>".number_format(abs($sum_amt_onhand), 2, '.', ',')."</td>    
+        </tr>";
+       
+echo"</table>";
+}
+
+}  // end สรุปยอดรวม
+
+
+echo "<table cellpadding=5>"; // bill sl
+$arrsl_bill=$this->getbillsl_data;
+ echo "<tr><td colspan=4>เลขที่บิลอย่างย่อ</td></tr>";
+ foreach($arrsl_bill as $bsl){
+ echo "<tr><td colspan=4>".$bsl['min(`doc_no`)']." - ".$bsl['max(`doc_no`)']."</td></tr>";
+}
+$arrvt_bill=$this->getbillvt_data; // bill vt
+ foreach($arrvt_bill as $bvt){
+	 if($bvt['min(`doc_no`)'] != null){
+		 echo "<tr><td colspan=4>".$bvt['min(`doc_no`)']." - ".$bvt['max(`doc_no`)']."</td></tr>";
+	 }else{
+	  	 echo "";
+	 }
+}
+$arrslvt_bill=$this->getbillslvt_data; // sum sl vt
+ foreach($arrslvt_bill as $bslvt){
+ echo "<tr><td>  รวม </td><td align=right>".number_format(abs($bslvt['quantity']), 0, '.', ',')."</td><td> จำนวนเงิน </td><td align='right'>".number_format(abs($bslvt['amount']), 2, '.', ',')."</td></tr>";
+}
+echo "</table>";
+
+ // bill ti
+$arrti_bill=$this->getbillti_data;
+$ti_sum_quantity_detail = 0;
+$ti_sum_amount_detail =0;
+ echo "<table cellpadding=5>"; 
+ echo "<tr><td colspan=4>เลขที่รับสินค้า</td></tr>";
+ foreach($arrti_bill as $c){
+     $ti_sum_quantity_detail+=$c['quantity'];
+     $ti_sum_amount_detail+=$c['amount'];
+ echo "<tr><td>".$c['doc_no']."  รวม </td><td align=right>".number_format(abs($c['quantity']), 0, '.', ',')."</td><td> จำนวนเงิน </td><td align='right'>".number_format(abs($c['amount']), 2, '.', ',')."</td></tr>";
+ }
+//if($ti_sum_quantity_detail > '0'){  
+ echo "<tr><td>รวม</td><td>".number_format(abs($ti_sum_quantity_detail), 0, '.', ',')."</td><td>จำนวนเงิน</td><td align='right'>".number_format(abs($ti_sum_amount_detail), 2, '.', ',')."</td>";
+//}
+ echo "</table>";
+
+   // bill dn
+$arrdn_bill=$this->getbilldn_data;
+$dn_sum_quantity_detail = 0;
+$dn_sum_amount_detail =0;
+echo "<table cellpadding=5>";
+ echo "<tr><td colspan=4>เลขที่ใบส่งสินค้า</td></tr>";
+ foreach($arrdn_bill as $bsl){
+ echo "<tr><td colspan=4>".$bsl['min(`doc_no`)']." - ".$bsl['max(`doc_no`)']."</td></tr>";
+ echo "<tr><td>  รวม </td><td align=right>".number_format(abs($bsl['quantity']), 0, '.', ',')."</td><td> จำนวนเงิน </td><td align='right'>".number_format(abs($bsl['amount']), 2, '.', ',')."</td></tr>";
+}
+//if($dn_sum_quantity_detail > '0'){ 
+//echo "<tr><td>รวม</td><td>".number_format(abs($dn_sum_quantity_detail), 0, '.', ',')."</td><td>จำนวนเงิน</td><td align='right'>".number_format(abs($dn_sum_amount_detail), 2, '.', ',')."</td>";
+//}
+echo "</table>";
+
+  // bill to
+$arrto_bill=$this->getbillto_data;
+$to_sum_quantity_detail = 0;
+$to_sum_amount_detail =0;
+echo "<table cellpadding=5>";
+ echo "<tr><td colspan=4>เลขที่คืนสินค้า</td></tr>";
+ foreach($arrto_bill as $c){
+     $to_sum_quantity_detail+=$c['quantity'];
+     $to_sum_amount_detail+=$c['amount']; 
+ echo "<tr><td>".$c['doc_no']."  รวม </td><td align=right>".number_format(abs($c['quantity']), 0, '.', ',')."</td><td> จำนวนเงิน </td><td align='right'>".number_format(abs($c['amount']), 2, '.', ',')."</td></tr>";
+ }
+//if($to_sum_quantity_detail > '0'){ 
+echo "<tr><td>รวม</td><td>".number_format(abs($to_sum_quantity_detail), 0, '.', ',')."</td><td>จำนวนเงิน</td><td align='right'>".number_format(abs($to_sum_amount_detail), 2, '.', ',')."</td>";
+//}
+echo "</table>";
+
+
+echo "<table cellpadding=5>";  // bill cn
+$arrcn_bill=$this->getbillcn_data;
+$cn_sum_quantity_detail = 0;
+$cn_sum_amount_detail =0;
+ echo "<tr><td colspan=4>เลขที่ลดหนี้ลูกค้า</td></tr>";
+ foreach($arrcn_bill as $c){
+     $cn_sum_quantity_detail+=$c['quantity'];
+     $cn_sum_amount_detail+=$c['amount'];
+ echo "<tr><td>".$c['doc_no']."  รวม </td><td align=right>".number_format(abs($c['quantity']), 0, '.', ',')."</td><td> จำนวนเงิน </td><td align='right'>".number_format(abs($c['amount']), 2, '.', ',')."</td></tr>";
+}
+//if($cn_sum_quantity_detail > '0'){ 
+echo "<tr><td>รวม</td><td>".number_format(abs($cn_sum_quantity_detail), 0, '.', ',')."</td><td>จำนวนเงิน</td><td align='right'>".number_format(abs($cn_sum_amount_detail), 2, '.', ',')."</td>";
+//}
+echo "</table>";
+
+
+echo "<table cellpadding=5>";  // bill ai
+$arrai_bill=$this->getbillai_data;
+$ai_sum_quantity_detail = 0;
+$ai_sum_amount_detail =0;
+ echo "<tr><td colspan=4>เลขที่ปรับปรุงเข้า</td></tr>";
+ foreach($arrai_bill as $c){
+     $ai_sum_quantity_detail+=$c['quantity'];
+     $ai_sum_amount_detail+=$c['amount'];
+ echo "<tr><td>".$c['doc_no']."  รวม </td><td align=right>".number_format(abs($c['quantity']), 0, '.', ',')."</td><td> จำนวนเงิน </td><td align='right'>".number_format(abs($c['amount']), 2, '.', ',')."</td></tr>";
+}
+//if($ai_sum_quantity_detail > '0'){ 
+echo "<tr><td>รวม</td><td>".number_format(abs($ai_sum_quantity_detail), 0, '.', ',')."</td><td>จำนวนเงิน</td><td align='right'>".number_format(abs($ai_sum_amount_detail), 2, '.', ',')."</td>";
+//}
+echo "</table>";
+
+
+echo "<table cellpadding=5>";  // bill ao
+$arrao_bill=$this->getbillao_data;
+$ao_sum_quantity_detail = 0;
+$ao_sum_amount_detail =0;
+ echo "<tr><td colspan=4>เลขที่ปรับปรุงออก</td></tr>";
+ foreach($arrao_bill as $c){
+     $ao_sum_quantity_detail+=$c['quantity'];
+     $ao_sum_amount_detail+=$c['amount'];
+ echo "<tr><td>".$c['doc_no']."  รวม </td><td align=right>".number_format(abs($c['quantity']), 0, '.', ',')."</td><td> จำนวนเงิน </td><td align='right'>".number_format(abs($c['amount']), 2, '.', ',')."</td></tr>";
+}
+//if($ao_sum_quantity_detail > '0'){ 
+echo "<tr><td>รวม</td><td>".number_format(abs($ao_sum_quantity_detail), 0, '.', ',')."</td><td>จำนวนเงิน</td><td align='right'>".number_format(abs($ao_sum_amount_detail), 2, '.', ',')."</td>";
+//}
+echo "</table>";
+?>
+
+        
+
+
+<?php
+
+                         
+/*echo"
+<form action='/report/report/printviewstock' method='post'>
+<input type=hidden  name=product1 value='$this->product_start'>
+<input type=hidden  name=product2 value='$this->product_end'>
+<input type=hidden  name=data1 value='$this->dayfrom'>
+<input type=hidden  name=data2 value='$this->tofrom'>
+<input type=hidden  name=condition value='$this->condition'>
+<input type=hidden  name=detail value='$this->report_detail'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>";*/
+
+
+if ($this->get_printer == 'Y'){
+	echo "<div align=right>
+<form action='/report/report/printviewstock' method='post'>
+<input type=hidden  name=product1 value='$this->product_start'>
+<input type=hidden  name=product2 value='$this->product_end'>
+<input type=hidden  name=data1 value='$this->dayfrom'>
+<input type=hidden  name=data2 value='$this->tofrom'>
+<input type=hidden  name=condition value='$this->condition'>
+<input type=hidden  name=detail value='$this->report_detail'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>";  // print thermal
+}else{
+	echo "<div align=right>
+<form action='/report/report/printmtstock' method='post'>
+<input type=hidden  name=product1 value='$this->product_start'>
+<input type=hidden  name=product2 value='$this->product_end'>
+<input type=hidden  name=data1 value='$this->dayfrom'>
+<input type=hidden  name=data2 value='$this->tofrom'>
+<input type=hidden  name=condition value='$this->condition'>
+<input type=hidden  name=detail value='$this->report_detail'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>"; // print dot matrix
+}
+
+
+
+?>
+
+<?php
+/*$day = $this->tofrom;
+$today = date('Y-m-d');
+
+
+
+if ($day < $today ){
+    echo "<div align=right>
+<form action='/report/report/printreport' method='post'>
+<input type=hidden id=start_date name=start_date value='$this->dayfrom'>
+<input type=hidden id=end_date name=end_date value='$this->tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>
+
+</div>" ;
+}  else {
+echo "";    
+}*/
+
+?>

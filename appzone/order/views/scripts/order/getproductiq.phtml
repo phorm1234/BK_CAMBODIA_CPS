@@ -1,0 +1,141 @@
+
+<style>
+.flexigrid div.fbutton .view_product {
+	background: url(/stock/img/view_choose.png) no-repeat center left;
+}
+
+.flexigrid div.fbutton .delete {
+	background: url(/stock/img/delete.png) no-repeat center left;
+}
+
+</style>
+<?php
+$doc_no=$this->doc_no;
+//$sum_inv=$this->sum_inv;
+$sum=$this->sum_inv;
+$chkdocno=$this->chkdocno;
+//echo $sum[0]['quantity'];
+//print_r($sum_inv);
+/*if(!empty($sum[0]['quantity'])){
+	$sumall=($sum[0]['price']*$sum[0]['quantity']);
+}else{
+	$sumall=null;
+}*/
+?>
+<center>
+<table width="100%" bgcolor="#d1d1d1">
+	<tr>
+		<td><table id="flex1" style="display:none"></table></td>
+	</tr>
+	<tr>
+		<td>
+			<table width="100%" border="0" cellpadding="2" cellspacing="2" bgcolor="#e9f2f8" align="center">
+				<tr>
+					<td width="5%" height="30"></td>
+					<td width="10%"></td>
+					<td width="21%"></td>
+					<td width="10%" align="right"><b>Total</b></td>
+					<td width="10%" align="center"><input type="text" value="<?php echo number_format($sum[0]['quantity'], 0, '.', ',');?>" size="10" class="NFText" disabled="disabled"></td>
+					<td width="10%" align="center"><input type="text" value="<?php echo number_format($sum[0]['price'], 2, '.', ',');?>" size="10" class="NFText" disabled="disabled"></td>
+					<td width="10%"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td width="5%" height="30"></td>
+					<td width="10%"></td>
+					<td width="21%"></td>
+					<td width="10%" align="right"></td>
+					<td width="10%" colspan="2">
+						<table width="100%" border="0" cellpadding="2" cellspacing="2">
+							<tr>
+								<td align="right"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return tempor2diaryiq();"><span class="ui-icon ui-icon-disk"></span>Save  (F3)</a></td>
+								<td align="left"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return iq_cancel();"><span class="ui-icon ui-icon-cancel"></span>Cancle (F4)</a></td>
+							</tr>
+						</table>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<input type="hidden" name="doc_no" id="doc_no" value="<?php echo $doc_no;?>">
+<input type=hidden name="chk" id="chk" value="<?php echo $chkdocno;?>">
+</center>
+<script type="text/javascript">
+var pWidth=(screen.width-(screen.width*(20/100)))-10;
+var pWidth=(screen.width-(screen.width*(2/100)))-10;
+var pWidth=(screen.width-(screen.width*(3/100)))-10;
+var txt="Order Items";
+$("#flex1").flexigrid({
+	url: '/order/order/getdataproductiq',
+	dataType: 'json',
+	colModel : [
+		{display: '#', name : 'seq', width : 40, sortable : true, align: 'center'},
+		{display: 'Product Id', name : 'product_id', width : 95, sortable : true, align: 'center'},
+		{display: 'Description', name : 'product_name', width : 200, sortable : false, align: 'left'},
+		{display: 'Onhand', name : 'quantity', width : 65, sortable : false, align: 'center'},
+		{display: 'Price', name : 'price', width : 90, sortable : false, align: 'center'},
+		{display: 'Quantity', name : 'quantity', width : 65, sortable : false, align: 'center'},
+		{display: 'Amount', name : 'dif', width : 90, sortable : false, align: 'center'}
+		],
+		buttons : [
+      	{name: 'Delete', bclass: 'delete', onpress : productaction},
+      	{separator: true}
+      	],
+		searchitems : [
+		{display: 'รหัสสินค้า', name : 'procuct_id'}
+		],
+	sortname: "seq",
+	sortorder: "asc",
+	usepager: true,
+	title: txt,
+	useRp: true,
+	rp: 30,
+	showTableToggleBtn: true,
+	onSubmit: addFormData,
+	height: 300
+});
+
+function productaction(com, grid) {
+	var doc_no=$("#doc_no").val();
+	if($('.trSelected',grid).length>0){
+		var items = $('.trSelected',grid);
+		var itemlist ='';
+		for(i=0;i<items.length;i++){
+			itemlist+= items[i].id.substr(3)+",";
+			//itemlist= items[i].id.substr(3);
+		}
+	}
+	if (com == 'Delete') {
+		if(itemlist==undefined){
+			jAlert('You did not select any items!', 'Alert!');;
+		}else{
+			jConfirm('Confirm Delete?', 'Alert!', function(r) {
+				if(r==false){
+					return false;
+				}else{
+					$.ajax({type: "POST",url: "/order/order/deletetmplistiq",data:{seq:itemlist},success:
+						function(data){
+							if(data=="y"){
+								viewiq("s");
+							}
+						}
+					});
+				}
+			});
+		} 
+	}
+}
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+	
+$('#sform').submit(function (){
+	$('#flex1').flexOptions({newp: 1}).flexReload();
+	return false;
+});
+</script>

@@ -1,0 +1,33 @@
+<p>
+		<table width="100%" border="0" cellpadding="0" cellspacing="3"><!--bgcolor="#CFE2E5"-->
+			<tr>
+				<td width="100" align="right"><span style="color:#000">Member code &nbsp;</span></td>
+				<td>
+					<input type="text" id="member_code" size="25" value='<?php echo $this->dummy_code['dummy']; ?>' class="input-text-pos"></input>
+				</td>               
+			</tr>		
+			<tr>
+				<td width="100" align="right"><span style="color:#000">Mobile &nbsp;</span></td>
+				<td>
+					<input type="text" id="key_mobile_no" size="25" class="input-text-pos"></input>
+				</td>               
+			</tr>	
+            <tr>
+				<td>&nbsp;</td>
+                <td>
+                    <button id="btn_otp_code_req">Request OTP CODE</button>
+                </td>
+			</tr>	
+            <tr>
+				<td colspan="2"><hr/></td>               
+			</tr>	
+            <tr>
+				<td width="100" align="right"><span style="color:#000"> OTP Code&nbsp;&nbsp;</span></td>
+				<td>
+					<input type="text" id="key_mobile_otp" size="25" class="input-text-pos"></input>
+					<input type='hidden' id='tmp_member_id' ></input>
+				</td>
+               
+			</tr>		
+        </table>
+</p>

@@ -1,0 +1,16 @@
+<?php
+@header("Content-type:text/html; charset=utf=8");
+//print_r($sum);
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->AddPage();
+$pdf->SetAutoPageBreak("off",1);
+$startY=2;
+$startX=0;//4
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Image('C:\Documents and Settings\todsaporn\Zend\workspaces\DefaultWorkspace7\pos-online\htdocs\stock\img\logo_op.png',35,0,0,0);
+
+$pdf->Output();
+	

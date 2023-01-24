@@ -1,0 +1,276 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>POS ONLINE</title>
+	<link href='/sales/css/style.css' rel='stylesheet' type='text/css'>
+	<link href="/sales/css/themes/dark-hive/jquery-ui-1.8.18.custom.css" rel="stylesheet" type="text/css"/>
+	<link href="/sales/js/plugin/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen"/>
+	<link href="/sales/css/flexigrid/flexigrid.css" rel="stylesheet" type="text/css">	
+	<style type="text/css">
+	.ui-widget-header,
+	.ui-state-default,
+	ui-button {
+	  background: #CCCCCC;
+	  border: 1px solid #B8B8B8;
+	  color: #000;
+	  font-weight: bold;
+	}
+	/* custom style for modal content*/
+	
+	.custom-ui-widget-header-warning {
+	  background: #EBCCCC;
+	  font-size: 1em;
+	}
+	
+	.custom-ui-widget-header-accessible {
+	  background: #C2D7E9;
+	  font-size: 1em;
+	}
+	
+	.ui-dialog-titlebar {
+	  background: #7BCCB5;
+	  color:#FFFFFF;
+	}		
+	</style>
+	<script type="text/javascript" src="/sales/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="/sales/js/jquery-ui-1.8.18.custom.min.js"></script>	
+	<script type="text/javascript" src="/sales/js/plugin/jquery.jclock.js.txt"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.alerts.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/flexigrid.js"></script>
+	<script type="text/javascript" src="/sales/js/util/posglobal.js"></script>
+	<script type="text/javascript" src="/sales/js/shortcut.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.maskMoney.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.numeric.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.enabledisable.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.navigate.js"></script>	
+	<script type="text/javascript" src="/sales/js/plugin/blinky.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.center.js"></script>
+	 <link href='/sales/css/datatables/jquery.dataTables.css' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.dataTables.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/bootbox.min.js"></script>
+	<script type="text/javascript">
+	// 	document.addEventListener('DOMContentLoaded', function () 
+	// 			{
+	// 				if (Notification.permission !== "granted")
+	// 				{
+	// 					Notification.requestPermission();
+	// 				}
+	// 	});
+
+	function notifyBrowser(title,desc,url){
+
+		if (Notification.permission !== "granted")
+		{
+			Notification.requestPermission();
+		}else{
+			var notification = new Notification(title, {
+			icon:'/sales/img/icon_bag_32x32.png',
+			body: desc,});
+			/* ลบการแจ้งเตือนออกจากรายการ เมื่อทำการคลิกเพื่อเปิด URL ใหม่*/
+			notification.onclick = function () {
+				window.open(url); 
+			};
+
+			/* Callback function เมื่อปิดหน้าต่างการแจ้งเตือน */
+			notification.onclose = function () {
+				console.log('Notification closed');
+			};
+		}
+	}//func
+	
+	var startDay = new Date().getDate();
+    var startTime = new Date().getTime();
+    var interval;
+	function showNotifications(message){
+		//test notify of firefox
+		//notifyBrowser(messageid,subject,'');
+		//return false;		
+		if($("#dlgNoty").dialog( "isOpen" )===true) {
+			$('#dlgNoty').dialog('close');			
+        	
+        }//if
+		//------------------ SHOW POPUP NOTIFICATIONS -----------------
+		$("<div id='dlgNoty'><p id='msgnoty' align='center'></p></div>").dialog({
+					autoOpen:true,
+					width:'70%',		
+					height:'auto',	
+					modal:true,
+					resizable:true,					
+	  				position: { my: "center bottom", at: "center center", of: window },
+	  				showOpt: {direction: 'up'},		
+	  				closeOnEscape: false,
+	  				title:"<span class='ui-icon ui-icon-notice'></span>Order Notifications",
+	  				open: function(){ 
+ 		            	$(this).dialog('widget')
+ 				            .find('.ui-dialog-titlebar')
+ 				            .removeClass('ui-corner-all')
+ 				            .addClass('ui-corner-top');
+
+ 						$(this).parents(".ui-dialog:first")
+ 						.find(".ui-dialog-content")
+ 						.css({"background-color":"#FFF8DC","font-size":"25px","color":"#666","padding":"0"});
+		            	$('#msgnoty').empty().html(message);
+	  				},
+	  				close:function(evt){
+		            	$('#dlgNoty').dialog('destroy').remove();
+		   			}
+	          });
+		//------------------ SHOW POPUP NOTIFICATIONS -----------------
+	}//func
+		
+		function showPopup(messageid,subject){
+			//------------------ SHOW POPUP NOTIFICATIONS -----------------
+			var aaa=bootbox.confirm({
+			    message: "This is a confirm with custom button text and color! Do you like it?",
+			    buttons: {
+			        confirm: {
+			            label: 'Yes',
+			            className: 'btn-success'
+			        },
+			        cancel: {
+			            label: 'No',
+			            className: 'btn-danger'
+			        }
+			    },
+			    callback: function (result) {
+			        console.log('This was logged in the callback: ' + result);
+			    }
+			});
+			aaa.modal('hide');
+			//------------------ SHOW POPUP NOTIFICATIONS -----------------
+		}//func
+		
+		function getDataNotifications()
+		{
+			$.ajax({
+				url: "/sales/ecommerce/getnotifications" ,
+				type: "POST",
+				data:{
+					order_status:'A',
+					rnd:Math.random()
+				},success:function(result){
+					var obj = jQuery.parseJSON(result);					
+					if(obj != '')
+					{
+							  var order_no = null;
+							  var subject = null;
+							  var str_message='';
+							  $.each(obj, function(key, val) {
+										order_no = val["order_no"] ;
+										subject = val["description"] ;		
+										str_message += order_no + " : " + subject + '<br>';								
+							  });
+							  jAlert(str_message, 'แจ้งเตือน',function(){										    	
+							    	return false;
+							    });	
+							  //showNotifications(str_message);
+						  //showNotifications(messageid,subject);
+					}	}	
+			});
+	}//func
+	
+	
+	
+	$(document).ready(function(){
+			var w=getWidth();
+			var h=getHeight();
+			var newstyle = "/sales/css/style1024.css";
+			if ((screen.width>=1280) && (screen.height>=1024)){
+				newstyle = "/sales/css/style1280.css";
+			}
+			$('<link/>').attr({ rel:"stylesheet",href:newstyle}).appendTo($('head'));
+			$('body').append('<div id="ajaxBusy"><p><img src="/sales/img/loading.gif"></p></div>');	
+			$('#ajaxBusy').css({"position":"absolute","display":"none","z-index":"99999"});
+			$('#ajaxBusy').css("top", ( $(window).height() - $('#ajaxBusy').height() ) / 2+$(window).scrollTop() + "px");
+			$('#ajaxBusy').css("left", ( $(window).width() - $('#ajaxBusy').width() ) / 2+$(window).scrollLeft() + "px");
+			 /////// AJAX SETUP /////////
+		    $.xhrPool = []; // array of uncompleted requests
+		    $.xhrPool.abortAll = function() { // our abort function
+			    $(this).each(function(idx, jqXHR) {
+			    	jqXHR.abort();
+			    });
+			    $.xhrPool.length = 0
+		    };			     
+		    $.ajaxSetup({
+			    beforeSend: function(jqXHR) { // before jQuery send the request we will push it to our array
+			    	$.xhrPool.push(jqXHR);
+			    },
+			    complete: function(jqXHR) { // when some of the requests completed it will splice from the array				    
+				    var index = $.xhrPool.indexOf(jqXHR);
+				    if (index > -1) {
+				    	$.xhrPool.splice(index, 1);
+				    }
+			    }
+		    });
+			/////// AJAX SETUP /////////	
+					 
+		  var activity = false;
+		  $(document).ajaxStart(function(){
+		      activity = true;
+		      window.setTimeout(function(){
+		          if(activity){
+		        	  $('#ajaxBusy').show();
+		          }
+		      }
+		      ,800);
+		  });
+		  
+		  $(document).ajaxStop(function(){
+		      activity = false;
+		      $('#ajaxBusy').hide();
+		  });		
+
+		//for test notifation
+// 		if (window.webkitNotifications) {
+// 			function requestingPopupPermission(callback) {
+// 				window.webkitNotifications.requestPermission(callback);
+// 			}
+
+// 			function showPopup(messageid,subject) {
+// 				if (window.webkitNotifications.checkPermission() > 0) {
+// 					requestingPopupPermission(showPopup);
+// 				} else {
+					
+// 					//------------------ SHOW POPUP NOTIFICATIONS -----------------
+// 					bootbox.confirm({
+// 					    message: "This is a confirm with custom button text and color! Do you like it?",
+// 					    buttons: {
+// 					        confirm: {
+// 					            label: 'Yes',
+// 					            className: 'btn-success'
+// 					        },
+// 					        cancel: {
+// 					            label: 'No',
+// 					            className: 'btn-danger'
+// 					        }
+// 					    },
+// 					    callback: function (result) {
+// 					        console.log('This was logged in the callback: ' + result);
+// 					    }
+// 					});
+// 					//------------------ SHOW POPUP NOTIFICATIONS -----------------
+					
+// 				}
+// 			}
+// 		}else{
+// 			alert('Your Browser Not SUPPORT \n Google Chrome Only');
+// 		}
+		//setInterval(getDataFromDb, 10000);   // 1000 = 1 second
+
+	    interval = setInterval( function () {
+	        if (startDay != new Date().getDate() || startTime < (new Date().getTime() - 1000*60*60*8)) {
+	            clearInterval(interval);
+	            return;
+	        }
+	        getDataNotifications();
+	    },1200000); //300000 Then set it to run again after five minutes
+			
+	});//ready	
+	</script>	
+</head>
+<body>
+       <?php	
+       		echo $this->layout()->content;
+		?>
+</body>
+</html>

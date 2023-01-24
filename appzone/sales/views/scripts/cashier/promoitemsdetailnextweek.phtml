@@ -1,0 +1,56 @@
+<?php
+   			echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' bgcolor='#cccccc' class='display' id='datatables_promoitems_details2'>";
+   			echo "<thead><tr height='32' bgcolor='#ebebeb' idd=''>
+   						<th align='center' width='15%'>TYPE PROMOTION</th>
+   						<th align='center' width='5%'>SEQ</th>
+   						<th align='center' width='10%'>PRODUCT ID</th>
+   						<th align='center'>DESCRIPTION</th>
+   						<th align='center' width='6%'>QUANTITY</th>
+   						<th align='center' width='12%'>TYPE DISCOUNT</th>
+   						<th align='center' width='6%'>DISCOUNT</th>
+   						<th align='center' width='6%'>POINT</th>
+   						<th align='center' width='12%'>MEMBER DISCOUNT</th>
+   					</tr></thead><tbody>";
+   			$i=1;
+	  		foreach($this->arr_promo as $data){
+	  				$id_tmp="n_".$i;
+	  				$rows_json=json_encode($data);
+	  				if(strlen(trim($data['name_product']))>25){
+	  					$description=substr($data['name_product'],0,80);
+	  					$description.="...";
+	  				}else{
+	  					$description=$data['name_product'];
+	  				}
+		  			echo "<tr idd='".$rows_json."'>"
+		  					."<td align='center' >".$data['promo_tp']."</td>"
+		  					."<td align='center' >".$data['seq_pro']."</td>"
+		  					."<td align='center' >".$data['product_id']."</td>"
+		  					."<td align='left' >".$description."</td>"
+		  					."<td align='center' >".intval($data['quantity'])."</td>"
+		  					."<td align='center' >".$data['type_discount']."</td>"
+		  					."<td align='center' >".$data['discount']."</td>"
+		  					."<td align='center' >".$data['get_point']."</td>"
+		  					."<td align='center' >".$data['discount_member']."</td>"
+		  					."</tr>";  
+		  			$i++;
+	  		}//foreach 
+	  			
+	  		echo "</tbody>
+	  		<tfooter></tfooter>
+	  		</table>";
+   ?>
+
+   <script type="text/javascript">
+	  		$(function(){
+	  			$('#datatables_promoitems_details2 tr').each(function(){
+	       			$(this).click(function(){
+	       				var strJson=$(this).attr('idd');
+	       				if(strJson!=''){
+			       				var selPro=$.parseJSON(strJson);
+			       				//$('#datatables_promoitems_details').dialog('close');
+			       			}
+	       			});
+	       		});
+	  		});
+	</script>
+   

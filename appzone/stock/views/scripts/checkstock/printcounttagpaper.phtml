@@ -1,0 +1,88 @@
+<?php 
+$json_data=$this->jsondata;
+$shelf_no=json_decode($json_data,true);
+$shop_name=$this->branch_name;
+$doc_no=$this->doc_no;
+/*echo "<pre>";
+print_r($shelf_no);
+echo "</pre>";*/
+$sum_amt_all=null;
+$sum_qty_all=null;
+echo "เลขที่เอกสาร : ".$doc_no."<br>";
+if($shelf_no!="n"){
+	foreach($shelf_no as $val_shelf){
+	echo "รหัสชั้นสินค้า : ".$val_shelf['shelf_no'];
+	echo "<hr size='1'>";
+	echo "
+	<table width='100%' border='0' cellspacing='0' cellpadding='0'>
+		<tr bgcolor='#f2f0f0'>
+			<td>รหัสห้อง</td>
+			<td>รหัสสินค้า</td>
+			<td>รายละเอียด</td>
+			<td>ราคา</td>
+			<td>จำนวน</td>
+			<td>จำนวนเงิน</td>
+		</tr>";
+	$sum_qty=null;
+	$sum_amt=null;
+	$count_page=null;
+	foreach($val_shelf['data'] as $data){
+		if(empty($room)){
+			$room="start";
+		}
+		if($room==$data['room_no']){
+			$room_no="";
+			$color="#ffffff";
+		}else{
+			$room_no=$data['room_no'];
+			$room_no=explode("-",$room_no);
+			$room_no=$room_no[1]."-".$room_no[2];
+			$color="#f2f0f0";
+		}
+		
+		
+		$amt=$data['price']*$data['quantity'];
+		$sum_amt=$sum_amt+$amt;
+		$sum_amt_all=$sum_amt_all+$amt;
+		$format_amt_all=number_format($sum_amt_all,2);
+		$format_sum_amt=number_format($sum_amt,2);
+		$amt=number_format($amt,2);
+		
+		$qty=number_format($data['quantity']);
+		$sum_qty=$sum_qty+$data['quantity'];
+		$sum_qty_all=$sum_qty_all+$data['quantity'];
+		$format_sum_qty_all=number_format($sum_qty_all);
+		$sum_qty=number_format($sum_qty);
+		
+		$product_name=iconv('UTF-8','cp874',$data['name_product']);
+		$product_name=substr($product_name,0,10);
+			
+		echo "
+		<tr>
+			<td bgcolor='$color'>$room_no</td>
+			<td>$data[product_id]</td>
+			<td>$product_name</td>
+			<td>$data[price]</td>
+			<td>$qty</td>
+			<td>$amt</td>
+		</tr>";
+		$room=$data['room_no'];
+	}
+	echo "
+		<tr bgcolor='#f2f0f0'>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>รวม</td>
+			<td>$sum_qty</td>
+			<td>$format_sum_amt</td>
+		</tr>
+	<table>
+	";
+	echo "<hr size='1'>";
+	}
+}else{
+	echo "<font color='red'>คุณยังไม่ได้เลือกชั้นวาง</font>";
+}
+?>
+	

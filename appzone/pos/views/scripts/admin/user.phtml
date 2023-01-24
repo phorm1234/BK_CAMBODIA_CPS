@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ผู้ใช้ระบบ</title>
+	<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery-1.7.1.min.js"></script>
+	<link rel="stylesheet" href="/pos/css/black-tie/jquery-ui-1.8.10.custom.css" />
+	<script src="/pos/js/jquery-ui-1.8.18.custom.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/gray/easyui.css"/>
+	<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/icon.css"/>
+	<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery.easyui.min.js"></script>
+
+	<script src="/pos/js/flexigrid.js"></script>
+	<link type="text/css" rel="stylesheet" media="screen" href="/pos/css/flexigrid/flexigrid.css" />	
+	
+	<script type='text/javascript' src="/pos/js/user/user.js"></script> 
+	<link rel="stylesheet" href="/pos/css/style.css" />
+
+</head>
+<body  class="easyui-layout" style="width:100%;height:600px;">
+
+<div region="west" split="true" title="ผู้ใช้ระบบ" style="width:200px;">
+<ul id="tgroup"></ul>
+</div>
+<div region="center" title="กลุ่มผู้ใช้ระบบ" style="background:#eee;">
+
+<form action="/pos/user/tableusergroup" method="post" enctype="multipart/form-data" name="sform" id="sform">
+	<input type="hidden" name="corporation_id"  id ="corporation_id" />
+	<input type="hidden" name="company_id"  id ="company_id" />
+	<input type="hidden" name="clicknode"  id ="clicknode" />
+	<input type="hidden" name="idemp"  id ="idemp" />
+	<input type="hidden" name="idgroup"  id ="idgroup" />
+	<table id='fixgrids'></table>
+</form>
+
+</div>
+<div align="center" style="display:none">
+<div id="mgroup" class="easyui-menu" style="width:120px;">
+	<div class="menu-sep"></div>
+	<div onclick="append()" iconCls="icon-add">Add Group</div>
+	<div onclick="formeditgroup()" iconCls="icon-edit">Edit Group</div>
+	<div onclick="remove()" iconCls="icon-no">Del Group</div>	
+	<div class="menu-sep"></div>
+	<div onclick="formaddgroup()" iconCls="icon-add">Add User</div>
+	<div class="menu-sep"></div>			
+	<div onclick="cancel()" iconCls="icon-undo">Cancel Status</div>
+	<div onclick="active()" iconCls="icon-ok">Active Status</div>
+
+</div>
+
+<div align="center" title="แก้ไขข้อมูลกลุ่มผู้ใช้" id='divusergroup'  >
+<table border="0">
+  <tr>
+    <td>รหัสประกลุ่มผู้ใช้</td>
+    <td><input name="ggroup_id" type="text" id="ggroup_id" /></td>
+  </tr>
+  <tr>
+    <td>สถานะ</td>
+    <td><select name="gcancel" id="gcancel">
+      <option value="1">ใช้งานปกติ</option>
+      <option value="0">ระงับ</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>หมายเหตุ</td>
+    <td><textarea name="gremark" id="gremark"></textarea></td>
+  </tr>
+</table>
+</div>
+
+<div id='divinsert' title="บันทึกข้อมูลพนักงาน" icon="icon-save" >
+<form action="/pos/user/runempform"  method="post" enctype="multipart/form-data" name="empform" id="empform">
+
+<table border="0">
+	 <tr>
+	   <td colspan="3"><div align="right"><font color="#FF0000">* </font>ถ้าไม่ทราบสาขาให้ใส่ <font color="#FF0000">0001</font> </div></td>
+      </tr>
+	 <tr>
+	    <td><div align="right">สาขา</div></td>
+	    <td><input name="branch_id" type="text" id="branch_id" value="0001" size="15" /></td>
+        <td>&nbsp;</td>
+	 </tr>
+	  <tr>
+    <td><div align="right">User เข้าระบบ</div></td>
+    <td><input name="user_id" type="text" id="user_id" size="15" /></td>
+    <td>&nbsp;</td>
+	  </tr>
+  <tr>
+    <td><div align="right">Password </div></td>
+    <td><input name="password_id" type="text" id="password_id" size="15" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div align="right">กลุ่มพนักงาน</div></td>
+    <td><div align="left" id='divgroupid'>
+      <select name="group_id_in" id="group_id_in">
+      </select>
+    </div></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div align="right">รหัสพนักงาน</div></td>
+    <td><input name="employee_id" type="text" id="employee_id" size="15" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div align="right">ชื่อ</div></td>
+    <td><input name="name" type="text" id="name" size="15" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div align="right">นามสกุล</div></td>
+    <td><input name="surname" type="text" id="surname" size="15" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div align="right">ตำแหน่งงาน</div></td>
+    <td><input name="position" type="text" id="position" size="15" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div align="right">วันที่เริ่มต้น</div></td>
+    <td><input name="start_date" type="text" id="start_date" size="15" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div align="right">วันที่สิ้นสุด</div></td>
+    <td><input name="end_date" type="text" id="end_date" size="15" /></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div align="right">สถานะพนักงาน</div></td>
+    <td>
+	 <select name="cancel"  id="cancel" >
+	  <option value="1">ปกติ</option>
+	  <option value="0">ระงับ</option>
+	</select></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><div align="right">หมายเหตุ</div></td>
+    <td>
+    <textarea name="remark" cols="10" id="remark"></textarea></td>
+    <td>&nbsp;</td>
+  </tr>
+</table>	
+</form>
+</div>
+
+</div>
+
+</body>
+</html>

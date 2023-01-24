@@ -1,0 +1,668 @@
+<style type="text/css">   
+    .div-table{display:table; width: 700px;  }
+    .div-table-row{display:table-row;}
+ 
+    .div-table-col1{display:table-cell; padding-left:  10px; padding-right:  100px; width: 250px;}
+    .div-table-col2{display:table-cell; padding-left:  50px; }
+    .div-table-col3{display:table-cell; padding-left:  50px; float: right;}
+	.div-table-col4{display:table-cell; padding-left:  10px; width: 600px;}
+    
+	.div-table2{display:table; width: 700px;  }
+    .div-table-row2{display:table-row;}
+ 
+    .div-table-coll1{display:table-cell; padding-right:  100px; width: 250px; border: 1px;}
+    
+    
+    
+</style>
+
+
+    
+
+<p align="center">
+    <img src="/sales/img/cps/logo_cps_new_s.png">
+  <br><br>สรุปการชำระเงินจากลูกค้า<br>
+    ประจำวันที่ <?php echo $this->s_date. " - " .$this->e_date ; ?></p>
+
+<div class="div-table">
+<div class="div-table-row">   
+    <div class="div-table-col1">วันที่พิมพ์เอกสาร <?php echo $this->print_time ;?></div>
+    
+    <div class="div-table-col3">เวลา  <?php echo $this->ptime ;?></div>
+    
+</div>
+<div class="div-table-row">
+    <div class="div-table-col1">จุดขาย :  <?php echo $this->branch_id.' '.$this->branch_name ;?></div>
+    
+    
+</div>
+</div>
+
+<hr>
+
+<div class="div-table">
+
+<div class="div-table-row">
+          <div class="div-table-col1">จำนวนเงินทั้งสิ้น</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->amount_data, 2, '.', ',') ;?> บาท</div>
+</div>
+    
+   
+<div class="div-table-row">
+          <div class="div-table-col1">ส่วนลด</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->discount_data, 2, '.', ',') ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">บัตรเครดิต</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->credit_data, 2, '.', ',') ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">คูปอง เงินสด / voucher </div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->netcashcoupon, 2, '.', ',') ;?> บาท</div>
+</div>
+<!--<div class="div-table-row">
+          <div class="div-table-col1">หักลดหนี้ เครดิต</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php// echo "" ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">ยอดสุทธิ เครดิต</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php// echo number_format($this->credit_data, 2, '.', ',') ;?> บาท</div>
+</div>-->
+<div class="div-table-row">
+          <div class="div-table-col1">เงินสด</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->cash_data, 2, '.', ',') ;?> บาท</div>
+</div>
+
+</div>
+
+<div class="div-table">
+
+<div class="div-table-row">
+
+          <div class="div-table-col1">(40) เปลี่ยน ส/ค &nbsp;&nbsp; (G) &nbsp;&nbsp; <?php echo number_format($this->getgross_data) ;?> บาท </div>
+          
+          <div class="div-table-col2">,   <?php echo number_format($this->getquan_data) ;?></div>
+          <div class="div-table-col3"> (N) &nbsp; <?php echo number_format($this->getamt_data, 2, '.', ',') ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">(41) คืนเงิน &nbsp;&nbsp; (G) &nbsp;&nbsp; <?php echo number_format($this->qbackgross_data) ;?> บาท </div>
+          <div class="div-table-col2">,   <?php echo number_format($this->qback_data) ;?></div>
+          <div class="div-table-col3">(N) &nbsp; <?php echo number_format($this->qbackamt_data, 2, '.', ',') ;?> บาท</div>
+</div>
+</div>
+
+<div class="div-table">
+
+<div class="div-table-row">
+          <div class="div-table-col1">หักลดหนี้ เครดิต</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->getcn_credit, 2, '.', ',') ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">หักลดหนี้ เงินสด</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->getcn_cash, 2, '.', ',') ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">บิลสินค้าขาด (19)</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->getbill_data, 2, '.', ',') ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">ยอดเงิน PAY IN</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->payin, 2, '.', ',') ;?> บาท</div>
+</div>
+<!--</table>-->
+</div>
+
+<hr>
+
+<div class="div-table">
+<!--<table width="550">-->
+<div class="div-table-row">
+          <div class="div-table-col1">โอนสินค้าเข้า</div>
+          <div class="div-table-col2"> <?php echo number_format($this->qincome_data) ;?></div>
+          <div class="div-table-col3"><?php echo number_format($this->aincome_data, 2, '.', ',') ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">โอนสินค้าออก</div>
+          <div class="div-table-col2"> <?php echo number_format($this->qoutcome_data) ;?></div>
+          <div class="div-table-col3"><?php echo number_format($this->aoutcome_data, 2, '.', ',') ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">ปรับปรุงเข้า</div>
+          <div class="div-table-col2"> <?php echo number_format($this->qchincome_data) ;?></div>
+          <div class="div-table-col3"><?php echo number_format($this->chincomeamt_data, 2, '.', ',') ;?> บาท</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">ปรับปรุงออก</div>
+          <div class="div-table-col2"> <?php echo number_format($this->qchoutcome_data) ;?></div>
+          <div class="div-table-col3"><?php echo number_format($this->choutcomeamt_data, 2, '.', ',') ;?> บาท</div>
+</div>
+<!--</table>-->
+</div>
+
+<hr>
+
+<div class="div-table">
+<!--<table width="550" >-->
+
+           <?php 
+          $newmember = $this->getmember_data;
+          
+          //print_r($newmember);
+          /*
+          $count = count($newmember);
+          
+            if ($count > 0){ 
+                
+                $countsum = 0;
+                $sumnew = 0;
+                foreach($newmember as $m){  
+                        
+                    //$sumnew =$sumnew+$m['sum_net_amt'];
+                    $sumnew+=$m['sum_net_amt'];
+                    
+                        
+                        echo "<div class=div-table-row>
+                        		<div class=div-table-col1>". $m['promo_code']."</div>
+                        		<div class='div-table-col2'> " .$m['count(a.doc_no)']." </div>
+                        		<div class=div-table-col3>" .number_format($m['sum_net_amt'], 2, '.', ','). "  บาท</div>
+                        		</div>";
+                          
+                }
+                
+               echo "<div class=div-table-row>
+               			<div class=div-table-col1> ** รวม </div>
+               			<div class='div-table-col2'> " .$countsum." </div>
+               			<div class=div-table-col3>" . number_format($sumnew, 2, '.', ','). "  บาท</div>
+               			</div>";
+                // echo"<div class='div-table-row'><div class=div-table-col> ********* รวม   ".$countsum."   ใบ ". number_format($sumnew, 2, '.', ',')."   บาท</div></div>"; 
+                
+            }
+          */
+          ?> 
+<div class="div-table-row">
+          <div class="div-table-col1">รายละเอียดสมาชิกใหม่ </div>
+		<div class="div-table-col2"><?php echo @number_format($newmember[0]['newmem']) ;?></div>
+		<div class="div-table-col3"><?php echo @number_format($newmember[0]['sum_net_amt']) ;?></div>
+</div>
+
+<div class="div-table-row">
+          <div class="div-table-col1">สมาชิก </div>
+          <div class="div-table-col2"><?php echo @number_format($this->getmember_data2) ;?></div>
+          <div class="div-table-col3"><?php echo @number_format($this->getmemamt_data, 2, '.', ',') ;?> บาท</div>
+</div>
+
+<div class="div-table-row">
+          <div class="div-table-col1">ลูกค้าทั่วไป </div>
+          <div class="div-table-col2"><?php echo @number_format($this->getwalkin_data) ;?></div>
+          <div class="div-table-col3"><?php echo @number_format($this->getwkamt_data, 2, '.', ',') ;?> บาท</div>
+</div>
+    
+    <br><br>
+    
+<div class="div-table-row">
+    <div class="div-table-col1"><b>รายละเอียดบัตรเครดิต</b></div>  
+</div>
+<div class="div-table-row">
+ <div class="div-table-col4">
+
+    <?php
+    
+    $sumkbank = 0 ;
+    $sumbblbank = 0 ;
+    $sumscbbank = 0 ;
+    
+    $arr_data=$this->getpaid_data;
+    $count = count($arr_data);
+    if ($count > 0){ 
+      echo "บัตรเครดิต กสิกรไทย <br>";
+        foreach($arr_data as $m){     
+         
+         $sumkbank+=$m['pay_credit'];
+         echo number_format($m['pay_credit'], 2, '.', ',')." / " ; 
+        
+        }   
+        
+        echo"<br> รวม ".number_format($sumkbank, 2, '.', ',')." บาท <br>";
+    }
+    
+    echo "<br>";
+    
+    $arr_data2=$this->getpaid_data2;
+    $count2 = count($arr_data2);
+    if ($count2 > 0){ 
+      echo "บัตรเครดิต กรุงเทพ <br>";
+        foreach($arr_data2 as $m){     
+         //echo "<div class="div-table-row"><div class="div-table-col1">";
+         $sumbblbank+=$m['pay_credit'];
+         echo number_format($m['pay_credit'], 2, '.', ',')." / "; 
+     
+        }   
+        
+        echo"<br> รวม ".number_format($sumbblbank, 2, '.', ',')." บาท <br>"; 
+    }
+    
+   echo "<br>";
+    
+   $arr_data3=$this->getpaid_data3;
+    $count3 = count($arr_data3);
+    if ($count3 > 0){ 
+      echo "บัตรเครดิต ไทยพาณิชย์ <br>";
+        foreach($arr_data3 as $m){     
+         //echo "<div class="div-table-row"><div class="div-table-col1">";
+         $sumscbbank+=$m['pay_credit'];
+         echo number_format($m['pay_credit'], 2, '.', ',')." / " ; 
+        
+        }   
+      echo"<br> รวม ".number_format($sumscbbank, 2, '.', ',')." บาท <br>";  
+    } 
+    
+     
+    
+    $sum_bank = $sumkbank+$sumbblbank+$sumscbbank;
+    $sum_count = $count+$count2+$count3;
+  
+    if ($sum_bank > 0 and $sum_count > 0){
+    echo "************* รวมทั้งหมด ".$sum_count."  ฉบับ <br>" ;
+    echo "************* รวมเป็นเงิน ".number_format($sum_bank, 2, '.', ',')."  บาท";
+    }
+    
+?> 
+</div>
+</div>
+</div>
+<hr>
+<div class="div-table">
+
+<?php
+$arr_bill=$this->getbill_datano;
+foreach($arr_bill as $b){ 
+   /* if ($b['doc_tp'] =="SL"){
+        echo "<div class=div-table-row><div class=div-table-col>เลขที่บิลอย่างย่อ</div></div>";
+        echo "<div class=div-table-row><div class=div-table-col>".$b['min(`doc_no`)']." - ". $b['max(`doc_no`)']." = ".$b['count(`doc_no`)']." ฉบับ" ;
+        echo "</div></div>";
+            }
+     elseif ($b['doc_tp'] =="DN") {
+         echo '<div class=div-table-row><div class=div-table-col>ใบส่งสินค้า</div></div>';
+        echo '<div class=div-table-row><div class=div-table-col>'.$b['min(`doc_no`)']." - ". $b['max(`doc_no`)']." = ".$b['count(`doc_no`)']." ฉบับ" ;
+        echo "</div></div>";
+     }*/
+    
+    echo "<div class='div-table-row'>
+            <div class='div-table-col1' style='width:600px;'><u>".$b['remark']."</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$b['count']." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; จำนวน " .number_format($b['quantity'], 0, '.', ','). "   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; เป็นเงิน " .number_format($b['amount'], 0, '.', ','). "  บาท</div>                
+            
+          </div>
+          <div class='div-table-row'>
+            <div class='div-table-col1'>".$b['min']." - ".$b['max']."</div>
+          </div><br>";
+    
+     }
+?>
+</div>
+
+<u>บิลยกเลิก</u>
+<div class="div-table">
+<?php
+$arr_cancel=$this->getcancel_data;
+$countarr = 0;
+$amt = 0;
+foreach($arr_cancel as $c){ 
+    $countarr = count($arr_cancel);
+    $amt += $c['amount'];
+    echo "<div class='div-table-row'>
+            <div class='div-table-col1'>". $c['doc_no'] ."</div>       
+            <div class='div-table-col2'>". number_format($c['quantity'], 0, '.', ',') ."</div>
+            <div class='div-table-col3'>". number_format($c['amount'], 2, '.', ',') ."  บาท</div> 
+          </div>";    
+    }
+echo "<div class='div-table-row'>
+    <div class='div-table-col1'><br>** รวม ". $countarr ." ฉบับ     เป็นเงิน  ".number_format($amt, 2, '.', ',') ." บาท  </div>     
+</div>";
+
+?>
+    
+</div>
+
+<hr>
+
+<b>รายละเอียดส่วนลดสมาชิก</b>
+<?php
+    
+   // $sum_mem_dis = 0;    
+    $arr_mem5=$this->getmember5_dis_data;
+   // $count4 = count($arr_mem);
+    foreach($arr_mem5 as $m){
+ /*   if ($count4 > 0){ 
+     
+        foreach($arr_mem as $m){     
+         
+         $sum_mem_dis+=$m['member_discount1'];
+        // echo number_format($m['member_discount1'], 2, '.', ',')." / " ; 
+        
+        }   
+    } */   
+       // echo" ส่วนลด 5%  = ".$count4." ฉบับ     =".number_format($sum_mem_dis, 2, '.', ',')." บาท <br>";
+        echo "
+    <div class='div-table'>
+    <div class='div-table-row'>
+            <div class='div-table-col1'>ส่วนลดสมาชิก 5%</div>
+            <div class='div-table-col2'> ".$this->getmember5_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." บาท</div>
+
+    </div>";
+    
+    }   
+    
+    $arr_mem15=$this->getmember15_dis_data;
+    foreach($arr_mem15 as $m){
+        echo "
+    
+    <div class='div-table-row'>
+            <div class='div-table-col1'>ส่วนลดสมาชิก 15%</div>
+            <div class='div-table-col2'> ".$this->getmember15_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." บาท</div>
+
+    </div>"; 
+        
+    }
+    
+     $arr_mem15_10=$this->getmember15_10_dis_data;
+    foreach($arr_mem15_10 as $m){
+        echo "
+    
+    <div class='div-table-row'>
+            <div class='div-table-col1'>ส่วนลดสมาชิก 15% + 10%</div>
+            <div class='div-table-col2'> ".$this->getmember15_10_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." บาท</div>
+
+    </div>"; 
+        
+    }
+    
+     $arr_mem25=$this->getmember25_dis_data;
+    foreach($arr_mem25 as $m){
+        echo "
+    
+    <div class='div-table-row'>
+            <div class='div-table-col1'>ส่วนลดสมาชิก 25%</div>
+            <div class='div-table-col2'> ".$this->getmember25_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." บาท</div>
+
+    </div>"; 
+        
+    }
+    
+    $arr_mem50=$this->getmember50_dis_data;
+    foreach($arr_mem50 as $m){
+        echo "
+    
+    <div class='div-table-row'>
+            <div class='div-table-col1'>คูปองพนักงานส่วนลด 50%</div>
+            <div class='div-table-col2'> ".$this->getmember50_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_net_amt'], 2, '.', ',')." บาท</div>
+
+    </div>"; 
+        
+    }
+    
+    echo "</div>";
+    
+    echo "<hr><b>รายละเอียดส่วนลดโปรโมชั่น</b>";
+    echo "<div class='div-table'>";
+    
+    //$sum_disc = 0;    
+    $arr_disc=$this->disc_data;
+    //$count5 = count($arr_disc);
+   /* if ($count5 > 0){ 
+     
+        foreach($arr_disc as $m){     
+         
+         $sum_disc+=$m['discount'];
+        // echo number_format($m['member_discount1'], 2, '.', ',')." / " ; 
+        
+        }   
+    }    */
+       // echo" ส่วนลด 5%  = ".$count4." ฉบับ     ".number_format($sum_mem_dis, 2, '.', ',')." บาท <br>";
+    foreach($arr_disc as $m){    
+        echo "
+
+    <div class='div-table-row'>
+            <div class='div-table-col1'>ส่วนลดโปรโมชั่น</div>
+            <div class='div-table-col2'> ".$this->count_discount_trn2."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." บาท</div>
+
+    </div>";
+    }
+    
+    //$sum_coupon_disc = 0;    
+    $arr_coupon_disc=$this->coupon_disc_data;
+    foreach($arr_coupon_disc as $m){
+    /*$count6 = count($arr_coupon_disc);
+    if ($count6 > 0){ 
+     
+        foreach($arr_coupon_disc as $m){     
+         
+         $sum_coupon_disc+=$m['coupon_discount'];
+        // echo number_format($m['member_discount1'], 2, '.', ',')." / " ; 
+        
+        }   
+    } */   
+       // echo" ส่วนลด 5%  = ".$count4." ฉบับ     =".number_format($sum_mem_dis, 2, '.', ',')." บาท <br>";
+        echo "
+
+<div class='div-table-row'>
+          <div class='div-table-col1'>คูปองส่วนลด</div>
+          <div class='div-table-col2'> ".$this->count_coupon_discount."   </div>
+          <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." บาท</div>
+
+</div>";
+    
+    }
+    
+echo"<br><b>บิลใช้สิทธิ์วันเกิด</b>";    
+
+    $arr_newbirth=$this->newbirth_data;
+    foreach($arr_newbirth as $m){     
+    
+    switch ($m['promo_code']) {
+    case "OM02071113":
+        $code = "25%  2500.-";
+        break;
+    case "OM02081113":
+        $code =  "35%  2000.-";
+        break;
+    case "OM02091113":
+        $code =  "35%  3000.-";
+        break;
+    case "OX02651014":
+        $code = "25%  2500.-";
+        break;
+    case "OX02671014":
+         $code =  "35%  2000.-";
+        break;
+    case "OX02691014":
+         $code =  "35%  3000.-";
+        break;            
+	}
+    
+    
+		echo"
+    	  <div class='div-table-row'>
+          <div class='div-table-col1'>".$m['promo_code']."      ".$code."</div>
+          <div class='div-table-col2'>".$m['count']." </div>
+          <div class='div-table-col3'>". number_format($m['amount'], 2, '.', ',')." บาท</div>
+		  </div>";
+    }
+   
+
+    $arr_pointdata=$this->point_data;
+    if($arr_pointdata){
+    echo"<br><b>Point มาตรฐาน</b>";  
+    }
+    
+    foreach($arr_pointdata as $p){     
+    
+    switch ($p['promo_code']) {
+    case "STKER1":
+        $pcode = "50 คะแนน";
+        break;
+    case "STKER2":
+        $pcode = "100 คะแนน";
+        break;
+    case "STKER3":
+        $pcode = "150 คะแนน";
+        break;
+    case "STKER4":
+        $pcode = "200 คะแนน";
+        break;
+    case "STKER5":
+        $pcode = "250 คะแนน";
+        break;
+	}
+    
+    
+		echo"
+    	  <div class='div-table-row'>
+          <div class='div-table-col1'>".$pcode."</div>
+          <div class='div-table-col2'>".$p['count']." </div>
+          <div class='div-table-col3'>". number_format($p['amount'], 2, '.', ',')." บาท</div>
+		  </div>";
+    }
+    
+   $arr_new_pointdata=$this->newpoint_data;
+   if($arr_new_pointdata){
+   echo"<br><b>New Point มาตรฐาน</b>";    
+	}
+    
+    foreach($arr_new_pointdata as $np){     
+    
+    switch ($np['promo_code']) {
+    case "OM19180415":
+        $npcode = "50 คะแนน + 500 บาท";
+        break;
+    case "OM19190415":
+        $npcode = "100 คะแนน + 1,000 บาท";
+        break;
+    case "OM19200415":
+        $npcode = "150 คะแนน + 2,000 บาท";
+        break;
+    case "OM19210415":
+        $npcode = "200 คะแนน + 3,000 บาท";
+        break;
+    case "OM19220415":
+        $npcode = "250 คะแนน + 4,000 บาท";
+        break;
+	}
+    
+    
+		echo"
+    	  <div class='div-table-row'>
+          <div class='div-table-col1'>".$npcode."</div>
+          <div class='div-table-col2'>".$np['count']." </div>
+          <div class='div-table-col3'>". number_format($np['amount'], 2, '.', ',')." บาท</div>
+		  </div>";
+    }
+  
+  
+    
+ 
+
+    $arr_billdata=$this->bill02_data;
+    if($arr_billdata){
+     echo"<br><b>Bill</b>";    
+    }
+    foreach($arr_billdata as $bill){     
+    echo"
+    	  <div class='div-table-row'>
+          <div class='div-table-col1'>".$bill['application_id']."</div>
+          <div class='div-table-col2'>".$bill['count']." </div>
+          <div class='div-table-col3'>". number_format($bill['amount'], 2, '.', ',')." บาท</div>
+		  </div>";
+    }   
+    
+echo "</div>"; // </table>
+
+
+echo "<hr>";
+
+echo "<br>จำนวน EDC  = ".$sum_count ;
+echo "<br><br><br>ลายเซ็นต์พนักงานขาย  :  __________________________________" ;
+
+?>
+
+<br><br><br><br><br><br>
+
+<?php
+$dayfrom =$this->dayfrom;
+$tofrom =$this->tofrom;
+$day = $this->get_doc_date;
+$today = date('Y-m-d');
+
+//echo $this->get_printer ;
+
+if ($this->get_printer == 'Y'){
+	echo "<div align=right>
+<form action='/report/report/printreport' method='post'>
+<input type=hidden id=start_date name=start_date value='$dayfrom'>
+<input type=hidden id=end_date name=end_date value='$tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>";  // print thermal
+}else{
+	echo "<div align=right>
+<form action='/report/report/printreport' method='post'>
+<input type=hidden id=start_date name=start_date value='$dayfrom'>
+<input type=hidden id=end_date name=end_date value='$tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>"; // print dot matrix
+}
+
+/*echo $dayfrom;
+echo "<br>";
+echo $tofrom;
+
+ */
+
+
+/*if ($tofrom < $day ){
+    echo "<div align=right>
+<form action='/report/report/printmt' method='post'>
+<input type=hidden id=start_date name=start_date value='$dayfrom'>
+<input type=hidden id=end_date name=end_date value='$tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>
+
+</div><br><br>" ;
+}  else {
+echo "<div align=right>
+<form action='/report/report/printmt' method='post'>
+<input type=hidden id=start_date name=start_date value='$dayfrom'>
+<input type=hidden id=end_date name=end_date value='$tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>
+
+</div><br><br>" ;   
+}
+*/
+
+
+
+?>
+
+
+
+
+
+    
+    
+
+</div>

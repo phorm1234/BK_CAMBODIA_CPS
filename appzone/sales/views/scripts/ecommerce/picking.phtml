@@ -1,0 +1,94 @@
+<style type="text/css">
+	.box-title-header { 
+		background:#FFF;
+		background: white; 
+	    border: 1px solid #ffa853; 
+	    border-radius: 5px; 
+	    box-shadow: 0 0 5px 3px #ffa853; 
+	    color: #666; 
+	    outline: none; 
+	    height:23px; 
+	    width: 275px; 
+	    padding-right:5px;
+	    font-size:20px;
+	    color:#000;
+	  } 
+</style>
+<?php 	
+	$this->doc_date="2017-02-08";
+	$arr_date_show=explode("-", $this->doc_date);
+	$date_show=$arr_date_show[2]."/".$arr_date_show[1]."/".$arr_date_show[0];
+?>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+	<tr bgcolor="#B9E7CF" height="40">
+		<td>
+		<img src="http://localhost/sales/img/icon_bag_32x32.png" align="absmiddle"/>
+		&nbsp;<span style='font-size:20px;color:#454545;'>ดึง Order/พิมพ์ใบจัดสินค้า(Order Picking)</span>		
+		</td>
+		<td align="right"><span style='font-size:24px;color:#454545;'>วันที่เอกสาร :</span> <span style='font-size:23px;color:#000000;'><?php echo $this->doc_date_show;?>&nbsp;</span></td>
+	</tr>
+	
+	<tr >
+		<td colspan="2">
+			  <table width="100%" border="0" cellpadding="5" cellspacing="2">
+					  <tr>	
+					  <td width="14%">
+							<a href="#" name="btn_allocate" id="btn_allocate" class='btnGreenClean'>Allocate Stock</a>
+						</td>	
+						<td width="17%">
+							<a href="#" name="btn_getorder" id="btn_getorder" class='btnGreenClean'>รับใบสั่งสินค้า(Order)</a>
+						</td>		
+						<td width="20%" >
+							<a href="#" name="btn_printpicking" id="btn_printpicking" class='btnGreenClean'>พิมพ์ใบจัดสินค้า(Picking)</a>
+						</td>
+						<td width="">&nbsp;</td>
+					</tr>
+				</table>
+		</td>
+	</tr>		
+	</table>
+		
+	</td>	
+	</tr>
+	
+</table>
+
+<input type="hidden" id="cashier_id" value="<?php echo $this->SESSION_EMPLOYEE_ID;?>"></input>
+</td>
+</tr>
+<tr>
+<td>
+	<table id="tbl_order" ></table>
+</td>
+</tr>
+<tr>
+	<td>
+			<table width="800" border="0" cellpadding="0" cellspacing="2" bgcolor="#FFFFFF">
+				<tr>
+					<td>&nbsp;</td>
+					<td width="7%" align="right">จำนวน&nbsp;</td>
+					<td width="7%"><input type="text" size="10" id="sum_quantity" class="input-text-pos-disabled"></td>
+					<td width="5%">&nbsp;ชิ้น</td>	
+					<td width="3%">&nbsp;</td>
+					<td width="7%" align="right">รวมเงิน&nbsp;</td>
+					<td width="7%"><input type="text" size="10" id="sum_amount" class="input-text-pos-disabled"></td>
+					<td width="5%">&nbsp;บาท</td>
+				</tr>
+			</table>
+	</td>
+</tr>
+</table>
+
+<input type="hidden" id="csh_saleman_id" name="csh_saleman_id">
+<input type="hidden" id="doc_date" value="<?php echo $this->doc_date;?>">
+<input type="hidden" id="doc_status" value="">
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+
+<p id="ajaxResult"></p>
+<div id="loading" title="my ajax loading dialog"> 
+    <p>Please wait ...</p>
+</div>
+<script type="text/javascript" src="/sales/js/ecommerce/picking.js"></script>

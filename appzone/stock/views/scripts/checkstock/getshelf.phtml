@@ -1,0 +1,72 @@
+<script>
+$(function() {	
+//all hover and click logic for buttons
+	jqCheckAll2( 'checker', 'myCB' );
+	$(".fg-button")
+	.hover(
+		function(){ 
+			$(this).addClass("ui-state-hover"); 
+		},
+		function(){ 
+			$(this).removeClass("ui-state-hover"); 
+		}
+	)
+	.mousedown(function(){
+			$(this).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
+			if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ $(this).removeClass("ui-state-active"); }
+			else { $(this).addClass("ui-state-active"); }	
+	})
+	.mouseup(function(){
+		if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+			$(this).removeClass("ui-state-active");
+		}
+	});
+});
+
+function jqCheckAll2( id, name )
+{
+   $("INPUT[@name=" + name + "][type='checkbox']").attr('checked', $('#' + id).is(':checked'));
+}
+jQuery(document).bind('keydown', 'f1',
+function (evt){
+	print_count_list_tag();
+});
+</script>
+<?php 
+$shelf=$this->viewshelf;
+$doc_no=$this->doc_no;
+?>
+<form name="frm_print_count_list_tag" id="frm_print_count_list_tag">
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+<tr>
+	<td width="1%"><input type="checkbox" name="checker" id="checker" onclick="jqCheckAll2( this.id, 'myCB' )" checked="checked"></td>
+    <td>Select/Cancle All</td>
+	<td><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return print_count_list_tag();"><span class="ui-icon ui-icon-print"></span>Print Doc. (F1) </a></td>
+</tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+<?php
+$i=0;
+$countShlef=count($shelf);
+foreach($shelf as $val_shelf){
+	if($i=='0'){echo"<tr>";}
+	echo "
+	<td>
+		<table width='100%' border='0' cellspacing='2' cellpadding='2'>
+			<tr>
+				<td width='1%' bgcolor='#edf0f1' class='head_sub_shelf'><input type='checkbox' name='shelf_no[]' id='shelf_no[]' value='".$val_shelf['shelf_no']."' class='sel_checkbox'></td>
+				<td class='head_sub_shelf'>".$val_shelf['shelf_no']."</td>
+			</tr>
+		</table>
+	</td>";
+  	$i++;
+	if($i=='2'){echo"</tr>"; $i='0';}
+	}
+	?>
+</table>
+<input type="hidden" name="doc_no" id="doc_no" value="<?php echo $doc_no;?>"></input>
+</form>
+<form name="send_countshelf" id="send_countshelf" action="printcounttag" method="post" target="_blank">  
+	<input type="hidden" name="shlef" id="shlef" value="">
+	<input type="hidden" name="doc_no_pdf" id="doc_no_pdf" value="">
+</form>

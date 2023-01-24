@@ -1,0 +1,11 @@
+<?php 
+	if(!empty($this->arr_doc)){
+		$arr_json=array();
+		foreach($this->arr_doc as $data){
+			$array_json['value'] = $data['doc_no'];
+			$array_json['label'] = "{$data['doc_date']}  {$data['doc_no']}";
+			$matches[] = $array_json;
+		}
+		echo json_encode($matches);		
+	}
+?>

@@ -1,0 +1,23 @@
+<?php 
+	if(!empty($this->arr_product)){
+		$arr_json=array();
+		/*
+		foreach($this->arr_product as $arr_product){
+			$array_json['value'] = $arr_product['product_id'];
+			//$array_json['label'] = "{$arr_product['product_id']}, {$arr_product['product_id']} {$arr_product['name_product']}";
+			$array_json['label'] = "{$arr_product['product_id']} {$arr_product['name_product']}";
+			//$array_json['label'] = "{$arr_product['name_product']}";
+			$matches[] = $array_json;
+		}
+		*/		
+	
+		foreach($this->arr_product as $data){
+			$onhand=intval($data['onhand']);
+			$unit=$data['unit'];
+			$array_json['value'] = $data['product_id'];
+			$array_json['label'] = "{$data['product_id']} {$data['name_product']} คงเหลือ {$onhand} {$unit}";
+			$matches[] = $array_json;
+		}
+		echo json_encode($matches);		
+	}
+?>

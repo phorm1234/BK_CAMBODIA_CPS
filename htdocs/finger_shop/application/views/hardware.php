@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-theme.min.css">
+<script src="<?php echo base_url();?>js/jquery-2.1.1.min.js"></script>
+<script src="<?php echo base_url();?>js/bootstrap.min.js"></script>
+<style>
+	#body{ margin:auto; width:500px; overflow:hidden;}
+	.col-xs-6 {
+    text-align: center;
+    width: 50%;
+}
+</style>
+</head>
+<body>
+	<div class="container" id="body" style="padding-top:10px;">
+    	<!--<p><img style="float:right;" src="<?php echo base_url();?>images/ssup-logo.jpg" width="100px;"></p>-->
+    	<p style="margin:auto;width:362px;"><img src="<?php echo base_url();?>images/finger.png" /></p>
+        <p id="detail">
+        <h4 style="text-align:center; color:#CCC; margin:20px;">ระะบบไม่สามาระเชื่อมต่อกับอุปกรณ์ได้<br>
+		ตรวจสอบอีกครั้ง</h4>
+		</p>
+        <div class="row">
+              <div class="col-xs-6">
+              <a href="#" onClick="call_socket_compare()">
+              <button style="width:150px;" type="button" class="btn btn-danger">ทำรายการอีกครั้ง</button>
+              </a>
+              </div>
+              <div class="col-xs-6">
+		<a href="/finger_shop/index.php/idcard"><button  style="width:150px;" type="button" class="btn btn-primary">ข้ามขั้นตอนดังกล่าว</button></a>
+	    </div>
+        	
+            
+        </div>
+    </div>
+    
+</body>
+</html>

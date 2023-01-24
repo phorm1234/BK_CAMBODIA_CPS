@@ -1,0 +1,153 @@
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+	<td valign="top">
+		<!-- header -->
+		<table width="100%" border="0" cellspacing="1" cellpadding="3" style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+			<tr>
+				<td width="10%" align="right">
+					ประเภทบิล
+				</td>
+				<td width="5%">
+					<input type="text" name="rwd_status_no" id="rwd_status_no" size="20" class="input-text-pos"></input>					
+				</td>
+				<td width="3%"><a href="#" name="btn_rwd_doc_tp" id="btn_rwd_doc_tp" class='btnGrayClean'>...</a></td>	
+				<td colspan="3"><span  id="rwd_doc_tp"></span></td>				
+			</tr>
+			<tr>
+				<td width="10%" align="right">
+					รหัสสมาชิก
+				</td>
+				<td colspan="3">
+					<input type="text" name="rwd_member_no" id="rwd_member_no" size="25" class="input-text-pos keybarcode"></input>&nbsp;
+					
+				</td>
+				<td width="5%" align="right">
+					<a href="#" class='btnGrayClean' id="btnKeyMemberOk">ตกลง</a>
+				</td>				
+				<td>
+					คะแนน&nbsp;<input type="text" name="rwd_point_sum" id="rwd_point_sum" size="5" class="input-text-pos-disabled" readonly></input>
+				</td>
+			</tr>
+			<tr>
+				<td width="10%" align="right">
+					ชื่อ-นามสกุล
+				</td>
+				<td colspan="5">
+					<input type="text" name="rwd_fullname" id="rwd_fullname" size="30" class="input-text-pos"></input>
+				</td>
+			</tr>
+			<tr>
+				<td width="5%" align="right" valign="top">
+					ที่อยู่
+				</td>
+				<td colspan="5">
+					<textarea rows="3" cols="55" class ="ui-corner-all" name="rwd_address" id="rwd_address"></textarea>
+				</td>
+			</tr>
+		</table>
+		<!-- header -->		
+		<table id="tblRWD"></table>		
+		<!-- footer -->
+		<table width="100%" border="0" cellspacing="1" cellpadding="3" bgcolor="#FFFFFF">
+			<tr>
+				<td width="40" align="right">&nbsp;</td>
+				<td width="100" align="right">&nbsp;</td>
+				<td width="120" align="right">&nbsp;</td>
+				<td width="40">&nbsp;</td>
+				<td width="220" align="right">รวม</td>
+				<td width="100">
+					<input type="text" name="rwd_sum_quantity" id="rwd_sum_quantity" size="10"  class="input-text-pos-disabled" readonly></input>
+				</td>
+				<td width="100">
+					<input type="text" name="rwd_sum_amount" id="rwd_sum_amount" size="10"  class="input-text-pos-disabled" readonly></input>
+				</td>
+				<td width="" align="right">&nbsp;</td>
+			</tr>
+			
+			<tr>
+				<td width="40" align="right">&nbsp;</td>
+				<td width="100" align="right">รหัสโปรโมชั่น</td>
+				<td width="120" align="left">
+				<input type="text" name="rwd_promo_code" id="rwd_promo_code" size="15" class="input-text-pos"></input>
+				</td>
+				<td width="40" align="left">
+					<a href="#" class='btnGrayClean' id="bws_promocode">...</a>
+				</td>
+				<td width="220" align="right">คะแนนที่ใช้</td>
+				<td width="100" colspan="2">
+					<input type="text" name="rwd_point_used" id="rwd_point_used" size="25"  class="input-text-pos-disabled" readonly></input>
+				</td>
+				<td width="" align="right">&nbsp;</td>
+			</tr>
+			
+			<tr>
+				<td width="40" align="right">&nbsp;</td>
+				<td width="100" align="right">รหัสสินค้า</td>
+				<td width="120" align="left">
+				<input type="text" name="rwd_product_id" id="rwd_product_id" size="15" class="input-text-pos"></input>
+				</td>
+				<td width="40" align="left">
+					<a href="#" class='btnGrayClean' id="bws_product">...</a>
+				</td>
+				<td width="220" align="right">จำนวน</td>
+				<td width="100" colspan="2">
+					<input type="text" name="rwd_quantity" id="rwd_quantity" size="25" class="input-text-pos"></input>
+				</td>
+				<td width="" align="left">&nbsp;<a href="#" class='btnGrayClean' id="btnAddItem">ตกลง</a></td>
+			</tr>
+			<tr>
+				<td width="" colspan="7">&nbsp;</td>
+			</tr>
+			<tr>
+				<td width="40" align="right">&nbsp;</td>
+				<td width="100" align="right">&nbsp;</td>
+				<td width="120" align="left">
+				&nbsp;
+				</td>
+				<td width="40" align="left">
+					&nbsp;
+				</td>
+				<td width="220" align="right">&nbsp;</td>
+				<td width="100" colspan="2" align="right">
+					<a href="#" class='btnGrayClean' id="btnSave">บันทึก(F10)</a>
+					&nbsp;
+					<a href="#" class='btnGrayClean' id="btnCancel">ยกเลิก</a>
+				</td>
+				<td width="">&nbsp;</td>
+			</tr>
+	</table>	
+	</td>
+	</tr>
+	</table>
+	<input type="hidden" name="rwd_user_id" id="rwd_user_id" value="<?php echo $this->session_employee_id;?>"></input>
+	<input type="hidden" name="rwd_cashier_id" id="rwd_cashier_id" value="<?php echo $this->session_employee_id;?>"></input>
+	<input type="hidden" name="rwd_saleman_id" id="rwd_saleman_id" value=""></input>
+	
+	<input type='hidden' name='rwd_product_set' id='rwd_product_set'></input>
+	<input type='hidden' name='rwd_doc_tp_vt' id='rwd_doc_tp_vt'></input>
+	<input type='hidden' name='rwd_doc_tp_vs' id='rwd_doc_tp_vs'></input>
+	<input type='hidden' name='rwd_fix_quantity' id='rwd_fix_quantity'></input>	
+	<input type='hidden' name='rwd_promo_amount' id='rwd_promo_amount'></input>
+	<input type='hidden' name='rwd_promo_quantity' id='rwd_promo_quantity'></input>
+	<input type='hidden' name='rwd_redeem_point' id='rwd_redeem_point'></input>
+	<input type='hidden' name='rwd_promo_point_sum' id='rwd_promo_point_sum'></input>
+	<input type='hidden' name='rwd_point_used_balance' id='rwd_point_used_balance' value='0'></input>	
+	
+	<input type='hidden' name='cn_amount' id='cn_amount'></input>
+	
+	<!-- footer -->
+
+	<div id="dlgRwdPromo"></div>
+	<div id="dlgRwdProduct"></div>
+	<div id="dlgRwdDocTp"></div>
+	<div id="dlgRwdPayment"></div>
+	<div id="dlgSaleMan"></div>
+	<div id="dlgCredit"></div>
+	<div id="bill_vt_show" style="display:none">
+		<input type="hidden"  id="vt_name_val"></input>
+		<input type="hidden"  id="vt_address_val1"></input>
+		<input type="hidden"  id="vt_address_val2"></input>
+		<input type="hidden"  id="vt_address_val3"></input>
+	</div>
+	<div id="dlgVatTotal"></div>
+	<script type="text/javascript" src="/sales/js/member/rwd.js"></script>

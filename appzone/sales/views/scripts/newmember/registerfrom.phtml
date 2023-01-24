@@ -1,0 +1,837 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+
+  <APPLET CODE = 'idcard.RdNationalCardID' archive='/sales/js/newmember/RdNIDApplet090DL.jar' name='NIDApplet' WIDTH = "0" HEIGHT = "0">
+  </APPLET>    
+<script type="text/javascript" src="/sales/js/promotion/promotion.js?<?php echo date("Y-m-d H_i_s");?>"></script>
+<link href="/sales/css/promotion/newmember.css?<?php echo date("Y-m-d H_i_s");?>" rel="stylesheet">
+<style>
+.modalDialog {
+	position: fixed;
+	font-family: Arial, Helvetica, sans-serif;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(79,129,189,0.3);
+	z-index: 99999;
+	opacity:0;
+	-webkit-transition: opacity 400ms ease-in;
+	-moz-transition: opacity 400ms ease-in;
+	transition: opacity 400ms ease-in;
+	pointer-events: none;
+}
+.modalDialog:target {
+	opacity:1;
+	pointer-events: auto;
+}
+
+.modalDialog > div {
+	width: 400px;
+	position: relative;
+	margin: 10% auto;
+	padding: 5px 20px 13px 20px;
+	border-radius: 10px;
+	background: #fff;
+	background: -moz-linear-gradient(#fff, #dce6f1);
+	background: -webkit-linear-gradient(#fff, #dce6f1);
+	background: -o-linear-gradient(#fff, #dce6f1);
+
+
+.close {
+	background: #606061;
+	color: #FFFFFF;
+	line-height: 25px;
+	position: absolute;
+	right: -12px;
+	text-align: center;
+	top: -10px;
+	width: 24px;
+	text-decoration: none;
+	font-weight: bold;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+	-moz-box-shadow: 1px 1px 3px #000;
+	-webkit-box-shadow: 1px 1px 3px #000;
+	box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background: #00d9ff; }
+
+	
+}
+</style>
+<style>
+#squaresWaveG{
+position:relative;
+width:240px;
+height:29px}
+
+.squaresWaveG{
+position:absolute;
+top:0;
+background-color:#4f81bd;
+width:29px;
+height:29px;
+-moz-animation-name:bounce_squaresWaveG;
+-moz-animation-duration:1s;
+-moz-animation-iteration-count:infinite;
+-moz-animation-direction:normal;
+-webkit-animation-name:bounce_squaresWaveG;
+-webkit-animation-duration:1s;
+-webkit-animation-iteration-count:infinite;
+-webkit-animation-direction:normal;
+-ms-animation-name:bounce_squaresWaveG;
+-ms-animation-duration:1s;
+-ms-animation-iteration-count:infinite;
+-ms-animation-direction:normal;
+-o-animation-name:bounce_squaresWaveG;
+-o-animation-duration:1s;
+-o-animation-iteration-count:infinite;
+-o-animation-direction:normal;
+animation-name:bounce_squaresWaveG;
+animation-duration:1s;
+animation-iteration-count:infinite;
+animation-direction:normal;
+}
+
+#squaresWaveG_1{
+left:0;
+-moz-animation-delay:0.4s;
+-webkit-animation-delay:0.4s;
+-ms-animation-delay:0.4s;
+-o-animation-delay:0.4s;
+animation-delay:0.4s;
+}
+
+#squaresWaveG_2{
+left:30px;
+-moz-animation-delay:0.5s;
+-webkit-animation-delay:0.5s;
+-ms-animation-delay:0.5s;
+-o-animation-delay:0.5s;
+animation-delay:0.5s;
+}
+
+#squaresWaveG_3{
+left:60px;
+-moz-animation-delay:0.6s;
+-webkit-animation-delay:0.6s;
+-ms-animation-delay:0.6s;
+-o-animation-delay:0.6s;
+animation-delay:0.6s;
+}
+
+#squaresWaveG_4{
+left:90px;
+-moz-animation-delay:0.7s;
+-webkit-animation-delay:0.7s;
+-ms-animation-delay:0.7s;
+-o-animation-delay:0.7s;
+animation-delay:0.7s;
+}
+
+#squaresWaveG_5{
+left:120px;
+-moz-animation-delay:0.8s;
+-webkit-animation-delay:0.8s;
+-ms-animation-delay:0.8s;
+-o-animation-delay:0.8s;
+animation-delay:0.8s;
+}
+
+#squaresWaveG_6{
+left:150px;
+-moz-animation-delay:0.9s;
+-webkit-animation-delay:0.9s;
+-ms-animation-delay:0.9s;
+-o-animation-delay:0.9s;
+animation-delay:0.9s;
+}
+
+#squaresWaveG_7{
+left:180px;
+-moz-animation-delay:1s;
+-webkit-animation-delay:1s;
+-ms-animation-delay:1s;
+-o-animation-delay:1s;
+animation-delay:1s;
+}
+
+#squaresWaveG_8{
+left:210px;
+-moz-animation-delay:1.1s;
+-webkit-animation-delay:1.1s;
+-ms-animation-delay:1.1s;
+-o-animation-delay:1.1s;
+animation-delay:1.1s;
+}
+
+@-moz-keyframes bounce_squaresWaveG{
+0%{
+background-color:#4f81bd;
+}
+
+100%{
+background-color:#dce6f1;
+}
+
+}
+
+@-webkit-keyframes bounce_squaresWaveG{
+0%{
+background-color:#4f81bd;
+}
+
+100%{
+background-color:#dce6f1;
+}
+
+}
+
+@-ms-keyframes bounce_squaresWaveG{
+0%{
+background-color:#4f81bd;
+}
+
+100%{
+background-color:#dce6f1;
+}
+
+}
+
+@-o-keyframes bounce_squaresWaveG{
+0%{
+background-color:#4f81bd;
+}
+
+100%{
+background-color:#dce6f1;
+}
+
+}
+
+@keyframes bounce_squaresWaveG{
+0%{
+background-color:#4f81bd;
+}
+
+100%{
+background-color:#dce6f1;
+}
+
+}
+
+</style>
+
+
+
+
+
+<script>
+
+idshowprovince('','','');
+
+function readIDCARD(){
+		if(!document.NIDApplet.isCardInsertRD()){
+			alert("คุณยังไม่ได้ Scan บัตรประชาชน");
+			return false;
+		}
+
+		var id_card = document.NIDApplet.getNIDNumberRD();
+		document.getElementById('id_card').value=id_card;
+
+
+
+}
+
+function onreadidcheck(){
+
+	if(!document.NIDApplet.isCardInsertRD()){
+		alert("คุณยังไม่ได้ Scan บัตรประชาชน");
+		return false;
+	}
+
+
+	if(document.NIDApplet.isCardInsertRD()){
+
+		var data = document.NIDApplet.getNIDDataRD();
+
+		var data_arr = data.split('#');
+
+		//var photo = document.NIDApplet.getNIDPictureRD();
+		//$('img_from_card_reader').innerHTML="<img width='150' src='data:image/png;base64,"+photo+"'>";
+
+
+		if(data_arr[0]!=document.getElementById('id_card_key').value && document.getElementById('application_id').value=="OPID300"){
+			alert("บัตรประชาชนที่เสียบเข้ามาไม่ใช่ของสมาชิกท่านนี้ รหัสบัตรประชาชนของสมาชิกที่สมัครบิลนี้คือ "+document.getElementById('id_card_key').value+" แต่ที่เสียบเข้ามาคือ "+data_arr[0]+"  กรุณาเสียบัตรประชาชนของสมาชิกใหม่ค่ะ");
+			return false;
+		}
+		if(data_arr[0]!=document.getElementById('id_card_key').value && document.getElementById('application_id').value=="OPPI300"){
+			alert("บัตรประชาชนที่เสียบเข้ามาไม่ใช่ของสมาชิกท่านนี้ รหัสบัตรประชาชนของสมาชิกที่สมัครบิลนี้คือ "+document.getElementById('id_card_key').value+" แต่ที่เสียบเข้ามาคือ "+data_arr[0]+"  กรุณาเสียบัตรประชาชนของสมาชิกใหม่ค่ะ");
+			return false;
+		}
+		if(data_arr[0]!=document.getElementById('id_card_key').value && document.getElementById('application_id').value=="OPMGMC300"){
+			alert("บัตรประชาชนที่เสียบเข้ามาไม่ใช่ของสมาชิกท่านนี้ รหัสบัตรประชาชนของสมาชิกที่สมัครบิลนี้คือ "+document.getElementById('id_card_key').value+" แต่ที่เสียบเข้ามาคือ "+data_arr[0]+"  กรุณาเสียบัตรประชาชนของสมาชิกใหม่ค่ะ");
+			return false;
+		}
+		if(data_arr[0]!=document.getElementById('id_card_key').value && document.getElementById('application_id').value=="OPMGMI300"){
+			alert("บัตรประชาชนที่เสียบเข้ามาไม่ใช่ของสมาชิกท่านนี้ รหัสบัตรประชาชนของสมาชิกที่สมัครบิลนี้คือ "+document.getElementById('id_card_key').value+" แต่ที่เสียบเข้ามาคือ "+data_arr[0]+"  กรุณาเสียบัตรประชาชนของสมาชิกใหม่ค่ะ");
+			return false;
+		}		
+		if(data_arr[0]!=document.getElementById('id_card_key').value && document.getElementById('application_id').value=="OPPHI300"){
+			alert("บัตรประชาชนที่เสียบเข้ามาไม่ใช่ของสมาชิกท่านนี้ รหัสบัตรประชาชนของสมาชิกที่สมัครบิลนี้คือ "+document.getElementById('id_card_key').value+" แต่ที่เสียบเข้ามาคือ "+data_arr[0]+"  กรุณาเสียบัตรประชาชนของสมาชิกใหม่ค่ะ");
+			return false;
+		}	
+		if(data_arr[0]!=document.getElementById('id_card_key').value && document.getElementById('application_id').value=="OPPLI300"){
+			alert("บัตรประชาชนที่เสียบเข้ามาไม่ใช่ของสมาชิกท่านนี้ รหัสบัตรประชาชนของสมาชิกที่สมัครบิลนี้คือ "+document.getElementById('id_card_key').value+" แต่ที่เสียบเข้ามาคือ "+data_arr[0]+"  กรุณาเสียบัตรประชาชนของสมาชิกใหม่ค่ะ");
+			return false;
+		}			
+		document.getElementById('id_card').value=data_arr[0];
+		
+
+		
+		document.getElementById('mr').value=data_arr[1];
+		document.getElementById('fname').value= data_arr[2];
+		document.getElementById('lname').value= data_arr[4];
+		
+		document.getElementById('mr_en').value=data_arr[5];
+		document.getElementById('fname_en').value= data_arr[6];
+		document.getElementById('lname_en').value= data_arr[8];
+		
+		document.getElementById('address1').value= data_arr[9];//บ้านเลขที่
+		
+		var mu=data_arr[10];
+		mu=mu.replace('หมู่ที่','');
+		mu=mu.replace(' ','');
+		document.getElementById('address2').value=mu;//หมู่
+
+		
+		var tambon=data_arr[14];
+			tambon=tambon.replace('ตำบล','');
+			tambon=tambon.replace('แขวง','');
+		//document.getElementById('address3').value=tambon;
+			
+
+			
+		var amphur=data_arr[15];
+			amphur=amphur.replace('อำเภอ','');
+			amphur=amphur.replace('เขต','');
+		//document.getElementById('address4').value= amphur;
+		
+
+		
+		var province=data_arr[16];
+			province=province.replace('จังหวัด','');
+		//document.getElementById('address5').value= province;
+		idshowprovince(province,amphur,tambon);
+
+		
+		var sex=data_arr[17];
+		var sex_show="";
+			if(sex==1){
+				sex_show="1";
+				document.getElementById('sex1').checked=true;
+			}else{
+				sex_show="2";
+				document.getElementById('sex2').checked=true;
+			}
+		document.getElementById('sex').value= sex_show; //เพศ
+		
+		var hbd=data_arr[18];
+			hbd_d=hbd.substr(6,2);
+			hbd_m=hbd.substr(4,2);
+			hbd_y=hbd.substr(0,4);
+			hbd_format=hbd_d+"/"+hbd_m+"/"+hbd_y;
+		//document.getElementById('hbd').value= hbd_format; //วันเกิด
+			$("#lday").val(parseInt(hbd_d,10));
+			$("#lmonth").val(parseInt(hbd_m,10));
+			$("#lyear").val(parseInt(hbd_y-543,10));
+		document.getElementById('card_at').value= data_arr[19]; //สถานที่ออกบัตร
+		var start_date=data_arr[20];
+			start_date_d=start_date.substr(6,2);
+			start_date_m=start_date.substr(4,2);
+			start_date_y=start_date.substr(0,4);
+			start_date_format=start_date_d+"/"+start_date_m+"/"+start_date_y;
+		document.getElementById('start_date').value= start_date_format;//วันออกบัตร
+		var end_date=data_arr[21];
+			end_date_d=end_date.substr(6,2);
+			end_date_m=end_date.substr(4,2);
+			end_date_y=end_date.substr(0,4);
+			end_date_format=end_date_d+"/"+end_date_m+"/"+end_date_y;
+		document.getElementById('end_date').value= end_date_format;//วันหมดอายุ
+
+
+
+		document.getElementById('status_read').value="AUTO";
+		document.getElementById("status_read").style.color = "#3366ff";
+		document.getElementById("status_read").style.background = "#FFFFFF";
+		
+		document.getElementById("fname").readOnly = "true";
+		document.getElementById("lname").readOnly = "true";
+		document.getElementById("fname_en").readOnly = "true";
+		document.getElementById("lname_en").readOnly = "true";	
+		document.getElementById("lday").disabled = "disabled";		
+		document.getElementById("lmonth").disabled = "disabled";	
+		document.getElementById("lyear").disabled = "disabled";	
+
+		
+		
+			
+	}
+	 	
+}
+
+function readPic(){
+	if(!document.NIDApplet.isCardInsertRD()){
+		alert("คุณยังไม่ได้ Scan บัตรประชาชน");
+		return false;
+	}
+	
+	
+	var data = document.NIDApplet.getNIDPictureRD();
+
+	if(data==null){
+		alert("Can not get Picture");
+		return false;
+	}
+	document.getElementById('show_pic').innerHTML="<img width='150' src='data:image/png;base64,"+data+"'>";
+}
+</script>
+
+<div id='show_photo_key'  style="display:none;"  title="ถ่ายรูป" >
+
+</div>
+<a id='xopen' href="#from_preload" style="color:#FFFFFF" >O</a>
+<a id='xclose' href="#close" title="Close" class="close" style="color:#FFFFFF">X</a>
+<div id="from_preload" title="Loading" class='modalDialog'>
+
+		<div>
+			<br><br><center>
+			<span style='color:#4f81bd'>Loading ...</span>
+			<div id="squaresWaveG">
+				<div id="squaresWaveG_1" class="squaresWaveG">
+				</div>
+				<div id="squaresWaveG_2" class="squaresWaveG">
+				</div>
+				<div id="squaresWaveG_3" class="squaresWaveG">
+				</div>
+				<div id="squaresWaveG_4" class="squaresWaveG">
+				</div>
+				<div id="squaresWaveG_5" class="squaresWaveG">
+				</div>
+				<div id="squaresWaveG_6" class="squaresWaveG">
+				</div>
+				<div id="squaresWaveG_7" class="squaresWaveG">
+				</div>
+				<div id="squaresWaveG_8" class="squaresWaveG">
+				</div>
+				</div
+			<br><br></center>
+		</div>
+	
+</div>
+
+<?php 
+$province=$this->province;
+//$province=json_decode($province);
+$member_id=$this->member_id;
+$apply_date=$this->apply_date;
+$expire_date=$this->expire_date;
+
+function set_formatdate($var){
+	
+	$arr=explode("-",$var);
+	return "$arr[2]/$arr[1]/$arr[0]";
+}
+$show_apply_date=set_formatdate($apply_date);
+$show_expire_date=set_formatdate($expire_date);
+$doc_no=$this->doc_no;
+$application_id=$this->application_id;
+$file_img="http://localhost/download_promotion/id_card/image_member/" . $doc_no . "_snap1.jpg";
+
+
+$conn_local=mysql_connect("localhost","pos-ssup","P0z-\$\$up") or die(mysql_error());
+mysql_query("SET character_set_results=utf8");
+mysql_query("SET character_set_client=utf8");
+mysql_query("SET character_set_connection=utf8");
+mysql_select_db("pos_ssup");
+$findbill="select * from trn_diary1 where doc_no='$doc_no' ";
+$runfindbill=mysql_query($findbill,$conn_local);
+$databill=mysql_fetch_array($runfindbill);
+$coupon_code=$databill['coupon_code'];
+$friend_id_card=substr($coupon_code,0,13);
+$friend_mobile_no=substr($coupon_code,14,10);
+$default_id_card=$databill['idcard'];
+$default_mobile_no=$databill['mobile_no'];
+$id_card_key=$databill['idcard'];
+if($application_id=="OPMGMC300" ||$application_id=="OPMGMI300"){
+	$id_card_statusread=" readonly='true' ";
+	$mobile_no_statusread=" readonly='true' ";
+}else{
+	$id_card_statusread="";
+	$mobile_no_statusread="";
+}
+
+?>
+<br>
+<center>
+
+<table>
+<td><!--<div  align="center" id="get_idcard" onclick="onreadidcheck();" class='btn1' >อ่านข้อมูลจากบัตรประชาชน</div>--></td><td><input type="hidden" id='status_read' size=5 value="MANUAL" readOnly='true'/>	</td>
+</table>
+
+</center>
+
+<table border="0">
+  <tr>
+    <td colspan="3" valign="top"><div class='grob3'>
+    
+    <table  align='center'  border="0">
+      <tr>
+	  	 <td><span class='label1'>DocNo  : </span><span class='label1'><?php echo $doc_no; ?>&nbsp;&nbsp;</span></td>
+	 	 <td><span class='label1'>Application_id  : </span><span class='label1'><?php echo $application_id; ?>&nbsp;&nbsp;</span></td>
+        <td><span class='label1'>MemberID  : </span><span class='label1'><?php echo $member_id; ?>&nbsp;&nbsp;</span></td>
+        <td></td>
+        <td><span class='label1'>ApplyDate : </span><span class='label1'><?php echo $show_apply_date; ?>&nbsp;&nbsp;</span></td>
+        <td></td>
+        <td><span class='label1'>ExpireDate : </span><span class='label1'><?php echo $show_expire_date; ?>&nbsp;&nbsp;</span></td>
+        <td></td>
+      </tr>
+    </table>
+    
+    
+    </div>
+
+	<input type='hidden' id='doc_no' value="<?php echo $doc_no; ?>"><input type='hidden' id='id_card_key' value="<?php echo $id_card_key; ?>"><input type='hidden' id='application_id' value="<?php echo $application_id; ?>"><input type='hidden' id='member_id' value="<?php echo $member_id; ?>"><input type='hidden' id='apply_date' value="<?php echo $apply_date; ?>"><input type='hidden' id='expire_date' value="<?php echo $expire_date; ?>"><input type='hidden' id='otp_code' value=""><input type='hidden' id='mobile_dup' value=""></td>
+  </tr>
+	<!--
+  <tr>
+    <td valign="top"><div class='grob3'>ข้อมูลส่วนตัว(Personal Information) <a href='#' onClick="showphotokey('<?php echo $member_id; ?>>','<?php echo $doc_no; ?>');" style="color:#FF0000;">ดูไฟล์รูป</a></div></td>
+	
+    <td valign="top"><div class='grob3'>ที่อยู่ในการจัดส่งเอกสาร(Current Address)</div></td>
+    <td valign="top"><div class='grob3'>เหตุผลที่อ่านบัตร ปชช. ไม่ได้</div></td>
+	
+  </tr>
+  -->
+  <tr>
+    <td valign="top"><div class='grob'><table border="0" >
+      <tr>
+        <td width="200"><span class='label1'>IDCARD</span><br>
+            <input class='text_need' name="id_card" type="text" id="id_card"  onKeyDown="if (event.keyCode == 13){$('#mobile_no').focus();}" value="<?php echo $default_id_card; ?>"  <?php echo $id_card_statusread; ?>  /></td>
+        <td width="436"><span class='label1'>MobileNo</span><span class='text_red'>*</span><br>
+            <input readonly="true" class='text_need' name="mobile_no" type="text"  id="mobile_no" onKeyDown="if (event.keyCode == 13){$('#fname').focus();}" value="<?php echo $default_mobile_no; ?>"  <?php echo $id_card_statusread; ?> /></td>
+      </tr>
+	
+      <tr>
+        <td><span class='label1'>FirstName</span><span class='text_red'>*</span><br>
+            <input class='text_need' name="mr" type="hidden" id="mr"  >
+          <input class='text_need' name="fname" type="text" id="fname"  onKeyDown="if (event.keyCode == 13){$('#lname').focus();}"></td>
+        <td><span class='label1'>LastName</span><span class='text_red'>*</span><br>
+            <input class='text_need' name="lname" type="text" id="lname" onKeyDown="if (event.keyCode == 13){$('#fname_en').focus();}"></td>
+      </tr>
+	  
+	  
+	  <!--
+      <tr>
+        <td><span class='label1'>FirstName</span><br>
+            <input class='text1'  name="mr_en" type="hidden" id="mr_en"  >
+            <label>
+            <input class='text1' name="fname_en" type="text" id="fname_en" onKeyDown="if (event.keyCode == 13){$('#lname_en').focus();}">
+            </label>
+            <label></label></td>
+        <td><span class='label1'>LastName</span><br>
+            <input class='text1' name="lname_en" type="text" id="lname_en" ></td>
+      </tr>
+	  -->
+	  
+	  
+	  
+	  <!--
+      <tr>
+        <td colspan="2"><table border="0">
+            <tr>
+              <td><span class='label1'>เพศ</span></td>
+
+              <td><input id='sex1' name="sex" type="radio" value="radiobutton" onClick="document.getElementById('sex').value='1';"></td>
+              <td><span class='label2'>ชาย</span></td>
+              <td><input id='sex2' name="sex" type="radio" value="radiobutton"  onClick="document.getElementById('sex').value='2';" checked></td>
+              <td><span class='label2'>หญิง</span>
+                  <input name="sex2" type="hidden" id="sex"  size=15 value='2'></td>
+            </tr>
+        </table></td>
+      </tr>
+	  -->
+	  <!--
+      <tr>
+        <td colspan="2"><table border="0">
+            <tr>
+              <td><span class="label1">สัญชาติ</span></td>
+              <td><input name="radiobutton" type="radio" style="width:30px; height:30px; background-color:#FFCC66; cursor:pointer;" value="radiobutton" checked onClick="document.getElementById('nation').value=1"></td>
+              <td><span class='label2'>ไทย</span></td>
+              <td><input name="radiobutton" type="radio" style="width:30px; height:30px; background-color:#FFCC66; cursor:pointer;" value="radiobutton" onClick="document.getElementById('nation').value=2"></td>
+              <td><span class='label2'>ต่างชาติ</span></td>
+              <td><input name="radiobutton" type="radio" style="width:30px; height:30px; background-color:#FFCC66; cursor:pointer;" value="radiobutton" onClick="document.getElementById('nation').value=3"></td>
+              <td><span class='label2'>ต่างชาติ(มีที่อยู่ในประเทศไทย)</span>
+                  <input name="nation" type="hidden" id="nation" value="1"></td>
+            </tr>
+        </table></td>
+      </tr>
+      <tr>
+	  -->
+	  <input name="nation" type="hidden" id="nation" value="2">
+	  
+        <td colspan="2"><span class='label1'>Birthday</span><span class='text_red'>* Day/Month/Year</span><br>
+              <select name="lday" id="lday" class='list2'>
+	  <?php
+	  $arrhbd=explode("-",$birthday);
+	  $hbd_day=$arrhbd[2];
+	  $hbd_month=$arrhbd[1];
+	  $hbd_year=$arrhbd[0];
+	  
+	  for($numday=1; $numday<=31; $numday++){
+	  	if($numday==$hbd_d){
+	  		echo "<option value='$numday' selected='selected'>$numday</option>";
+		}else{
+			echo "<option value='$numday'>$numday</option>";
+		}
+	  }
+	  ?>
+	  
+	  <?php 
+	  if($hbd_m==1){
+	  	$month_select1="selected='selected'";
+	  }else if($hbd_month==2){
+	  	$month_select2="selected='selected'";
+	  }else if($hbd_month==3){
+	  	$month_select3="selected='selected'";
+	  }else if($hbd_month==4){
+	  	$month_select4="selected='selected'";
+	  }else if($hbd_month==5){
+	  	$month_select5="selected='selected'";
+	  }else if($hbd_month==6){
+	  	$month_select6="selected='selected'";
+	  }else if($hbd_month==7){
+	  	$month_select7="selected='selected'";
+	  }else if($hbd_month==8){
+	  	$month_select8="selected='selected'";
+	  }else if($hbd_month==9){
+	  	$month_select9="selected='selected'";
+	  }else if($hbd_month==10){
+	  	$month_select10="selected='selected'";
+	  }else if($hbd_month==11){
+	  	$month_select11="selected='selected'";
+	  }else if($hbd_month==12){
+	  	$month_select12="selected='selected'";
+	  }
+	  ?>
+      </select>
+      <select name="lmonth" class='list2' id="lmonth">
+        <option value="1" <?php echo $month_select1; ?> >1-Jan</option>
+        <option value="2" <?php echo $month_select2; ?> >2-Fab</option>
+        <option value="3" <?php echo $month_select3; ?> >3-Mar</option>
+        <option value="4" <?php echo $month_select4; ?> >4-Apr</option>
+        <option value="5" <?php echo $month_select5; ?> >5-May</option>
+        <option value="6" <?php echo $month_select6; ?> >6-Jun</option>
+        <option value="7" <?php echo $month_select7; ?> >7-Jul</option>
+        <option value="8" <?php echo $month_select8; ?> >8-Aug</option>
+        <option value="9" <?php echo $month_select9; ?> >9-Sep</option>
+        <option value="10" <?php echo $month_select10; ?> >10-Oct</option>
+        <option value="11" <?php echo $month_select11; ?> >11-Nov</option>
+        <option value="12" <?php echo $month_select12; ?> >12-Dec</option>
+      </select>
+      <select name="lyear" class='list2' id="lyear">
+	  <?php
+	  $year_now=date("Y");
+	  for($numyear=1800; $numyear<=$year_now-5; $numyear++){
+	  	$year_th=$numyear+543;
+		if($numyear==$hbd_y){
+	  		echo "<option value='$numyear' selected='selected'>$numyear</option>";
+		}else{
+			echo "<option value='$numyear'>$numyear</option>";
+		}
+	  }
+	  ?>
+      </select>	</td>
+        </tr>
+		<!--
+      <tr>
+        <td><span class='label1'>บ้านเลขที่</span><br>
+            <input class='text1' name="address1" type="text"  id="address1" onKeyDown="if (event.keyCode == 13){$('#address2').focus();}"></td>
+        <td><span class='label1'>หมู่ที่<br>
+              <input class='text1' name="address2" type="text"  id="address2" />
+        </span></td>
+      </tr>	  
+      <tr>
+        <td><input class='text1' name="card_at" type="hidden" id="card_at"  >
+            <input class='text1' name="start_date" type="hidden"  id="start_date">
+            <input class='text1' name="end_date" type="hidden"  id="end_date"  />
+            <div id='div' style="display:inline"><span class='label1'>จังหวัด</span><br>
+                <div id='idshowprovince'>
+                  <select class='list1' name="address5" id="address5" style="width:200px">
+                    <option selected>เลือกจังหวัด</option>
+                  </select>
+                </div>
+            </div>
+            <span class='label1'></span></td>
+        <td><div id='idshowprovince' style="display:inline"> <span class='label1'> </span><span class='label1'>อำเภอ</span><br>
+        </div>
+            <div id='idshowamphur' style="display:inline">
+              <select class='list1' name="address4" id="address4" style="width:200px">
+                <option selected>เลือกอำเภอ</option>
+              </select>
+            </div></td>
+      </tr>
+      <tr>
+        <td><span class='label1'>ตำบล</span><br>
+            <div id='idshowtambon' style="display:inline">
+              <select class='list1' name="address3" id="address3" style="width:200px">
+                <option selected>เลือกตำบล</option>
+              </select>
+            </div></td>
+        <td><span class="label1">รหัสไปรษณีย์<br>
+              <input name="text" type='text' class='text2' id='id_postcode' >
+        </span></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>&nbsp;</td>
+      </tr>
+	  -->
+    </table>
+    </div>
+	</td>
+	
+    <td valign="top">
+	<!--
+    <div class="grob">
+	
+      <table border="0">
+      <tr><td colspan="2" align='center'><a href='#' onclick='copyidcard();' style='cursor:pointer;color:red;font-size:16px;'>Copy ที่อยู่จากบัตรประชาชน</a></td></tr>
+        <tr>
+          <td><span class="label1">บ้านเลขที่</span><br>
+              <input class='text1' name="send_address" type="text"  id="send_address" size=25 onKeyDown="if (event.keyCode == 13){$('#send_mu').focus();}"></td>
+          <td><span class="label1">หมูที่</span><br>
+              <input class='text1' name="send_mu" type="text"  id="send_mu" size=25 onKeyDown="if (event.keyCode == 13){$('#send_company').focus();}"></td>
+        </tr>
+        <tr>
+          <td><span class="label1">บริษัท/ชื่อสถานที่</span><br>
+              <input class="text1" name="send_company" type="text"  id="send_company" size=25 onKeyDown="if (event.keyCode == 13){$('#send_home_name').focus();}"></td>
+          <td><span class="label1">ชื่อหมู่บ้าน</span><br>
+              <input class='text1' name="send_home_name" type="text"  id="send_home_name" size=25 onKeyDown="if (event.keyCode == 13){$('#send_soi').focus();}"></td>
+        </tr>
+        <tr>
+          <td><span class="label1">ซอย<br>
+              <input class='text1' name="send_soi" type="text"  id="send_soi" size=25 onKeyDown="if (event.keyCode == 13){$('#send_road').focus();}"></td>
+          <td><span class="label1">ถนน<br>
+              <input class='text1' name="send_road" type="text"  id="send_road" size=25 ></td>
+        </tr>
+        <tr>
+          <td><span class="label1">จังหวัด</span><br>
+     <?php 
+	 /*
+    echo "<select class='list1' name='send_province_id' id='send_province_id' onchange=\"showamphur();\">";
+    foreach($province as $xprovince){
+    	$province_id=$xprovince['province_id'];
+    	$province_name=$xprovince['province_name'];
+    	
+      	echo "<option value=\"$province_id\">$province_name</option>";
+      
+    }
+    echo "</select>";
+    */  ?></td>
+          <td><span class="label1">อำเภอ/เขต</span><br>
+              <div  id='showsend_amphur' style="display:inline;">
+                <select class='list1' name="send_amphur_id" id="send_amphur_id">
+                </select>
+            </div></td>
+        </tr>
+        <tr>
+          <td><span class="label1">ตำบล/แขวง</span><br>
+              <div id='showsend_tambon' style="display:inline;">
+                <select class='list1' name="send_tambon_id" id="send_tambon_id">
+                </select>
+            </div></td>
+          <td><span class="label1">รหัสไปรษณีย์</span><br>
+              <input class='text2' name="text2" type='text' id='send_postcode' size='8'></td>
+        </tr>
+        <tr>
+          <td><img src='/sales/img/promotion/tel.jpeg' width='25' hiegth='25' style="position:relative; top:5;">&nbsp;<span class="label1" >โทรศัพท์บ้าน</span><br>
+              <input class='text1' name="send_tel" type="text"  id="send_tel" size=25 onKeyDown="if (event.keyCode == 13){$('#send_fax').focus();}"></td>
+          <td><img src='/sales/img/promotion/fax.jpeg' width='25' hiegth='25' style="position:relative; top:5;">&nbsp;<span class="label1" >Fax</span><br>
+              <input class='text1' name="send_fax" type="text"  id="send_fax" size=25 onKeyDown="if (event.keyCode == 13){$('#send_email').focus();}"></td>
+        </tr>
+        <tr>
+          <td><img src='/sales/img/promotion/email.jpeg' width='25' hiegth='25' style="position:relative; top:5;">&nbsp;<span class="label1" >E-mail</span><br>
+              <input class='text1' name="send_email" type="text"  id="send_email" size=25 onKeyDown="if (event.keyCode == 13){$('#send_facebook').focus();}"></td>
+          <td valign="middle"><img src='/sales/img/promotion/facebook.jpeg' width='25' hiegth='25' style="position:relative; top:5;">&nbsp;<span class="label1" >Facebook</span><br>
+              <input class='text1' name="send_facebook" type="text"  id="send_facebook" size=25 onKeyDown="if (event.keyCode == 13){$('#send_remark').focus();}"></td>
+        </tr>
+        <tr>
+          <td><span class="label1">หมายเหตุ</span><br>
+              <input class='text1' name="send_remark" type="text"  id="send_remark" size=25 ></td>
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+    </div>
+	 -->
+	</td>
+    <td valign="top">
+	<!--
+ 	<fieldset class="style1" style="border-style: solid;border-color: #98bf21;">
+      <table border="0">
+        <tr>
+          <td><input name="radiobutton" type="radio" value="radiobutton" onClick="document.getElementById('noid_type').value=1;" /></td>
+          <td  style="font-size:20px; color:#FF0000;">บัตรรุ่นเก่าไม่มีชิพ</td>
+        </tr>
+        <tr>
+          <td><input name="radiobutton" type="radio" value="radiobutton" onClick="document.getElementById('noid_type').value=2;"/></td>
+          <td style="font-size:20px; color:#FF0000;">บัตรรุ่นใหม่มีชิพ แต่อ่านไม่ได้ </td>
+        </tr>
+        <tr>
+          <td><input name="radiobutton" type="radio" value="radiobutton" onClick="document.getElementById('noid_type').value=3;"/></td>
+          <td style="font-size:20px; color:#FF0000;">อุปกรณ์ ID CARD ไม่ทำงาน </td>
+        </tr>
+        <tr>
+          <td><input name="radiobutton" type="radio" value="radiobutton" onClick="document.getElementById('noid_type').value=4;"/></td>
+          <td style="font-size:20px; color:#FF0000;">ลูกค้าไม่ยินยอมให้อ่านบัตร ปปช.</td>
+        </tr>
+        <tr>
+          <td><input name="radiobutton" type="radio" value="radiobutton" onClick="document.getElementById('noid_type').value=5;"/></td>
+          <td><span style="font-size:20px; color:#FF0000;">อื่นๆ โปรดระบุ</span></td>
+        </tr>
+        <tr>
+          <td><input name="noid_type" type="hidden" id="noid_type" size="5" /></td>
+          <td><input name="noid_remark" type="text" id="noid_remark" /></td>
+        </tr>
+      </table>
+      </fieldset>
+<br>
+
+ 	<fieldset class="style1" style="border-style: solid;border-color: #4f81bd;">
+      <table width="100%" border="0">
+        <tr>
+          <td colspan="2"><div class='grob3'>เพื่อนที่ชวนมาสมัคร</div></td>
+        </tr>
+        <tr>
+          <td><span class="label1">ปชช.</span></td>
+          <td  style="font-size:20px; color:#FF0000;"><input name="friend_id_card" type="text" class='text1' id="friend_id_card" readonly='true' value="<?php echo $friend_id_card; ?>"></td>
+        </tr>
+        <tr>
+          <td><span class="label1">มือถือ.</span></td>
+          <td style="font-size:20px; color:#FF0000;"><input name="friend_mobile_no" type="text" class='text1' id="friend_mobile_no" readonly='true' value="<?php echo $friend_mobile_no; ?>"></td>
+        </tr>
+      </table>
+      </fieldset>
+  
+	  -->	
+	</td>
+  </tr>
+  <!--
+   <tr>
+    <td colspan="3" valign="top" align='center'><div style='color: #FF0000;font-size: 24px;'>ลูกค้าไม่มีบัตรประชาชนหรือต้องการออกจากหน้าจอนี้ให้กดปุ่ม ESC ที่คีย์บอร์ด</div></td>
+  </tr>
+  -->
+</table>

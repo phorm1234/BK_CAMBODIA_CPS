@@ -1,0 +1,81 @@
+<?php	
+	include(FPDF_PATH."/fpdf.php");      
+        $hl=5;
+        $hl1=4;
+        $hl2=3;
+        $maxdoc=72;
+        $logo="/op-logo.gif";
+        $pdf=new FPDF('P','mm','tm-t88iv');
+        $pdf->SetThaiFont();
+        $pdf->AddPage();
+        $pdf->SetY(2);
+		$pdf->SetX(0);
+		$pdf->SetMargins(0,2,0); 
+        $pdf->SetAutoPageBreak("off",1);
+        $pdf->Image('/var/www/pos/htdocs/sales/img/op/op-logo.gif',2,0,65);
+        //$pdf->Image(LOGO_PATH.$logo,2,0,65);
+        $pdf->SetY(8);
+        $pdf->SetFont('CordiaNew','B',13); 
+        $pdf->Cell($maxdoc,$hl,iconv('UTF-8','cp874','Claim Expense Doc.'),0,0,'C',0); 
+        $pdf->Ln();
+        $pdf->Ln();
+        $pdf->SetFont('CordiaNew','B',10);//B
+        $pdf->Cell(10,$hl1,iconv('UTF-8','cp874',"Branch : ").$this->branch_id." ".iconv('UTF-8','cp874',$this->branch_name),0,0,'L',0); 
+        $pdf->Cell(25,$hl1,$this->arr_h[0]['tax_id'],0,0,'L',0);
+        $pdf->Cell(4,$hl1,"",0,0,'L',0);
+        $arr_cdate=explode('-',date('Y-m-d'));
+        $cdate=$arr_cdate[2]."/".$arr_cdate[1]."/".$arr_cdate[0];
+        $pdf->Cell(33,$hl1,iconv('UTF-8','cp874',"Print Date : ").$cdate,0,0,'R',0); 
+        $pdf->Ln();
+        
+        $pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"Start Date : ".$this->date_start." - ".$this->date_stop),0,0,'L',0); 
+        $pdf->Ln();
+        
+        $pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"Employee ID : ".$this->user_id)." (".iconv('UTF-8','cp874',$this->user_fullname).")",0,0,'L',0); 
+        $pdf->Ln();  
+        //--------- product item ------------------
+      	$pdf->SetFont('CordiaNew','',10);      	
+      	$pdf->Cell($maxdoc,$hl1,"========================================================",0,0,'C',0); 
+        $pdf->Ln();
+		$i=1;
+        foreach($this->arr_expense as $dataL){
+        	$description=iconv('UTF-8','cp874',$dataL['description']);
+        	$pdf->Cell(5,$hl2,$i,0,0,'L',0);
+	        $pdf->Cell(19,$hl2,$dataL['account_code'],0,0,'L',0);
+	        $pdf->Cell(26,$hl2,$description,0,0,'L',0);	     
+	        $pdf->Cell(22,$hl2,number_format($dataL['sum_amount'],2),0,0,'R',0);        
+	        $pdf->Ln();
+	        $i++;
+        }        
+        //--------- product item ------------------
+        $pdf->Ln();
+        $pdf->Cell($maxdoc,$hl1,"========================================================",0,0,'C',0); 
+        $pdf->Ln();
+        $pdf->SetFont('CordiaNew','B',10);//B
+        $pdf->Cell(24,$hl1,iconv('UTF-8','cp874',"Total Amount  "),0,0,'L',0); 
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(15,$hl1,"",0,0,'L',0); 
+        $pdf->Cell(13,$hl1,number_format($this->sum_amount,2,'.',',').iconv('UTF-8','cp874'," Baht"),0,0,'R',0);
+        $pdf->Ln();
+        $pdf->Ln();
+        $pdf->Ln();
+        
+        $pdf->Cell(10,$hl1,iconv('UTF-8','cp874',"Received by"),0,0,'L',0); 
+        $pdf->Cell(14,$hl1,"___________",0,0,'L',0); 
+        $pdf->Cell(10,$hl1,iconv('UTF-8','cp874',"Examiners/Auditors"),0,0,'L',0); 
+        $pdf->Cell(14,$hl1,"___________",0,0,'L',0); 
+        $pdf->Cell(10,$hl1,iconv('UTF-8','cp874',"Approvers"),0,0,'L',0); 
+        $pdf->Cell(14,$hl1,"___________",0,0,'L',0); 
+        $pdf->Ln();
+      	 $pdf->Ln();
+       
+        $name='/rptexpense.pdf';
+	    $output=REPORT_PATH.$name;	 
+	    @chmod(REPORT_PATH,0777);
+	    //$pdf->Output($output);// for test print
+	    $pdf->Output($output,'F');
+		echo shell_exec("lp -o media=Letter $output");
+		if(@file_exists($output)){
+			echo shell_exec("rm $output");			
+		}
+?>

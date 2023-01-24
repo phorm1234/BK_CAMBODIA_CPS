@@ -1,0 +1,26 @@
+<?php 	
+	if(!empty($this->arr_data)){
+		if($this->arr_data['action']=='getdocdate'){
+			$arr_date=explode("-",$this->arr_data['data']);
+			$str_date=$arr_date[2]."/".$arr_date[1]."/".($arr_date[0]+543);
+			echo $str_date;
+		}
+		
+		if($this->arr_data['action']=='confirmcloseday'){
+			/*
+			$str_show="";
+			if($this->arr_data['data']!=0){
+				$arr_date=explode("-",$this->arr_data['data']);
+				$str_doc_date=mktime(0,0,0,$arr_date[1],$arr_date[2],$arr_date[0]);
+				$str_doc_date=date("d/m/Y",$str_doc_date);
+				$str_show="ปิดบิลประจำวันที่ ".$str_doc_date." สมบูรณ์";
+			}else{
+				$str_show= "ไม่สามารถปิดบิลประจำวันได้ กรุณาตรวจสอบอีกครั้ง";
+			}
+			echo $str_show;
+			*/
+			echo $this->arr_data['data'];
+		}
+		
+	}
+?>

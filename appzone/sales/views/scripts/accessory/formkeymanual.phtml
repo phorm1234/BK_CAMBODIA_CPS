@@ -1,0 +1,244 @@
+<style type="text/css">
+	.frmKeymanualFixedTextbox{
+		width:50px;
+		height:40px;
+		text-align:center;
+	}
+	.frmKeymanualFixedTextboxTicket{
+		width:50px;
+		height:40px;
+		text-align:center;
+	}
+ 	.TableKeyManual
+    {
+        display: table;
+    	width:100%;
+    	height:300px fixed;
+    	border:0pt solid#000;    	
+    }
+  
+    .Title
+    {
+        display: table-caption;
+        text-align: center;
+        font-weight: bold;
+        font-size:24px;
+    }
+    .Heading
+    {
+        display: table-row;
+        font-weight: bold;
+        text-align: center;
+    }
+    .RowOfCell 
+    {
+        display: table-row; 
+    	zoom: 1;          /* Clear internal floats in IE */
+    	overflow: hidden; /* Clear internal floats */
+    	line-height: 1.5;    	
+    	padding:0pt;
+    	height:50px !important;
+    	
+    }
+    .CellLeft
+    {
+        display: table-cell;
+    	width:20%;
+        border:none;
+        border-width: thin;
+        text-align: right;    
+    	padding-top:10px;
+    	height:50px ;
+    	/*background-color:#b0e0e6;*/
+    }
+	.CellRight
+    {
+        display: table-cell;
+    	width:80%;    	
+        border:none;
+        border-width: thin;      
+    	padding-top:10px;
+    	height:50px;
+    }
+</style>
+<input type="hidden" id="str_bill_manual" value="<?php echo $this->str_bill;?>"></input>
+<div class="TableKeyManual">
+    <div class="RowOfCell">
+        <div class="CellLeft">
+            <label>เลขที่บิล : </label>
+        </div>
+        <div class="CellRight">
+           
+            	&nbsp;OP
+				<input type="text" size="1" value="" id="fkm1" class="frmKeymanualFixedTextbox">
+				<input type="text" size="1" value="" id="fkm2" class="frmKeymanualFixedTextbox">
+				<input type="text" size="1" value="" id="fkm3"  class="frmKeymanualFixedTextbox">
+				<input type="text" size="1" value="" id="fkm4"  class="frmKeymanualFixedTextbox">
+				/
+				<input type="text" size="1" value="" id="fkm5"  class="frmKeymanualFixedTextbox">
+				<input type="text" size="1" value="" id="fkm6" class="frmKeymanualFixedTextbox">
+				<input type="text" size="1" value="" id="fkm7"  class="frmKeymanualFixedTextbox">
+				<input type="text" size="1" value="" id="fkm8"  class="frmKeymanualFixedTextbox">
+				<input type="text" size="1" value="" id="fkm9"  class="frmKeymanualFixedTextbox">
+           
+        </div>     
+    </div>
+    <div class="RowOfCell">
+        <div class="CellLeft">
+            <label>เลขที่ TICKET : </label>
+        </div>
+        <div class="CellRight">
+           
+            	&nbsp;&nbsp;&nbsp;&nbsp;
+            	<input type="text" size="1" value="" id="fkmTck1"  class="frmKeymanualFixedTextboxTicket">
+				<input type="text" size="1" value="" id="fkmTck2" class="frmKeymanualFixedTextboxTicket">
+				<input type="text" size="1" value="" id="fkmTck3"  class="frmKeymanualFixedTextboxTicket">
+				<input type="text" size="1" value="" id="fkmTck4"  class="frmKeymanualFixedTextboxTicket">
+				<input type="text" size="1" value="" id="fkmTck5"  class="frmKeymanualFixedTextboxTicket">
+				<input type="text" size="1" value="" id="fkmTck6"  class="frmKeymanualFixedTextboxTicket">
+          
+        </div>
+     
+    </div>
+</div>
+<script type="text/javascript">
+$(function () {
+	//----------------------------------------------init----------------------------------------------------
+	var str_bill_manual=$('#str_bill_manual').val();	
+	if(str_bill_manual!=''){
+		var arr_bill=str_bill_manual.split('#');//bill vs ticket
+		var arr_fbill_manual=arr_bill[0].split('/');//bill manual			
+		var f_bill_manual1=arr_fbill_manual[0].substr(2, 4);
+		var f_bill_manual2=arr_fbill_manual[1];
+		var arr_bill_manual1=f_bill_manual1.split('');
+		var arr_bill_manual2=f_bill_manual2.split('');
+		$('#fkm1').val(arr_bill_manual1[0]);
+		$('#fkm2').val(arr_bill_manual1[1]);
+		$('#fkm3').val(arr_bill_manual1[2]);
+		$('#fkm4').val(arr_bill_manual1[3]);
+		$('#fkm5').val(arr_bill_manual2[0]);
+		$('#fkm6').val(arr_bill_manual2[1]);
+		$('#fkm7').val(arr_bill_manual2[2]);
+		$('#fkm8').val(arr_bill_manual2[3]);
+		$('#fkm9').val(arr_bill_manual2[4]);
+		var arr_ticket=arr_bill[1].split('');
+		$('#fkmTck1').val(arr_ticket[0]);
+		$('#fkmTck2').val(arr_ticket[1]);
+		$('#fkmTck3').val(arr_ticket[2]);
+		$('#fkmTck4').val(arr_ticket[3]);
+		$('#fkmTck5').val(arr_ticket[4]);
+		$('#fkmTck6').val(arr_ticket[5]);		
+	}
+	//----------------------------------------------init ---------------------------------------------------
+	jQuery(".frmKeymanualFixedTextbox").bind("keydown", function (evt) {
+			if ( evt.keyCode == 46 || evt.keyCode == 8 || evt.keyCode == 9 || evt.keyCode == 27 || evt.keyCode == 13 || 
+				 // Allow: Ctrl+A
+				(evt.keyCode == 65 && evt.ctrlKey === true) || 
+				
+				// Allow: Ctrl+C
+				(evt.keyCode == 67 && evt.ctrlKey === true) || 
+				
+				// Allow: Ctrl+V
+				(evt.keyCode == 86 && evt.ctrlKey === true) || 
+				
+				// Allow: home, end, left, right
+				(evt.keyCode >= 35 && evt.keyCode <= 39)) {
+				  // let it happen, don't do anything
+				  return;
+			} else {
+				// Ensure that it is a number and stop the keypress
+				if (evt.shiftKey || (evt.keyCode < 48 || evt.keyCode > 57) && (evt.keyCode < 96 || evt.keyCode > 105 )) {
+					evt.preventDefault(); 
+				}   
+			}
+	});
+	
+	$(':text.frmKeymanualFixedTextbox').each(function(){
+		
+		$(this).keypress(function(evt){
+			var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+	        if(key == 13){
+	            evt.preventDefault();
+	            if($(this).val().length==0) return false;
+	            if($(this).val().length>1) {
+	            	$(this).focus().select();
+		            return false;
+	            }
+	            var sizeofbox=$(":text.frmKeymanualFixedTextbox").size();
+	            var index_last=$(this).index() + 1;
+	            if(index_last == sizeofbox){
+	            	 $(':text.frmKeymanualFixedTextboxTicket:first').focus();
+	            }else{
+	            	 $(this).next().focus();
+	            }
+	            return false;
+	        }
+		});//keypress
+
+		$(this).keyup(function(evt){
+			
+	            evt.preventDefault();
+	            if($(this).val().length==0) return false;
+	            if($(this).val().length>1) {
+	            	$(this).focus().select();
+		            return false;
+	            }
+	            var sizeofbox=$(":text.frmKeymanualFixedTextbox").size();
+	            var index_last=$(this).index() + 1;
+	            var aa=index_last +"==" +sizeofbox;
+	            //alert(aa);
+	            if(index_last == sizeofbox){	            	
+	            	 $(':text.frmKeymanualFixedTextboxTicket:first').focus();
+	            }else{		          
+	            	 $(this).next().focus();
+	            }
+	            return false;	       
+		});//keyup
+		
+	});//each
+
+	$('.frmKeymanualFixedTextboxTicket').each(function(){
+		$(this).keypress(function(evt){
+			var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+	        if(key == 13){
+	            evt.preventDefault();
+	            if($(this).val().length==0) return false;
+	            if($(this).val().length>1) {
+	            	$(this).focus().select();
+		            return false;
+	            }
+	            var sizeofbox=$(":text.frmKeymanualFixedTextboxTicket").size();
+	            var index_last=$(this).index() + 1;
+	            if(index_last == sizeofbox){
+	            	 //$('#ticket_no').focus();
+	            	 $('.ui-dialog-buttonpane button:first').focus();
+	            }else{
+	            	 $(this).next().focus();
+	            }
+	            return false;
+	        }
+		});//keypress
+
+		$(this).keyup(function(evt){
+	            evt.preventDefault();
+	            if($(this).val().length==0) return false;
+	            if($(this).val().length>1) {
+	            	$(this).focus().select();
+		            return false;
+	            }
+	            var sizeofbox=$(":text.frmKeymanualFixedTextboxTicket").size();
+	            var index_last=$(this).index() + 1;
+	            var aa=index_last +"==" +sizeofbox;
+	            //alert(aa);
+	            if(index_last == sizeofbox){
+	            	 //$('#ticket_no').focus();
+	            	 $('.ui-dialog-buttonpane button:first').focus();
+	            }else{		          
+	            	 $(this).next().focus();
+	            }
+	            return false;	       
+		});//keyup
+	});//each	
+
+});//ready
+</script>

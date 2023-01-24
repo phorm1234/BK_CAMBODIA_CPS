@@ -1,0 +1,292 @@
+<style type="text/css">   
+    .div-table{display:table; width: 700px; border: 1px; }
+    .div-table-row{display:table-row;}
+ 
+    .div-table-col1{display:table-cell; padding-left:  10px; padding-right:  100px; width: 350px;}
+    .div-table-col2{display:table-cell; padding-left:  50px; }
+    .div-table-col3{display:table-cell; padding-left:  50px; float: right; }
+	.div-table-col4{display:table-cell; padding-left:  10px; width: 600px;}
+	
+	.div-table-col5{display:table-cell; padding-left:  20px; width: 70px;}
+    .div-table-col6{display:table-cell; padding-left:  20px; width: 100px; }
+    .div-table-col7{display:table-cell; padding-left:  10px; width: 180px; }
+	.div-table-col8{display:table-cell; padding-left:  20px; width: 40px;}
+	.div-table-col9{display:table-cell; padding-left:  100px; width: 50px;}
+    
+</style>
+
+<p align="center">
+    <!-- <img src="/report/img/logo/op/op-logo.gif">
+    <br> -->
+	<br>Sales Tax Report<br>
+    On Date <?php echo $this->s_date. " - " .$this->e_date ; ?></p>
+    
+<div class="div-table">
+<!-- <div class="div-table-row">   
+    <div class="div-table-col1">Name of entrepreneur :  O.P.NATURAL PRODUCTS CO.,LTD.</div>
+    
+    
+</div> -->
+<!-- <div class="div-table-row">   
+    <div class="div-table-col1">Company Name : O.P.NATURAL PRODUCTS CO.,LTD.</div>
+    
+    
+</div> -->
+<div class="div-table-row">   
+    <div class="div-table-col1">Date of print <?php echo $this->print_time ;?></div>
+    
+    <div class="div-table-col3">Time  <?php echo $this->ptime ;?></div>
+    
+</div>
+
+<div class="div-table-row">
+    <div class="div-table-col1">Branch :  <?php echo $this->branch_id ." (".$this->branch_name.")" ;?></div>
+    
+
+</div>
+</div>
+
+<hr>
+
+<div class="div-table">
+	 <!-- <div class="div-table-row">
+          <div class="div-table-col2">ใบกำกับภาษี</div>
+          <div class="div-table-col9">มูลค่าที่รับชำระ</div>
+	</div>-->
+	
+	<div class="div-table-row">
+          <div class="div-table-col5">D.M.Y.</div>
+          <div class="div-table-col6">No.<br>(SL)</div>
+          <div class="div-table-col5">Cash</div>
+          <div class="div-table-col5">Credits</div>
+          <div class="div-table-col5">Product that calculate the VAT</div>
+          <div class="div-table-col5">VAT</div>
+          <div class="div-table-col5">Amount on Bill of Sale</div>
+	</div>
+</div>
+
+<hr>
+
+<div class="div-table">
+	<?php $i=1;$c=0;$d=0;$e=0;$vt=0;$n=0;foreach($this->get_data_sl as $v){
+		$plus_vat = $v['net_amt'] - $v['vat'];
+		$vat = $v['vat'];
+		$net_amt = $v['net_amt'];
+		if($this->type == '2'){	
+			
+			if($v['paid'] == '0000' ){
+				$p_cash = $v['net_amt'];
+				$p_cd = '0';
+			}else{
+				$p_cd = $v['net_amt'];
+				$p_cash = '0';
+			}
+			if($v['flag'] == 'C'){
+				$flag = "<font color='red'>( ยกเลิก )</font>";
+				$p_cash = '0';
+				$p_cd = '0';
+				$vat = '0';
+				$net_amt = '0';
+				$plus_vat = '0';
+			}else{
+				$flag = "";	
+			}
+			echo "<div class='div-table-row'>
+						  <div class='div-table-col5'>$v[doc_date]<br>$flag</div>
+					  <div class='div-table-col6'>$v[doc_no]</div>
+					  <div class='div-table-col5'>".number_format($p_cash,2)."</div>
+					  <div class='div-table-col5'>".number_format($p_cd,2)."</div>
+					  <div class='div-table-col5'>".number_format($plus_vat,2)."</div>
+					  <div class='div-table-col5'>".number_format($vat,2)."</div>
+					  <div class='div-table-col5'>".number_format($net_amt,2)."</div>
+				  </div>";
+			$i++;
+			$c = $c + $p_cash ;
+			$d = $d + $p_cd ;
+			$e = $e + $plus_vat ;
+			$vt = $vt + $v['vat'] ;
+			$n = $n + $v['net_amt'] ;
+		}else{
+			/*foreach($this->get_data_sl as $arr){
+			
+			$cash = $arr['net_amt'];
+			$credit = $v['net_amt'] - $arr['net_amt'];
+			
+			}//<div class='div-table-col5'>".number_format($credit,2)."</div>*/
+			echo "<div class='div-table-row'>
+						  <div class='div-table-col5'>$v[doc_date]</div>
+					  <div class='div-table-col6'>".substr($v['min'],-6)." - ". substr($v['max'],-6)."</div>
+					  <div class='div-table-col5'>".number_format($v['cash'],2)."</div>
+					  <div class='div-table-col5'>".number_format($v['credit'],2)."</div>
+					  <div class='div-table-col5'>".number_format($plus_vat,2)."</div>
+					  <div class='div-table-col5'>".number_format($v['vat'],2)."</div>
+					  <div class='div-table-col5'>".number_format($v['net_amt'],2)."</div>
+				  </div>";
+			$c =  $c + $v['cash'] ;
+			$d = $d + $v['credit'] ;
+			$e = $e + $plus_vat ;
+			$vt = $vt + $v['vat'] ;
+			$n = $n + $v['net_amt'] ;
+			
+		}
+	
+	}?>
+	
+</div>
+
+<hr>
+
+<div class="div-table">
+
+	<div class="div-table-row">
+          <div class="div-table-col7">Total Amount Summary </div>
+    </div>
+    <div class="div-table-row">
+    	  <div class="div-table-col7"><?php echo $this->s_date. " - " .$this->e_date ; ?> </div>
+          <div class='div-table-col5'><?php echo number_format($c,2);?></div>
+	  <div class='div-table-col5'><?php echo number_format($d,2);?></div>
+          <div class='div-table-col5'><?php echo number_format($e,2); ?></div>
+          <div class='div-table-col5'><?php echo number_format($vt,2); ?></div>
+          <div class='div-table-col5'><?php echo number_format($n,2); ?></div>
+	</div>
+</div>
+
+<hr><br>
+<hr>
+
+<div class="div-table">
+	 <!-- <div class="div-table-row">
+          <div class="div-table-col2">ใบกำกับภาษี</div>
+          <div class="div-table-col9">มูลค่าที่รับชำระ</div>
+	</div>-->
+	
+	<div class="div-table-row">
+          <div class="div-table-col5">D.M.Y.</div>
+          <div class="div-table-col6">No.<br>(VT)</div>
+          <div class="div-table-col5">Cash</div>
+          <div class="div-table-col5">Credits</div>
+          <div class="div-table-col5">Product that calculate the VAT</div>
+          <div class="div-table-col5">VAT</div>
+          <div class="div-table-col5">Amount on Bill of Sale</div>
+	</div>
+</div>
+
+<hr>
+
+<div class="div-table">
+	<?php $i=1;$c=0;$d=0;$e=0;$vt=0;$n=0;foreach($this->get_data_vt as $v){
+		$plus_vat = $v['net_amt'] - $v['vat'];
+		$vat = $v['vat'];
+		$net_amt = $v['net_amt'];
+		if($this->type == '2'){	
+			//$plus_vat = $v['net_amt'] - $v['vat'];
+			if($v['paid'] == '0000'){
+				$p_cash = $v['net_amt'];
+				$p_cd = '0';
+			}else{
+				$p_cd = $v['net_amt'];
+				$p_cash = '0';
+			}
+			echo "<div class='div-table-row'>
+						  <div class='div-table-col5'>$v[doc_date]</div>
+					  <div class='div-table-col6'>$v[doc_no]</div>
+					  <div class='div-table-col5'>".number_format($p_cash,2)."</div>
+					  <div class='div-table-col5'>".number_format($p_cd,2)."</div>
+					  <div class='div-table-col5'>".number_format($plus_vat,2)."</div>
+					  <div class='div-table-col5'>".number_format($v['vat'],2)."</div>
+					  <div class='div-table-col5'>".number_format($v['net_amt'],2)."</div>
+				  </div>";
+			$i++;
+			$c = $c + $p_cash ;
+			$d = $d + $p_cd ;
+			$e = $e + $plus_vat ;
+			$vt = $vt + $v['vat'] ;
+			$n = $n + $v['net_amt'] ;
+		}else{
+			/*$cash=0;$credit=0;foreach($this->get_data_vt as $arr){
+			$plus_vat = $arr['net_amt'] - $arr['vat'];
+				if($arr['paid'] == '0000'){
+					$p_cash = $arr['net_amt'];
+					$p_cd = '0';
+				}else{
+					$p_cd = $arr['net_amt'];
+					$p_cash = '0';
+				}
+			$cash = $cash + $p_cash ;
+			$credit = $credit + $p_cd ;
+			}*/
+			$c = $c + $v['cash'] ;
+			$d = $d + $v['credit'] ;
+			$e = $e + $plus_vat ;
+			$vt = $vt + $v['vat'] ;
+			$n = $n + $v['net_amt'] ;
+		}
+		if($this->type == '1'){	
+		echo "<div class='div-table-row'>
+						  <div class='div-table-col5'>$v[doc_date]</div>
+					  <div class='div-table-col6'>".substr($v['min'],-6)." - ". substr($v['max'],-6)."</div>
+					  <div class='div-table-col5'>".number_format($v['cash'],2)."</div>
+					  <div class='div-table-col5'>".number_format($v['credit'],2)."</div>
+					  <div class='div-table-col5'>".number_format($plus_vat,2)."</div>
+					  <div class='div-table-col5'>".number_format($vat,2)."</div>
+					  <div class='div-table-col5'>".number_format($net_amt,2)."</div>
+				  </div>";
+		}
+	}?>
+	
+</div>
+
+<hr>
+
+<div class="div-table">
+
+	<div class="div-table-row">
+          <div class="div-table-col7">Total Amount Summary </div>
+    </div>
+    <div class="div-table-row">
+    	  <div class="div-table-col7"><?php echo $this->s_date. " - " .$this->e_date ; ?> </div>
+          <div class='div-table-col5'><?php echo number_format($c,2);?></div>
+	  <div class='div-table-col5'><?php echo number_format($d,2);?></div>
+          <div class='div-table-col5'><?php echo number_format($e,2); ?></div>
+          <div class='div-table-col5'><?php echo number_format($vt,2); ?></div>
+          <div class='div-table-col5'><?php echo number_format($n,2); ?></div>
+	</div>
+</div>
+
+<hr>
+
+<?php 
+	echo "<br><br><br>Signature of salesperson  :  __________________________________" ;
+	
+	$dayfrom =$this->dayfrom;
+	$tofrom =$this->tofrom;
+	$day = $this->get_doc_date;
+	$today = date('Y-m-d');
+	
+
+	
+	
+	if ($this->type == '2' ){
+	    echo "<div align=right>
+	<form action='/report/shop/printtax' method='post'>
+	<input type=hidden id=start_date name=start_date value='$dayfrom'>
+	<input type=hidden id=end_date name=end_date value='$tofrom'>
+	<input type=submit value= Print  id=print>
+	<input type=hidden value= '2'  name='type'>
+	</form>
+	
+	</div>" ;
+	}  else {
+		echo "<div align=right>
+	<form action='/report/shop/printtax' method='post'>
+	<input type=hidden id=start_date name=start_date value='$dayfrom'>
+	<input type=hidden id=end_date name=end_date value='$tofrom'>
+	<input type=submit value= Print  id=print>
+	<input type=hidden value= '1'  name='type'>
+	</form>
+	
+	</div>" ; 
+	}
+
+?>
+

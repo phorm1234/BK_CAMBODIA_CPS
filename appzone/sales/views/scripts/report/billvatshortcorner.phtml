@@ -1,0 +1,398 @@
+<?php	
+	include(FPDF_PATH."/fpdf.php");        
+        $hl=8;
+        $hl1=7;
+        $hl2=6;
+        $l2br=7;
+        $maxdoc=203;//210
+        $logo="/op-logo.gif";
+        $pdf=new FPDF('P','mm','A4');
+        $pdf->SetThaiFont();
+        $pdf->AddPage();
+        $startY=2;
+        $startX=0;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->SetMargins(0,10,0); 
+        $pdf->SetAutoPageBreak("off",1);
+        $pdf->Image(LOGO_PATH.$logo,70,0,65);       
+        
+        $startX=0;
+        $startY+=8;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);
+         
+        $pdf->SetFont('CordiaNew','B',16); 
+        if($this->act=='reprint'){        	
+        	$pdf->Cell(2,$hl,"*",0,0,'L',0); 
+        }
+       $pdf->Cell($maxdoc,$hl,iconv('UTF-8','cp874',$this->arr_h[0]['company_name_print']),0,0,'C',0); 
+		$str_cancel='';
+		if($this->arr_h[0]['flag']=='C'){
+			$str_cancel='<ยกเลิก>';
+			$str_cancel=iconv('UTF-8','cp874',$str_cancel);
+		}             
+        $startY+=$l2br;
+      	$startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+		
+        $pdf->SetFont('CordiaNew','',14);//B
+        $pdf->Cell(25,$hl1,"TAX ID :",0,0,'R',0); 
+        $pdf->Cell(66,$hl1,$this->arr_h[0]['tax_id'],0,0,'L',0);
+        $pdf->Cell(39,$hl1,"",0,0,'L',0);
+        $pdf->Cell(73,$hl1,"POS ID : ".$this->arr_h[0]['pos_id'],0,0,'R',0); 
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+		
+		$pdf->Cell(25,$hl1,"Branch : ",0,0,'R',0); 
+        $pdf->Cell(178,$hl1,$this->csh_branch_id." ".iconv('UTF-8','cp874',$this->arr_h[0]['branch_name']),0,0,'L',0); 
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        
+        $pdf->Cell(25,$hl1,"Rcpt : ",0,0,'R',0); 
+		$pdf->Cell(72,$hl1,$this->arr_h[0]['doc_no'],0,0,'L',0);	
+		$pdf->Cell(43,$hl1,"",0,0,'L',0);
+		$arr_docdate=explode("-",$this->arr_h[0]['doc_date']);
+		$doc_date_show=$arr_docdate[2]."/".$arr_docdate[1]."/".$arr_docdate[0];
+		$pdf->Cell(63,$hl1,$doc_date_show." ".$this->arr_h[0]['doc_time'],0,0,'R',0); 
+		
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->Cell(25,$hl1,"Member ID : ",0,0,'R',0); 
+        $pdf->Cell(82,$hl1,$this->arr_h[0]['member_id'],0,0,'L',0);
+        $pdf->Cell(57,$hl1,"Cashier :",0,0,'R',0); 
+        $pdf->Cell(39,$hl1,$this->arr_h[0]['saleman_id'],0,0,'L',0);		
+     
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        //--------- product item ------------------
+      	$pdf->SetFont('CordiaNew','',14);
+      	$discount=$this->arr_h[0]['member_percent']+$this->arr_h[0]['special_percent'];
+		$member_percent=$this->arr_h[0]['member_percent'];
+		$special_percent=$this->arr_h[0]['special_percent'];
+		
+		$ipg=1;
+		$citem=count($this->arr_l);
+		$itemperpage=30;
+		
+        foreach($this->arr_l as $dataL){
+        	$name_product=trim($dataL['name_product']);
+        	//11
+        	if(strlen($name_product)>27){
+        		$name_product=mb_substr($name_product,0,27,'utf-8');
+        		$name_product.="..";
+        	}
+        	
+        	if(intval($dataL['member_discount1'])==0){
+        		$chk_member_percent=0;
+        	}else{
+        		$chk_member_percent=$member_percent;
+        	}
+        	
+        	if(intval($dataL['member_discount2'])==0){
+        		$chk_special_percent=0;
+        	}else{
+        		$chk_special_percent=$special_percent;
+        	}
+        	
+	        $pdf->Cell(8,$hl2,intval($dataL['quantity']),0,0,'R',0); 
+	        $pdf->Cell(2,$hl2," ",0,0,'C',0); 
+	        $pdf->Cell(28,$hl2,$dataL['product_id'],0,0,'L',0);
+	        $pdf->Cell(60,$hl2,iconv('UTF-8','cp874',$name_product),0,0,'L',0);
+	        $pdf->Cell(30,$hl2,"[".number_format($dataL['discount'],2)."+".intval($chk_member_percent)."%+".intval($chk_special_percent)."%]",0,0,'R',0);	       
+	        $pdf->Cell(38,$hl2,number_format($dataL['price'],2),0,0,'R',0);
+	        $pdf->Cell(37,$hl2,number_format($dataL['net_amt'],2),0,0,'R',0);        
+	        $startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+			if($citem>$itemperpage){				
+				if($ipg==$itemperpage){						
+			        $pdf->AddPage();
+			        $startY=2;
+			        $startX=0;
+			        $pdf->SetY($startY);
+					$pdf->SetX($startX);				
+					$ipg=1;
+					$citem=$citem-$itemperpage;
+				}else{
+					$ipg++;
+				}
+				
+			}else{
+				$ipg++;
+			}
+			
+        }        
+        //--------- product item ------------------
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->SetFont('CordiaNew','',14);//B
+        $pdf->Cell(66,$hl1,iconv('UTF-8','cp874',"จำนวนชิ้นรวม ="),0,0,'L',0); 
+        $pdf->Cell(64,$hl1,intval($this->arr_h[0]['quantity']),0,0,'L',0);
+        $pdf->Cell(36,$hl1,"Total",0,0,'L',0); 
+        $pdf->Cell(37,$hl1,number_format($this->arr_h[0]['amount'],2),0,0,'R',0);
+      	$startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->Cell(66,$hl1,iconv('UTF-8','cp874',$this->paiddesc),0,0,'L',0); 
+        $pdf->Cell(64,$hl1,"",0,0,'L',0);
+        $pdf->Cell(36,$hl1,"Discount",0,0,'L',0); 
+        $pdf->Cell(37,$hl1,number_format($this->arr_h[0]['discount'],2),0,0,'R',0);
+       	$startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->Cell(66,$hl1,"*** Vat Included ***",0,0,'L',0); 
+        $pdf->Cell(64,$hl1,"",0,0,'L',0);
+        $pdf->Cell(36,$hl1,"Net",0,0,'L',0); 
+        $pdf->Cell(37,$hl1,number_format($this->arr_h[0]['net_amt'],2),0,0,'R',0);
+      	$startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->Cell(66,$hl1,"",0,0,'L',0); 
+        $pdf->Cell(64,$hl1,"",0,0,'L',0);
+        $pdf->Cell(36,$hl1,"Received",0,0,'L',0); 
+        $pdf->Cell(37,$hl1,number_format($this->arr_h[0]['pay_cash'],2),0,0,'R',0);
+        
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+
+		
+     	$pdf->Cell(66,$hl1,'',0,0,'L',0); 
+	    $pdf->Cell(64,$hl1,'',0,0,'L',0);
+        $pdf->Cell(36,$hl1,"Change",0,0,'L',0); 
+        $pdf->Cell(37,$hl1,number_format($this->arr_h[0]['change'],2),0,0,'R',0);
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 		
+		
+		if(trim($this->arr_h[0]['member_id'])!=''){       
+			if($this->arr_h[0]['member_id']!='' && $this->point_total_today!=''){
+				$startY+=$l2br;
+			    $pdf->SetY($startY);
+				$pdf->SetX($startX); 
+				$point_total_today=0;
+			
+				$point_total_today=$this->point_total_today;
+				$pdf->Cell(103,$hl1,iconv('UTF-8','cp874',"คะแนนสะสมเดิม "),0,0,'L',0); 
+			    $pdf->Cell(100,$hl1,"(".$point_total_today.") ".iconv('UTF-8','cp874'," คะแนน"),0,0,'R',0);
+			}else{
+				$pdf->Cell(103,$hl1,'',0,0,'L',0); 
+			    $pdf->Cell(100,$hl1,'',0,0,'L',0);
+			}		
+	        
+		}else{
+			 $pdf->Cell(103,$hl1,'',0,0,'L',0); 
+	         $pdf->Cell(100,$hl1,'',0,0,'L',0);
+		}
+		$startY+=$l2br;
+    	$pdf->SetY($startY);
+		$pdf->SetX($startX);      
+		
+		$total_point_receive=0;
+        if(intval($this->arr_h[0]['point1'])!=0 || intval($this->arr_h[0]['point2'])!=0){
+	        $total_point_receive=$this->arr_h[0]['point1']+$this->arr_h[0]['point2'];
+			if(trim($this->arr_h[0]['member_id'])!=''){
+		        $pdf->Cell(103,$hl1,iconv('UTF-8','cp874',"คะแนนที่ได้รับในบิลนี้"),0,0,'L',0); 
+		        $pdf->Cell(100,$hl1,"(".$this->arr_h[0]['point1']."+".$this->arr_h[0]['point2']."=".$total_point_receive.") ".iconv('UTF-8','cp874'," คะแนน"),0,0,'R',0);
+			}else{
+				 $pdf->Cell(103,$hl1,'',0,0,'L',0); 
+		         $pdf->Cell(100,$hl1,'',0,0,'L',0);
+			}
+			$startY+=$l2br;
+	    	$pdf->SetY($startY);
+			$pdf->SetX($startX);  
+        }else{ 			
+		    $pdf->Cell(103,$hl1,iconv('UTF-8','cp874',"คะแนนที่ได้รับในบิลนี้"),0,0,'L',0); 
+		    $pdf->Cell(100,$hl1,"(0) ".iconv('UTF-8','cp874'," คะแนน"),0,0,'R',0);
+			$startY+=$l2br;
+	    	$pdf->SetY($startY);
+			$pdf->SetX($startX);  
+        }
+        
+        
+		$total_point_used=0;
+		if(intval($this->arr_h[0]['redeem_point'])!=0){
+         	$total_point_used=$this->arr_h[0]['redeem_point'];
+			if(trim($this->arr_h[0]['member_id'])!=''){
+		        $pdf->Cell(103,$hl1,iconv('UTF-8','cp874',"คะแนนที่แลกใช้ในบิลนี้"),0,0,'L',0); 
+		        $pdf->Cell(100,$hl1,"(".$total_point_used.") ".iconv('UTF-8','cp874'," คะแนน"),0,0,'R',0);
+			}else{
+				 $pdf->Cell(103,$hl1,'',0,0,'L',0); 
+		         $pdf->Cell(100,$hl1,'',0,0,'L',0);
+			}
+			
+			$startY+=$l2br;
+	    	$pdf->SetY($startY);
+			$pdf->SetX($startX);       
+        }else{
+		    $pdf->Cell(103,$hl1,iconv('UTF-8','cp874',"คะแนนที่แลกใช้ในบิลนี้"),0,0,'L',0); 
+		    $pdf->Cell(100,$hl1,"(0) ".iconv('UTF-8','cp874'," คะแนน"),0,0,'R',0);			
+			$startY+=$l2br;
+	    	$pdf->SetY($startY);
+			$pdf->SetX($startX);       
+        }	
+                
+         if(trim($this->arr_h[0]['member_id'])!=0){
+        	//คะแนนคงเหลือ ณ วันนี้        	
+	        $redeem_point=intval($this->arr_h[0]['redeem_point']);
+	        $point1=intval($this->arr_h[0]['point1']);
+	        $point2=intval($this->arr_h[0]['point2']);
+	        $receive_point=$point1+$point2;
+	        $summary_point=$this->point_total_today+$receive_point+$redeem_point; 
+	        $pdf->Cell(103,$hl1,iconv('UTF-8','cp874',"คะแนนสะสมคงเหลือทั้งสิ้น "),0,0,'L',0); 
+			$pdf->Cell(100,$hl1,"(".$summary_point.") ".iconv('UTF-8','cp874'," คะแนน"),0,0,'R',0);
+			$startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+        }
+		
+		//sms message
+		if($this->arr_h[0]['status_no']!='01' && $this->arr_h[0]['bfc_code']!=''){
+			$arr_line2print=$this->arr_h[0]['promo_message'];
+			if(!empty($arr_line2print)){
+				foreach($arr_line2print as $dataMsg){
+					if($dataMsg['print_code']=='Y'){
+						$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',$dataMsg['promo_des']."".$this->arr_h[0]['bfc_code']),0,0,'L',0); 
+					}else{
+						$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',$dataMsg['promo_des']),0,0,'L',0); 
+					}
+			        $startY+=$l2br;
+				    $pdf->SetY($startY);
+					$pdf->SetX($startX);  
+				}
+			}
+		}
+		
+		
+		if($this->arr_h[0]['member_id']=='' && !empty($this->arr_refdiscount)){
+			$startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+			if($this->arr_refdiscount[0]['dw_status']=='special'){
+				$pdf->SetFont('CordiaNew','',14);
+	        	$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"หากคุณเป็นสมาชิกบัตร OPS "),0,0,'L',0);
+	        	$startY+=$l2br;
+			    $pdf->SetY($startY);
+				$pdf->SetX($startX); 
+	        	$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"คุณจะได้รับส่วนลดในครั้งนี้  ".number_format($this->arr_refdiscount[0]['ref_discount'],2)." บาท"));
+	        	
+	        	$startY+=$l2br;
+			    $pdf->SetY($startY);
+				$pdf->SetX($startX); 
+	        	$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"และคะแนนสะสม  ".$this->arr_refdiscount[0]['ref_total_point']." คะแนน"));
+			}else{
+				$pdf->SetFont('CordiaNew','',14);
+	        	$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"หากคุณเป็นสมาชิกบัตร OPS "),0,0,'L',0);
+	        	$startY+=$l2br;
+			    $pdf->SetY($startY);
+				$pdf->SetX($startX); 
+	        	$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"คุณจะได้รับส่วนลดในครั้งนี้  ".number_format($this->arr_refdiscount[0]['ref_discount'],2)." บาท"));	        	
+	        	
+	        	$startY+=$l2br;
+			    $pdf->SetY($startY);
+				$pdf->SetX($startX); 
+	        	$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"และคะแนนสะสม  ".$this->arr_refdiscount[0]['ref_total_point']." คะแนน"));
+			}
+		}
+		
+		//sms message
+		$startY+=$l2br;
+		$startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+		
+        $pdf->SetFont('CordiaNew','',14);
+        $pdf->Cell($maxdoc,$hl1,"Customer Satisfaction Guarantee",0,0,'L',0); 
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        
+        if($this->arr_h[0]['status_no']=='06'){
+        	$startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+        	$pdf->SetFont('CordiaNew','',14);
+	        $pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"อ้างถึงใบลดหนี้            ").$this->arr_h[0]['refer_doc_no'],0,0,'L',0); 
+	        $startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+	        
+	        $pdf->SetFont('CordiaNew','',14);
+	        $pdf->Cell(165,$hl1,iconv('UTF-8','cp874',"จำนวนเงิน "),0,0,'L',0); 
+	         $pdf->Cell(38,$hl1,number_format($this->arr_h[0]['refer_cn_net'],2),0,0,'R',0); 
+	        $startY+=$l2br;
+	        $startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+        }
+        
+        $pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"ยินดีรับคืนผลิตภัณฑ์ที่ไม่พึงพอใจในทุกกรณี ภายใน 14 วัน"),0,0,'L',0); 
+        $startY+=$l2br;
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"ผู้รับเงิน....................................................................."),0,0,'L',0); 
+        $startY+=$l2br;
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        if($this->arr_h[0]['status_no']=='01' || $this->arr_h[0]['status_no']=='02'){
+        	$str_bill_desc="";
+        	if($this->arr_h[0]['status_no']=='01'){
+        		$str_bill_desc="<สมัครสมาชิกใหม่>";
+        	}else if($this->arr_h[0]['status_no']=='02'){
+        		$str_bill_desc="<ซื้อครั้งแลกส่วนลดพิเศษ>";
+        	}
+	        $pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',$str_bill_desc),0,0,'L',0); 	  
+	        $startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+        }
+         if($this->arr_h[0]['status_no']=='01' && $this->arr_h[0]['refer_member_id']!=''){        
+	        $startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+			$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"อ้างถึงรหัสสมาชิก : ".$this->arr_h[0]['refer_member_id']),0,0,'L',0);
+			$startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+        }
+        if($this->arr_h[0]['status_no']=='05'){        
+	        $startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+			$pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"อ้างถึงรหัสสมาชิก : ".$this->arr_h[0]['refer_member_id']),0,0,'L',0);
+			$startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+        }
+        
+        $pdf->Cell(100,$hl1,"www.orientalprincesssociety.com",0,0,'L',0);
+        $pdf->Cell(3,$hl1,"",0,0,'L',0); 
+        $pdf->Cell(100,$hl1,"Beauty Line : 0-2642-6606",0,0,'R',0);  
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->Cell($maxdoc,$hl1,iconv('UTF-8','cp874',"เบอร์โทรศัพท์สาขา : ".$this->arr_h[0]['branch_tel']),0,0,'L',0);
+        $name='/billvatshortcorner.pdf';
+	    $output=REPORT_PATH.$name;
+	    @chmod(REPORT_PATH,0777);	  		  
+	    //$pdf->Output($output,'D');// for test print
+	    $pdf->Output($output,'F');	  
+		$print2ip=$this->arr_h[0]['print2ip'].":631";
+		if($this->arr_h[0]['print2ip']=='LOCAL'){
+			echo shell_exec("lp -o media=A4 $output");
+		}else{
+			echo shell_exec("lpr -H $print2ip $output");
+		}
+		if(@file_exists($output)){
+			echo shell_exec("rm $output");			
+		}
+?>

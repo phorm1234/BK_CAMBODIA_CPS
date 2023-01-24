@@ -1,0 +1,34 @@
+<?php 
+	if($this->arr_data['action']=='userlogin'){
+		if($this->arr_data['data']!=''){
+			$str_show="";
+			foreach($this->arr_data['data'] as $data){
+				$str_show.=$data['name']."&nbsp;";
+				$str_show.=$data['surname']."&nbsp;";
+			}
+			echo $str_show;
+		}
+	}//
+	
+	if($this->arr_data['action']=='swapcashier'){
+		if($this->arr_data['data']!=''){
+			echo $this->arr_data['data'];
+		}
+	}//
+	
+	if($this->arr_data['action']=='saleman'){
+		if($this->arr_data['data']!=""){
+			echo $this->arr_data['data'];
+		}else{
+			echo "";
+		}
+	}
+	
+	if($this->arr_data['action']=='audit'){
+		if($this->arr_data['data']!=""){
+			echo $this->arr_data['data'];
+		}else{
+			echo "";
+		}
+	}
+?>

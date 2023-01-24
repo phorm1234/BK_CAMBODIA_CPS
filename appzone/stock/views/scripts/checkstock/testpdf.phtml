@@ -1,0 +1,12 @@
+<?php 
+$arr=$this->shelf;
+echo "<pre>";
+//print_r($arr);
+echo "</pre>";
+$arr_json=json_encode($arr);
+echo $arr_json;
+?>
+<form name='f1' action='/stock/Plugin/fpdf/test.php' method='post' target="_blank">
+	<input type='text' id='shlef' name='shlef' value='<?php echo $arr_json;?>'>
+	<input type='submit' value='send'>
+</form>

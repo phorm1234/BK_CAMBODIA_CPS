@@ -1,0 +1,75 @@
+<style>
+.myform{
+margin-left :10px;
+width : 100%;
+padding:10px;
+
+}
+ 
+</style>
+
+
+<div class="myform">
+<table border="0">
+    <tr>
+          <td><h4>วันที่เปิดบิล <?php echo $this->v_docdate;?></h4></td>
+          
+    </tr>
+        
+</table>
+  
+   <hr width="85%">
+   
+
+<table width="500"> 
+	<tr>
+		<td><h3>เลขที่เอกสาร</h3></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr> 
+	<tr>
+		<td>branch_id</td>
+		<td>doc_tp</td>
+		<td>doc_no</td>
+		<td>doc_no</td>
+	</tr>
+   <?php 
+   $doc = $this->v_docno ;   
+   foreach($doc as $d){
+   	echo "
+   	<tr>
+		<td>".$d['branch_id']."</td>
+		<td>".$d['doc_tp']."</td>
+		<td>".$d['max(t.`doc_no`)']."</td>
+		<td>".$d['doc_no']."</td>
+	</tr> ";
+   	
+   }  
+   
+   ?>
+</table>     
+    
+    
+	<br>
+    <hr width="85%">
+    
+
+<h3>เวลาทำการ</h3>
+<form method="post" action="/report/report/system3">
+<table width="600" >
+<tr>
+	<td><b>วันปกติ</b></td>
+	<td>เวลาเปิด  <input type="text" name="nopen_time" value="<?php echo $this->nopen_time;?>"></td>
+	<td>เวลาปิด <input type="text" name="nclose_time" value="<?php echo $this->nclose_time;?>"></td>
+</tr>
+<tr>
+	<td><b>วันหยุด</b></td>
+	<td>เวลาเปิด  <input type="text" name="sopen_time" value="<?php echo $this->sopen_time;?>"></td>
+	<td>เวลาปิด <input type="text" name="sclose_time" value="<?php echo $this->sclose_time;?>"></td>
+</tr>
+</table>
+<input type="submit" value="UPDATE"></form>
+
+    
+</div>

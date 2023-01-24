@@ -1,0 +1,88 @@
+<?php 
+$date=$this->date;
+$data=$this->data;
+$amount_default="0.00";
+if(empty($data[0]['month_amount'])){$month_amount= $amount_default;}else{$month_amount= number_format($data[0]['month_amount'], 2, '.', ',');}
+if(empty($data[0]['month_order'])){$month_order= $amount_default;}else{$month_order= number_format($data[0]['month_order'], 2, '.', ',');}
+if(empty($data[0]['balance_amount'])){$balance_amount= $amount_default;}else{$balance_amount= number_format($data[0]['balance_amount'], 2, '.', ',');}
+?>
+<script>
+$(document).ready( function() {
+	$("#doc_remark").focus();
+});
+function process(event,p){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		if(p=="check_doc_remark"){
+			$("#product_id").focus();
+		}
+		if(p=="check_product"){
+			check_product();
+		}
+		if(p=="insert_tdiary_or"){
+			insert_tdiary_or();
+		}
+	}
+}
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	process_to_order();
+});
+
+jQuery(document).bind('keydown', 'f8',
+function (evt){
+	search_product();
+});
+
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	tempor2diaryor();
+});
+
+jQuery(document).bind('keydown', 'f4',
+function (evt){
+	order_cancel();
+});
+
+jQuery(document).bind('keydown', 'f2',
+function (evt){
+	select_status_no();
+});
+</script>
+<div id="dialog_type_product" title="ประเภทสั่งสินค้า"></div>
+<div id="dialog_product" title="สินค้า"></div>
+<form id="frm_order">
+<table width="100%" border="0" cellpadding="0" cellspacing="3" background="/order/img/bg_header.gif">
+  <tr>
+  	<td colspan="6" height="5"></td>
+  </tr>
+  <tr>
+    <td align="right" class="servBodL_right"><b>Quata Amt. : </b></td>
+    <td width="5" colspan="4"><input type="text" style="text-align:right;" name="month_amount" id="month_amount" size="13" value="<?php echo $month_amount;?>" class="NFText_hidden" disabled="disabled" onkeypress=""></td>
+  </tr>
+  <tr>
+    <td width="15%" align="right" class="servBodL_right"><b>Order Amt. : </b></td>
+    <td width="5"><input type="text" style="text-align:right;" name="month_order" id="month_order" size="13" value="<?php echo $month_order;?>" class="NFText_hidden" disabled="disabled" onkeypress=""></td>
+		<td>&nbsp;</td> 
+		<td width="80%" ><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return process_to_order();"><span class="ui-icon ui-icon-circle-arrow-e"></span> Process to Order (F3)</a></td>
+	</tr>
+	<tr>
+    <td width="10%" align="right" class="servBodL_right"><b>Balance Amt. : </b></td>
+    <td width="15%"><input type="text" style="text-align:right;" name="balance_amount" id="balance_amount" value="<?php echo $balance_amount;?>" size="13" disabled="disabled" class="NFText_hidden" onkeypress=""></td>	
+ 	<td>&nbsp;</td> 
+	
+  </tr>
+
+  <tr>
+	 <td colspan="6" height="5"></td>
+  </tr>
+</table>
+<input type="hidden" name="doc_tp" id="doc_tp" value="OR"></input>
+<input type="hidden" name="status_no" id="status_no" value="70"></input>
+</form>
+<table width="100%">
+	<tr>
+		<td><div id="viewproductorderfix"></div></td>
+	</tr>
+</table>

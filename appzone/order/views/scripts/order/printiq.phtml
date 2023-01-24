@@ -1,0 +1,165 @@
+<?php 
+$doc_no=$this->doc_no;
+$data_detail=$this->data_detail;
+/*echo "<pre>";
+print_r($doc_no);
+echo "</pre>";
+echo "<pre>";
+print_r($data_detail);
+echo "</pre>";*/
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->AddPage();
+$pdf->SetAutoPageBreak("off",1);
+
+$startY=2;
+$startX=0;//4
+$pdf->SetY($startY);
+$pdf->SetX($startX);	
+//--------------------------------------------------------------------
+$title1="O.P. NATURAL PRODUCTS CO.,LTD";
+$title2="89/1 Soi Ratchataphan,Rachaprarop";
+$title2_1="Rd. Makkasun Rachatevee Bangkok 10400.";
+$title4="TAX INVOICE / RECEIPT";
+$head_form="INVENTORY TAG FORM";
+$shop="7777";
+$day=date("d");
+$month=date("m");
+$year=date("Y");
+$date="$day/$month/$year";
+$start_date="01/$month/$year";
+$time=date("h:i:s");
+$line="---------------------------------------------------------------------------------------------------------------------";
+
+$startY=$startY+1;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',9);
+$pdf->Cell(48,1,"$title1",0,0,'L',0);
+
+$line2_col_1=iconv('UTF-8','cp874',"ใบคำขอ โอนสินค้าออก");
+$line2_col_2=iconv('UTF-8','cp874',"พิมพ์ครั้งที่");
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',9);
+$pdf->Cell(40,1,$line2_col_1,0,0,'L',0);
+$pdf->Cell(11,1,$line2_col_2,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,"1",0,0,'L',0);
+
+$line3_col_1=iconv('UTF-8','cp874',"เลขที่เอกสาร");
+$line3_col_2=iconv('UTF-8','cp874',"วันที่เอกสาร");
+$ex_doc_date=explode("-",$doc_no[0]['doc_date']);
+$doc_date=$ex_doc_date[2]."/".$ex_doc_date[1]."/".$ex_doc_date[0];
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',9);
+$pdf->Cell(13,1,$line3_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(23,1,$doc_no[0]['doc_no'],0,0,'L',0);
+$pdf->Cell(11,1,$line3_col_2,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,$doc_date,0,0,'L',0);
+
+$line4_col_1=iconv('UTF-8','cp874',"เวลาเอกสาร");
+$line4_col_2=iconv('UTF-8','cp874',"วันที่พิมพ์");
+$ex_doc_date=explode("-",$doc_no[0]['doc_date']);
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',9);
+$pdf->Cell(13,1,$line4_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(23,1,$doc_no[0]['doc_time'],0,0,'L',0);
+$pdf->Cell(11,1,$line4_col_2,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,$date,0,0,'L',0);
+
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',9);
+$pdf->Cell(13,1,"Remark",0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(50,1,iconv('UTF-8','cp874',$doc_no[0]['doc_remark']),0,0,'L',0);
+
+$line6_col_1=iconv('UTF-8','cp874',"อ้างถึงเอกสาร");
+$line6_col_2=iconv('UTF-8','cp874',"User");
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',9);
+$pdf->Cell(13,1,$line6_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(23,1,$doc_no[0]['refer_doc_no'],0,0,'L',0);
+$pdf->Cell(11,1,$line6_col_2,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,$doc_no[0]['reg_user'],0,0,'L',0);
+
+$line7_col_1=iconv('UTF-8','cp874',"รหัสจุดขาย");
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',9);
+$pdf->Cell(13,1,$line7_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(50,1,$shop,0,0,'L',0);
+
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(1,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'L',0);
+
+$i=0;
+foreach($data_detail as $val_detail){
+	$startY=$startY+3;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(1,1,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','',8);
+	$pdf->Cell(5,1,number_format($val_detail['quantity'], 0, '.', ','),0,0,'L',0);
+	$pdf->Cell(9,1,$val_detail['product_id'],0,0,'L',0);
+	$pdf->Cell(18,1,iconv('UTF-8','cp874',substr($val_detail['name_product'],0,15)),0,0,'L',0);
+	$pdf->Cell(15,1,number_format($val_detail['price'], 2, '.', ','),0,0,'R',0);
+	$pdf->Cell(13,1,number_format($val_detail['amount'], 2, '.', ','),0,0,'R',0);
+	$i++;
+}
+
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(1,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'L',0);
+
+$line_sum=iconv('UTF-8','cp874',"จำนวนทั้งหมด : ".$i." รายการ");
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',8);
+$pdf->Cell(5,1,number_format($doc_no[0]['quantity'], 0, '.', ','),0,0,'L',0);
+$pdf->Cell(30,1,$line_sum,0,0,'L',0);
+$pdf->Cell(10,1,number_format($doc_no[0]['amount'], 0, '.', ','),0,0,'L',0);
+
+$line_sum=iconv('UTF-8','cp874',"จำนวนทั้งหมด : ".$i." รายการ");
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(5,1,iconv('UTF-8','cp874',"ผู้ออกรายงาน/ตรวจทาน :________________________"),0,0,'L',0);
+
+$pdf->Output();

@@ -1,0 +1,40 @@
+<script type="text/javascript">
+function jqCheckAll2( id, name )
+{
+   $("INPUT[@name=" + name + "][type='checkbox']").attr('checked', $('#' + id).is(':checked'));
+}
+</script>
+<?php 
+$productData=$this->productdata;
+$room=$this->room;
+?>
+
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr>
+  	<td align="center" width="10%" background="/stock/img/bg_header_blue.gif">#</td>
+    <td width="15%" height="25" background="/stock/img/bg_header_blue.gif" align="center">Product ID</td>
+    <td background="/stock/img/bg_header_blue.gif">Product Name</td>
+    <td background="/stock/img/bg_header_blue.gif" width="5%" align="center"><input type="checkbox" name="checker" id="checker" id="checker" onclick="jqCheckAll2( this.id, 'myCB' )"></td>
+  </tr>
+  <?php 
+  $i=1;
+  if(!empty($productData)){
+	  foreach($productData as $valProduct){
+	  if($i%2){$color="#eaebeb";}else{$color="#f2f3f3";}
+	  ?>
+	  <tr bgcolor="<?php echo $color;?>">
+	  	<td align="center"><input type="text" name="seq_<?php echo $valProduct['product_id'];?>" id="seq_<?php echo $valProduct['product_id'];?>" value="<?php echo $valProduct['seq'];?>" size="3" onkeypress="return update_seq(event,'<?php echo $room?>');" class="nexttxt"></input></td>
+	    <td height="20" align="center"><?php echo $valProduct['product_id'];?></td>
+	    <td><?php echo $valProduct['name_product'];?></td>
+	    <td align="center"><input type="checkbox" name="delproductid[]" id="delproductid[]" value="<?php echo $valProduct['product_id'];?>" class="sel_checkbox"></td>
+	  </tr>
+	  <?php 
+	  $i++;
+	  }
+  }
+  ?>
+  <tr bgcolor="#e6e4e4">
+    <td colspan="3"></td>
+    <td align="center"><a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" title="ลบ" onClick="return deleteproductonshelf();"><span class="ui-icon ui-icon-trash"></span> ลบ</a></td>
+  </tr>
+</table>

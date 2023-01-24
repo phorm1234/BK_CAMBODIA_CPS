@@ -1,0 +1,35 @@
+<?php
+$arr_data=$this->arr_data;
+$page=$this->page;
+$total=$this->total;
+if(empty($arr_data)){
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+}else{
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+	$i=1;
+	foreach($arr_data as $val){
+		$price=number_format($val['price'], 2, '.', ',');
+		$onhand=number_format($val['onhand'], 0, '.', ',');
+		$data['rows'][] = 
+		array(
+			'id' => $val['product_id'],
+			'cell' => 
+					array(
+							$val['product_id'], 
+							$val['name_product'], 
+							$price, 
+							$onhand, 
+							$val['product_status']
+						)
+		);
+		$i++;
+	}
+}
+echo json_encode($data);
+?>

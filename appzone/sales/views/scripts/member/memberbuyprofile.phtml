@@ -1,0 +1,36 @@
+<table width="100%" border="0"  cellpadding="3" cellspacing="0" bgcolor="#cccccc" class="ui-widget-header">
+<tr bgcolor="#FFE3D1">
+	<td width="20%" align="right">ยอดซื้อ Amout =</td><td width="15%"><?php echo number_format($this->amount,2,'.',',')?>&nbsp;บาท</td>
+	<td width="15%" align="right">ยอดซื้อ Net = </td><td><?php echo number_format($this->net_amt,2,'.',',')?>&nbsp;บาท</td>
+	<td width="15%" align="right">คะแนนวันนี้  = </td><td><?php echo $this->total_point_today;?>&nbsp;คะแนน</td>
+</tr>
+</table>
+<div style="width:100%;height:2px;"></div>
+<table width="100%" border="0"  cellpadding="0" cellspacing="1" bgcolor="#cccccc">
+<tr bgcolor="#DCE8FF">
+	<td align ="center">จุดขาย</td>
+	<td align ="center">วันที่</td>
+	<td align ="center">เลขที่บิล</td>	
+	<td align ="center">Amount</td>
+	<td align ="center">Net</td>
+	<td align="center">Point</td>
+	
+</tr>
+<?php
+	$i=0;
+	foreach($this->arr_profile as $data){
+		($i%2==0)?$bg_color="#f2f2f2":$bg_color="#e7e7e7";
+		?>
+		<tr bgcolor="<?php echo $bg_color;?>">
+			<td align ="center"><?php echo $data['branch_id']; ?></td>
+			<td align ="center"><?php echo $data['doc_date'];?></td>
+			<td align ="center"><?php echo $data['doc_no'];?></td>			
+			<td align ="center"><?php echo $data['amount'];?></td>
+			<td align ="center"><?php echo $data['net_amt'];?></td>		
+			<td align ="center"><?php echo $data['total_point'];?></td>
+		</tr>
+		<?php 
+		$i++;
+	} 
+?>
+</table>

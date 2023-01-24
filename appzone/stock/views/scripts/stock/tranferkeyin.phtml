@@ -1,0 +1,75 @@
+<script>
+$(document).ready( function() {
+	$("#invoice").focus();
+});
+function test(){
+	var a=$("#type_tranfer").val();
+	alert(a);
+}
+function process(event,p){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		if(p=="check_docno"){
+			check_docno();
+		}
+		if(p=="check_doc_remark"){
+			$("#product_id").focus();
+		}
+		if(p=="check_product"){
+			check_product();
+		}
+		if(p=="gen_tmpdiary"){
+			gen_tmpdiary();
+		}
+	}
+}
+
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	keytranfer_tranin2shopheadtodiary();
+});
+
+jQuery(document).bind('keydown', 'f4',
+function (evt){
+	keytranfer_cancel();
+});
+
+</script>
+<div id="dialog_invoice" title="เลขที่โอนเข้า"></div>
+<form id="frm_tranferkeyin">
+<div id="dialog_process" title="Process"></div>
+<table width="100%" border="0" cellpadding="0" cellspacing="3" background="/stock/img/bg_header.gif">
+  <tr>
+  	<td colspan="6" height="5"></td>
+  </tr>
+  <tr>
+    <td width="17%" align="right" class="servBodL_right">ประเภทการโอนเข้า : </td>
+    <td width="5"><input type="text" name="type_tranfer" id="type_tranfer" size="25" value="62 - Key In Data โอนเข้า" class="NFText_hidden" disabled="disabled" onkeypress=""></td>
+    <td width="2%">&nbsp;</td>
+    <td width="10%" align="right" class="servBodL_right">ประเภทสินค้า : </td>
+    <td width="3%"><input type="text" name="type_product" id="type_product" value="N" size="2" disabled="disabled" class="NFText_hidden" onkeypress=""></td>
+ 	<td>&nbsp;</td> 
+  </tr>
+  <tr>
+    <td align="right" class="servBodL_right">ป้อนเลขที่สินค้าโอนเข้า :</td>
+    <td colspan="5"><input type="text" name="invoice" id="invoice" size="25" onkeypress="return process(event,'check_docno')" class="NFText" /></td>
+  </tr>
+  <tr>
+    <td align="right" class="servBodL_right">หมายเหตุ :</td>
+    <td colspan="5"><input type="text" name="doc_remark" id="doc_remark" size="50" onkeypress="return process(event,'check_doc_remark')" class="NFText" /></td>
+  </tr>
+  <tr>
+    <td width="17%" align="right" class="servBodL_right">รหัสสินค้า : </td>
+    <td width="5" colspan="2"><input type="text" name="product_id" id="product_id" size="25" onkeypress="return process(event,'check_product')" class="NFText" onkeypress=""></td>
+    <td width="10%" align="right" class="servBodL_right">จำนวน : </td>
+    <td width="3%" colspan="2"><input type="text" name="qty" id="qty" size="3" class="NFText" onkeypress="return process(event,'gen_tmpdiary')"></td>
+  </tr>
+  <tr>
+	 <td colspan="6" height="5"></td>
+  </tr>
+</table>
+<input type="hidden" name="doc_tp" id="doc_tp" value="TI"></input>
+<input type="hidden" name="status_no" id="status_no" value="62"></input>
+</form>
+<div id="viewproducttranfer"></div>

@@ -1,0 +1,19 @@
+<?php
+$pro=$this->pro;
+if($pro){
+	echo '<UL class="promotion_panel" tag="playpro">';
+	$i=0;
+	foreach($pro as $data){
+		$promo_code=$data['promo_code'];
+		$doc_no='';
+		$product_id=$data['product_id'];
+		$seq=$data['seq'];
+		$textName="radio0".++$i;
+		$active = $i==1?"active":"";
+
+		
+		echo "	<li class='$active' var1='$promo_code,$doc_no,$product_id,$seq'><input name='test' class='test' id='$textName' type='radio' value='1' checked ><div var1='$promo_code,$doc_no,$product_id,$seq'>".$promo_code." => ".$data['proName']."</div></li>";
+	}
+	echo '</UL>';
+}
+?>

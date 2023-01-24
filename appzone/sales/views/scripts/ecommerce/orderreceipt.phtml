@@ -1,0 +1,185 @@
+<style type="text/css">
+#main {
+    margin-top: 10px;/*50*/
+    position: relative;
+    padding: 0;
+}
+.ui-tabs-nav {
+    background-color: #81D8D0 !important; /*To overwrite jquery-ui.css #95B9C7*/
+    height: 30px;                        /*To stop nav block scaling of tab size*/
+}
+
+.ui-tabs .ui-tabs-nav {
+    margin: 0;
+    padding: 0.2em 0.2em 0;
+    border: none;
+    background: none;
+    border-radius: 2px 2px 0 0; /*To affect only top corners*/
+   
+}
+
+.ui-tabs .ui-tabs-nav li {
+    position: relative;    /*To overwrite jquery-ui.css*/
+    top: -10px !important;  /*To overwrite jquery-ui.css*/
+    border: none;
+	margin: 0 0 -5px 0;
+    background: none;
+   
+}
+.ui-tabs-anchor{
+    color: white !important;                  /*To overwrite jquery-ui.css*/
+    text-decoration: underline !important;    /*To overwrite jquery-ui.css*/
+     
+}
+#main ul.ui-widget-header, #main ul.ui-widget-content, #main ul.ui-state-default, #main ul.ui-state-hover {
+    background: none;
+    border: none
+}
+
+#main .ui-widget-header {
+            background:#CFECEC  !important; 
+            border:1px solid #e5e5e5;
+            color:#000000  !important; 
+            font-weight: bold;
+         }
+
+#main .ui-tabs-active a {
+   -moz-border-bottom-colors: none;
+   -moz-border-left-colors: none;
+   -moz-border-right-colors: none;
+   -moz-border-top-colors: none;
+   
+   background-color: white;        /*To make it looks like on example pic, it is possible do do with it whatever you want*/
+   border-color: #cccccc;
+   border-style: solid;
+   border-width: 1px 1px 0;
+   border-radius: 5px 5px 0 0;    /*To affect only top corners*/
+   color: #222222;
+   position: relative;
+   z-index: 5;
+   color: black !important;             /*To overwrite jquery-ui.css*/
+   text-decoration: none !important;     /*To overwrite jquery-ui.css*/
+}    
+a:focus{                                /*To handle that annoing border(chrome) when item is in focus*/
+ outline: none;   
+}
+
+/*
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {	
+	padding: 10px 20px 12px 20px;
+	background: #B9E7CF;
+	border-bottom-style: none;
+	color:#000;
+}
+*/
+
+
+
+#main li {
+        background :  black !important;
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important; 
+
+    }
+    #main li.ui-state-active {
+        background :  white !important;
+        border-top: 0 !important;
+        border-left: 0 !important;
+        border-right: 0 !important; 
+        margin: 0;
+
+
+    }
+
+#main li a 
+    {
+        color:          Black !important;
+        font-size:      1.0em !important;/*1.4*/
+        font-weight:    bold;/*bolder*/
+        padding:        4px 1.5ex 3px !important;
+    }
+</style>
+
+
+<?php 	
+	$this->doc_date="2017-02-08";
+	$arr_date_show=explode("-", $this->doc_date);
+	$date_show=$arr_date_show[2]."/".$arr_date_show[1]."/".$arr_date_show[0];
+?>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FEFCFF">
+<tr style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+<td valign="TOP">
+	<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+		<tr bgcolor="#B9E7CF" height="40">
+			<td>
+			<img src="http://localhost/sales/img/icon_bag_32x32.png" align="absmiddle"/>
+			&nbsp;<span style='font-size:20px;color:#454545;'>ลูกค้ารับสินค้า(Order Receipt)</span>		
+			</td>
+			<td align="right"><span style='font-size:24px;color:#454545;'>วันที่เอกสาร :</span> <span style='font-size:23px;color:#000000;'><?php echo $this->doc_date_show;?>&nbsp;</span></td>
+		</tr>
+	</table>
+
+<div id="main">
+    			<div class="ui-widget-header ui-corner-top">
+    				<ul>
+						<li><a href="#tabs-1">ลูกค้ารับสินค้าเอง</a></li> 
+    					<li><a href="#tabs-2">รับสินค้าแทน</a></li>
+    				</ul>
+    			</div>
+    			
+    			<div id="tabs-1" class="tabs3">
+    				<p>
+    				 <table width="100%" border="0" cellpadding="10" cellspacing="2"> 
+    				 	  <tr>	
+						  <td colspan="3" align="center">
+						  		<input type="text" size="35" style="height:50px;"></input>
+						  </td>							
+						</tr>
+						  <tr>	
+						  <td width="45%">
+						  		&nbsp;
+						  </td>
+							<td width="20%">
+								<a href="#" name="bws_cnproduct" id="btn_getorder" class='btnGrayClean'>บันทึกการรับสินค้า</a>
+							</td>		
+							<td width="">&nbsp;</td>
+						</tr>
+					</table>
+    				</p>
+    			</div>
+    			
+    			<div id="tabs-2" class="tabs3">
+    				<p>EEEEEE</p>
+    			</div>
+    </div>
+	
+
+		
+	</td>	
+	</tr>
+	
+</table>
+
+<input type="hidden" id="cashier_id" value="<?php echo $this->SESSION_EMPLOYEE_ID;?>"></input>
+</td>
+</tr>
+
+</table>
+<input type="hidden" id="doc_date" value="<?php echo $this->doc_date;?>">
+<input type="hidden" id="doc_status" value="">
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+
+<p id="ajaxResult"></p>
+<!-- 
+<div id="loading" title="my ajax loading dialog"> 
+    <p>Please wait ...</p>
+</div>
+ -->
+ <script>
+$(function() {
+	$("#main").tabs();
+		   
+});
+
+</script>

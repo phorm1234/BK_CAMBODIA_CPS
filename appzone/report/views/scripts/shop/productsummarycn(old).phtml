@@ -1,0 +1,84 @@
+<style>
+.myform{
+margin-left :30px;
+width : 100%;
+padding:14px;
+
+}
+.topbg{
+margin-left :20px;
+
+height :200px;
+}    
+</style>
+<script type="text/javascript">
+
+$(document).ready(function(){
+ 
+    $("#opener").click(function(){       
+      
+        var opts_QstDetail={
+                    autoOpen:false,
+                    width:'70%',
+                    height:'600',
+                    modal:true,
+                    resizeable:true,
+                    position:'top',
+                    showOpt: {direction:'up'},
+                    closeOnEscape:true,
+                    title:"",
+                    open:function(){
+                        $("#dialog").html("");
+                        $.ajax({
+                            type:'post',
+                            url:'/report/shop/viewproductsummarycn',
+                            cache:false,
+                            data:{       
+                                data1:$("#start_date").val(),
+                                data2:$("#end_date").val(),                            
+                                now:Math.random()
+                            },
+                            success:function(data){
+                                $("#dialog").html(data);
+                            }//end success function
+                        });//end ajax pos
+                    }
+            };
+            $("#dialog").dialog("destroy");
+            $("#dialog").dialog(opts_QstDetail);
+            $("#dialog").dialog("open");
+       
+         
+     
+    });
+   
+});
+	
+</script>
+
+<div class="topbg">
+
+<h2>รายงานสรุปลดหนี้ลูกค้า</h2>
+
+
+
+<div class="myform">
+<!--<form method="post" action="/report/report/printreport">-->
+<table border="0">
+    <tr>
+          <td>วันที่ :</td>
+          <td><input type="text" id="start_date" name="start_date"/></td>
+    </tr>
+    <tr>
+          <td>ถึง  :</td>
+          <td><input type="text" id="end_date" name="end_date"/></td>
+    </tr>
+    
+</table>
+    <input type="button" value="ตกลง" id="opener">
+
+<!--</form>-->
+</div>
+</div>
+        
+<div id="dialog" title="รายงานสรุปลดหนี้ลูกค้า"></div>

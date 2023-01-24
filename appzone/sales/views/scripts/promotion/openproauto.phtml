@@ -1,0 +1,31 @@
+<?php
+
+
+
+
+
+
+//header("Content-type:text/html; charset=tis-620"); 
+echo "<input type='hidden' name='manual_promo_code_hide' id='manual_promo_code_hide' value='$this->promo_code' >";
+
+
+
+//echo "<br>";
+//echo "<span class='label_head'>$promo_code&nbsp;$promo_des</span>";
+
+?>
+<span class='start_left' id='from_scan_auto'>
+<span class='label'>QUANTITY </span><input type="text"  class='text_scan' style='width:30px;' name="manual_input_quantity" id="manual_input_quantity"  size="1"  value=1 onKeyDown="if (event.keyCode == 13){$('#manual_input_product').focus();}">
+&nbsp;&nbsp;
+<span class='label'>PRODUCT ID </span><input type="text"  class='text_scan'   name="manual_input_product" id="manual_input_product" size="10" onKeyDown="if (event.keyCode == 13){addproductauto();}">
+
+</span>
+
+
+
+<?php 
+
+echo "<div id='viewpro'>";
+
+echo "</div>";
+?>

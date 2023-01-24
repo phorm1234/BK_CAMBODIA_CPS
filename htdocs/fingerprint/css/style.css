@@ -1,0 +1,296 @@
+@CHARSET "UTF-8";
+body {
+	min-width: 1024;
+	margin-left: auto;
+	margin-right: auto;
+}
+@font-face {
+    font-family: psl158;
+    src: url(PSL158.eot);
+    src: url(PSL158.woff);
+    src: url(PSL158.ttf);
+}
+@font-face {
+    font-family: psl159;
+    src: url(PSL159.eot);
+    src: url(PSL159.woff);
+    src: url(PSL159
+    .ttf);
+}
+a{
+	cursor: pointer;
+	text-decoration : none;
+	color: #999;
+}
+a:hover{
+	cursor: pointer;
+	text-decoration : none;
+	color: #999;
+}
+.left{
+	float: left;
+}
+.margin{
+	margin: 10px 5px;
+}
+.line{
+	border-bottom: #000 dotted 1px;
+}
+.header{
+	position:relative;
+	border-bottom: #ccc solid 1px;;
+	padding: 5px 0;
+}
+.logo{
+	
+}
+.logo img{
+	width: 150px;
+	height: auto;
+}
+.version{
+	position:absolute;
+	bottom:0;
+	right:0;
+	color:#999;
+	text-align: right;
+}
+.logo-txt1{
+	font-size: 18px;
+	color: #999;
+	padding-left: 5px;
+}
+.logo-txt2{
+	font-size: 16px;
+	color: #ccc;
+	padding-left: 5px;
+	
+}
+.login-box {
+    width: 500px;
+    height: 300px;
+
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+}
+.img-login{
+	width: 150px;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+.login-box img{
+	width: 150px;
+	height: auto;
+}
+.submit-login{
+	width:55px;
+	height:55px;
+	border: #ccc solid 1px;
+	padding-top: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+}
+.txt-row{
+	margin-top:20px;
+	text-align: center;
+}
+.txt-box{
+	border-bottom: #666 solid 1px;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	width:126px;
+	color: #999;
+	background: transparent;
+}
+.txt-box-1{
+	border-bottom: #666 solid 1px;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	width:250px;
+	color: #999;
+	background: transparent;
+}
+.txt-box-3{
+	border-bottom: #666 solid 1px;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	width:150px;
+	color: #999;
+	background: transparent;
+}
+.photo{
+	width: 230px;
+	height: 180px;
+	border: #999 dotted 1px;
+	background-color: #ccc;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 30px;
+}
+.btn{
+	margin-top: 30px;
+}
+.txt-front{
+	width: 150px;
+}
+.txt-front-login{
+	width: 100px;
+}
+.progress-bar{
+	-webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+.hand{
+	position: relative;
+	width: 250px;
+	height: 300px;
+	overflow: hidden;
+}
+.finger{
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	border: #D6C73A dotted 2px;
+}
+.finger-active{
+	border: #048300 dotted 3px !important;
+}
+#finR1{
+	left: 5px;
+	top: 140px;
+}
+#finR2{
+	left: 75px;
+	top: 20px;
+}
+#finR3{
+	left: 125px;
+	top: 5px;
+}
+#finR4{
+	left: 172px;
+	top: 20px;
+}
+#finR5{
+	left: 212px;
+	top: 60px;
+}
+
+#finL1{
+	right: 5px;
+	top: 140px;
+}
+#finL2{
+	right: 75px;
+	top: 20px;
+}
+#finL3{
+	right: 125px;
+	top: 5px;
+}
+#finL4{
+	right: 172px;
+	top: 20px;
+}
+#finL5{
+	right: 212px;
+	top: 60px;
+}
+.dis-menu{
+	float: left;
+	width: 120px;
+	height: 120px;
+
+	margin: 20px;
+}
+.menu-box-img{
+	height: 90px;
+}
+.dis-menu img{
+	width: 60px;
+	height: auto;
+}
+.beginL,.beginR{
+	font-size:18px;
+	color:#999;
+	margin-top:20px;
+	text-align:center;
+	opacity:0;
+	
+	-webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+.pl_t_l,.pl_t_r{
+	opacity:0;
+}
+
+.pgL,.pgR{
+	opacity:0;
+	
+	-webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+}
+
+
+/*************************** Menu *********************************/
+.menu{
+	border-bottom: #ccc dotted 1px;
+}
+ul.v_menu{ /* กำหนดขอบเขตของเมนู */  
+    list-style:none;  
+    margin:0px;  
+    padding:0px;  
+    font-family:tahoma, "Microsoft Sans Serif", Vanessa;  
+    font-size:12px;  
+}  
+ul.v_menu > li{ /* กำหนดรูปแบบให้กับเมนูเ */  
+    display:block;  
+    width:150px;  
+    height:20px;  
+    text-indent:5px;  
+    float:left;  
+    text-align:center;  
+    color: #999;
+} 
+ul.v_menu > li:hover a{ /* กำหนดรูปแบบให้กับเมนูเมื่อมีเมาส์อยู่เหนือ */  
+    display:block;  
+    width:150px;  
+    height:20px;  
+    text-indent:5px;  
+    background-color:#ccc;    
+    float:left;  
+    text-align:center;    
+    color: #FFF;
+}  
+ul.v_menu > li > a{ /* กำหนดรูปแบบให้กับลิ้งค์ */  
+    text-decoration:none;  
+    line-height:20px;  
+}
+.a-active{
+	background-color:#ccc;        
+}
+.a-active a{
+    color: #FFF;
+}
+.contrainer{
+	margin-top: 30px;
+}
+.tab-menu{
+	height: 200px;
+}

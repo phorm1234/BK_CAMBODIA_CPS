@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+	<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/gray/easyui.css"/>
+	<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/icon.css"/>
+	<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery.easyui.min.js"></script>	
+<!-- 	<link rel="stylesheet" type="text/css" href="demo.css"/> -->
+	<script type="text/javascript" src="/pos/js/index/childicon.js"></script>
+	<link rel='stylesheet' type='text/css' href='/stock/css/style.css'>
+</head>
+<body  class="easyui-layout" style="width:100%;height:100%;">
+<input type="hidden" name="hiddenmenu_id"  id="hiddenmenu_id"  value="<?php echo $this->menu_id;?>" />
+		<div region="west" split="true" title="MENU <?php echo $this->namemenu;?>" style="width:260px;">
+			<ul id="treemenu_ref"></ul>
+		</div>
+		<div region="center"  id='con_menu_exec' title="<?php echo $this->namemenu;?>" style="background:#fafafa;">	</div>
+</body>
+</html>

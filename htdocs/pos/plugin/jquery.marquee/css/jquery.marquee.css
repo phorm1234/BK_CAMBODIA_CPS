@@ -1,0 +1,36 @@
+.marquee .author {
+	display: none;
+}
+.marquee-author {
+	float: left; 
+	width: 90px; 
+	text-align: right; 
+	padding: 4px 5px 1px 0;
+}
+ul.marquee {
+	display: block;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	line-height: 1;
+	position: absolute;
+	overflow: hidden;
+	width: 85%;
+	height: 40px;
+	border: 0px solid #08084d;
+	bottom:50px;
+	float:right; 
+	right:170px; 
+	opacity:1;
+	filter:alpha(opacity=100);
+}
+ul.marquee li {
+	z-index: 21;
+	position: absolute;
+	top: -999em;
+	left: 0;
+	display: block;
+	white-space: nowrap;
+	font: 24px Arial, Helvetica, sans-serif;
+	padding: 3px 5px;
+}

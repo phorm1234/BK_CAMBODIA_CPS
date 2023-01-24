@@ -1,0 +1,215 @@
+<style>
+			/** Start: to style navigation tab **/
+			.nav {
+			  margin-bottom: 18px;
+			  margin-left: 0;
+			  list-style: none;
+			}
+
+			.nav > li > a {
+			  display: block;
+			}
+
+			.nav-tabs{
+			  *zoom: 1;
+			}
+
+			.nav-tabs:before,
+			.nav-tabs:after {
+			  display: table;
+			  content: "";
+			}
+
+			.nav-tabs:after {
+			  clear: both;
+			}
+
+			.nav-tabs > li {
+			  float: left;
+			}
+
+			.nav-tabs > li > a {
+			  padding-right: 12px;
+			  padding-left: 12px;
+			  margin-right: 2px;
+			  line-height: 14px;
+			}
+
+			.nav-tabs {
+			  border-bottom: 1px solid #ddd;
+			}
+
+			.nav-tabs > li {
+			  margin-bottom: -1px;
+			}
+
+			.nav-tabs > li > a {
+			  padding-top: 8px;
+			  padding-bottom: 8px;
+			  line-height: 18px;
+			  border: 1px solid transparent;
+			  -webkit-border-radius: 4px 4px 0 0;
+				 -moz-border-radius: 4px 4px 0 0;
+					  border-radius: 4px 4px 0 0;
+			}
+
+			.nav-tabs > li > a:hover {
+			  border-color: #eeeeee #eeeeee #dddddd;
+			}
+
+			.nav-tabs > .active > a,
+			.nav-tabs > .active > a:hover {
+			  color: #555555;
+			  cursor: default;
+			  background-color:#FFFFFF;/*#ffffff*/
+			  border: 1px solid #ddd;
+			  border-bottom-color: transparent;
+			}
+
+			li {
+			  line-height: 18px;
+			}
+
+			.tab-content.active{
+				display: block;
+			}
+
+			.tab-content.hide{
+				display: none;
+			}
+
+
+			/** End: to style navigation tab **/
+			.input_receive{
+		   		width:250px;
+		   		height:40px;
+		   		border:1px solid#e4e4e4;
+		   		background-color:#FFFFFF;
+		   }
+		   
+		   	.input_receive_active{
+		   		width:250px;
+		   		height:40px;
+		   		border:2px solid#F2BB66;
+		   		background-color:#F5F5F5;
+		   }
+		</style>
+
+<?php 	
+	$this->doc_date="2017-02-08";
+	$arr_date_show=explode("-", $this->doc_date);
+	$date_show=$arr_date_show[2]."/".$arr_date_show[1]."/".$arr_date_show[0];
+?>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FEFCFF">
+<tr style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+<td valign="TOP">
+	<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+		<tr bgcolor="#B9E7CF" height="40">
+			<td>
+			<img src="http://localhost/sales/img/icon_bag_32x32.png" align="absmiddle"/>
+			&nbsp;<span style='font-size:20px;color:#454545;'>ลูกค้ารับสินค้า(Order Receipt)</span>		
+			</td>
+			<td align="right"><span style='font-size:24px;color:#454545;'>วันที่เอกสาร :</span> <span style='font-size:23px;color:#000000;'><?php echo $this->doc_date_show;?>&nbsp;</span></td>
+		</tr>
+	</table>
+	<div id="main">
+	    <ul class="nav nav-tabs">
+	        <li class="active">
+	            <a href="#tab1">ลูกค้ารับสินค้าเอง</a>
+	        </li>
+	        <li>
+	            <a href="#tab2">รับสินค้าแทน</a>
+	        </li>
+	    </ul>
+	    
+	    <section id="tab1" class="tab-content active">
+		<div>
+			
+    				 <table width="65%" align="center" border="0" cellpadding="2" cellspacing="2"> 
+    				 	  <tr>	
+						  <td colspan="3" align="left">
+						  		<span style="font-size:33px;">แสกนข้อมูลการับสินค้า</span>
+						  		
+						  </td>							
+						</tr>
+    				 	  <tr>	
+						  <td colspan="3" align="left">
+						  		<input type="text" size="30" id="cst_data" name="cst_data" class="input_receive ui-corner-all"></input>
+						  </td>							
+						</tr>
+						 <tr>	
+						  <td width="45%" align="center">
+						  		<br/>
+						  		<a href="#" name="bws_cnproduct" id="btn_cst_submit" class='btnGreenClean'>บันทึกรับสินค้า</a>
+						  </td>
+							<td width="15%">
+								&nbsp;
+							</td>		
+							<td width="">&nbsp;</td>
+						</tr>
+					</table>
+    			
+		</div>
+	</section>
+	
+	<section id="tab2" class="tab-content hide">
+		<div>
+			<table width="65%" align="center" border="0" cellpadding="2" cellspacing="2"> 
+	    				 	 <tr>	
+							  <td colspan="3" align="Left">
+							  		<span style="font-size:33px;">รหัสบัตรประชาชน</span>
+							  </td>							
+							</tr>
+	    				 	<tr>	
+							  <td colspan="3" align="left">
+							  		<input type="text" size="30" id="cst_idcard" name="cst_idcard" class="input_receive ui-corner-all"></input>
+							  </td>							
+							</tr>
+						
+    				 	  <tr>	
+						  <td colspan="3" align="Left">
+						  		<span style="font-size:33px;">แสกนข้อมูลการับสินค้า</span>
+						  		
+						  </td>							
+						</tr>
+    				 	<tr>	
+						  <td colspan="3" align="Left">
+						  		<input type="text" size="30" id="cst_data2" name="cst_data2" class="input_receive ui-corner-all"></input>
+						  </td>							
+						</tr>
+						<tr>	
+						  <td width="45%" align="center">
+						  		<br/>
+						  		<a href="#" name="bws_cnproduct" id="btn_cst_submit2" class='btnGreenClean'>บันทึกการรับสินค้า</a>
+						  </td>
+							<td width="20%">
+								&nbsp;
+							</td>		
+							<td width="">&nbsp;</td>
+						</tr>
+					</table>
+		</div>
+	</section>
+	    
+	</div>
+	
+	
+	
+	
+	</td>	
+	</tr>	
+</table>
+
+
+
+
+
+<input type="hidden" id="cashier_id" value="<?php echo $this->SESSION_EMPLOYEE_ID;?>"></input>
+</td>
+</tr>
+
+</table>
+<input type="hidden" id="doc_date" value="<?php echo $this->doc_date;?>">
+<input type="hidden" id="doc_status" value="">
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+<script type="text/javascript" src="/sales/js/ecommerce/receivegoods.js"></script>

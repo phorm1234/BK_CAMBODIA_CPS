@@ -1,0 +1,9 @@
+<?php
+$arr_data=$this->arr_data;
+$count=count($arr_data);
+if($count==0){
+	$arr_data=array(array('name'=>'','address1'=>'','address2'=>'','address3'=>''));
+}
+$ex=json_encode($arr_data);
+echo $ex;
+?>

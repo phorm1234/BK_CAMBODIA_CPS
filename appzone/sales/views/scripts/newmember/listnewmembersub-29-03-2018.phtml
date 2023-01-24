@@ -1,0 +1,84 @@
+<?php
+$status_show=$this->status_show;
+$listnewmember=$this->listnewmember;
+$count_list=count($listnewmember);
+function set_formatdate($var){
+	
+	$arr=explode("-",$var);
+	return "$arr[2]/$arr[1]/$arr[0]";
+}
+$varday=$this->varday;
+if($varday=="today"){
+	$show_cr="<span style='color:#1b7412;'>รายการสมัครใหม่วันนี้</span>";
+}else if($varday=="day3"){
+	$show_cr="<span style='color:#1b7412;'>รายการสมัครใหม่ย้อนหลัง 3 วัน</span>";
+}else if($varday=="month3"){
+	$show_cr="<span style='color:#1b7412;'>รายการสมัครใหม่ย้อนหลัง 3 เดือน</span>";
+}else if($varday=="finish"){
+	$show_cr="<span style='color:#1b7412;'>รายการสมัครใหม่ที่บันทึกเรียบร้อยแล้ว</span>";
+}else if($varday=="wait"){
+	$show_cr="<span style='color:#1b7412;'>รายการสมัครใหม่ที่รอการบันทึก</span>";
+}
+//print_r($listnewmember);
+echo "<center><br>$show_cr</center>";
+echo "<table id='newspaper-prob' cellspacing='0' cellpadding='0'>";
+echo "<tbody>";
+echo "<tr >";
+		echo "<th  align='center' >ลำดับ</th>";
+		echo "<th  align='center' >วันที่สมัคร</th>";
+		echo "<th  align='center' >เลขที่เอกสาร</th>";
+		echo "<th align='center'>รหัสสมาชิก</th>";
+		echo "<th align='center'>ปชช.</th>";
+		echo "<th align='center'>มือถือ</th>";
+		echo "<th align='center'>สิทธิ์</th>";
+		echo "<th align='center'>ชุดสมัคร</th>";
+		echo "<th align='center'>สาขา</th>";
+		echo "<th  align='center' >ผลการบันทึก</th>";
+		echo "<th  align='center' >สถานะการส่งเข้าส่วนกลาง</th>";
+echo "</tr>";
+$i=1;
+foreach($listnewmember as $data){
+	$doc_no=$data['doc_no'];
+	$doc_date=set_formatdate($data['doc_date']);
+	$doc_time=$data['doc_time'];
+	$member_finish=$data['member_finish'];
+	if($member_finish=="Y"){
+		$show_add="<span style='color:#1b7412;'>บันทึกแล้ว</span>";
+	}else{
+		$show_add="<input  type='button' value='รอการบันทึก' onclick=\"registerfromafter('$doc_no');\";>";
+	}
+	$sendtoserver_status=$data['sendtoserver_status'];
+	$sendtoserver_date=$data['sendtoserver_date'];
+	$sendtoserver_date=set_formatdate($sendtoserver_date);
+	$sendtoserver_time=$data['sendtoserver_time'];
+	if($sendtoserver_status=="Y"){
+		$msg_send="ส่งแล้วเมื่อ $sendtoserver_date $sendtoserver_time"; 
+	}else{
+		$msg_send=""; 
+	}
+	
+	if($data[application_id]=="OPID300" || $data[application_id]=="OPPLI300"){
+		$show_img="<br><img src='../../../download_promotion/img/id_card.gif' width='40' hieght='40'>";
+	}else{
+		$show_img="";
+	}
+	
+		echo "<tr>";
+				echo "<td  align='center' >$i</th>";
+				echo "<td  align='center' >$doc_date $doc_time</th>";
+				echo "<td  align='center' >$data[doc_no]</th>";
+				echo "<td  align='center' >$data[member_id]</th>";
+				echo "<td  align='center' >$data[idcard]</th>";
+				echo "<td  align='center' >$data[mobile_no]</th>";
+				echo "<td  align='center' >$data[special_day]</th>";
+				echo "<td  align='center' >$data[application_id] $show_img</th>";
+				echo "<td  align='center' >$data[branch_id]</th>";
+				echo "<td  align='center' >$show_add</th>";
+				echo "<td  align='center' >$msg_send</th>";
+		echo "</tr>";
+	
+	$i++;
+}
+	echo "</tbody>";
+	echo "</table>";
+?>

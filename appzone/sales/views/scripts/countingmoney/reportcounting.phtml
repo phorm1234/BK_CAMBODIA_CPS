@@ -1,0 +1,84 @@
+<link href='/sales/css/inventory/pickinglist.css' rel='stylesheet' type='text/css'>
+<style type="text/css">
+		.td{ /*outline: 1pt solid black;*/ text-align:center}
+		.tdborder{ outline: 1pt solid black; text-align:center}
+		.tr{ /*outline: 1pt solid black;*/ text-align:center; background-color: #EBEBEB;}
+		.nhiden{ /*outline: 1pt solid black;*/ 
+			background-color:#EBEBEB;
+   			 border: 1px solid #BFBFBF;
+    		color: #333333;
+    		font: 100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma;
+    		height: 30px;
+    		padding: 0 5px;
+    		text-align: right;
+    		}
+			
+		.nnomal{ /*outline: 1pt solid black;*/ 
+			background: url("/sales/img/text-bg.gif") repeat-x scroll 0 0 #FFFFFF;
+   			 border: 1px solid #BFBFBF;
+    		color: #333333;
+    		font: 100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma;
+    		height: 30px;
+    		padding: 0 5px;
+    		}	
+    	.nbutton{ padding:5px;}	
+	</style>
+<div id="dialog">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td valign="top" >
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+		<tr bgcolor="#B9E7CF" height="40">
+			<td><span style='font-size:23px;color:#000000;'> Cash Checking Report</span></td>
+			<td ><span style='font-size:23px;color:#000000;'></span></td>
+		</tr >
+		<tr height="32">
+			<td width="5%" align="right">Date : </td>
+			<td width="5%">
+				<input style="text-align:left" type="text"  id="datepicker" size="20" class="nnomal" value="" />
+			</td>
+			
+		</tr>
+		<tr height="32">
+			<td width="5%" align="right">Choose Type : </td>
+			<td width="5%">
+				<select id="typecounting">
+					<option value="">=select=</option>
+					<option value="O">Open</option>
+					<option value="C">Close</option>
+				</select>
+			</td>
+			
+		</tr>
+	
+	</table>
+	
+	<div class="margin10"></div>
+	
+	
+	<table width="100%" cellspacing="2" cellpadding="2" border="0" bgcolor="#ecfcf5" align="center">
+		<tbody>
+			<tr>
+			<td class="font_remark" width="100%" background="/stock/img/bg_g.gif" height="35" align="left"> </td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="margin10"></div>
+	<table width="100%" border="0">
+		<tbody>
+			<tr>
+				<td>
+				</td>
+				<td align="right" width="55%">
+					<a href="#" class='btnGrayClean nbutton' id="btnSave" onclick="printing()">Print</a>
+				</td>
+		    </tr>
+	    </tbody>
+    </table>
+
+</td>
+</tr>
+</table>
+<script type="text/javascript" src="/sales/js/countingmoney/report.js"></script>

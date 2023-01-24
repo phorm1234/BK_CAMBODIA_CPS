@@ -1,0 +1,521 @@
+<?php
+//@header("Content-type:text/html; charset=utf=8");
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->SetMargins( 0,2,0 );  // ซ้าย , บน , ขวา
+
+$pdf->AddPage();
+$pdf->SetFont('CordiaNew','',5);
+//$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' ,'วันที่ออกเอกสาร '.$this->print_time ) , 0 , 1,'R' );
+
+$pdf->Image('/var/www/pos/htdocs/report/img/logo/op/op-logo.gif',8 ,0,0);
+$pdf->SetFont('CordiaNew','B',10);
+//$title1=iconv('UTF-8','cp874',"สรุปการชำระเงินจากลูกค้า");
+
+$line="----------------------------------------------------------------------------------------------";
+
+$pdf->Ln(7);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','สรุปการชำระเงินจากลูกค้า'),0,0,'C');
+$pdf->Ln(3);
+$pdf->Cell(0,3,iconv('UTF-8','cp874',"ประจำวันที่  ".$this->s_date." - ".$this->e_date),0,1,'C');
+$pdf->Ln(2);
+$pdf->Cell( 40  , 3 , iconv( 'UTF-8','cp874' ,'วันที่พิมพ์เอกสาร '.$this->print_time ),0,0,'L');
+$pdf->Cell( 28  , 3 , iconv( 'UTF-8','cp874' ,'เวลา '.$this->ptime ),0,0,'R');
+$pdf->Ln(3);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','จุดขาย : '.$this->branch_id.' '.$this->branch_name ));
+$pdf->Ln(3);
+
+$pdf->SetFont('CordiaNew','',11);
+$pdf->Cell(0,3,$line);
+$pdf->Ln(4);
+
+$a = 30;
+$b = 15;
+$c = 25;
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'จำนวนเงินทั้งสิ้น' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0 ,'R' );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->amount_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'ส่วนลด' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->discount_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'บัตรเครดิต' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->credit_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'ABA Pay' ) , 0 , 0 ); // ABA Credit
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->credit_aba, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'คูปอง เงินสด / voucher' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->netcashcoupon, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'เงินสด' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->cash_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , '(40) เปลี่ยน ส/ค  ') , 0 , 0 );
+$pdf->Cell( 18  , 4 , iconv( 'UTF-8','cp874' , '(G)  '.number_format($this->getgross_data) .',' ) , 0 , 0 );
+$pdf->Cell( 9  , 4 , iconv( 'UTF-8','cp874' , number_format($this->getquan_data).' ,') , 0 , 0,'R'  );
+$pdf->Cell( 23  , 4 , iconv( 'UTF-8','cp874' ,'(N) '.number_format($this->getamt_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , '(41) คืนเงิน  ') , 0 , 0 );
+$pdf->Cell( 18  , 4 , iconv( 'UTF-8','cp874' , '(G)  '.number_format($this->qbackgross_data) .',' ) , 0 , 0 );
+$pdf->Cell( 9  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->qback_data).' ,') , 0 , 0 ,'R' );
+$pdf->Cell( 23  , 4 , iconv( 'UTF-8','cp874' ,'(N) '. number_format($this->qbackamt_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'หักลดหนี้ เครดิต' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->getcn_credit, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'หักลดหนี้ เงินสด' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->getcn_cash, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'บิลสินค้าขาด (19)' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->getbill_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'ยอดเงิน PAY IN' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->payin, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+/*$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'ยอดสุทธิ เครดิต' ) , 0 , 0 );
+$pdf->Cell( 15  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( 23  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->credit_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );*/
+
+/*$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'เงินสด' ) , 0 , 0 );
+$pdf->Cell( 15  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0  );
+$pdf->Cell( 23  , 4 , iconv( 'UTF-8','cp874' ,number_format($this->cash_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );*/
+
+$pdf->Cell(0,3,$line);
+$pdf->Ln(4);
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'โอนสินค้าเข้า' ) , 0 , 0 ); 
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($this->qincome_data).' ,') , 0 , 0 ,'R' );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($this->aincome_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'โอนสินค้าออก' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($this->qoutcome_data).' ,') , 0 , 0 ,'R' );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($this->aoutcome_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'ปรับปรุงเข้า' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($this->qchincome_data).' ,') , 0 , 0 ,'R' );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($this->chincomeamt_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'ปรับปรุงออก' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($this->qchoutcome_data).' ,') , 0 , 0 ,'R' );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($this->choutamt_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );
+
+
+/*$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , '(42) เปลี่ยน ส/ค ต่างสาขา' ) , 0 , 0 );
+$pdf->Cell( 15  , 4 , iconv( 'UTF-8','cp874' , number_format($this->qother_data).' ,') , 0 , 0  );
+$pdf->Cell( 23  , 4 , iconv( 'UTF-8','cp874' , number_format($this->otheramt_data, 2, '.', ',').'  บาท' ) , 0 , 1,'R' );*/
+
+
+$pdf->Cell(0,3,$line);
+$pdf->Ln(4);
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'รายละเอียดสมาชิกใหม่ :' ) , 0 , 1 );
+
+  
+          $newmember = $this->getmember_data ;
+          $count = count($newmember);
+            if ($count > 0){ 
+                
+                $countsum = 0;
+                $sumnew = 0;
+                foreach($newmember as $m){  
+                        
+                    //$sumnew =$sumnew+$m['sum_net_amt'];
+                    $sumnew+=$m['sum_net_amt'];
+                    $countsum+=$m['count(a.doc_no)'];
+                    
+                        $pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , $m['promo_code'].' ' ) , 0 , 0 );
+                        $pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , $m['count(a.doc_no)'] .' ,') , 0 , 0 ,'R');
+                        $pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($m['sum_net_amt'], 2, '.', ',').'  บาท' ) , 0 , 1 ,'R');
+                        //echo "<div class=div-table-row><div class=div-table-col1>". $m['promo_code']."</div><div class='div-table-col2'>= " .$m['count(a.doc_no)']." ใบ</div><div class=div-table-col3>" .number_format($m['sum_net_amt'], 2, '.', ','). "  บาท</div></div>";    
+                }
+               
+                // $pdf->Cell( 50  , 4 , iconv( 'UTF-8','cp874' ,'************* รวม   '.$countsum.'   ใบ   '. number_format($sumnew, 2, '.', ',').'   บาท' ) , 0 , 1 ,'R');
+               //  echo'<div class='div-table-row'><div class=div-table-col> ************* รวม   ".$countsum."   ใบ ". number_format($sumnew, 2, '.', ',')."   บาท</div></div>"; 
+                $pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , '************* รวม ' ) , 0 , 0 );
+                $pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , $countsum .' ,') , 0 , 0 ,'R');
+                $pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($sumnew, 2, '.', ',').'  บาท' ) , 0 , 1 ,'R');
+            }
+ 
+
+            $pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'สมาชิก' ) , 0 , 0 );
+            $pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($this->getmember_data2).' ,' ) , 0 , 0 ,'R');
+            $pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($this->getmemamt_data, 2, '.', ',').'  บาท' ) , 0 , 1 ,'R');
+                        
+            
+            $pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'ลูกค้าทั่วไป' ) , 0 , 0 );
+            $pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($this->getwalkin_data).' ,' ) , 0 , 0 ,'R');
+            $pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($this->getwkamt_data, 2, '.', ',').'  บาท' ) , 0 , 1 ,'R');
+
+
+$pdf->Ln(3);
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'รายละเอียดบัตรเครดิต  :' ) , 0 , 1 );
+$pdf->Ln(3);
+
+    
+    $sumkbank = 0 ;
+    $sumbblbank = 0 ;
+    $sumscbbank = 0 ;
+    
+    $arr_data=$this->getpaid_data;
+    $count = count($arr_data);
+    if ($count > 0){ 
+      
+      $pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'บัตรเครดิต กสิกรไทย   :' ) , 0 , 1 );
+        foreach($arr_data as $m){     
+         $pdf->SetMargins( 0,0,5 );  // ซ้าย , บน , ขวา
+         $sumkbank+=$m['pay_credit'];        
+         $pdf->Write( 1  , iconv( 'UTF-8','cp874' , number_format($m['pay_credit'], 2, '.', ',').' / ' ) );
+         $pdf->SetMargins( 0,0,5 );
+        }
+        
+        $pdf->Ln(5);  
+        
+        $pdf->Cell( 50  , 4 , iconv( 'UTF-8','cp874' , "รวม  ".number_format($sumkbank, 2, '.', ',').'    บาท' ) , 0 , 1 );
+        $pdf->Ln(5);
+       // echo"<br> รวม ".number_format($sumkbank, 2, '.', ',')." บาท <br>";
+    }
+    
+   
+    
+    $arr_data2=$this->getpaid_data2;
+    $count2 = count($arr_data2);
+    if ($count2 > 0){ 
+      $pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'บัตรเครดิต กรุงเทพ   :' ) , 0 , 1 );
+        foreach($arr_data2 as $m){     
+         //echo "<div class="div-table-row"><div class="div-table-col">";
+         $pdf->SetMargins( 0,0,5 );  // ซ้าย , บน , ขวา
+         $sumbblbank+=$m['pay_credit'];         
+         $pdf->Write( 5  , iconv( 'UTF-8','cp874' , number_format($m['pay_credit'], 2, '.', ',').' / ' ) );
+         $pdf->SetMargins( 0,0,5 );
+        }
+       
+        $pdf->Ln(5);
+        $pdf->Cell( 50  , 4 , iconv( 'UTF-8','cp874' , "รวม  ".number_format($sumbblbank, 2, '.', ',').'    บาท' ) , 0 , 1 );
+        $pdf->Ln(5);
+    }
+    
+   //echo "<br>";
+    
+   $arr_data3=$this->getpaid_data3;
+    $count3 = count($arr_data3);
+    if ($count3 > 0){ 
+      
+      $pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'บัตรเครดิต ไทยพาณิชย์   :' ) , 0 , 1 );
+        foreach($arr_data3 as $m){     
+         //echo "<div class="div-table-row"><div class="div-table-col">";
+         $pdf->SetMargins( 0,0,5 );  // ซ้าย , บน , ขวา
+         $sumscbbank+=$m['pay_credit'];
+         $pdf->Write( 0  , iconv( 'UTF-8','cp874' , number_format($m['pay_credit'], 2, '.', ',').' / ' ) );
+         $pdf->SetMargins( 0,0,5 );
+        }   
+        
+        $pdf->Cell( 50  , 4 , iconv( 'UTF-8','cp874' , "รวม  ".number_format($sumscbbank, 2, '.', ',').'    บาท' ) , 0 , 1 );
+        $pdf->Ln(5);
+    }
+
+$arr_data4=$this->getpaid_data4;
+    $count4 = count($arr_data4);
+    if ($count4 > 0){ 
+      
+      $pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'ABA PAY   :' ) , 0 , 1 );
+        foreach($arr_data4 as $m){     
+         //echo "<div class="div-table-row"><div class="div-table-col">";
+         $pdf->SetMargins( 0,0,5 );  // ซ้าย , บน , ขวา
+         $sumaba+=$m['pay_credit'];
+         $pdf->Write( 0  , iconv( 'UTF-8','cp874' , number_format($m['pay_credit'], 2, '.', ',').' / ' ) );
+         $pdf->SetMargins( 0,0,5 );
+        }   
+        
+        $pdf->Cell( 50  , 4 , iconv( 'UTF-8','cp874' , "Total  ".number_format($sumaba, 2, '.', ',').'    USD' ) , 0 , 1 );
+        $pdf->Ln(5);
+    }
+     
+    
+     
+    
+    $sum_bank = $sumkbank+$sumbblbank+$sumscbbank+$sumaba;
+    $sum_count = $count+$count2+$count3+$count4;
+  
+    if ($sum_bank > 0 and $sum_count > 0){
+   // $pdf->Ln(5);    
+    $pdf->Cell( 50  , 4 , iconv( 'UTF-8','cp874' ,'************* รวมทั้งหมด '.$sum_count.'   ฉบับ' ) , 0 , 1 );    
+    $pdf->Cell( 50  , 4 , iconv( 'UTF-8','cp874' ,'************* รวมเป็นเงิน '.number_format($sum_bank, 2, '.', ',')."  บาท" ) , 0 , 1 );  
+    $pdf->Ln(5);
+    //echo "************* รวมทั้งหมด ".$sum_count."  ฉบับ <br>" ;
+   // echo "************* รวมเป็นเงิน ".number_format($sum_bank, 2, '.', ',')."  บาท";
+    }
+    
+
+$line2="*******************************************************************";
+$pdf->Ln(2);
+$pdf->Cell(0,3,$line);
+$pdf->Ln(3);
+
+$arr_bill=$this->getbill_datano;
+foreach($arr_bill as $b){ 
+   /* if ($b['doc_tp'] =="SL"){
+            
+            $pdf->Cell( 15  , 4 , iconv( 'UTF-8','cp874' , 'เลขที่บิลอย่างย่อ' ) , 0 , 1 );  
+            $pdf->SetFont('CordiaNew','',10);
+            $pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , $b['min(`doc_no`)'].' - '. $b['max(`doc_no`)'].' = '.$b['count(`doc_no`)'].'  ฉบับ') , 0 , 1 ,'L');
+   }elseif ($b['doc_tp'] =="DN") {
+       
+       $pdf->Cell( 15  , 4 , iconv( 'UTF-8','cp874' , 'ใบส่งสินค้า' ) , 0 , 1 );        
+       $pdf->SetFont('CordiaNew','',10);
+       $pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , $b['min(`doc_no`)'].' - '. $b['max(`doc_no`)'].' = '.$b['count(`doc_no`)'].'  ฉบับ') , 0 , 1 ,'L');
+   }*/
+    $pdf->SetFont('CordiaNew','U',10);
+    $pdf->Cell( 25  , 4 , iconv( 'UTF-8','cp874' , $b['remark'] ) , 0 , 1 );
+    $pdf->SetFont('CordiaNew','',10);
+    $pdf->Cell( 15  , 4 , iconv( 'UTF-8','cp874' , $b['count'].'  ฉบับ'),0,0 );
+    $pdf->Cell( 15  , 4 , iconv( 'UTF-8','cp874' , number_format($b['quantity'], 0, '.', ','). '  ชิ้น '),0,0 );
+    $pdf->Cell( 15  , 4 , iconv( 'UTF-8','cp874' , number_format($b['amount'], 0, '.', ','). '  บาท'),0,1 );
+       
+    $pdf->cell( 70  , 4 , iconv( 'UTF-8','cp874' , $b['min'].' - '.$b['max'] ) , 0 , 1 );
+    $pdf->Ln(3);  
+ }
+
+ 
+$arr_cancel=$this->getcancel_data;
+$countarr = 0;
+$amt = 0;
+
+$pdf->SetFont('CordiaNew','U',10);
+    $pdf->Cell( 25  , 4 , iconv( 'UTF-8','cp874' , 'บิลยกเลิก') , 0 , 1 );
+    $pdf->SetFont('CordiaNew','',10);
+    
+foreach($arr_cancel as $c){ 
+    $countarr = count($arr_cancel);
+    $amt += $c['amount'];
+    
+    $pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , $c['doc_no'] ),0,0 );
+    $pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , number_format($c['quantity'], 0, '.', ',')),0,0 ,'R' );
+    $pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , number_format($c['amount'], 2, '.', ','). '  บาท'),0,1,'R' );
+}    
+
+    $pdf->Ln(3);  
+ 
+    $pdf->Cell( 25  , 4 , iconv( 'UTF-8','cp874' , '******* รวม '),0,0 );
+    $pdf->Cell( 13  , 4 , iconv( 'UTF-8','cp874' , $countarr. ' บิล '),0,0 );
+    $pdf->Cell( 27  , 4 , iconv( 'UTF-8','cp874' , '  เป็นเงิน   '.number_format($amt, 2, '.', ','). '  บาท'),0,1,'R');
+    
+
+$pdf->Cell(0,3,$line,0,1);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'รายละเอียดส่วนลดสมาชิก  :' ) , 0 , 1 );
+$pdf->SetFont('CordiaNew','',10);
+$arr_mem5=$this->getmember5_dis_data;
+foreach($arr_mem5 as $m){
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'ส่วนลดสมาชิก 5%' ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $this->getmember5_count_data) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($m['sum_discount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+    
+}
+
+$arr_mem15=$this->getmember15_dis_data;
+foreach($arr_mem15 as $m){
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'ส่วนลดสมาชิก 15%' ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $this->getmember15_count_data) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($m['sum_discount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+    
+}
+
+$arr_mem15_10=$this->getmember15_10_dis_data;
+foreach($arr_mem15_10 as $m){
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'ส่วนลดสมาชิก 15% + 10%' ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $this->getmember15_10_count_data) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($m['sum_discount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+    
+}
+
+
+$arr_mem25=$this->getmember25_dis_data;
+foreach($arr_mem25 as $m){
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'ส่วนลดสมาชิก 25%' ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $this->getmember25_count_data) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($m['sum_discount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+    
+}
+
+
+$arr_mem50=$this->getmember50_dis_data;
+foreach($arr_mem50 as $m){
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'คูปองพนักงานส่วนลด 50%' ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $this->getmember50_count_data) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($m['sum_net_amt'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+    
+}
+
+$pdf->Cell(0,3,$line,0,1);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'รายละเอียดส่วนลดโปรโมชั่น  :' ) , 0 , 1 );
+$pdf->SetFont('CordiaNew','',10);
+
+
+$arr_disc=$this->disc_data;
+foreach($arr_disc as $m){
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'ส่วนลดโปรโมชั่น' ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $this->count_discount_trn2) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($m['sum_discount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+    
+}
+
+$arr_coupon_disc=$this->coupon_disc_data;
+foreach($arr_coupon_disc as $m){
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , 'คูปองส่วนลด' ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $this->count_coupon_discount) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($m['sum_discount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+    
+}
+
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'BIRTHDAY' ) , 0 , 1 );
+$pdf->SetFont('CordiaNew','',10);
+
+$arr_newbirth=$this->newbirth_data;
+foreach($arr_newbirth as $m){     
+  switch ($m['promo_code']) {
+    case "OM02071113":
+        $code = "25%  2500.-";
+        break;
+    case "OM02081113":
+        $code =  "35%  2000.-";
+        break;
+    case "OM02091113":
+        $code =  "35%  3000.-";
+        break;
+    case "OX02651014":
+        $code = "25%  2500.-";
+        break;
+    case "OX02671014":
+         $code =  "35%  2000.-";
+        break;
+    case "OX02691014":
+         $code =  "35%  3000.-";
+        break;            
+	}
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , "บิลใช้สิทธิ์วันเกิด   ". $code ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $m['count']) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($m['amount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+    
+}
+
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'Point มาตรฐาน' ) , 0 , 1 );
+$pdf->SetFont('CordiaNew','',10);
+
+ $arr_pointdata=$this->point_data;
+    foreach($arr_pointdata as $p){     
+    
+    switch ($p['promo_code']) {
+    case "STKER1":
+        $pcode = "50 คะแนน";
+        break;
+    case "STKER2":
+        $pcode = "100 คะแนน";
+        break;
+    case "STKER3":
+        $pcode = "150 คะแนน";
+        break;
+    case "STKER4":
+        $pcode = "200 คะแนน";
+        break;
+    case "STKER5":
+        $pcode = "250 คะแนน";
+        break;
+	}
+
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , $pcode ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $p['count']) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($p['amount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+}
+
+
+
+ $arr_new_pointdata=$this->newpoint_data;
+ if($arr_new_pointdata){
+ $pdf->SetFont('CordiaNew','B',10);
+ $pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'New Point มาตรฐาน' ) , 0 , 1 );
+ $pdf->SetFont('CordiaNew','',10);
+ }
+    foreach($arr_new_pointdata as $np){     
+    
+    switch ($np['promo_code']) {
+    case "OM19180415":
+        $npcode = "50 คะแนน + 500 บาท";
+        break;
+    case "OM19190415":
+        $npcode = "100 คะแนน + 1,000 บาท";
+        break;
+    case "OM19200415":
+        $npcode = "150 คะแนน + 2,000 บาท";
+        break;
+    case "OM19210415":
+        $npcode = "200 คะแนน + 3,000 บาท";
+        break;
+    case "OM19220415":
+        $npcode = "250 คะแนน + 4,000 บาท";
+        break;
+	}
+
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , $npcode ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $np['count']) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' ,number_format($np['amount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+}
+
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'Bill' ) , 0 , 1 );
+$pdf->SetFont('CordiaNew','',10);
+
+$arr_billdata=$this->bill02_data;
+foreach($arr_billdata as $bill){     
+$pdf->Cell( 30  , 4 , iconv( 'UTF-8','cp874' , $bill['application_id'] ) , 0 , 0 );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , $bill['count']) , 0 , 0 ,'R' );
+$pdf->Cell( 20  , 4 , iconv( 'UTF-8','cp874' , number_format($bill['amount'], 2, '.', ',').'  บาท' ) , 0 , 1,'R' );    
+    
+}
+
+$pdf->Ln(3);
+$pdf->Cell(0,3,$line,0,1);
+$pdf->Ln(3);
+
+$pdf->Cell( 28  , 4 , iconv( 'UTF-8','cp874' , 'จำนวน EDC  =  '.$sum_count ) , 0 , 0 );
+$pdf->Ln(12);
+
+$pdf->Cell( 28  , 4 , iconv( 'UTF-8','cp874' , 'ลายเซ็นต์พนักงานขาย  :  __________________________________' ) , 0 , 0 );
+
+$pdf->Ln(20);
+$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , '.' ) , 0 , 0 );
+//$pdf->Output();
+$name='printreport.pdf';
+$output="/var/www/pos/htdocs/report/printreport/".$name;
+//$pdf->Output($output,'F');
+@chmod($output,0777); 
+
+if(@file_exists($output)){
+		 shell_exec("rm $output");
+		@unlink($output);
+	}
+ 
+$pdf->Output($output,'F'); 
+shell_exec("lp -o media=Letter $output");
+	
+
+?>
+
+<script type="text/javascript">
+//self.close();
+</script>
+		

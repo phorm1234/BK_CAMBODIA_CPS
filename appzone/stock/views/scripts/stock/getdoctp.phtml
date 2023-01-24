@@ -1,0 +1,32 @@
+<?php 
+$data=$this->data;
+?>
+<form name="frm_inv" id="frm_inv">
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+  <tr>
+  	<td height="25" width="3%" background="/stock/img/bg_header_blue.gif" align="center">#</td>
+    <td height="25" background="/stock/img/bg_header_blue.gif" align="center">วันที่เอกสาร</td>
+    <td background="/stock/img/bg_header_blue.gif" align="center">เลขที่เอกสาร</td>
+    <td background="/stock/img/bg_header_blue.gif" align="center">เลขที่เอกสารอ้างอิง</td>
+    <td background="/stock/img/bg_header_blue.gif" align="center">จำนวน</td>
+  </tr>
+ <?php 
+ $i=1;
+ foreach($data as $val){
+ 	if($i%2){$color="#eaebeb";}else{$color="#f2f3f3";}
+		 $conv_date=explode("-",$val['reg_date']);
+		 $conv_date=$conv_date[2]."/".$conv_date[1]."/".$conv_date[0];
+		 ?>
+		  <tr bgcolor="<?php echo $color;?>">
+		  	<td align="center" height="20"><input type="radio" name="getinv" id="getinv" value="<?php echo $val['doc_no'];?>" <?php if($i==1){echo "checked='checked'";}?> ondblclick="return dbclick();"></td>
+		    <td align="center" height="20"><?php if(!empty($val['reg_date'])){echo $conv_date;}?></td>
+		    <td align="center"><?php if(!empty($val['doc_no'])){echo $val['doc_no'];}?></td>
+		    <td align="center"><?php if(!empty($val['refer_doc_no'])){echo $val['refer_doc_no'];}?></td>
+		    <td align="center"><?php if(!empty($val['quantity'])){echo number_format($val['quantity'], 0, '.', ',');}?></td>
+		  </tr>
+		 <?php 
+ 	$i++;
+ }
+ ?>
+</table>
+</form>

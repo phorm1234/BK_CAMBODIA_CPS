@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Receive</title>
+<link href="/sales/css/receive/bootstrap.css" rel="stylesheet">
+<link href="/sales/css/receive/bootstrap-responsive.css" rel="stylesheet">
+<link href="/sales/css/receive/jquery.dataTables.css" rel="stylesheet">
+<script src="/sales/js/js_receive/jquery-2.1.1.min.js" type="text/javascript"></script>
+<script src="/sales/js/js_receive/jquery.dataTables.js" type="text/javascript"></script>
+<script src="/sales/js/js_receive/bootstrap-modal.js" type="text/javascript"></script>
+<script src="/sales/js/js_receive/bootstrap-transition.js" type="text/javascript"></script>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+    $('#myTable').dataTable();
+	$("#bar").focus();	
+});
+
+function showdetail(id){
+	if(id == ""){
+		alert("ไม่พบรหัส");
+	}else{
+		$.ajax({type: "POST",url: "/sales/inventory/showdetailreg",data:{id:id},success:
+			function(data){
+				if(data !="n"){
+					//show_detail_box(id);
+					//$("#head_detail").html(data);
+					//show_detail_box(id);	
+				}else{
+					alert("fail");
+				}
+			}
+		});
+	}
+}
+
+
+function save_qty(){
+		var bar = $("#bar").val();
+		var qty = $("#qty").val();
+		if(bar == ""){
+			alert("กรุณาใส่รหัสบาร์โค๊ด");
+			$("#bar").focus();
+		}else if(qty == parseInt(qty)){
+			
+			//alert(qty);
+			$.ajax({type: "POST",url: "/sales/inventory/addheadreg",data:{bar:bar,qty:qty},success:
+				function(data){
+					if(data!="n"){
+						alert("บันทึกข้อมูลสำเร็จ");
+						$("#bar").val("");
+						$("#qty").val("");
+						show_reg();
+					}else{
+						alert("fail");
+					}
+				}
+			});
+		}else{
+			alert("กรุณาใส่ข้อมูลเป็นตัวเลข");
+			$("#qty").focus();
+		}
+}
+
+function update_qty(id,id_update){
+		var id_qty = $("#id_qty_"+id+"").val();
+		if(id_qty == parseInt(id_qty)){
+				$.ajax({type: "POST",url: "<?php echo $this->url?>/inventory/updateqty",data:{id:id_update,qty:id_qty},success:
+					function(data){
+						if(data!="n"){
+							alert("บันทึกข้อมูลสำเร็จ");
+							show_reg();
+						}else{
+							alert("fail");
+						}
+					}
+				});
+		}else{
+			alert("กรุณาใส่ข้อมูลเป็นตัวเลข");
+		}
+}
+
+function enterkey(event,type){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox  
+	var bar = $("#bar").val();
+	var qty = $("#qty").val(); 
+	if (keyCode == 13) {
+		//save_qty();
+		if(type == "bar"){
+			if(bar == ""){
+				alert("กรุณาใส่บาร์โค๊ด");
+			}else{
+				$("#qty").focus();
+				//save_qty(bar,qty);
+			}
+		}
+		if(type == "qty"){
+			//alert("qty");
+			if(qty == ""){
+				alert("กรุณากรอกจำนวนเป็นตัวเลข");
+			}else if(isNaN(qty)){
+				alert("กรุณากรอกจำนวนเป็นตัวเลข");
+				$("#qty").focus();
+			}else{
+				save_qty();
+			}
+		}
+	}
+}
+
+function show_qty(id,bar,qty){
+	$("#id").val(id);
+	$("#id_bar").html(bar);
+	$("#id_qty").val(qty);
+}
+
+function process(event,chk,id){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	var val =$("#val").val();
+	keyCode = event.which; // Firefox   
+	if (keyCode == 13) {
+		add_detail(id,val);
+	}
+}
+
+function add_detail(id,val){
+	if(val==""){
+		alert("กรุณาใส่ข้อมูล"); 
+	}else{
+		alert(val);
+		$.ajax({type: "POST",url: "<?php echo $this->url?>/inventory/adddetail",data:{id:id,val:val},success:
+			function(data){
+				if(data!="n"){
+					show_detail_box(id);
+					$("#val").val("");	
+				}else{
+					alert("fail");
+				}
+			}
+		});
+	}
+}
+
+function show_detail_box(id){
+	if(id==""){
+		alert("กรุณาใส่ข้อมูล"); 
+	}else{
+		$.ajax({type: "POST",url: "<?php echo $this->url?>/inventory/detailreg",data:{id:id},success:
+			function(data){
+				//alert(data);
+				if(data != ""){
+					$("#head_id").val(id);
+					$("#detailbox").html(data);	
+				}else{
+					$("#detail_"+id+"").html(data);
+				}
+			}
+		});
+	}
+}
+
+function show_reg(){
+	var id="";
+	$.ajax({type: "POST",url: "<?php echo $this->url?>/inventory/showitem",data:{id:id},success:
+			function(data){
+				//alert(data);
+				if(data != ""){
+					$("#body").html(data);	
+				}else{
+					alert("fail");
+				}
+			}
+		});
+}
+
+function print_data(id){
+	if(id == ""){
+		alert("ไม่มีรหัส");
+	}else{
+	$.ajax({type: "POST",url: "<?php echo $this->url?>/inventory/genpdf",data:{id:id},dataType: 'json',success:
+			function(data){
+				if(data.status == 'success'){
+								printWindow = window.open(
+								  ""+data.name+"",'_blank'
+								  );
+								printWindow.window.print();
+				}else{
+					alert("fail");
+				}
+			}
+		});
+	}
+}
+
+/*document.getElementById("btnPrint").onclick = function () {
+    printElement(document.getElementById("printThis"));
+}*/
+
+
+function printElement(elem) {
+    var domClone = elem.cloneNode(true);
+    
+    var $printSection = document.getElementById("printSection");
+    
+    if (!$printSection) {
+        var $printSection = document.createElement("div");
+        $printSection.id = "printSection";
+        document.body.appendChild($printSection);
+    }
+    
+    $printSection.innerHTML = "";
+    $printSection.appendChild(domClone);
+    window.print();
+}
+
+</script>
+<style type="text/css">
+@media screen {
+  #printSection {
+      display: none;
+  }
+}
+
+@media print {
+  body * {
+    visibility:hidden;
+  }
+  #printSection, #printSection * {
+    visibility:visible;
+  }
+  #printSection {
+    position:absolute;
+    left:0;
+    top:0;
+  }
+}
+</style>
+</head>
+<body>
+
+<div style="width:95%; margin:auto">
+<h2>คืนกล่องสินค้า</h2>
+   <div style="background:#FFEFDF; padding:5px; margin-bottom:10px;border-radius: 15px;">
+   <label>เพิ่มข้อมูล</label><input type="text" id="bar" value="" onKeyPress="return enterkey(event,'bar');" />
+   <label>จำนวน</label><input type="text" id="qty" value="" onKeyPress="return enterkey(event,'qty');" />
+   <input type="button" class="btn btn-primary" value="บันทึก" onclick="save_qty();" />
+   </div>
+   <table class="table table-bordered" id="myTable">
+   <thead>
+   		<tr>
+        	<th>#</th>
+            <th>Company</th>
+            <th>Branch ID</th>
+            <th>Doc No.</th>
+            <th>Refer.</th>
+            <th>Qty.</th>
+            <th>Manage</th>
+        </tr>
+   </thead>
+   <tbody id="body">
+   <?php foreach($this->arr as $index){  ?>
+        <tr>
+        	<td>#</td>
+            <td><?php echo $index['company_id'];?></td>
+            <td><?php echo $index['branch_id'];?></td>
+            <td><?php echo $index['doc_no'];?></td>
+            <td><?php echo $index['refer_doc_no'];?></td>
+            <td><?php echo number_format($index['quantity']);?></td>
+            <td><!--<i class="icon-edit" title="เพิ่มข้อมูล" onclick="showdetail('<?php echo $index['id'];?>');"></i>-->
+            <a href="#myModal_<?php echo $index['id'];?>" role="button" class="btn" data-toggle="modal">
+            <i class="icon-edit" title="เพิ่มข้อมูล"></i>
+            </a>
+             <a href="#" role="button" class="btn" data-toggle="modal" onclick="print_data('<?php echo $index['id_dr2'];?>');">
+            <i class="icon-print" title="พิมพ์"></i>
+            </a>
+            </td>
+            <!-- Button to trigger modal -->
+             <div id="myModal_<?php echo $index['id'];?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h5 id="myModalLabel">Refer: <span id="id_bar"><?php echo $index['refer_doc_no'];?></span></h5>
+  </div>
+  <div class="modal-body">
+    <p>
+    <input type="hidden" id="id" value="" />
+   	<label>จำนวน: </label><input type="text" id="id_qty_<?php echo $index['id'];?>" value="<?php echo number_format($index['quantity'],'0','.','');?>" />
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+     <button class="btn btn-primary" onclick="update_qty('<?php echo $index['id'];?>','<?php echo $index['id_dr2'];?>');">Save changes</button>
+  </div>
+</div>
+        </tr>
+  <?php } ?>    
+   </tbody>
+   </table>
+</div>
+<div style="width:60%; margin:auto; background:#DAF4FE;">
+	<div id="head_detail" style="margin:4px">	
+    </div>
+    <input type="hidden" id="head_id" value="" />
+    <div id="detailbox">
+    </div>
+  <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  </div>
+  <div id="printThis">
+  <div class="modal-body" id="detail_print">  
+   
+  </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+     <button class="btn btn-primary" id="btnPrint" onclick="printElement(this);">พิมพ์</button>
+  </div>
+</div>
+</div>   
+</body>
+</html>

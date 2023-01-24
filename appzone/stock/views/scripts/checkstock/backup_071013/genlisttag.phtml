@@ -1,0 +1,69 @@
+<script>
+viewgenlisttag();
+jQuery(document).bind('keydown', 'f1',
+function (evt){
+	print_list_tag();
+});
+
+function add_shelf_audit(){
+	var txt="ยืนยันการการเพิ่ม Shelf Audit";
+	jConfirm(txt, 'ยืนยันการทำงาน', function(r) {
+		if(r==true){
+			$( "#dialog_process" ).html("<center><font color='#059562'><img src='/stock/img/ajax-loader.gif' border='0' align='absmiddle'><br><b>กำลังสร้าง Shelf Audit...</b></font></center>");
+			$( "#dialog_process" ).dialog( "open" );
+			$.ajax({type: "POST",url: "/stock/checkstock/genshelfaudit",data:{},success:
+				function(data){
+					if(data=="Y"){
+						$( "#dialog_process" ).dialog( "close" );
+						viewgenlisttag();
+					}else{
+						jAlert('เกิดความผิดผลาด ไม่สามารถทำรายการได้', 'แจ้งเตือน', function(r){return false;});
+					}
+				}
+			}); 
+		}
+	});
+}
+
+</script>
+<?php 
+$doc_no=$this->doc_no;
+$shelf=$this->shelf;
+?>
+<div id="dialog_get_docno" title="เลขที่เอกสารตรวจนับสินค้า"></div>
+<div id="dialog_process" title="Process"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="sub_text_head">Inventory Tag </td>
+  </tr>
+  <tr>
+    <td height="30"><hr size="1"></hr></td>
+  </tr>
+  <tr>
+    <td>
+    <table width="100%" border="0" cellspacing="2" cellpadding="2">
+    	<tr bgcolor="#f5f4f4">
+    		<td width="1%"><input type="checkbox" name="checker" id="checker" onclick="jqCheckAll2( this.id, 'myCB' )" checked="checked"></td>
+    		<td>เลือก/ยกเลิก ทั้งหมด</td>
+    		<td align="right">
+    		<a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return print_list_tag();"><span class="ui-icon ui-icon-gear"></span>รันและพิมพ์เอกสาร (F1)</a>
+    		<a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return print_doc_no();"><span class="ui-icon ui-icon-print"></span>พิมพ์จากเลขที่เอกสาร </a>
+    		<a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return print_shelf();"><span class="ui-icon ui-icon-print"></span>พิมพ์ Shelf</a>
+    		<a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return add_shelf_audit();"><span class="ui-icon ui-icon-gear"></span>เพิ่ม Shelf Audit</a>
+    		</td>
+    	</tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td height="30"><hr size="1"></hr></td>
+  </tr>
+  <tr>
+    <td>
+   	<div id="viwgenlisttag"></div>
+	</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>

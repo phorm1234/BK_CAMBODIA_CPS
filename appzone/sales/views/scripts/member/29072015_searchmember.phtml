@@ -1,0 +1,39 @@
+<style type="text/css">
+	a.sel_cardlost{
+		color:#0000ff;
+	}
+</style>
+<table width="100%" border="0"  cellpadding="3" cellspacing="1" bgcolor="#cccccc">
+<tr bgcolor="#80A29E">	
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">รหัส</span></td>
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">ชื่อ-นามสกุล</span></td>
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">เบอร์โทรศัพท์</span></td>	
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">ที่อยู่</span></td>	
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">หมายเหตุ</span></td>
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">วันสมัคร</span></td>
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">วันหมดอายุ</span></td>
+	</tr>
+	<?php	
+		$i=0;	
+		foreach($this->arr_json as $data){
+			$fullname=$data['name']."&nbsp;".$data['surname'];
+			//*WR22092014
+			$address=$data['address']."&nbsp;".$data['sub_district'];
+			$address.=$data['district']."&nbsp;".$data['province_name'];			
+			$rows_json=json_encode($data, JSON_HEX_QUOT | JSON_HEX_APOS);			
+			($i%2==0)?$bg_color="#f2f2f2":$bg_color="#e7e7e7";
+			?>
+				<tr bgcolor="<?php echo $bg_color;?>">	
+					<td align="center"><a href="#" id="<?php echo $data['member_no'];?>" idjson='<?php echo $rows_json;?>'   class="sel_cardlost"><?php echo $data['member_no'];?></a></td>
+					<td align="center"><?php echo $fullname;?></td>
+					<td align="center"><?php echo $data['mobile_no'];?></td>
+					<td align="left"><?php echo $address;?></td>
+					<td align="center"><?php echo $data['remark'];?></td>
+					<td align="center"><?php echo $data['apply_date'];?></td>
+					<td align="center"><?php echo $data['expire_date'];?></td>
+				</tr>
+			<?php 
+			$i++;
+		} 
+	?>
+</table>

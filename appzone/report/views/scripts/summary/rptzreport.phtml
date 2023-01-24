@@ -1,0 +1,299 @@
+<?php	
+	include(FPDF_PATH."/fpdf.php");
+        $hl=5;
+        $hl1=4;
+        $hl2=3;
+        $l2br=4;
+        $maxdoc=72;
+        $logo="/ssup_logo.gif";
+        $pdf=new FPDF('P','mm','a23');
+        $pdf->SetThaiFont();
+        $pdf->AddPage();    
+        $startY=2;
+        $startX=0;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->SetMargins(0,2,0); 
+        $pdf->SetAutoPageBreak("off",1);  
+        $pdf->Image(LOGO_PATH.$logo,20,0,35);
+        
+        $startY+=10;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);
+        $pdf->SetFont('CordiaNew','B',13); 
+        $str_copy="";
+        if($this->act=='reprint'){        	
+        	$pdf->Cell(2,$hl,"*",0,0,'L',0); 
+        	$str_copy="(COPY)";
+        }      
+       
+       	$pdf->Cell($maxdoc,$hl,"  SSUP (CAMBODIA) CO.LTD.",0,0,'C',0);
+       	$startY+=5;
+       	$pdf->SetY($startY);
+       	$pdf->SetX($startX);
+       
+		$str_cancel='';
+		if($this->arr_h[0]['flag']=='C'){
+			$str_cancel='<ยกเลิก>';
+			$str_cancel=iconv('UTF-8','cp874',$str_cancel);
+		}       
+       
+		
+		$pdf->Cell($maxdoc,$hl2,"CUTE PRESS",0,0,'C',0);
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->Cell($maxdoc,$hl2,"( Z Report $str_copy)",0,0,'C',0);
+        $startY+=$l2br;
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+
+        $pdf->SetFont('CordiaNew','B',11);
+        $pdf->Cell(18,$hl1,"REPORT DATE :",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $arr_docdate=explode("-",date("Y-m-d"));
+        $doc_date_show=$arr_docdate[2]."/".$arr_docdate[1]."/".$arr_docdate[0];
+        $pdf->Cell(29,$hl1,"PRINT DATE : ".$doc_date_show,0,0,'R',0);
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(43,$hl1,"REPORT TIME :",0,0,'L',0);
+        $pdf->Cell(29,$hl1,date("H:i:s"),0,0,'R',0);
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"SETTLEMENT",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"DAILY",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"Z",0,0,'L',0);
+        $pdf->Cell(29,$hl1,$this->settlement_number,0,0,'R',0);
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"NUMBER OF CUSTOMERS",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,$this->num_customer,0,0,'R',0);
+        
+      	$startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"SALES DATE",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,$this->sale_date,0,0,'R',0);
+        
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"SALES ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"QTY",0,0,'L',0);       
+        $pdf->Cell(29,$hl1,number_format($this->sale_quantity,2),0,0,'R',0);		
+		
+		
+		$startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1," ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);       
+        $pdf->Cell(29,$hl1,number_format($this->sale_amount,2,".",""),0,0,'R',0);
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"DISCOUNT",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,number_format($this->discount_day,2,".",""),0,0,'R',0);
+		
+		
+		
+		$startY+=$hl;
+		$pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->Cell($maxdoc,1,"------------------------------------------------------------------------------------------",0,0,'L',0);
+		
+		
+		$startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"GROSS SALES ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"NO",0,0,'L',0);       
+        $pdf->Cell(29,$hl1,number_format($this->sale_quantity,2),0,0,'R',0);
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1," ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,number_format($this->sale_net_amt,2,".",""),0,0,'R',0);
+        
+        $startY+=$hl;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell($maxdoc,1,"------------------------------------------------------------------------------------------",0,0,'L',0);
+		
+        $vat_xx=($this->sale_net_amt*10)/110;
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"VAT ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,number_format($vat_xx,2),0,0,'R',0);
+        
+        $startY+=$hl;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell($maxdoc,1,"------------------------------------------------------------------------------------------",0,0,'L',0);
+        
+        $net_sales_xx=$this->sale_net_amt-$vat_xx;
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"NET SALES ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,number_format($net_sales_xx,2),0,0,'R',0);
+                
+//         $startY+=$l2br;
+//         $pdf->SetY($startY);
+//         $pdf->SetX($startX);
+//         $pdf->Cell(18,$hl1,"NET TOTAL ",0,0,'L',0);
+//         $pdf->Cell(20,$hl1,"",0,0,'L',0);
+//         $pdf->Cell(5,$hl1,"",0,0,'L',0);
+//         $pdf->Cell(29,$hl1,number_format($this->bill_total,2),0,0,'R',0);
+        
+//         $startY+=$l2br;
+//         $pdf->SetY($startY);
+//         $pdf->SetX($startX);
+//         $pdf->Cell(18,$hl1," ",0,0,'L',0);
+//         $pdf->Cell(20,$hl1,"",0,0,'L',0);
+//         $pdf->Cell(5,$hl1,"",0,0,'L',0);
+//         $pdf->Cell(29,$hl1,number_format($this->sale_net_amt,2,".",""),0,0,'R',0);
+		
+		
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"CASH ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,number_format($this->pay_cash,2,".",""),0,0,'R',0);
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"CREDIT ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,number_format($this->pay_credit,2,".",""),0,0,'R',0);
+
+        if(sizeof($this->other_credit)>0){
+            foreach($this->other_credit as $data_sub){
+      
+                $startY+=$l2br;
+                $pdf->SetY($startY);
+                $pdf->SetX($startX);
+                $pdf->Cell(18,$hl1,$data_sub['description'],0,0,'L',0);
+                $pdf->Cell(20,$hl1,"",0,0,'L',0);
+                $pdf->Cell(5,$hl1,"",0,0,'L',0);
+                $pdf->Cell(29,$hl1,number_format($data_sub['amount'],2,".",""),0,0,'R',0);
+            }
+        }
+
+
+				
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"CHANGE ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,number_format($this->pay_cn,2,".",""),0,0,'R',0);
+        
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+        $pdf->Cell(18,$hl1,"CHECK ",0,0,'L',0);
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        $pdf->Cell(29,$hl1,number_format(0.00,2),0,0,'R',0);
+        
+		
+		
+// 		$startY+=$hl;
+// 		$pdf->SetY($startY);
+// 		$pdf->SetX($startX);
+// 		$pdf->Cell($maxdoc,$hl2,"------------------------------------------------------------------------------------------",0,0,'L',0);
+		
+		
+// 		$startY+=$l2br;
+// 		$pdf->SetY($startY);
+// 		$pdf->SetX($startX);
+// 		$pdf->Cell(18,$hl1,"TAX-AMT ",0,0,'L',0);
+// 		$pdf->Cell(20,$hl1,"",0,0,'L',0);
+// 		$pdf->Cell(5,$hl1,"",0,0,'L',0);
+// 		$pdf->Cell(29,$hl1,number_format($this->tax_amt,2),0,0,'R',0);
+		
+// 		$startY+=$l2br;
+// 		$pdf->SetY($startY);
+// 		$pdf->SetX($startX);
+// 		$pdf->Cell(18,$hl1,"TAX ",0,0,'L',0);
+// 		$pdf->Cell(20,$hl1,"",0,0,'L',0);
+// 		$pdf->Cell(5,$hl1,"",0,0,'L',0);
+// 		$pdf->Cell(29,$hl1,number_format($this->tax,2),0,0,'R',0);
+	
+		$startY+=$hl;
+		$pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->Cell($maxdoc,$hl2,"------------------------------------------------------------------------------------------",0,0,'L',0);
+		
+		$startY+=$l2br;
+		$pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->Cell(18,$hl1,"GT ",0,0,'L',0);
+		$pdf->Cell(20,$hl1,"",0,0,'L',0);
+		$pdf->Cell(5,$hl1,"",0,0,'L',0);
+		$pdf->Cell(29,$hl1,number_format($this->gt,2,".",""),0,0,'R',0);
+		
+		$startY+=$l2br;
+		$pdf->SetY($startY);
+		$pdf->SetX($startX);
+		
+        $pdf->SetFont('CordiaNew','B',11);
+        $pdf->Cell($maxdoc,$hl1,".  ",0,0,'L',0);         
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 	
+        
+        $name='/billvatshort.pdf';
+	    $output=REPORT_PATH.$name;    	    
+	    @chmod(REPORT_PATH,0777);
+        // $pdf->Output();
+        // die;
+
+
+
+	    $pdf->Output($output,'F');
+		$print2ip=$this->arr_h[0]['print2ip'].":631";
+		if($this->arr_h[0]['print2ip']=='LOCAL'){
+			echo shell_exec("lp -o media=Letter $output");
+		}else{
+			echo shell_exec("lpr -H $print2ip $output");
+		}
+		if(@file_exists($output)){
+			echo shell_exec("rm $output");
+			//@unlink($output);
+		}
+?>

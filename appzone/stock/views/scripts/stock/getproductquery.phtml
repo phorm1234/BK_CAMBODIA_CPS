@@ -1,0 +1,45 @@
+<?php 
+$flag=$this->flag;
+$txt=$this->txt;
+?>
+<center>
+<table width="10%">
+	<tr>
+		<td><table id="flex1" style="display:none"></table></td>
+	</tr>
+</table>
+</center>
+<script type="text/javascript">
+var pWidth=(screen.width-(screen.width*(20/100)))-10;
+var pWidth=(screen.width-(screen.width*(2/100)))-10;
+var pWidth=(screen.width-(screen.width*(3/100)))-10;
+var txt="<?php echo $txt;?>";
+$("#flex1").flexigrid({
+	url: 'getdataproductquery?flag=<?php echo $flag;?>',
+	dataType: 'json',
+	colModel : [
+		{display: 'DATE', name : 'doc_date', width : 100, sortable : true, align: 'center'},
+		{display: 'DOCUMENT NO.', name : 'doc_no', width : 150, sortable : true, align: 'center'},
+		{display: 'PRODUCT', name : 'product_id', width : 140, sortable : true, align: 'left'},
+		{display: 'DESCRIPTION', name : 'product_name', width : 220, sortable : true, align: 'center'},
+		{display: 'PRICE', name : 'price', width : 100, sortable : true, align: 'center'},
+		{display: 'QUANTITY', name : 'quantity', width : 100, sortable : false, align: 'center'}
+		],
+	sortname: "doc_no",
+	sortorder: "desc",
+	usepager: true,
+	title: txt,
+	useRp: true,
+	rp: 30,
+	showTableToggleBtn: true,
+	width: pWidth,
+	onSubmit: addFormData,
+	height: 300
+});
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+</script>

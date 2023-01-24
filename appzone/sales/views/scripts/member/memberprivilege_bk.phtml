@@ -1,0 +1,103 @@
+     <style type="text/css">  
+			.tableNavMemberPriv
+				{
+					width:100%;
+					background:#333;
+				}
+			.tableNavMemberPriv ul
+				{
+					float:right;
+					width:100%;
+					margin:0;
+					padding:0;
+					border:1px solid #C9C9C9;
+				}
+         
+          .tableNavMemberPriv ul li{
+          		cursor:pointer;
+					list-style-type:none;
+					line-height:40px;
+					font-family:"PSLKittithadaBold","Garuda","Tahoma", "Geneva", "Arial", sans-serif;
+				
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#303030;
+					padding-left:1em;
+					
+					border-bottom:1px solid  #78777C;
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(     #D4D7E0,     #B0B0B0);;
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0,      #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.active {
+            cursor:pointer;
+          			list-style-type:none;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold", "Garuda", "Tahoma", "Geneva", "Arial", sans-serif;
+				
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#ffffff;/*#303030*/
+					padding-left:1em;
+					
+					border-bottom:1px solid  #000;/*78777C*/
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(#9DDCCF,#265541);
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          .promotion-label {
+          	 padding:0 0 0 35px;
+
+			}
+			.c_FF3333_img {
+				background: url(/sales/img/cancel-32x32.png) no-repeat  center left;
+			}
+			.c_66FF99_img {
+				background: url(/sales/img/icon_confirm_32x32.png) no-repeat  center left;
+			}
+			
+			.c_dfdfdf_img{
+				background: url(/sales/img/icon_hourglass_32x32.png) no-repeat  center left;				
+			}
+          
+          ul li.nokeyboard {
+            color: #999;
+            background:#0000ff;
+          }
+        </style>
+    <div class="tableNavMemberPriv">
+    	<ul>
+	        <?php 
+	        	//print_r($this->arr_memberpriv);
+	        	if(!empty($this->arr_promo)){ 
+		        	$i=1;
+		        	$str_promo="";
+		        	foreach($this->arr_promo as $data){
+		        		$data['promo_detail']=strip_tags($data['promo_detail']);
+		        		$rows_json=json_encode($data);
+		  				$id_tmp="n_".$i;		  				
+			  			echo "<li id='$id_tmp' name='$id_tmp'  idpromo='".$rows_json."'><div class='promotion-label c_".substr($data['promo_color'],1,6)."_img'>&nbsp;".$data['promo_code']."&nbsp;&nbsp;&nbsp;".$data['promo_name']."&nbsp;&nbsp;&nbsp;".$data['promo_detail']."</div></li>";  
+			  			$i++;
+		  			}//foreach	
+	        	}else{
+	        		echo "<li align='center' id='n_1' name='n_1' idpromo='nodata'>ไม่พบข้อมูล</li>";
+	        	}
+	        ?>
+	    </ul>
+     </div>

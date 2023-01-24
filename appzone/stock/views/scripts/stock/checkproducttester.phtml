@@ -1,0 +1,23 @@
+<?php
+$data=$this->data;
+$qty=$this->qty;
+if($qty<=0){
+	$status=array('status'=>'6','data'=>'');
+}else{
+	if($data[0]['onhand']=="" || $data[0]['onhand']==0){
+		$status=array('status'=>'0','data'=>'');
+	}else{
+		$sum_onhand=$data[0]['onhand']-$data[0]['qty_tmp'];
+		if($qty>$sum_onhand){
+			$status=array('status'=>'3','data'=>'');
+		}else{
+			$status=array('status'=>'4','data'=>'');
+		}
+	}
+}
+$ex=json_encode($status);
+echo $ex;
+?>
+
+
+

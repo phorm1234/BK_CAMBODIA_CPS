@@ -1,0 +1,120 @@
+<script  type="text/javascript" src="/sales/js/jquery-1.4.4.min.js"></script>
+<script  type="text/javascript" src="/sales/js/jquery-ui-1.8.10.custom.min.js"></script>
+<link href="/sales/css/themes/dark-hive/jquery-ui-1.8.9.custom.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">	
+function addPro() {
+	var promo_code=$("#promo_code").val();
+    $.get("/sales/setpromotion/addpro",{
+	      	    	promo_code:promo_code,
+	      	    	promo_des:$("#promo_des").val(),
+	      	    	promo_pos:$("#promo_pos").val(),
+	      	    	level:$("#level").val(),
+	      	    	process:$("#process").val(),
+	      	    	start_date:$("#start_date").val(),
+	      	    	end_date:$("#end_date").val(),
+	      	    	compare:$("#compare").val(),
+	      	    	check_repeat:$("#check_repeat").val(),
+	      	    	seq_pro:$("#seq_pro").val(),
+	      	    	product_id:$("#product_id").val(),
+	      	    	quantity:$("#quantity").val(),
+	      	    	type_discount:$("#type_discount").val(),
+	      	    	discount: $("#discount").val(),
+	      	    	weight: $("#weight").val(),
+	    	    	ran:Math.random()},function(data){
+	    	    		showlistpro(promo_code);
+
+    }); 
+}
+
+function showlistpro(promo_code) {
+    $.get("/sales/setpromotion/showlistpro",{
+	      	    	promo_code:promo_code,
+	    	    	ran:Math.random()},function(data){
+	    	    	$("#show_detailpro").html(data);	
+
+    }); 
+}
+
+</script>
+
+
+
+
+<form name="form1" method="post" action="">
+<table border="0">
+    <tr>
+      <td colspan="17">กำหนดโปรโมชั่น</td>
+    </tr>
+    <tr>
+      <td>รหัส</td>
+      <td>
+        <input name="promo_code" type="text" id="promo_code">
+      </td>
+      <td>&nbsp;</td>
+      <td colspan="14">ชื่อ
+        <input name="promo_des" type="text" id="promo_des" size="50">
+        <select name="promo_pos" id="promo_pos">
+          <option value="M" selected>M - โปรโมชั่นหลัก</option>
+          <option value="L">L - โปรโมชั่นท้ายบิล</option>
+        </select>
+      &nbsp;&nbsp;Level
+      <input name="level" type="text" id="level" size="8"> 
+      &nbsp;Process
+      <select name="process" id="process">
+        <option value="C" selected>C</option>
+        <option value="F">F</option>
+      </select></td>
+    </tr>
+    <tr>
+      <td>เริ่มใช้</td>
+      <td colspan="16">
+        <input name="start_date" type="text" id="start_date">
+      ถึง
+      <input name="end_date" type="text" id="end_date"> 
+      &nbsp;&nbsp;&nbsp;&nbsp;สถานะตัวแถม
+      <select name="compare" id="compare">
+        <option value="N" selected>N - ไม่เปรียบเทียบราคา</option>
+        <option value="L">L - ราคา&lt;สินค้าซื้อ</option>
+        <option value="G">G - ราคา&lt;=สินค้าซื้อ</option>
+      </select>
+      &nbsp;&nbsp;&nbsp;
+      <select name="check_repeat" id="check_repeat">
+        <option value="N" selected>N - ซ้ำกับตัวซื้อได้</option>
+        <option value="Y">Y - ห้ามซ้ำกับตัวซื้อ</option>
+        </select>
+&nbsp;&nbsp;      </td>
+    </tr>
+    <tr>
+      <td>Seq</td>
+      <td><input name="seq_pro" type="text" id="seq_pro" size="5">
+</td>
+      <td>รหัสสินค้า</td>
+      <td><input name="product_id" type="text" id="product_id" size="15"></td>
+      <td>&nbsp;
+      </td>
+      <td>จำนวน</td>
+      <td><input name="quantity" type="text" id="quantity" size="8">
+      </td>
+      <td>&nbsp;</td>
+      <td>ประเภทโปร</td>
+      <td><select name="type_discount" id="type_discount">
+        <option value="Normal">Normal - ซื้อ</option>
+        <option value="Price">Price - แลกซื้อ(บาท)</option>
+        <option value="Percent">Percent - กำหนดส่วนลด(%)</option>
+        <option value="Free">Free - ฟรี</option>
+      </select>
+      </td>
+      <td>&nbsp;</td>
+      <td>ราคา</td>
+      <td><input name="discount" type="text" id="discount"></td>
+      <td>&nbsp;</td>
+      <td>weight</td>
+      <td><input name="weight" type="text" id="weight" value="1" size="8"></td>
+      <td><input type="button" name="Submit" value="Add" onClick='addPro();'></td>
+    </tr>
+    <tr>
+      <td colspan="17"><div id='show_detailpro'></div></td>
+    </tr>
+  </table>
+
+</form>

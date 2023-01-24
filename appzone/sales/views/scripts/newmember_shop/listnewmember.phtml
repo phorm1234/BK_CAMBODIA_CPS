@@ -1,0 +1,95 @@
+<title>New member</title>
+	<link href='/sales/css/style.css' rel='stylesheet' type='text/css'>
+	<link href="/sales/css/themes/dark-hive/jquery-ui-1.8.18.custom.css" rel="stylesheet" type="text/css"/>
+	<link href="/sales/js/plugin/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen"/>
+	<link href="/sales/css/flexigrid/flexigrid.css" rel="stylesheet" type="text/css">	
+	<script type="text/javascript" src="/sales/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="/sales/js/jquery-ui-1.8.18.custom.min.js"></script>	
+	<script type="text/javascript" src="/sales/js/plugin/jquery.jclock.js.txt"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.alerts.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/flexigrid.js"></script>
+	<script type="text/javascript" src="/sales/js/util/posglobal.js"></script>
+	<script type="text/javascript" src="/sales/js/shortcut.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.maskMoney.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.numeric.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.enabledisable.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.navigate.js"></script>	
+	<script type="text/javascript" src="/sales/js/plugin/blinky.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.center.js"></script>
+	 <link href='/sales/css/datatables/jquery.dataTables.css' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.dataTables.js"></script>
+	<!-- Joke -->
+
+	<script type="text/javascript" src="/sales/js/promotion/promotion.js?<?php echo date("Y-m-d H_i_s");?>"></script>
+
+
+	<!-- Joke -->
+
+	</script>	
+	
+<style type="text/css">
+<!--	
+	#newspaper-prob{font-family:"Lucida Sans Unicode", "Lucida Grande", Sans-Serif;font-size:14px;width:95%;
+	text-align:left;border-collapse:collapse;border:1px solid #FFFFFF;margin:20px;}
+	#newspaper-prob th{font-weight:bold;font-size:16px;color:#174b84;padding:10px 10px 10px;background:#dfe8f0;}
+	#newspaper-prob tbody{background:#edeeef;}
+	#newspaper-prob td{color:#174b84;border-top:1px dashed #d3dae1;padding:3px;}
+	#newspaper-prob tbody tr:hover td{color:#339;background:#e0e7ee;}
+	-->
+</style>
+<body onload="listnewmembersub('today');">
+<div id='dialog-lastpro_play'>
+<div id='lastpro_play'></div>
+<div id='fromchkmobile'></div>
+</div>
+
+
+<center>
+Select Find : 
+<select name="field_search" id='field_search'>
+<option value="doc_date">DocDate</option>
+<option value="doc_no">DocNo</option>
+<option value="member_id">MemberID</option>
+<option value="idcard">ID CARD</option>
+</select>
+
+<input type='text' id='var_search' name='var_search' onKeyDown="if (event.keyCode == 13){search_newmember(document.getElementById('field_search').value,document.getElementById('var_search').value,'trn_diary1');}">
+<input type='button' value=' Search ' onclick="search_newmember(document.getElementById('field_search').value,document.getElementById('var_search').value,'trn_diary1');">
+<br>
+<input type='hidden' id='varday_hidden' name='varday_hidden' >
+<div >
+<!--	
+<span style='color:#CC9933;cursor:pointer;' >Search : &nbsp;&nbsp;&nbsp;</span>
+<a href="#" style='color:#3399FF;cursor:pointer;' onclick="listnewmembersub('today');">สมัครวันนี้</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+<a href="#" style='color:#3399FF;cursor:pointer;' onclick="listnewmembersub('day3');">ย้อนหลัง 3 วัน</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+<a  href="#" style='color:#3399FF;cursor:pointer;' onclick="listnewmembersub('month3');">ย้อนหลัง 3 เดือน</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+<a  href="#" style='color:#99CC33;cursor:pointer;' onclick="listnewmembersub('finish');">บันทึกแล้ว</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+<a  href="#" style='color:#FF0000;cursor:pointer;' onclick="listnewmembersub('wait');">รอการบันทึก</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+<a  href="../newmember/listnewmember" style='color:#FF0000;cursor:pointer;' onclick="listnewmembersub('wait');">ส่งข้อมูลเข้าส่วนกลาง</a>
+	-->
+	
+<span style='color:#CC9933;cursor:pointer;' >Search : &nbsp;&nbsp;&nbsp;</span>
+<a href="#" style='color:#3399FF;cursor:pointer;' onclick="listnewmembersub('today');">Today</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+<!--<a href="#" style='color:#3399FF;cursor:pointer;' onclick="listnewmembersub('day3');">ย้อนหลัง 3 วัน</a>&nbsp;&nbsp;|&nbsp;&nbsp;-->
+<!--<a  href="#" style='color:#3399FF;cursor:pointer;' onclick="listnewmembersub('month3');">ย้อนหลัง 3 เดือน</a>&nbsp;&nbsp;|&nbsp;&nbsp;-->
+
+<a  href="#" style='color:#FF0000;cursor:pointer;' onclick="listnewmembersub('wait');">Wait Register</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+<!--<a  href="#" style='color:#FF0000;cursor:pointer;' onclick="listnewmembersub('warning');">รายการที่ทำให้ลงเวลากลับบ้านไม่ได้</a>&nbsp;&nbsp;|&nbsp;&nbsp;-->
+<a  href="#" style='color:#99CC33;cursor:pointer;' onclick="listnewmembersub('finish');">Finish</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+<a  href="../newmember/listnewmember" style='color:#FF0000;cursor:pointer;' onclick="listnewmembersub('wait');">Send to CRM</a>
+</div>
+</center>
+<br>
+
+<div id='showlistnewmembersub'>แสดงตรงนี้</div>
+
+</body>
+<center>
+<?php
+$fp = @fopen("http://localhost/download_promotion/toserver_mem_register.php", "r");
+$text=@fgetss($fp, 4096);
+echo   $text;
+
+
+?>
+</center>

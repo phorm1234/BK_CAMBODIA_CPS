@@ -1,0 +1,61 @@
+	<style type="text/css">
+	<!--
+		tr.xtdover{
+			border:1pt solid#ff0000;
+			background-color:#ffcc99;
+		}
+		tr.xtdout{
+			border:0pt solid#ff0000;
+		}
+		/* test highlight*/
+		.datatablerowhighlight {
+		    background-color: #ffcc99 !important;
+			border-top:0pt solid#ff9933;
+			border-bottom:0pt solid#ff9933;
+		}
+	-->
+	</style>
+	<?php		
+		//	echo "<pre>";
+		//	print_r($this->arr_docno);
+		//	echo "</pre>";			
+   			if(!empty($this->arr_docno)){//&& $this->arr_docno[0]['status_receive']=='N'
+	   			echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' bgcolor='#cccccc' class='display' id='datatables_billprofiles'>";
+	   			echo "<thead><tr height='32' bgcolor='#ebebeb' idd=''>
+	   						<th align='center'  style='width:10%;color:#333;font-size:24px;'>วันที่</th>
+	   						<th align='center' style='color:#333;font-size:24px;'>เลขที่เอกสาร</th>
+	   						<th align='center'  style='width:10%;color:#333;font-size:24px;'>App</th>
+	        				<th align='center'  style='width:20%;color:#333;font-size:24px;'>รหัสสมาชิก</th>
+	        				<th align='center'  style='width:10%;color:#333;font-size:24px;'>ประเภท</th>
+	        				<th align='center'  style='width:10%;color:#333;font-size:24px;'>amount</th>
+	        				<th align='center'  style='width:15%;color:#333;font-size:24px;'>สถานะรับสินค้า</th>        				
+	   					</tr></thead><tbody>";
+	   			$i=1;
+	   			foreach($this->arr_docno as $data){
+		  				$id_tmp="n_".$i;
+		  				$rows_json=json_encode($data);
+		  				if($data['doc_date']!=''){
+		  					$arr_date=explode('-',$data['doc_date']);	  			
+		  					$doc_date=$arr_date[2]."/".$arr_date[1]."/".$arr_date[0];		
+		  				}else{
+		  					$doc_date="00/00/0000";
+		  				}		  				
+		  				($i%2==0)?$bg_color='#003333':$bg_color='#006666';
+			  			echo "<tr idd='".$rows_json."'>"
+			  					."<td align='center' >".$doc_date."</td>"
+			  					."<td align='center' >".$data['doc_no']."</td>"
+			  					."<td align='center' >".$data['application_id']."</td>"
+			  					."<td align='center' >".$data['member_id']."</td>"
+			  					."<td align='center' >".$data['status_no']."</td>"
+			  					."<td align='right' >".number_format($data['amount'],2)."</td>"
+			  					."<td align='center' >".$data['status_receive']."</td>"
+			  					."</tr>";  
+			  			$i++;
+		  		}//foreach 
+		  		echo "</tbody>
+	  		<tfooter></tfooter>
+	  		</table>";
+  	}else{		
+  				echo "<p id='item_not_found' align='center'>ไม่พบข้อมูลเลขที่เอกสารที่เล่นร่วมโปรโมชั่น หรือลูกค้ารับสินค้าไปแล้ว</p>";     	
+   	}
+     ?>

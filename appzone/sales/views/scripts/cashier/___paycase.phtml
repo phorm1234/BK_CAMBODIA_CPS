@@ -1,0 +1,210 @@
+<?php 
+	if(isset($this->arr_data) && $this->arr_data['data']==null){
+		if($this->arr_data['action']=='winpayment' || $this->arr_data['action']=='rwdpayment'){			
+			echo "
+				<input type='hidden' id='txt_netvt' value='$this->netvt'></input>
+				<table id='tbl_winpop_payment' width='100%' border='0' cellpadding='5' cellspacing='0'  class='ui-widget-content ui-corner-all'>
+					<tr height='60' bgcolor='#171717'>
+						<td width='70%' align='center'>
+							<span style='font-family:PSLKittithadaBold,Verdana,Garuda,ms sans serif,tahoma;font-size:300%;color:#43E023;'>รวม";
+							if($this->cn_amount!='0.00'){
+								echo " (หักลดหนี้แล้ว)";
+							}
+							echo "</span>&nbsp;</td>
+						<td align='right'>
+							<span id='net_total_payment' style='font-family:PSLKittithadaBold,Verdana,Garuda,ms sans serif,tahoma;font-size:300%;color:#43E023;padding-right:20px;'></span></td>
+					</tr>
+				</table><br/>
+				<table id='tbl_winpop_payment' width='100%' border='0' cellpadding='5' class='ui-corner-all' cellspacing='0' bgcolor='#417678' style='border:1px solid#444;'><!--12535C#4C7271#656972#7E838E-->
+					<tr>
+						<td  align='right'><span class='box_lbl_payment'>จำนวนเงินลดหนี้(CN)</span></td>
+						<td align='right' style='border-bottom:1pt dotted#cccccc;'>
+						<input type='text' id='txt_cn_amount' name='txt_cn_amount' value='$this->cn_amount' size='21' class='input-text-disable ui-corner-all' style='text-align:right;'>
+						</td>
+					</tr>
+					<!--
+					<tr>
+						<td  align='right'><span class='box_lbl_payment'>แลกคะแนน</span></td>
+						<td align='right' style='border-bottom:1pt dotted#cccccc;'>
+						<input type='text' id='txt_redeem_point'  size='13' class='input-text-enable2 ui-corner-all' style='text-align:right;'>
+						<input type='text' id='txt_redeem_point_cash' value='0.00' size='5' class='input-text-disable ui-corner-all' style='text-align:right;' readonly>
+						</td>
+					</tr>
+					-->
+					<tr>
+						<td align='right'><span class='box_lbl_payment'>บัตรกำนัล</span></td>
+						<td align='right' style='border-bottom:1pt dotted#cccccc;'>
+							<table border='0' cellpadding='0' cellspacing='2'>
+							<tr>
+								<td>
+								<input type='text' id='txt_voucher' readonly  size='13' class='form-input-payment-gifset ui-corner-all'  style='text-align:right;'>
+								</td>
+								<td>
+								<input type='text' id='txt_voucher_cash' value='$this->txt_voucher_cash' size='5' class='form-input-payment-disable ui-corner-all' style='text-align:right;' readonly>
+								</td>
+							</tr>
+							</table>
+						</td>
+					</tr>					
+					
+					<tr>
+						<td  align='right'><span class='box_lbl_payment'>เงินสด</span></td>
+						<td align='right' style='border-bottom:1pt dotted#cccccc;'>
+							<input type='text' id='txt_cash' value='' size='21' class='form-input-payment-cash ui-corner-all' style='text-align:right;'>
+						</td>
+					</tr>
+					
+					<tr>
+						<td  align='right' style='border-bottom:1pt solid#cccccc;'><span class='box_lbl_payment'>บัตรเครดิต</span></td>
+						<td align='right' style='border-bottom:1pt solid#cccccc;'>
+							<input type='text' id='txt_credit' value='0.00' readonly size='21' class='input-text-disable ui-corner-all' style='text-align:right;'>
+							<input type='hidden' id='txt_credit_no' value=''>
+						</td>
+					</tr>
+					
+					<tr>
+						<td  align='right' style='border-bottom:1pt solid#cccccc;'><span class='box_lbl_payment'>ยอดคงเหลือ</span></td>
+						<td align='right' style='border-bottom:1pt solid#cccccc;'>
+							<input type='text' id='txt_net' value='0.00' readonly size='21' class='input-text-disable ui-corner-all' style='font-size:16px;text-align:right;'>
+						</td>
+					</tr>
+					<tr >
+						<td  align='right'><span class='box_lbl_payment'>เงินทอน</span></td>
+						<td align='right' style='border-bottom:0pt dotted#cccccc;'>
+							<input type='text' id='txt_cash_back' value='0.00' readonly size='21' class='input-text-disable ui-corner-all' style='text-align:right;'>
+						</td>
+					</tr>
+				</table>
+				<table width='100%' border='0' cellpadding='0'>
+					<tr>
+						<td width='48'>
+							<button class='btn_payment_alipay' id='btn_payment_alipay' style='display:table-cell;vertical-align:middle;padding:0px;'>										
+								Alipay
+							</button>
+						</td>
+						<td width='48'>
+							<button class='btn_payment_credit' id='btn_payment_credit' style='display:table-cell;vertical-align:middle;padding:0px;'>										
+								บัตรเครดิต
+							</button>
+						</td>
+						<td width='48'>
+							<button class='btn_vat_total' id='btn_vat_total' style='display:table-cell;vertical-align:middle;padding:0px;'>										
+								ใบกำกับภาษี
+							</button>
+						</td>
+						<td width='48'>
+							<button class='btn_key_manual' id='btn_key_manual' style='display:table-cell;vertical-align:middle;padding:0px;'>										
+								เอกสารบิลมือ
+							</button>
+						</td>
+						<td>
+						   &nbsp;
+						</td>
+						<td width='48'>
+				 			<button class='btn_payment_confirm' id='btn_payment_confirm' style='display:table-cell;vertical-align:middle;padding:0px;'>
+				 			  ยืนยัน
+				 			</button>
+				 		</td>
+						<td width='48'>
+							<button class='btn_payment_cancel' id='btn_payment_cancel' style='display:table-cell;vertical-align:middle;padding:0px;'>
+								ยกเลิก
+							</button>						 			
+				 		</td>
+				 	</tr>
+				</table>";
+		}//if
+		
+		if($this->arr_data['action']=='wincredit'){
+			echo "<br/>
+					<table width='100%' border='0' cellpadding='2' cellspacing='0'>
+					<tr>
+						<td align='right'><span style='color:#000000;'>ประเภทบัตร</span></td>
+						<td>
+							<select id='sel_credit' class='input-text-pos ui-corner-all'>
+							<option value='0000'> - เลือก - </option>
+							";				
+								foreach($this->arr_paid as $data){
+									if($data['paid_tp']!='C') continue;
+									?>
+										<option value='<?php echo $data['paid'];?>' <?php if($data['paid']=='0002'){echo "selected";}?>><?php echo trim($data['description']);?></option>
+									<?php 
+								}
+							echo "
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td align='right'>
+							<span style='color:#000000;'>รหัสบัตรเครดิต</span>
+						</td>
+						<td>					
+							<input type='text' id='txt_credit_no_value' size='20' class='input-text-pos ui-corner-all' />
+						</td>
+					</tr>
+					<tr>
+						<td align='right'>
+							<span style='color:#000000;'>จำนวนเงิน</span>
+						</td>
+						<td>					
+							<input type='text' id='txt_credit_value' size='10' class='input-text-pos ui-corner-all' />
+						</td>
+					</tr>
+					</table>";	
+		}
+		//*WR13032017
+		if($this->arr_data['action']=='alipay'){
+			echo "
+					<table width='100%' border='0' cellpadding='2' cellspacing='0'>
+					<tr>
+						<td colspan='2' align='center'><img src='/sales/img/alipay_logo.png' width='300'></td>
+					</tr>
+					<tr>
+						<td colspan='2' align='center'><img src='/sales/img/alipay_scan.png' width='300'></td>
+					</tr>
+					<tr>
+						<td align='right'>
+							<span style='color:#000000;'>Scan Barcode</span>
+						</td>
+						<td>
+							<input type='text' id='txt_alipay_no_value' size='20' class='keybarcode input-text-pos ui-corner-all' />
+						</td>
+					</tr>
+					<tr>
+						<td align='right'>
+							<span style='color:#000000;'>จำนวนเงิน</span>
+						</td>
+						<td>
+							<input type='text' id='txt_alipay_value' size='10' class='input-text-pos ui-corner-all' />
+						</td>
+					</tr>
+					</table>";
+		}
+	
+	 }else if($this->arr_data['data']==""){
+	 	echo '<table id="tbl-pay-item" border="0" cellpadding="0" cellspacing="1">
+		 			<tr>
+		 				<td width="100" align="right">CASH:</td>
+		 				<td><span id="cash_html"></span></td>
+		 			</tr>
+		 			<tr>
+		 			<td width="100" align="right">VISA:</td>
+		 				<td><span id="visa_html"></span></td>
+		 			</tr>
+		 			<tr>
+		 				<td width="100" align="right">MASTERCARD:</td>
+		 				<td><span id="mastercard_html"></span></td>
+		 			</tr>
+		 			<tr>
+		 				<td width="100" align="right">VOUCHER:</td>
+		 				<td><span id="voucher_html"></span></td>
+		 			</tr>
+		 			<tr>
+		 				<td width="100" align="right">POINT:</td>
+		 				<td><span id="point_html"></span></td>
+		 			</tr>
+		 		</table>';
+	 }else{
+	 	echo "<p><br/></p><p align='center'>ไม่พบรายการ</p>";
+	 }
+?>
+<script type="text/javascript" src="/sales/js/cashier/alipay.js"></script>

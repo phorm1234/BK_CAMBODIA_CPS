@@ -1,0 +1,351 @@
+<html>
+<head>
+   <script type="text/javascript">
+        
+        $(function() {
+		var dates = $( "#start").datepicker({
+			dateFormat: 'yy-mm-dd',
+			changeMonth: true,
+                       // beforeShow: function(event,object) { alert ( "กรุณาเลือกวันแรกของเดือน" ); },
+			onSelect: function( selectedDate ) {
+				var option = this.id == "start_date" ? "minDate" : "maxDate",
+					instance = $( this ).data( "datepicker" ),
+					date = $.datepicker.parseDate(
+						instance.settings.dateFormat ||
+						$.datepicker._defaults.dateFormat,
+						selectedDate, instance.settings );
+				dates.not( this ).datepicker( "option", option, date );
+                                
+			}
+		});
+	});
+</script>
+
+<?php $password_id=$this->password_id;
+//check audit status
+$group_id=$this->group_id;
+// if ($group_id!="AUDIT"){
+// 	echo "<script>jAlert('สถานะคุณไม่ใช่ AUDIT ', 'กรุณาตรวจสอบอีกครั้ง',function(){																						
+// 		return false;
+// 	});	</script>";	
+// }
+?>
+<script type="text/javascript">
+	$(function(){
+		$("<div id='dlgAuditChkStock'></div>").dialog({
+	     	   autoOpen:true,
+					width:245,		
+					height:120,	
+					modal:true,
+					resizable:false,
+					position:"center",
+					showOpt: {direction: 'slid'},		
+					closeOnEscape: false,
+					title:"รหัสผ่าน Audit",
+					open: function(){    
+                        $(this).parents().css({"padding":"0 0 0 0","margin":"0 0 0 0","border-color":"#C6D5DC"});
+                        $(".ui-dialog-titlebar-close").hide();
+	    			    $(this).parents(".ui-dialog:first").css({"border":"solid 4px #9edec6","font-size":"21px","color":"#000","padding":"0.3em 0.4em","height":"70","width":"auto"});	
+		   				$("#dlgAuditChkStock").append("<input type='password' id='audit_password' size='20' class='input-text-pos'/>","<input type='hidden' id='group_id' value='<?php $group_id?>' '/>");
+			   			$("#audit_password").focus();
+		   				$("#audit_password").keypress(function(evt){
+		   					var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+		   			        if(key == 13){
+			   			        $.ajax({
+				   			         type:"post",
+							            url:"/sales/cashier/getemp",
+							            async:false,
+							            data:{
+							            	employee_id:$("#audit_password").val(),
+											actions:'audit'
+						            	},
+						            	success:function(data){
+                                            var arr_data=data.split('#');
+
+                                            var arr_data=data.split('#');
+											if($.trim(arr_data[0])==""){
+												jAlert('ไม่พบรหัส AUDIT หรือรหัสผ่านไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง','ข้อความแจ้งเตือน',function(){
+													$("#audit_password").val('').focus();
+													return false;
+								    			});
+											}else if($.trim(arr_data[3])=='P'){
+												jAlert('ขณะนี้พนักงาน AUDIT ไม่อยู่ในระบบ กรุณาตรวจสอบอีกครั้ง','ข้อความแจ้งเตือน',function(){
+													$("#audit_password").val('').focus();
+													return false;
+								    			});
+											}else if($.trim(arr_data[3])=='N'){
+												jAlert('ขณะนี้พนักงาน AUDIT ไม่ได้ลงเวลาเข้าระบบ กรุณาตรวจสอบอีกครั้ง','ข้อความแจ้งเตือน',function(){
+													$("#audit_password").val('').focus();
+													return false;
+								    			});
+											}else{
+								            	if(data!=""){										           
+                                                        $("#dlgAuditChkStock").dialog('close');
+                                                        $("#start_product").focus();
+                                                        return false;	
+                                                }
+                                            }
+                                            
+											
+						            	}
+				   			        });
+			   			        return false;
+		   			        }
+			   			 });
+					},close:function(){
+		   				$(this).remove();
+		   			}
+	        });
+	});//ready
+</script>
+
+                        
+<style type="text/css">
+
+.ui-dialog .ui-dialog-content { position: relative; border: 0; padding: .3em 0.4em; background: #fffff; overflow: auto; zoom: 0; }
+
+
+body{
+background:#FFF;
+font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+font-size:16px;
+}
+p, h1, form, button{border:0; margin:0; padding:0;}
+.spacer{clear:both; height:1px;}
+/* ----------- My Form ----------- */
+.myform{
+margin:0 auto;
+width:400px;
+padding:14px;
+}
+
+/* ----------- stylized ----------- */
+#stylized{
+border:solid 2px #b7ddf2;
+background:#ebf4fb;
+}
+#stylized h1 {
+font-size:16px;
+font-weight:bold;
+margin-bottom:8px;
+}
+#stylized p{
+font-size:14px;
+color:#666666;
+margin-bottom:20px;
+border-bottom:solid 1px #b7ddf2;
+padding-bottom:10px;
+}
+#stylized label{
+display:block;
+font-weight:bold;
+text-align:right;
+width:140px;
+float:left;
+}
+#stylized .small{
+color:#666666;
+display:block;
+font-size:12px;
+font-weight:normal;
+text-align:right;
+width:140px;
+}
+#stylized input{
+float:left;
+font-size:16px;
+padding:4px 2px;
+border:solid 1px #aacfe4;
+width:200px;
+margin:2px 0 20px 10px;
+}
+#stylized select{
+float:left;
+
+padding:4px 2px;
+border:solid 1px #aacfe4;
+width:200px;
+margin:2px 0 20px 10px;
+}
+#stylized button{
+clear:both;
+/*margin-left:150px;*/
+float: right;
+width:50px;
+height:31px;
+background:#666666 url(img/button.png) no-repeat;
+text-align:center;
+line-height:31px;
+color:#FFFFFF;
+font-size:14px;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+<div id="stylized" class="myform">
+<form id="form" name="form" method="post" action="">
+<h1>รายงานสินค้าเคลื่อนไหว (AUDIT)</h1>
+<p></p>
+
+<!-- <label>เงื่อนไข</label>
+<select name="condition" id="condition">
+    <option value="none" id="none">กรุณาเลือก</option>
+    <option value="สินค้าทั้งหมด" id="all">สินค้าทั้งหมด</option>
+    <option value="เฉพาะสินค้าเคลื่อนไหว" id="movement">เฉพาะสินค้าเคลื่อนไหว</option>
+</select>
+
+<label>แสดงผล</label>
+<select name="detail" id="detail">
+    <option value="แสดงรายละเอียด" id ="all_detail">แสดงรายละเอียด</option>
+    <option value="สรุปยอดรวม" id ="short_detail">สรุปยอดรวม</option>
+</select> -->
+
+<label>รหัสสินค้าเริ่มต้น</label>
+<input type="text" name="start_product" id="start_product"/>
+
+<label>ถึง</label>
+<input type="text" name="end_product" id="end_product" />
+
+<label>วันที่เริ่มต้น</label>
+<input type="text" name="start_date" id="start" />
+
+<label>ถึง</label>
+<input type="text" name="end_date" id="end_date" />
+
+<button type="button" id="opener">ตกลง</button>
+ 
+
+<div class="spacer"></div>
+</form>
+</div>
+
+    
+<div id="dialog" title="รายงานสรุปสินค้าเคลื่อนไหว"></div>    
+    
+</body>
+</html>
+
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+ 
+    $("#opener").click(function(){       
+      
+        var opts_QstDetail={
+                    autoOpen:false,
+                    width:'50%',
+                    height:'600',
+                    modal:true,
+                    resizeable:true,
+                    position:'top',
+                    showOpt: {direction:'up'},
+                    closeOnEscape:true,
+                    title:"",
+                    open:function(){
+                        $("#dialog").html("<span style='position: absolute;text-align: center;width: 100%; padding-top: 50px;'><img src='/report/img/ajax-loader.gif'> </span>");
+                        $.ajax({
+                            type:'post',
+                            url:'/report/report/viewstockcard',
+                            cache:false,
+                            data:{       
+                                product1:$("#start_product").val(),
+                                product2:$("#end_product").val(),
+                                data1:$("#start").val(),
+                                data2:$("#end_date").val(), 
+                                condition:$("#condition").val(),
+                                detail:$("#detail").val(),
+                                now:Math.random()
+                            },
+                            success:function(data){
+                                $("#dialog").html(data);
+                            }//end success function
+                        });//end ajax pos
+                    }
+            };
+            $("#dialog").dialog("destroy");
+            $("#dialog").dialog(opts_QstDetail);
+            $("#dialog").dialog("open");
+       
+        
+     
+    });
+   
+});
+	
+</script>
+
+
+<!--<script type="text/javascript">  Confirm Dialog
+
+$(document).ready(function(){
+    $("#confirm").click(function() {
+                jConfirm('พิมพ์แบบสรุปหรือไม่', 'Confirmation Dialog', function(r) {
+               
+           if (+r == false){
+               var opts_QstDetail={
+                    autoOpen:false,
+                    width:'60%',
+                    height:'600',
+                    modal:true,
+                    resizeable:true,
+                    position:'top',
+                    showOpt: {direction:'up'},
+                    closeOnEscape:true,
+                    title:"",
+                    open:function(){
+                        $("#dialog").html("");
+                        $.ajax({
+                            type:'post',
+                            url:'/report/report/viewstock',
+                            cache:false,
+                            data:{       
+                                product1:$("#start_product").val(),
+                                product2:$("#end_product").val(),
+                                data1:$("#start").val(),
+                                data2:$("#end_date").val(),                            
+                                now:Math.random()
+                            },
+                            success:function(data){
+                                $("#dialog").html(data);
+                            }//end success function
+                        });//end ajax pos
+                    }
+            };
+            $("#dialog").dialog("destroy");
+            $("#dialog").dialog(opts_QstDetail);
+            $("#dialog").dialog("open");
+       
+           }else{
+               // return false;
+                         $.ajax({
+                            type:'post',
+                            url:'/report/report/printviewstock',
+                            cache:false,
+                            data:{       
+                                product1:$("#start_product").val(),
+                                product2:$("#end_product").val(),
+                                data1:$("#start").val(),
+                                data2:$("#end_date").val(),                            
+                                now:Math.random()
+                            },
+                            success:function(data){
+                                $("#dialog").html(data);
+                            }//end success function
+                        });//end ajax pos   
+                        jAlert('print');
+           }        
+               
+           });
+            });
+    
+    });
+   
+
+	
+</script>-->
+

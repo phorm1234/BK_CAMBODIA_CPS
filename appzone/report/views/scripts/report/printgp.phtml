@@ -1,0 +1,112 @@
+<?php
+//@header("Content-type:text/html; charset=utf=8");
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->SetMargins( 0,4,4 );  // ซ้าย , บน , ขวา
+
+$pdf->AddPage();
+$pdf->SetFont('CordiaNew','',5);
+//$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' ,'วันที่ออกเอกสาร '.$this->print_time ) , 0 , 1,'R' );
+
+$pdf->Image('/var/www/pos/htdocs/report/img/logo/op/op-logo.gif',8 ,0,0);
+$pdf->SetFont('CordiaNew','B',10);
+//$title1=iconv('UTF-8','cp874',"สรุปการชำระเงินจากลูกค้า");
+
+$line="==============================================================";
+$line2="---------------------------------------------------------------------------------------------------------------";
+
+$pdf->Ln(7);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','รายงานสรุปยอดเงินตามบาร์โค้ด'),0,0,'C');
+$pdf->Ln(4);
+$pdf->Cell(0,3,iconv('UTF-8','cp874',"เงื่อนไข  ตั้งแต่วันที่ ".$this->dayfrom." - ".$this->tofrom),0,0,'C');
+//$pdf->Ln(3);
+//$pdf->Cell(0,3,iconv('UTF-8','cp874','SSUP (THAILAND) CO.,LTD.'));
+$pdf->Ln(4);
+$pdf->Cell( 40  , 3 , iconv( 'UTF-8','cp874' ,'วันที่พิมพ์ '.$this->print_time ),0,0,'L');
+$pdf->Cell( 28  , 3 , iconv( 'UTF-8','cp874' ,'เวลา '.$this->ptime ),0,0,'R');
+$pdf->Ln(4);
+$pdf->Cell(0,3,iconv('UTF-8','cp874', 'สาขา '.$this->branch_id.' '.$this->branch_name ));
+$pdf->Ln(4);
+
+
+
+
+$pdf->Cell(0,3,$line);
+$pdf->Ln(4);
+
+$pdf->Cell( 8  , 4 , iconv( 'UTF-8','cp874' , 'ลำดับ' ) , 0 , 0 );
+$pdf->Cell( 11  , 4 , iconv( 'UTF-8','cp874' , 'บาร์โค้ด' ) , 0 , 0 );
+$pdf->Cell( 8  , 4 , iconv( 'UTF-8','cp874' , 'GP' ) , 0 , 0 );
+$pdf->Cell( 13  , 4 , iconv( 'UTF-8','cp874' , 'จำนวนชิ้น' ) , 0 , 0 ,'R');
+$pdf->Cell( 13  , 4 , iconv( 'UTF-8','cp874' , 'จำนวนเงิน' ) , 0 , 0 ,'R');
+$pdf->Cell( 12  , 4 , iconv( 'UTF-8','cp874' , 'ส่วนลด' ) , 0 , 0 ,'R');
+$pdf->Cell( 12  , 4 , iconv( 'UTF-8','cp874' , 'สุทธิ' ) , 0 , 1 ,'R');
+//}
+
+$pdf->Ln(3);   
+$pdf->SetFont('CordiaNew','',9);
+
+$get_data = $this->gp_data ;
+	$i=1;
+	$sum_gp = 0;	
+	$sum_quan = 0;
+	$sum_amt = 0;
+	$sum_net = 0;
+	$dis = 0;
+	$sum_dis = 0;
+    foreach($get_data as $v){
+    
+	$sum_gp += $v['gp_corner'];	
+	$sum_quan += $v['quantity'];
+	$sum_amt += $v['amount'];
+	$sum_net +=$v['net_amt'];
+	$dis = $v['amount'] - $v['net_amt'];
+	$sum_dis += $dis;
+
+$pdf->Cell( 8  , 4 , iconv( 'UTF-8','cp874' , $i++),0,0,'C');
+$pdf->Cell( 11  , 4 , iconv( 'UTF-8','cp874' , $v['barcode']) , 0 , 0 );
+$pdf->Cell( 8  , 4 , iconv( 'UTF-8','cp874' , $v['gp_corner']) , 0 , 0 ,'R');
+$pdf->Cell( 13  , 4 , iconv( 'UTF-8','cp874' , number_format($v['quantity'], 2, '.', ',')) , 0 , 0 ,'R');
+$pdf->Cell( 13  , 4 , iconv( 'UTF-8','cp874' , number_format($v['amount'], 2, '.', ',')) , 0 , 0 ,'R');
+$pdf->Cell( 12  , 4 , iconv( 'UTF-8','cp874' , number_format($dis, 2, '.', ',')) , 0 , 0 ,'R');  
+$pdf->Cell( 12  , 4 , iconv( 'UTF-8','cp874' , number_format($v['net_amt'], 2, '.', ',')) , 0 , 1 ,'R'); 
+
+
+}
+
+$pdf->Cell(0,3,$line2);
+$pdf->Ln(3);  
+$pdf->Cell( 27  , 4 , iconv( 'UTF-8','cp874' , 'รวม' ) , 0 , 0 ,'R');
+$pdf->Cell( 13  , 4 , iconv( 'UTF-8','cp874' , number_format($sum_quan, 2, '.', ',')) , 0 , 0 ,'R');
+$pdf->Cell( 13  , 4 , iconv( 'UTF-8','cp874' , number_format($sum_amt, 2, '.', ',')) , 0 , 0 ,'R');
+$pdf->Cell( 12  , 4 , iconv( 'UTF-8','cp874' , number_format($sum_dis, 2, '.', ',')) , 0 , 0 ,'R');
+$pdf->Cell( 12  , 4 , iconv( 'UTF-8','cp874' , number_format($sum_net, 2, '.', ',')) , 0 , 1 ,'R');
+$pdf->Cell(0,3,$line2);
+$pdf->Ln(3);
+
+$pdf->Ln(10); 
+$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , 'ผู้ออกรายงาน / ตรวจทาน : _______________________________________ ' ) , 0 , 0 ,'R');
+
+$pdf->Ln(20);
+$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , '.' ) , 0 , 0 );
+//$pdf->Output();
+$name='printgp.pdf';
+$output="/var/www/pos/htdocs/report/printreport/".$name;
+//$pdf->Output($output,'F');
+@chmod($output,0777); 
+if(@file_exists($output)){
+		 shell_exec("rm $output");
+		@unlink($output);
+	}
+ 
+$pdf->Output($output,'F'); 
+shell_exec("lp -o media=Letter $output");
+	
+
+?>
+
+<script type="text/javascript">
+//self.close();
+</script>
+		

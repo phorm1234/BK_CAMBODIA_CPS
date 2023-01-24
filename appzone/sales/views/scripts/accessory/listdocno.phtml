@@ -1,0 +1,59 @@
+ <?php
+    	if(!empty($this->arr_docno)){ 
+    ?>
+	<style>
+	<!--
+		tr.xtdover{
+			border:1pt solid#ff0000;
+			background-color:#ffcc99;
+		}
+		tr.xtdout{
+			border:0pt solid#ff0000;
+		}
+		/* test highlight*/
+		.datatablerowhighlight {
+		    background-color: #ffcc99 !important;
+			border-top:1pt solid#ff9933;
+			border-bottom:1pt solid#ff9933;
+		}
+	-->
+	</style>
+	
+	<?php
+   			echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' bgcolor='#cccccc' class='display' id='datatables_listdocno'>";
+   			echo "<thead><tr height='32' bgcolor='#ebebeb' idd=''>
+   						<th align='center'  style='width:15%;color:#333;font-size:24px;'>Doc Date</th>
+   						<th align='center' style='width:20%;color:#333;font-size:24px;'>Doc No.</th>
+        				<th align='center'  style='width:20%;color:#333;font-size:24px;'>Member ID</th>
+        				<th align='center'  style='width:10%;color:#333;font-size:24px;'>Status</th>
+        				<th align='center'  style='width:10%;color:#333;font-size:24px;'>Type</th>
+   					</tr></thead><tbody>";
+   			$i=1;
+   			
+   			foreach($this->arr_docno as $data){
+	  				$id_tmp="n_".$i;
+	  				$rows_json=json_encode($data);
+	  				if($data['doc_date']!=''){
+	  					$arr_date=explode('-',$data['doc_date']);	  			
+	  					$doc_date=$arr_date[2]."/".$arr_date[1]."/".$arr_date[0];		
+	  				}else{
+	  					$doc_date="00/00/0000";
+	  				}
+	  				($i%2==0)?$bg_color='#003333':$bg_color='#006666';
+		  			echo "<tr idd='".$rows_json."'>"
+		  					."<td align='left' >".$doc_date."</td>"
+		  					."<td align='center' >".$data['doc_no']."</td>"
+		  					."<td align='left' >".$data['member_id']."</td>"
+		  					."<td align='left' >".$data['flag']."</td>"
+		  					."<td align='center' >".$data['status_no']."</td>"
+		  					."</tr>";  
+		  			$i++;
+	  		}//foreach 
+	  			
+	  		echo "</tbody>
+	  		<tfooter></tfooter>
+	  		</table>";
+    	}else{
+    		echo "<p align='center' id='item_not_found'>Data Not Found</p>";
+    	}
+     ?>

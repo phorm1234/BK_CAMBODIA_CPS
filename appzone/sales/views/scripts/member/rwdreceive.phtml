@@ -1,0 +1,37 @@
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td valign="top" height="180">
+	<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+		<tr bgcolor="#B9E7CF" height="40">
+			<td colspan="4"><span style='font-size:23px;color:#000000;'>&nbsp;สมาชิกรับ Premier Rewards</span></td>
+		</tr>
+		<tr height="32">
+			<td width="10%" align="right">รหัสสมาชิก&nbsp;:</td>
+			<td width="15%">
+				<input type="text" id="rwd_member_no" id="rwd_member_no" size="30" class="input-text-pos keybarcode"></input>
+			</td>
+			<td width="25%"><a href="#" name="btn_rwd_member_ok" id="btnKeyMemberOk" class='btnGrayClean'>ตกลง</a></td>
+			<td>&nbsp;</td>
+		</tr>
+		
+		<tr height="32">
+			<td width="10%" align="right">ชื่อ-นามสกุล&nbsp;:</td>
+			<td colspan="2">
+				<input type="text" id="rwd_member_fullname" id="rwd_member_fullname" size="55" class="input-text-pos"></input>
+			</td>		
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+
+<input type="hidden" id="rwd_cashier_id" value="<?php echo $this->SESSION_EMPLOYEE_ID;?>"></input>
+</td>
+</tr>
+
+<tr>
+	<td valign="top">
+	<div id="tblRwdReceive" style="border:0pt solid#cccccc;"></div>
+	</td>
+</tr>
+</table>
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+<script type="text/javascript" src="/sales/js/member/rwdreceive.js"></script>

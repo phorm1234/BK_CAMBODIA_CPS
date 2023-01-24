@@ -1,0 +1,124 @@
+<?php	
+	include(FPDF_PATH."/fpdf.php");
+        $hl=5;
+        $hl1=4;
+        $hl2=3;
+        $l2br=4;
+        $maxdoc=72;
+        $logo="/op-logo.gif";
+        $pdf=new FPDF('P','mm','a23');
+        $pdf->SetThaiFont();
+        $pdf->AddPage();
+        $startY=2;
+        $startX=0;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->SetMargins(0,2,0); 
+        $pdf->SetAutoPageBreak("off",1);
+        $pdf->Image(LOGO_PATH.$logo,2,0,65);
+        $startY+=8;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);
+        $pdf->SetFont('CordiaNew','B',13); 
+        $str_copy="";
+        if($this->act=='reprint'){        	
+        	$pdf->Cell(2,$hl,"*",0,0,'L',0); 
+        	$str_copy="(COPY)";
+        }     
+        
+        
+//         $startY+=$l2br;
+//         $pdf->SetY($startY);
+//         $pdf->SetX($startX);
+        $pdf->Cell(72,$hl1,iconv('UTF-8','cp874',"ใบจัดสินค้า(Picking List)"),0,0,'C',0);       
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+       
+       
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+		$pdf->Cell(52,$hl1,"Branch : ".$this->csh_branch_id." ".iconv('UTF-8','cp874',$this->arr_h[0]['branch_name']),0,0,'L',0); 
+	    $pdf->Cell(12,$hl1,'',0,0,'R',0); 
+	    $pdf->Cell(8,$hl1,'',0,0,'R',0);
+	    $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        
+        $pdf->Cell(15,$hl1,"Order No. ",0,0,'L',0); 
+		$pdf->Cell(25,$hl1,$this->arr_h[0]['doc_no'],0,0,'L',0);	
+		$pdf->Cell(5,$hl1,"",0,0,'L',0);
+		$arr_docdate=explode("-",$this->arr_h[0]['doc_date']);
+		$doc_date_show=$arr_docdate[2]."/".$arr_docdate[1]."/".$arr_docdate[0];
+		$pdf->Cell(27,$hl1,$doc_date_show." ".$this->arr_h[0]['doc_time'],0,0,'R',0); 
+        
+//         $pdf->Cell(12,$hl1,"Cashier :",0,0,'R',0); 
+//         $pdf->Cell(13,$hl1,$this->arr_h[0]['saleman_id'],0,0,'R',0);		
+     
+        $startY+=8;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        //--------- product item ------------------
+      	$pdf->SetFont('CordiaNew','',10);
+      	$discount=$this->arr_h[0]['member_percent']+$this->arr_h[0]['special_percent'];
+		$member_percent=$this->arr_h[0]['member_percent'];
+		$special_percent=$this->arr_h[0]['special_percent'];
+
+        foreach($this->arr_l as $dataL){
+        	$name_product=trim($dataL['name_product']);
+        	//11
+        	if(strlen($name_product)>35){
+        		$name_product=mb_substr($name_product,0,35,'utf-8');
+        		$name_product.="..";
+        	}
+        	
+        	if(intval($dataL['member_discount1'])==0){
+        		$chk_member_percent=0;
+        	}else{
+        		$chk_member_percent=$member_percent;
+        	}
+        	
+        	if(intval($dataL['member_discount2'])==0){
+        		$chk_special_percent=0;
+        	}else{
+        		$chk_special_percent=$special_percent;
+        	}
+        	
+	        $pdf->Cell(10,$hl2,intval($dataL['quantity']),0,0,'C',0); 
+	        $pdf->Cell(20,$hl2,$dataL['product_id'],0,0,'L',0);
+	        $pdf->Cell(42,$hl2,iconv('UTF-8','cp874',$name_product),0,0,'L',0);
+	        
+	           
+	        $startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+        }        
+        //--------- product item ------------------
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->SetFont('CordiaNew','B',10);//B
+        $pdf->Cell(24,$hl1,iconv('UTF-8','cp874',"จำนวนชิ้นรวม ="),0,0,'L',0); 
+        $pdf->Cell(20,$hl1,intval($this->arr_h[0]['quantity']),0,0,'L',0);
+        $pdf->Cell(15,$hl1,"Total",0,0,'L',0); 
+        $pdf->Cell(13,$hl1,number_format($this->arr_h[0]['amount'],2),0,0,'R',0);
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetX($startX);
+      
+        $name='/billvatshort.pdf';
+	    $output=REPORT_PATH.$name;    	    
+	    @chmod(REPORT_PATH,0777);
+	    $pdf->Output($output,'F');
+		$print2ip=$this->arr_h[0]['print2ip'].":631";
+		if($this->arr_h[0]['print2ip']=='LOCAL'){
+			echo shell_exec("lp -o media=Letter $output");
+		}else{
+			echo shell_exec("lpr -H $print2ip $output");
+		}
+		if(@file_exists($output)){
+			echo shell_exec("rm $output");
+			//@unlink($output);
+		}
+?>

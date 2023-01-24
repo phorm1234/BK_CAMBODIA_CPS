@@ -1,0 +1,12 @@
+<?php
+$dataamphur=$this->dataamphur;
+    echo "<select class='list1' name='send_amphur_id' id='id_amphur_id' onchange=\"changetambon();\" style='width:200px;'>";
+    foreach($dataamphur as $amphur){
+    	$amphur_id=$amphur['amphur_id'];
+    	$amphur_name=$amphur['amphur_name'];
+    	
+      	echo "<option value=\"$amphur_id\">$amphur_name</option>";
+      
+    }
+    echo "</select>";
+?>

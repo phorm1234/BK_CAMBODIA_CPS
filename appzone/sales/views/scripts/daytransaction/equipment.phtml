@@ -1,0 +1,252 @@
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+	<td valign="top">
+		<table width="100%" border="0" cellpadding="2" cellspacing="0" style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+			<tr bgcolor="#B9E7CF">
+				<td colspan="3"><span style='font-size:23px;color:#000000;'>&nbsp;ใบเบิกอุปกรณ์และวัสดุสิ้นเปลือง</span></td>
+			</tr>	
+			<tr>
+				<td colspan="3" valign="top">
+					<div id="divequipment"></div>
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+</table>
+<script type="text/javascript">
+	function chkEquipmentDate(){
+		$.ajax({
+				type:'post',
+				url:'/sales/daytransaction/chkequipmentdate',
+				data:{
+					rnd:Math.random()
+				},
+				success:function(data){
+					if(data=='N'){
+						 jAlert('วันที่สั่งต้องอยู่ระหว่างวันที่ 8-14 ถึง 22-28 ของทุกเดือน','ข้อความแจ้งเตือน',function(b){
+		    				 return false;
+			    		 });
+					}
+				}
+			});
+	}//func
+
+	function sendWait(){
+		var opts_wait={
+				type:'post',
+				url:'/sales/daytransaction/waitequipment',
+				data:{
+					json_string:JSONstring
+				},
+				success:function(data){
+					 jAlert('พักข้อมูลสมบูรณ์','ผลการบันทึก',function(b){
+						 initEquipment();
+	    				 return false;
+		    		 });
+				}
+			};
+		$.ajax(opts_wait);	
+	}//func
+	
+	function sendSave(JSONstring,flg){		
+		var opts_save={
+					type:'post',
+					url:'/sales/daytransaction/saveequipment',
+					data:{
+						flg:flg,
+						json_string:JSONstring
+					},
+					success:function(data){
+						 jAlert('บันทึกข้อมูลสมบูรณ์','ผลการบันทึก',function(b){
+							 initEquipment();
+		    				 return false;
+			    		 });
+					}
+				};
+		$.ajax(opts_save);
+	}//func
+	
+	function getEquipment(flg){
+		var opts_equ={
+				type:'post',
+				url:'/sales/daytransaction/getequipment',
+				data:{
+					flg:flg,
+					rnd:Math.random()
+				},success:function(data){
+					$("#divequipment").empty().html(data);
+					$(".inputkey").ForceNumericOnly();
+					
+					//sart
+					$("#btnWait").click(function(e){
+						e.preventDefault();
+						var JSONObject = new Object;
+					      JSONObject.name ="order";
+					      JSONObject.equipment = new Array;
+						var i=0;
+						$("input[name=new_order]").each(function(){
+							JSONObject.equipment[i] = new Object;
+							JSONObject.equipment[i].code =this.id;
+							JSONObject.equipment[i].order =this.value;
+							i++;	
+						});
+						JSONstring = JSON.stringify(JSONObject);			
+						jConfirm('คุณต้องการบันทึกทับข้อมูลที่พักไว้ ใช่หรือไม่?','ยืนยันการทำรายการใหม่', function(r){
+					        if(r){			
+					        	sendWait(JSONstring);
+						    }
+		        		});			
+					
+					});//
+					$("#btnSubmit").click(function(e){
+						e.preventDefault();
+						var JSONObject = new Object;
+						      JSONObject.name ="order";
+						      JSONObject.equipment = new Array;
+						var i=0;
+						$("input[name=new_order]").each(function(){
+							JSONObject.equipment[i] = new Object;
+							JSONObject.equipment[i].code =this.id;
+							JSONObject.equipment[i].order =this.value;
+							i++;	
+						});
+						JSONstring = JSON.stringify(JSONObject);						
+						sendSave(JSONstring,flg);						
+					});//
+					$("#btnCancel").click(function(e){
+						e.preventDefault();
+						//getEquipment();
+						initEquipment();
+						return false;
+					});
+					textboxes = $("input.inputkey");
+					$("input.inputkey").eq(0).focus();
+					textboxes_len=textboxes.length;
+					nextBox=0;
+					$(".inputkey").each(function(){
+						$(this).focusout(function () {
+							var id="#"+this.id;
+							 var quata="#quata_"+this.id;
+						     var quata_val=$(quata).val(); 
+						     if(parseInt(quata_val)!=0 && parseInt(this.value)>parseInt(quata_val)){							        
+					        	 jAlert('คุณคีย์ข้อมูลเกินกว่าจำนวนที่สามาถสั่งได้','ผลการบันทึก',function(b){	
+					        		 $(id).focus();							        	
+				    				 return false;
+					    		 });		
+					    		return false;				        
+					        }
+						});
+
+						$(this).keypress(function(evt){
+							var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+					        if(key == 13){
+						        evt.stopPropagation();
+						        evt.preventDefault();
+						       //var quata="#quata_"+this.id;
+						       //var quata_val=$(quata).val();
+						        currentBoxNumber = textboxes.index(this);
+						        /*
+						        if(parseInt(quata_val)!=0 && parseInt(this.value)>parseInt(quata_val)){							        
+						        	 jAlert('คุณคีย์ข้อมูลเกินกว่าจำนวนที่สามาถสั่งได้','ผลการบันทึก',function(b){	
+						        		 textboxes[currentBoxNumber].focus();							        	
+					    				 return false;
+						    		 });		
+						    		return false;				        
+						        }
+						        */						        
+						        if(textboxes[currentBoxNumber+1] != null) {
+						        	nextBox = textboxes[currentBoxNumber+1];			    				    					
+			    					nextBox.focus();
+						        }else{
+						        	$("#btnSubmit").focus();
+							    }
+						        //$(this).nextAll('.inputkey:first').focus();
+						        return false;
+					        }
+						});
+
+						$(this).blur(function(e){
+							e.preventDefault();
+						});
+						
+					});
+					//stop
+				}
+			};
+		$.ajax(opts_equ);
+	}//func
+	
+	function initEquipment(){
+		$.ajax({
+				type:'post',
+				url:'/sales/daytransaction/initequipment',
+				data:{
+				},success:function(data){
+					$("#divequipment").html(data);
+					$("#btnGetWait").click(function(e){						
+						e.preventDefault();
+						$.ajax({
+							type:'post',
+							url:'/sales/daytransaction/chkwait',
+							data:{
+								rnd:Math.random()
+							},success:function(data){
+								if(data=='Y'){
+									getEquipment('W');
+								}else{
+									jAlert('ไม่พบข้อมูลที่พักไว้ กรุณาตรวจสอบอีกครั้ง','ข้อความแจ้งเตือน',function(b){
+					    				 return false;
+						    		 });	
+								}
+							}
+						});
+						
+					});
+					
+					$("#btnNewData").click(function(e){
+						e.preventDefault();
+						getEquipment('T');			
+						return false;		
+						/*
+						$.ajax({
+							type:'post',
+							url:'/sales/daytransaction/chkwait',
+							data:{
+								rnd:Math.random()
+							},success:function(data){
+								if(data=='Y'){
+									jConfirm('คุณไม่ต้องการใช้ข้อมูลที่พักไว้ ใช่หรือไม่?','ยืนยันการทำรายการใหม่', function(r){
+								        if(r){			
+									        $.ajax({
+										        type:'post',
+										        url:'/sales/daytransaction/clearwait',
+										        data:{
+										        	rnd:Math.random()
+										        },
+										        success:function(){
+											        getEquipment();
+											    }
+										    });					        
+											return false;
+								        }else{
+								        	getEquipment();
+									    }
+					        		});
+								}else{
+									getEquipment();								
+								}
+							}
+						});
+						*/
+					});
+				}
+			});		
+	}//func
+	
+	$(function(){
+		chkEquipmentDate();
+		//getEquipment();
+		initEquipment();		
+	});//ready
+</script>

@@ -1,0 +1,66 @@
+<style type="text/css">
+html {  
+    /*font-family:monospace;*/
+	font-size:12px;
+	color:#222;
+}  
+.tbl {  
+        table-layout:fixed;  
+        border-top: 0px solid #339999;  
+        border-collapse: collapse;  
+       background-color:#F2F2F2;
+        width:100%;  
+         }  
+.tbl td {  
+        border-bottom: 1px dashed #99CCCC;  
+        padding: 2px 5px;  
+        text-overflow:ellipsis;  
+        overflow:hidden;  
+        white-space:nowrap;  
+        font-size:12px;
+		color:#222;
+ }  
+ .bag_items {
+	text-align:right;
+ 	width:50px;
+ }
+</style>
+<?php 
+	if(!empty($this->arr_bag)){
+		?>
+		<table border='0' width='100%' cellpadding='5' cellspacing='0'>
+		<?php 
+			$i=0;
+			foreach($this->arr_bag as $data){
+				$id_tmp=$i."_".$data['product_id'];
+				$pic_name=$data['pic_name'];
+				?>
+				<tr>
+					<td width='70%'><?php echo "[".$data['product_id']."] &nbsp;".$data['product_desc'];?></td>
+					<td width='30%' align="center">
+						<input type='text' size='1' value='' id='<?php echo $id_tmp;?>' class='bag_items inputkey_bag input-text-pos ui-corner-all' onkeypress="return isNumberKey(event)">
+					</td>
+				</tr>
+				<?php 
+				$i++;
+			}
+		?>
+		</table>
+		<?php 
+	}else{
+		?>
+		<p align='center'><span style='font-size:22px;'>ไม่พบข้อมูล</span></p>
+		<?php 
+	}
+?>
+<script type="text/javascript">
+   <!--
+   function isNumberKey(evt)
+   {
+      var charCode = (evt.which) ? evt.which : event.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+         return false;
+      return true;
+   }
+   //-->
+</script>

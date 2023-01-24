@@ -1,0 +1,201 @@
+ <style type="text/css">  
+			.tableNavCatList
+				{
+					width:100%;
+					background:#333;
+				}
+			.tableNavCatList ul
+				{
+					float:right;
+					width:100%;
+					margin:0;
+					padding:0;
+					border:1px solid #C9C9C9;
+				}
+         
+          .tableNavCatList ul li{
+          			cursor:pointer;
+					list-style-type:none;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold",  "Garuda","Helvetica World", "HelveticaNeue", "Helvetica Neue", "HelveticaNeueRoman", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+				
+					font-weight: normal;
+					font-size:25px;
+					text-decoration:none;
+					color:#303030;
+					padding-left:1em;
+					
+					border-bottom:1px solid  #78777C;
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(     #D4D7E0,     #B0B0B0);;
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0,      #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.active {
+            		cursor:pointer;
+          			list-style-type:none;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold",  "Garuda","Helvetica World", "HelveticaNeue", "Helvetica Neue", "HelveticaNeueRoman", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+				
+					font-weight: normal;
+					font-size:25px;
+					text-decoration:none;
+					color:#ffffff;/*#303030*/
+					padding-left:1em;
+					
+					border-bottom:1px solid  #000;/*78777C*/
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;/*#B2B2B8*/
+					background:  -moz-linear-gradient(#9DDCCF,#265541);/*#D4D7E0, #B0B0B0||#777777,#444444*/
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          
+          ul li.nokeyboard {
+            color: #999;
+            background:#0000ff;
+          }
+          
+			 li.img_disabled {				
+			 		cursor:pointer;
+					list-style-type:none;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold",  "Garuda","Helvetica World", "HelveticaNeue", "Helvetica Neue", "HelveticaNeueRoman", "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+				
+					font-weight: normal;
+					font-size:25px;
+					text-decoration:none;
+					color:#303030;
+					padding-left:1em;
+					
+					border-bottom:1px solid  #78777C;
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					
+			 		background:  -moz-linear-gradient(#D4D7E0,#B0B0B0) !important;
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#D4D7E0), color-stop(1, #B0B0B0)) !important;			 	
+					-moz-user-select:none !important;;
+					-moz-user-select:-moz-none !important;
+					-webkit-user-select:none !important;
+			 		
+			}
+			
+        </style>
+   
+    <div class="tableNavCatList" >
+	        <ul>
+	        <?php	
+//	        	echo "<pre>";
+//	        	print_r($this->arr_cataloglist);
+//	        	echo "</pre>";
+
+	        	function in_multiarray($elem, $array,$field)
+				{
+				    $top = sizeof($array) - 1;
+				    $bottom = 0;
+				    while($bottom <= $top)
+				    {
+				        if($array[$bottom][$field] == $elem)
+				            return true;
+				        else 
+				            if(is_array($array[$bottom][$field]))
+				                if(in_multiarray($elem, ($array[$bottom][$field])))
+				                    return true;
+				
+				        $bottom++;
+				    }        
+				    return false;
+				}//func
+
+	        
+				$arr_ops=array();
+				if(!empty($this->arr_ops)){
+					$arr_ops=$this->arr_ops;
+				}
+				
+	        	if(!empty($this->arr_cataloglist) && $this->arr_cataloglist[0]['product_id']!=''){
+	        		//echo "A1";
+		        	$i=1;
+		        	$str_data="";
+		        	foreach($this->arr_cataloglist as $data){
+		        		$ops_day_desc=trim($data['name_product']);		        		
+		        		if($data['price']=='' || $data['price']=='0'){
+		        			$data['price']='0.00';
+		        		}
+		        		
+		        		//*WR05022014 OPPN300 Revised
+		        		$status_wellcomegif='N';
+		        		$name_product=trim($data['name_product']);
+		        		//if(strpos($name_product,"Welcome")>0){
+		        		if(preg_match("/\bWelcome\b/i",$name_product)){
+		        			$status_wellcomegif='Y';
+		        		}
+		        		
+		        		switch ($ops_day_desc) {
+		        			case "บัตรสมาชิกพฤหัสที่ 1":$ops_day="OPS1";$ops_day_th="TH1";break;
+		        			case "บัตรสมาชิกพฤหัสที่ 2":$ops_day="OPS2";$ops_day_th="TH2";break;
+		        			case "บัตรสมาชิกพฤหัสที่ 3":$ops_day="OPS3";$ops_day_th="TH3";break;
+		        			case "บัตรสมาชิกพฤหัสที่ 4":$ops_day="OPS4";$ops_day_th="TH4";break;
+		        			case "บัตรสมาชิกอังคารที่ 1":$ops_day="OPT1";$ops_day_th="TU1";break;
+		        			case "บัตรสมาชิกอังคารที่ 2":$ops_day="OPT2";$ops_day_th="TU2";break;
+		        			case "บัตรสมาชิกอังคารที่ 3":$ops_day="OPT3";$ops_day_th="TU3";break;
+		        			case "บัตรสมาชิกอังคารที่ 4":$ops_day="OPT4";$ops_day_th="TU4";break;
+		        			default:"";$ops_day="";break;
+		        		}
+		        		if($data['product_no']=='2'){
+		        			$ops_day_desc=$ops_day_desc." (".$ops_day.")";
+		        		}
+		        		
+		        		//if(in_array($ops_day,$arr_ops)){
+		        		if(in_multiarray($ops_day,$arr_ops,"opsday")){
+		        			$a_cls="img_disabled";
+		        			$img_sts="<img src='/sales/img/icon_no_16x16.png' border='0' alt=''/>";
+		        		}else{
+		        			$a_cls="";
+		        			$img_sts="";
+		        		}
+		        		$str_data=$data['application_id']."#".$data['product_id']."#".intval($data['quantity'])."#".$data['price']."#".$data['product_no']."#".$data['product_seq']."#".$data['product_sub_seq']."#".$data['pn']."#".$data['ps']."#".$ops_day;
+		  				$id_tmp="n_".$i;
+		  				//*WR05022014 OPPN300 Revised
+		  				$id_tmp_name=$i."_".$status_wellcomegif."_".$ops_day_th;
+			  			echo "<li id='$id_tmp' pdt_desc='$id_tmp_name' class='btn_sel $a_cls' idp='".$str_data."'>"."$img_sts&nbsp;&nbsp;".$data['product_id']."&nbsp;&nbsp;".$ops_day_desc."&nbsp;&nbsp;".intval($data['quantity'])."&nbsp;&nbsp;".$data['price']."</li>";  
+			  			$i++;
+		  			}//foreach
+	        	}else if(!empty($this->arr_cataloglist)){
+	        		//echo "A2";
+	        		//$this->arr_cataloglist[0]['product_id'] is empty	        		
+	        		$j=1;
+	        		$str_data="";
+	        		$id_tmp="";
+	        		$id_tmp_name='';
+		        	foreach($this->arr_cataloglist as $data){
+		        		$str_data=$data['application_id']."#".$data['product_id']."#".intval($data['quantity'])."#".$data['price']."#".$data['product_no']."#".$data['product_seq']."#".$data['product_sub_seq']."#".$data['pn']."#".$data['ps'];
+			  			$id_tmp="n_".$j;
+				  		echo "<li id='$id_tmp' pdt_desc='$id_tmp_name'  class='btn_sel' idp='".$str_data."'>รายการสินค้า ".$data['product_list']." ไม่พอใช้สำหรับชุดสมัคร</li>"; 
+		        		$j++;
+		        	}
+	        	}else{	        		
+	        		//echo "A3";
+	        		//$this->arr_cataloglist is empty
+	        		$i=1;
+		  			$str_data="";
+	        		$id_tmp="n_".$i;
+	        		$id_tmp_name='';
+			  		echo "<li id='$id_tmp' pdt_desc='$id_tmp_name'  class='btn_sel' idp='".$str_data."'>รายการสินค้าหมด stock</li>"; 	        		
+	        	}//if
+	        ?>
+	        </ul>
+     </div>

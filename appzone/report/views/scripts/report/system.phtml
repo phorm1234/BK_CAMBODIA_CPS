@@ -1,0 +1,78 @@
+<style>
+.myform{
+margin-left :100px;
+width : 100%;
+padding:14px;
+
+}
+.topbg{
+margin-left :20px;
+
+height :200px;
+}    
+</style>
+<script type="text/javascript">
+
+$(document).ready(function(){
+ 
+    $("#opener").click(function(){       
+      
+        var opts_QstDetail={
+                    autoOpen:false,
+                    width:'70%',
+                    height:'700',
+                    modal:true,
+                    resizeable:true,
+                    position:'top',
+                    showOpt: {direction:'up'},
+                    closeOnEscape:true,
+                    title:"",
+                    open:function(){
+                        $("#dialog").html("<span style='position: absolute;text-align: center;width: 100%; padding-top: 50px;'><img src='/report/img/ajax-loader.gif'> </span>");
+                        $.ajax({
+                            type:'post',
+                            url:'/report/report/system2',
+                            cache:false,
+                            data:{       
+                                data1:$("#pass").val(),                                              
+                                now:Math.random()
+                            },
+                            success:function(data){
+                                $("#dialog").html(data);
+                            }//end success function
+                        });//end ajax pos
+                    }
+            };
+            $("#dialog").dialog("destroy");
+            $("#dialog").dialog(opts_QstDetail);
+            $("#dialog").dialog("open");
+       
+        
+     
+    });
+   
+});
+	
+</script>
+
+<div class="topbg">
+
+
+
+<div class="myform">
+<table border="0">
+    <tr>
+          <td>PASSWORD :</td>
+          <td><input type="password" id="pass" name="pass"/></td>
+          <td><input type="button" value="ตกลง" id="opener">
+    </tr>
+    
+    
+</table>
+    
+
+<!--</form>-->
+</div>
+</div>
+        
+<div id="dialog" title="SYSTEM CONFIG"></div>

@@ -1,0 +1,27 @@
+<?php 
+$data=$this->data;
+?>
+<table width="50%" border="0" cellpadding="2" cellspacing="2" align="center">
+<?php 
+$i=1;
+foreach($data as $val_data){
+	$qty=abs($val_data['qty']);
+	$sum=abs($val_data['sum']);
+?>
+ <tr>
+ 	<td class="Big_servBodL_right" height="25">จำนวนชิ้นที่ <?php echo $val_data['rs'];?></td>
+ 	<td class="bigfont"><?php echo number_format($qty);?></td>
+ 	<td class="Big_servBodL_right">มูลค่าที่ <?php echo $val_data['rs'];?></td>
+ 	<td class="bigfont"><?php echo number_format($sum);?></td>
+ </tr>
+
+<?php 
+$i++;
+}
+?>
+<tr>
+	<td></td>
+	<td></td>
+	<td colsapn="2"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="tranfer_stock();"><span class="ui-icon ui-icon-plusthick"></span>ยืนยัน</td>
+</tr>
+</table>

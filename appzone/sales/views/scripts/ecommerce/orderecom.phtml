@@ -1,0 +1,135 @@
+<style type="text/css">
+<!--
+	.ord_text_box_address_disble{
+			background:transparent;
+			width:200px !important;
+			border-top:0;
+			border-left:0;
+			border-right:0;
+			border-bottom:1pt solid#999 !important;
+			color:#000;
+		}
+	.ord_text_box_disble{
+			background:transparent;
+			width:130px !important;
+			border-top:0;
+			border-left:0;
+			border-right:0;
+			border-bottom:1pt solid#999 !important;
+			color:#000;
+		}
+	.ord_text_box_summary_disble{
+		background:transparent;
+		width:100px !important;
+		border-top:0;
+		border-left:0;
+		border-right:0;
+		border-bottom:1pt solid#999 !important;
+		color:#000;
+	}
+	.ord_text_box_summary_disble{
+		text-align:right;
+	}
+-->
+</style>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="0"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+	<tr bgcolor="#B9E7CF" height="40">
+		<td>
+		<img src="http://localhost/sales/img/icon_bag_32x32.png" align="absmiddle"/>
+		&nbsp;<span style='font-size:24px;color:#454545;'>ยืนยันใบสั่งซื้อ(Confirm Order Ecommerce)</span>		
+		</td>
+		<td align="right"><span style='font-size:24px;color:#454545;'>วันที่เอกสาร :</span> <span style='font-size:23px;color:#000000;'><?php echo $this->doc_date_show;?>&nbsp;</span></td>
+	</tr>
+	
+</table>
+<table width="100%" border="0" cellspacing="5" cellpadding="0" style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+	<tr>
+		<td width="8%" align="right" >เลขที่เอกสาร&nbsp;:</td>		
+		<td width="27%">
+			<input type="text" id="ord_doc_no" name="ord_doc_no" size="32"  class="input-text-pos ui-corner-all"  />
+		</td>
+		<td width="3%">
+			<a href="#" name="bws_orddocno" id="bws_orddocno" class='btnGreenClean'>...</a>
+		</td>
+		<td width="10%" align="right">รหัสสมาชิก&nbsp;:</td>
+		<td colspan="2">
+			<input type="text" id="ord_member_no" id="ord_member_no" size="15"  class="ord_text_box_disble" readonly />
+			<input type="hidden" id="ord_member_no_hide" id="ord_member_no_hide" size="25"></input>
+		</td>
+	</tr>
+	
+	<tr height="32">
+		<td  align="right">จำนวน&nbsp;:</td>
+		<td colspan="2">
+			<table width="100%">
+				<tr>
+				<td>
+					<input type="text" id="quantity" name="quantity" size="1" value="1" class="input-text-pos ui-corner-all" ></input>						
+				</td>
+				<td align="right">รหัสสินค้า&nbsp;:</td>
+				<td>
+					<input type="text" id="product_id" name="product_id" size="15" class="input-text-pos ui-corner-all" ></input>
+				</td>
+				<td>
+					<a href="#" name="bws_submit_product" id="btn_submit_product" class='btnGreenClean'>ตกลง</a>
+				</td>
+				</tr>
+			</table>
+		</td>
+		
+		
+		<td width="10%" align="right">ชื่อ-นามสกุล&nbsp;:</td>
+		<td>
+			<input type="text" id="ord_fullname" name="ord_fullname" size="25" class="ord_text_box_disble" ></input>
+		</td>
+		<td >&nbsp;ที่อยู่&nbsp;<input type="text" id="ord_address" name="ord_address" size="60" class="ord_text_box_address_disble"></input></td>
+	</tr>
+</table>
+<input type="hidden" id="ord_cashier_id" value="<?php echo $this->session_employee_id;?>"></input>
+</td>
+</tr>
+<tr>
+<td>
+<table id="tbl_ord"></table>
+<table width="100%" border="0" cellpadding="0" cellspacing="2" bgcolor="#FFFFFF">
+	<tr height="30">
+		<td width="">&nbsp;</td>
+		<td width="10%" align="right">จำนวน&nbsp;</td>
+		<td width="10%"><input type="text" size="10" id="ord_sum_quantity" class="ord_text_box_disble  ord_text_box_summary_disble"/ readonly></td>
+		<td width="7%">&nbsp;ชิ้น</td>			
+	</tr>
+	
+	<tr height="30">
+		<td>&nbsp;</td>
+		<td align="right">รวมเงิน&nbsp;</td>
+		<td><input type="text" size="10" id="ord_sum_net_amt" class="ord_text_box_disble  ord_text_box_summary_disble"/ readonly></td>
+		<td>&nbsp;บาท</td>		
+	</tr>	
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table width="100%" height="80" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+	<tr>
+		<td>&nbsp;</td>
+		<td width="15%">
+			<a href="#" name="btn_ord_submit" id="btn_ord_submit" class='btnGreenClean'>ยืนยันใบสั่งสินค้า</a>
+		</td>
+		<td width="1%">&nbsp;</td>
+		<td width="5%">
+			<a href="#" name="btn_ord_cancel" id="btn_ord_cancel" class='btnGreenClean'>ยกเลิก</a>
+		</td>
+		<td width="10%">&nbsp;</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<input type="hidden" name="csh_user_id" id="csh_user_id" value="<?php echo $this->session_employee_id;?>"></input>
+<input type="hidden" name="csh_cashier_id" id="csh_cashier_id" value="<?php echo $this->session_employee_id;?>"></input>
+<input type="hidden" name="csh_saleman_id" id="csh_saleman_id" value=""></input>
+<script type="text/javascript" src="/sales/js/ecommerce/orderecom.js"></script>

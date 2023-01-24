@@ -1,0 +1,183 @@
+<script>
+(function( $ ) {
+	$.widget( "ui.combobox", {
+		_create: function() {
+			var self = this,
+				select = this.element.hide(),
+				selected = select.children( ":selected" ),
+				value = selected.val() ? selected.text() : "";
+			var input = this.input = $( "<input id='enter' onKeyPress='return addproduct(event);' size='30'>" )
+				.insertAfter( select )
+				.val( value )
+				.autocomplete({
+					delay: 0,
+					minLength: 0,
+					source: function( request, response ) {
+						var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+						response( select.children( "option" ).map(function() {
+							var text = $( this ).text();
+							if ( this.value && ( !request.term || matcher.test(text) ) )
+								return {
+									label: text.replace(
+										new RegExp(
+											"(?![^&;]+;)(?!<[^<>]*)(" +
+											$.ui.autocomplete.escapeRegex(request.term) +
+											")(?![^<>]*>)(?![^&;]+;)", "gi"
+										), "<strong>$1</strong>" ),
+									value: text,
+									option: this
+								};
+						}) );
+					},
+					select: function( event, ui ) {
+						ui.item.option.selected = true;
+						self._trigger( "selected", event, {
+							item: ui.item.option
+						});
+					},
+					change: function( event, ui ) {
+						if ( !ui.item ) {
+							var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
+								valid = false;
+							select.children( "option" ).each(function() {
+								if ( $( this ).text().match( matcher ) ) {
+									this.selected = valid = true;
+									return false;
+								}
+							});
+							if ( !valid ) {
+								// remove invalid value, as it didn't match anything
+								$( this ).val( "" );
+								select.val( "" );
+								input.data( "autocomplete" ).term = "";
+								return false;
+							}
+						}
+					}
+				})
+				.addClass( "ui-widget ui-widget-content ui-corner-left" );
+
+			input.data( "autocomplete" )._renderItem = function( ul, item ) {
+				return $( "<li></li>" )
+					.data( "item.autocomplete", item )
+					.append( "<a>" + item.label + "</a>" )
+					.appendTo( ul );
+			};
+
+			this.button = $( "<button type='button'></button>" )
+				.attr( "tabIndex", -1 )
+				.attr( "title", "Show All Items" )
+				.insertAfter( input )
+				.button({
+					icons: {
+						primary: "ui-icon-triangle-1-s"
+					},
+					text: false
+				})
+				.removeClass( "ui-corner-all" )
+				.addClass( "ui-corner-right ui-button-icon" )
+				.click(function() {
+					// close if already visible
+					if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
+						input.autocomplete( "close" );
+						return;
+					}
+
+					// work around a bug (likely same cause as #5265)
+					$( this ).blur();
+
+					// pass empty string as value to search for, displaying all results
+					input.autocomplete( "search", "" );
+					input.focus();
+				});
+		},
+
+		destroy: function() {
+			this.input.remove();
+			this.button.remove();
+			this.element.show();
+			$.Widget.prototype.destroy.call( this );
+		}
+	});
+})( jQuery );
+
+$(function() {
+	$( "#combobox" ).combobox();
+	$( "#toggle" ).click(function() {
+		$( "#combobox" ).toggle();
+	});
+});
+  
+function addproduct(event){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		var product_id=$("#enter").val();
+		var product_id = product_id.split(':');
+		var product_id = product_id[0];
+		var shelf_no=$("#send_shelf_no").val();
+		var floor_no=$("#send_floor_no").val();
+		var room_no=$("#send_room_no").val();
+		if(product_id==""){return false;}
+		$.ajax({type: "POST",url: "/stock/checkstock/addproducttoshelf",
+			data:{
+			product_id:product_id,
+			shelf_no:shelf_no,
+			floor_no:floor_no,
+			room_no:room_no},success:
+		function(data){
+			$("#enter").val("");
+			viewproductonshelf();
+		}}); 
+	}
+	event.stopPropagation();
+}
+viewproductonshelf();
+function viewproductonshelf(){
+	var shelf_no=$("#send_shelf_no").val();
+	var floor_no=$("#send_floor_no").val();
+	var room_no=$("#send_room_no").val();
+	$.ajax({type: "POST",url: "/stock/checkstock/viewproductonshelf",data:{shelf_no:shelf_no,floor_no:floor_no,room_no:room_no},success:
+	function(data){
+		$("#viewproductonshelfhtml").html(data);
+	}});
+}
+
+function deleteproductonshelf(){
+	var txt="Confirm Delete!";
+		jConfirm(txt, 'Confirm Process', function(r) {
+		if(r==true){
+			var form=$('form#onviewproduct').serialize();
+			$.ajax({type: "POST",url: "/stock/checkstock/deleteproductonshelf",data:form,success:
+			function(data){
+				viewproductonshelf();
+			}});
+		}
+	});
+}
+</script>
+<?php 
+$detailData=$this->detaildata;
+$listproduct=$this->listproduct;
+?>
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td colspan="3" height="28" align="right">Shelf No. : <?php echo $detailData['shelf_no'];?> &gt;Floor No. : <?php echo $detailData['floor_no'];?> &gt;Room No. : <?php echo $detailData['room_no'];?></td>
+  </tr>
+  <tr>
+    <td height="25" colspan="3" align="left">
+    <table widht="100%" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td align="left">
+				Add Product : <input id="enter" onKeyPress="return addproduct(event);" size='15'>
+			</td>
+		</tr>
+	</table>	
+    </td>
+  </tr>
+</table>
+<form id="onviewproduct" name="onviewproduct">
+<input type="hidden" name="send_shelf_no" id="send_shelf_no" value="<?php echo $detailData['shelf_no'];?>"></input>
+<input type="hidden" name="send_floor_no" id="send_floor_no" value="<?php echo $detailData['floor_no'];?>"></input>
+<input type="hidden" name="send_room_no" id="send_room_no" value="<?php echo $detailData['room_no'];?>"></input>
+<div id="viewproductonshelfhtml"></div>
+</form>

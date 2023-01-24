@@ -1,0 +1,16 @@
+<?php 			
+	$table= "<table border=0 cellpadding=2 cellspacing=1 width='100%' bgcolor='#999999'>";
+	$table.="<tr bgcolor='#99CCCC'><td align='center'>Member no.</td><td align='center'>OPS Day</td><td align='center'>Apply Date</td><td align='center'>Expire Date</td></tr>";
+	if(!empty($this->arr_ops)){
+		$i=0;
+		foreach($this->arr_ops as $data){
+			($i%2==0)?$bg_color="#aaffff":$bg_color="#F4F4F4";
+			$table.= "<tr bgcolor='$bg_color'>
+						<td align='center'>".$data['member_no']."</td><td align='center'>".$data['ops']."</td><td align='center'>".$data['apply_date']."</td><td align='center'>".$data['expire_date']."</td>";
+			$table.= "</tr>";
+			$i++;
+		}
+	}
+	$table.= "</table>";
+	echo $table;	
+?>

@@ -1,0 +1,11 @@
+
+******file*********
+/htdocs/fingerprint/
+/htdocs/finger_shop/application/controllers/socket.php
+/htdocs/finger_shop/.htaccess
+
+
+******confige*******
+
+chmod 777 folder /htdocs/fingerprint/finger
+chmod 777 folder /htdocs/fingerprint/finger/user_id.txt 

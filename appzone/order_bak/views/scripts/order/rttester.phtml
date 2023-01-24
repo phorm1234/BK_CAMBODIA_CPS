@@ -1,0 +1,632 @@
+<style type="text/css">
+	.flexigrid div.fbutton .view_product {
+		background: url(/stock/img/view_choose.png) no-repeat center left;
+	}
+	.flexigrid div.fbutton .delete {
+		background: url(/stock/img/delete.png) no-repeat center left;
+	}
+</style>
+<center>
+<form id="frm_tranferkeyin">
+<table width="100%" cellspacing="3" cellpadding="0" border="0" bgcolor="dbfaed" background="/stock/img/bg_header.gif">
+<tbody>
+<tr>
+<td height="5" colspan="6"></td>
+</tr>
+<tr>
+<td class="servBodL_right" width="18%" align="right">เลขที่เอกสาร : </td>
+<td width="5">
+<span id="doc_number">
+<select id="doc_status" class="NFText_hidden" onchange="gendocto();" name="doc_status">
+	<?php echo $this->doc_no;?>
+</select>
+</span>
+</td>
+<td width="2%"> </td>
+<td class="servBodL_right" width="12%" align="right">วงเงินสินค้า : </td>
+<td width="3%">
+<input id="quota" class="NFText_hidden" type="text" onkeypress=""  size="8" value="<?php echo $this->quota;?>" name="type_product" disabled="disabled">
+</td>
+<td> </td>
+</tr>
+<tr>
+	<td class="servBodL_right" width="18%" align="right">ยอดสินค้า :</td>
+	<td><input id="totalproduct" class="NFText_hidden" type="text" onkeypress=""  size="8" value="0.00" name="type_product" disabled="disabled"></td>
+	<td></td>
+	<td class="servBodL_right" width="12%" align="right">คงเหลือ :</td>
+	<td><input id="amt" class="NFText_hidden" type="text" onkeypress=""  size="8" value="<?php echo $this->balance;?>" name="type_product" disabled="disabled"></td>
+</tr>
+<tr>
+	<td class="servBodL_right" width="18%" align="right">ประเภทสินค้า :</td>
+	<td><input id="type_product" class="NFText_hidden" type="text" onkeypress=""  size="8" value="สินค้า Tester" name="type_product" disabled="disabled"></td>
+	<td></td>
+	<td class="servBodL_right" width="12%" align="right">วันที่ :</td>
+	<td>
+		<input id="type_product" class="NFText_hidden" type="text" onkeypress=""  size="10" name="date" value="<?php echo $this->doc_date;?>" disabled="disabled">
+	</td>
+</tr>
+
+<tr>
+<td class="servBodL_right" align="right">หมายเหตุ :</td>
+<td colspan="5">
+<input id="doc_remark" class="NFText" type="text" onkeypress="return process(event,'check_doc_remark')" size="50" maxleng="50" name="doc_remark">
+</td>
+</tr>
+<tr>
+<td class="servBodL_right" colspan="" align="right">รหัสสินค้า : </td>
+<td  colspan="5">
+<input id="product_id" class="NFText" type="text" onkeypress="return process(event,'product')" size="15" name="product_id">
+
+จำนวน : 
+<input id="qty" class="NFText" type="text" onkeypress="return process(event,'qty')" size="3" name="qty">
+
+คืนครั้งสุดท้าย :
+<input id="last_doc" class="NFText_hidden" type="text" onkeypress="return process(event,'last_doc')" size="9" name="qty" disabled="disabled">
+ยอดขาย
+<input id="sum" class="NFText_hidden" type="text" onkeypress="return process(event,'sum')" size="9" name="qty" disabled="disabled">
+<!--<input type="button" id="btnsave" value="บันทึก" onclick="save_data();">-->
+</td>
+</tr>
+<tr>
+<td height="5" colspan="6"></td>
+</tr>
+</tbody>
+</table>
+</form>
+<table width="100%" bgcolor="#d1d1d1">
+	<tr>
+		<td><div id="detail"><table id="flex1" style="display:none"></table></div></td>
+	</tr>
+	<tr>
+		<td>
+			<table width="100%" border="0" cellpadding="2" cellspacing="2" bgcolor="#e9f2f8" align="center">
+				<tr>
+					<td width="5%" height="30"></td>
+					<td width="10%"></td>
+					<td width="21%"></td>
+					<td width="10%" align="right"><b>รวม</b></td>
+					<td width="10%" align="center"><input id="qt" type="text" value="" size="10" class="NFText" disabled="disabled"></td>
+					<td width="10%" align="center"><input id="am" type="text" value="" size="10" class="NFText" disabled="disabled"></td>
+					<td width="10%"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td width="5%" height="30"></td>
+					<td width="10%"></td>
+					<td width="21%"></td>
+					<td width="10%" align="right"></td>
+					<td width="10%" colspan="2">
+						<table width="100%" border="0" cellpadding="2" cellspacing="2">
+							<tr>
+								<td align="right"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return savediary();"><span class="ui-icon ui-icon-disk"></span>บันทึก  (F3)</a></td>
+								<td align="left"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return canceldiary();"><span class="ui-icon ui-icon-cancel"></span>ยกเลิก (F4)</a></td>
+							</tr>
+						</table>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<input type="hidden" name="doc_no" id="doc_no" value="">
+<input type=hidden name="status_trans" id="status_trans" value="">
+</center>
+<script type="text/javascript">
+var pWidth=(screen.width-(screen.width*(20/100)))-10;
+var pWidth=(screen.width-(screen.width*(2/100)))-10;
+var pWidth=(screen.width-(screen.width*(3/100)))-10;
+$( document ).keydown(function(event) {
+			if(event.which ==114){
+				savediary();
+				//return false;
+			}else if(event.which == 115){
+				canceldiary();
+				//return false;
+			}	
+});
+var txt="สั่งสินค้า";
+showamount();
+$("#flex1").flexigrid({
+	url: '/order/order/rtlist',
+	dataType: 'json',
+	colModel : [
+		{display: 'ลำดับ', name : 'product_id', width : 40, sortable : true, align: 'center'},
+		{display: 'รหัสสินค้า', name : 'product_id', width : 95, sortable : true, align: 'center'},
+		{display: 'รายละเอียด', name : 'desct', width : 190, sortable : false, align: 'left'},
+		{display: 'ราคา', name : 'price', width : 90, sortable : false, align: 'center'},
+		{display: 'จำนวน', name : 'qty', width : 65, sortable : false, align: 'center'},
+		{display: 'จำนวนเงิน', name : 'qty_amount', width : 90, sortable : false, align: 'center'},
+		{display: 'คืนครั้งสุดท้าย', name : 'last_doc', width : 90, sortable : false, align: 'center'},
+		{display: 'ยอดขาย', name : 'amount', width : 90, sortable : false, align: 'center'}
+		],
+		buttons : [
+      	{name: 'ลบ', bclass: 'delete', onpress : productaction},
+      	{separator: true}
+      	],
+		searchitems : [
+		{display: 'รหัสสินค้า', name : 'product_id'}
+		],
+	sortname: "seq",
+	sortorder: "asc",
+	usepager: true,
+	title: txt,
+	useRp: true,
+	rp: 30,
+	showTableToggleBtn: true,
+	onSubmit: addFormData,
+	height: 300
+});
+
+$( document ).ready(function() {
+	$.ajax({type: "POST",url: "/order/order/checkstatusrt",data:{checkstatus:'',str_status:''},success:
+		function(data){
+		 if(data == "0"){
+				jAlert("ไม่สามารถทำรายการได้ เนื่องจากได้ทำรายการเดือนนี้ไปแล้ว");
+			}	
+		}
+	});
+});
+
+function productaction(com, grid) {
+	var doc_no=$("#doc_no").val();
+	if($('.trSelected',grid).length>0){	
+		var items = $('.trSelected',grid);
+		var itemlist ='';
+		for(i=0;i<items.length;i++){
+			itemlist+= items[i].id.substr(3)+",";
+			//itemlist= items[i].id.substr(3);
+		}
+	}
+	if (com == 'ลบ') {
+		var doc_no = $("#doc_no").val();
+		var status_trans = $("#status_trans").val();//status_transfer<>T
+		//alert(status_trans);
+		if(status_trans ==""){
+			if(itemlist==undefined){
+				jAlert('คุณยังไม่เลือกรายการสินค้า!', 'แจ้งเตือน');;
+			}else{
+				//alert("itemlist==>" + itemlist );
+				jConfirm('ยืนยันการลบสินค้า', 'แจ้งเตือน', function(r) {
+					if(r==false){
+						return false;
+					}else{
+						$.ajax({type: "POST",url: "/order/order/deletediarty2rt",data:{seq:itemlist},success:
+							function(data){
+								if(data=="1"){
+									$("#flex1").flexReload();
+									showamount();
+								}
+							}
+						});
+					}
+				});
+			} 
+		}else{
+			jAlert("คุณไม่มีสิทธิลบข้อมูล รายการได้ทำการยกเลิกไปแล้ว");
+		}		
+	}
+}//func
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+	
+$('#sform').submit(function (){
+	$('#flex1').flexOptions({newp: 1}).flexReload();
+	return false;
+});
+
+function process(event,chk){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	//alert(event);
+	keyCode = event.which; // Firefox   
+	if (keyCode == 13) {
+		if(chk=="check_doc_remark"){
+			var remark = $("#doc_remark").val();
+			$("#product_id").focus();
+		}
+		if(chk == "product"){
+			check_product();
+		}
+		if(chk == "qty"){
+			check_qty();
+		}			
+	}
+}
+
+$("#product_id").focusout(function() {
+	check_product();
+});
+
+function check_product(){
+	var product = $("#product_id").val();
+	var doc_no = $("#doc_no").val();
+	if(product == ""){
+		jAlert("กรุณาใส่รหัสสินค้า");
+	}else{
+		$.ajax({type: "POST",url: "/order/order/checkproductid",data:{product_id:product,doc_no:doc_no},success:
+			function(data){
+				if(data =="y"){
+					check_product_master(product);
+				}else if(data == 'd'){
+					jAlert('มีรหัสสินค้านี้แล้ว กรุณาตรวจสอบอีกครั้ง','ข้อความแจ้งเตือน',function(){
+						$("#product_id").select().focus();
+						return false;
+	    			});
+					return false;
+				}else if(data == "n"){
+					jAlert('ไม่พบรหัสสินค้า กรุณาตรวจสอบอีกครั้ง','ข้อความแจ้งเตือน',function(){
+						$("#product_id").select().focus();
+						return false;
+	    			});
+					return false;
+					
+				}
+			}
+		});
+		}	
+}
+
+function check_product_master(product){
+	/***
+	*@แสดงยอดขาย
+	*@modify 27102016
+	*/
+	$.ajax({type: "POST",url: "/order/order/checkproductmas",data:{product_id:product},dataType: 'json',success:
+		function(data){
+			if(data.status =="1"){
+				$("#qty").focus();
+				$("#last_doc").val(data.doc);
+				$("#product_id").val(data.product_id);
+				//$("#sum").val(data.qty);
+				$("#sum").val(data.summary_sales);//*WR27102016 ยอดขาย
+			}else{
+				jAlert("ไม่พบรหัสสินค้า : " + product,"ข้อความแจ้งเตือน",function(){
+					$("#product_id").select().focus();
+					return false;
+    			});
+				
+			}
+		}
+	});
+}//func
+
+function check_qty(){
+	/**
+	*@mofify : 22092016
+	*/
+	var qty = $("#qty").val();
+	var product = $("#product_id").val();
+	if(qty == ""){
+		alert("กรุณาใส่จำนวนตัวเลข");
+		$("#qty").val("");	
+		$("#qty").focus();	
+	}else{
+			if(product == ""){
+				jAlert("กรุณาใส่รหัสสินค้า");
+			}else{		
+				if(qty == parseInt(qty)){
+					if(qty != "0"){
+						//------ strart ---------
+						$.ajax({
+							type: "POST",
+							url: "/order/order/checkqty",
+							data:{
+								product_id:product,
+								qty:qty
+							},success:function(data){
+								if(data=='y'){
+									save_data();
+								}else if(data=='f'){
+									jAlert("ไม่สามารถคืนสินค้ามากกว่า 1 ชิ้นได้");
+									$("#qty").focus();
+								}else{
+									jAlert("สินค้าไม่พอ");
+									$("#qty").focus();
+								}
+							}
+						});
+						//------ stop ----------
+					}else{
+						jAlert("กรุณาใส่จำนวนสินค้า");
+						$("#qty").val("");	
+						$("#qty").focus();	
+					}	
+				}else{
+					alert("กรุณาใส่ข้อมูลเป็นตัวเลข");
+					$("#qty").val("");
+					$("#qty").focus();	
+				}	
+		}
+	}
+
+  
+  }
+
+	function save_data(){
+		var checkstatus = $("#doc_status").val();
+		var product_id  = $("#product_id").val();
+		var qty			= $("#qty").val();
+		var doc_remark	= $("#doc_remark").val();
+		var last_doc	= $("#last_doc").val();
+		var sumqty		= $("#sum").val();
+		var str_status = checkstatus.substr(21);
+		//alert(checkstatus);
+		//alert(str_status);
+		//check_qty();
+		if(qty != "0"){
+			
+		if(checkstatus == "" || str_status == ""){
+			if(product_id != "" && qty != "" && last_doc != "" && sumqty != ""){
+				jConfirm('ยืนยันการบันทึกสินค้า', 'แจ้งเตือน', function(r) {
+					checkstatus = checkstatus.substr(0,20);
+					//alert(checkstatus);
+					if(r==false){
+						return false;
+					}else{
+						$.ajax({type: "POST",url: "/order/order/checkstatusrt",data:{checkstatus:checkstatus,str_status:str_status},success:
+							function(data){
+								if(data =="1"){
+									add_data();
+								}else if(data == "0"){
+									jAlert("ไม่สามารถทำรายการได้ เนื่องจากได้ทำรายการเดือนนี้ไปแล้ว");
+								}else if(data == "2"){
+									jAlert("ไม่สามารถทำรายการได้");
+								}	
+							}
+						});
+					}
+				});	
+			}else{
+				jAlert("กรุณาตรวจสอบข้อมูลอีกครั้ง");
+				$("#product_id").focus();
+			}				
+		}else{
+		}
+		}else{
+			//alert("กรุณาใส่จำนวนสินค้า");
+		}		
+	}
+
+  function add_data(){
+		var product_id  = $("#product_id").val();
+		var qty			= $("#qty").val();
+		var doc_remark	= $("#doc_remark").val();
+		var last_doc	= $("#last_doc").val();
+		var sumqty		= $("#sum").val().replace(/[^\d\.\-\ ]/g,'');//จำนวนเงิน;
+		var amt			= $("#amt").val();
+		var doc_no  	= $("#doc_no").val();
+		$.ajax({
+				type: "POST",
+				url: "/order/order/savert",
+				data:{
+					product_id:product_id,
+					qty:qty,
+					doc_remark:doc_remark,
+					last_doc:last_doc,
+					sum:sumqty,
+					quota:amt,
+					doc_no:doc_no
+					},
+				success:
+			function(data){
+				if(data =="1"){
+					$("#flex1").flexReload(); 
+					$("#product_id").val('').focus();
+					$("#qty").val("");
+					$("#last_doc").val("");
+					$("#doc_remark").val(doc_remark);
+					$("#sum").val("");
+					showamount();
+				}else if(data == "0"){
+					jAlert("ไม่สามารถทำรายการได้");
+				}else if(data =="2"){
+					jAlert("ยอดเงินคงเหลือไม่พอในการทำรายการ");
+					$("#qty").select();
+				}else if(data == "n"){
+					jAlert("มีเอกสารที่รอการอนุมัติให้ทำรายการนั้นก่อน");	
+					$("#product_id").val("");
+					$("#qty").val("");
+					$("#last_doc").val("");
+					$("#doc_remark").val("");
+					$("#sum").val("");
+				}		
+			}
+		});
+  }
+
+  function showamount(){
+	  var total = 0;
+	  var quota = $("#quota").val();
+	  var doc_status = $("#doc_no").val();
+	  var doc_remark = $("#doc_remark").val();
+	  //alert(quota);
+	  $.ajax({type: "POST",url: "/order/order/showamount",data:{checkstatus:doc_status},dataType:'json',success:
+			function(data){
+				if(data.am !=""){
+					$("#am").val(data.am);
+					$("#qt").val(data.qty);
+					//alert(data.am);
+					total = quota-data.amt;
+					$("#totalproduct").val(data.am);
+					$("#quota").val(data.quota);
+					$("#amt").val(data.amt);
+					$("#doc_remark").val(doc_remark);
+				}else{
+					alert("เชื่อมต่อล้มเหลว");
+				}
+			}
+		});
+  }	   		
+
+ function savediary(){
+	 var am = $("#am").val().replace(/[^\d\.\-\ ]/g,'');//จำนวนเงินคงเหลือ;	                   
+	 var amt = $("#amt").val().replace(/[^\d\.\-\ ]/g,'');//จำนวนเงิน amount;
+	 var qt = $("#qt").val();
+	 var remark = $("#doc_remark").val();
+	 var quota = $("#quota").val();
+	 var doc_no = $("#doc_no").val();
+	 var str_status =$("#status_trans").val();
+	 //alert(quota);showamount()
+	 //alert(am);
+	 var doc_no = $("#doc_no").val();
+	 if(str_status == ""){
+		 jConfirm('คุณต้องการบันทึกใบคำขอคืน Tester(RT) ใช่หรือไม่?','ยืนยันการบันทึก', function(r){
+		        if(r){
+		        	$.ajax({
+					 	type: "POST",
+					 	url: "/order/order/savediary",
+					 	data:{
+						 	checkstatus:'save',
+							am:am,
+							qt:qt,
+							remark:remark,
+							amt:amt,
+							doc_no:doc_no
+							 },
+					 	dataType:'json',
+					 	success:
+						function(data){
+							if(data =="1"){
+								$("#flex1").flexReload(); 
+								$("#doc_remark").val("");
+								if(doc_no != ""){
+									jAlert("บันทึกข้อมูลสำเร็จ");
+									$("#doc_no").val("");
+									var doc_no =$("#doc_status").val("");
+									gendocto();
+									$('#flex1').flexReload();
+									$("#product_id").val("");
+									$("#qty").val("");
+									$("#last_doc").val("");
+									$("#doc_remark").val("");
+									$("#sum").val("");
+								}	
+								showamount();
+								doc_number();
+							}else if(data =="2"){
+								jAlert("ไม่มีข้อมูลไม่สามารถบันทึกข้อมูลได้");
+							}else{
+								jAlert("บันทึกข้อมูลไม่สำเร็จ");
+							}	
+					 	}
+					});
+		        }//end r
+		        return false;
+		});//jconfirm
+			 
+		 
+	 }else if(str_status == "C"){
+		jAlert("รายการนี้ได้ทำการยกเลิกไปแล้ว");
+	}else if(str_status=="T"){
+		jAlert("รายการนี้ได้ทำการอนุมัติไปแล้ว");
+	}	 
+ }	 
+
+ function gendocto(){
+	    //alert($("#doc_status").val());
+		//var doc_status = $("#doc_status").val().replace(/,/g,'');
+		var doc_status = $("#doc_status").val();//format string = OP7777RT-01-00000001,T
+		$("#doc_no").val(doc_status);
+		var str_doc = "";
+		var str_status = "";
+		var tmp;
+		if(doc_status != ""){
+			tmp = doc_status.split(",");
+			str_status = tmp[1];//status_transfer T
+			doc_status = tmp[0];//doc_no
+			//alert("str_status=> " + str_status + " ,doc_status=> " + doc_status);
+			//alert(doc_status);
+			//str_status = doc_status.substr(21);
+			//doc_status = doc_status.substr(0,20);
+			
+			if(str_status != ""){
+				$("#status_trans").val(str_status);
+				$('#product_id').attr('disabled', 'disabled');
+				$('#product_id').addClass('NFText_hidden');
+				$('#doc_remark').attr('disabled', 'disabled');
+				$('#doc_remark').addClass('NFText_hidden');
+				$('#qty').attr('disabled', 'disabled');
+				$('#qty').addClass('NFText_hidden');
+				$('#last_doc').attr('disabled', 'disabled');
+				$('#last_doc').addClass('NFText_hidden');
+				$('#sum').attr('disabled', 'disabled');
+				$('#sum').addClass('NFText_hidden');
+			}else{
+				$('#product_id').attr('disabled',false);
+				$('#product_id').removeClass('NFText_hidden');
+				$('#doc_remark').attr('disabled', false);
+				$('#doc_remark').removeClass('NFText_hidden');
+				$('#qty').attr('disabled',false);
+				$('#qty').removeClass('NFText_hidden');
+				$('#last_doc').attr('disabled', 'disabled');
+				$('#sum').attr('disabled', 'disabled');
+				
+			}	
+		}else{
+			
+			$('#product_id').attr('disabled',false);
+			$('#product_id').removeClass('NFText_hidden');
+			$('#doc_remark').attr('disabled', false);
+			$('#doc_remark').removeClass('NFText_hidden');
+			$('#qty').attr('disabled',false);
+			$('#qty').removeClass('NFText_hidden');
+			$('#last_doc').attr('disabled', 'disabled');
+			$('#sum').attr('disabled', 'disabled');
+		}		
+		//alert(doc_status);
+		//$('#flex1').flexOptions({query:doc_status}).flexReload();
+		//*WR27102016
+		//alert("str_status===>" + str_status);
+		//$('#flex1').flexOptions({query:str_status}).flexReload();
+		$('#flex1').flexOptions({query:doc_status}).flexReload();		
+		$("#doc_no").val(doc_status);
+		$("#status_trans").val(str_status);
+		showamount();
+ }
+ 
+ function canceldiary(){
+	 var doc_no = $("#doc_no").val();
+	 var status_trans = $("#status_trans").val();
+	 //alert(status_trans);
+	 if(status_trans ==""){
+		 jConfirm('ยืนยันการยกเลิก', 'แจ้งเตือน', function(r) {
+				if(r==false){
+					return false;
+				}else{
+					$.ajax({type: "POST",url: "/order/order/canceldiary",data:{checkstatus:'cancel',doc_no:doc_no},success:
+						function(data){
+							if(data =="1"){
+								$('#flex1').flexReload();
+								showamount();
+							}else if(data =="2"){
+								jAlert("ไม่มีรายการข้อมูล");
+							}else{
+								jAlert("ไม่สามารถยกเลิกรายการได้");
+							}	
+						}
+					});
+				}
+		});	
+	 }else if(status_trans == 'C') {
+		jAlert("เอกสารถูกยกเลิกแล้ว ไม่สามารถยกเลิกซ้ำได้","ข้อความแจ้งเตือน");
+	 } else {
+		jAlert("ไม่สามารถยกเลิกได้");
+	 } 	
+ } 
+
+ function doc_number(){
+	 $.ajax({type: "POST",url: "/order/order/docnumber",data:{checkstatus:'cancel'},success:
+			function(data){
+				if(data !=""){
+					$("#doc_number").html(data);
+				}else{
+					//jAlert("");
+				}	
+			}
+		});
+	 } 
+</script>

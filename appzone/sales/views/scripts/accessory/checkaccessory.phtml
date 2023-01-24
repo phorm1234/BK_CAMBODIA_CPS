@@ -1,0 +1,201 @@
+<style type="text/css">
+	#chkacc{
+		width:450px;
+		height:300px;
+		background:#f9f9f9;
+	}
+	label{
+		display:block;		
+		width:200px;		
+	}
+	.showStatus{
+		display:'';
+	}
+	.hideStatus{
+		display:none;
+	}
+	.stopStatus{
+		disPlay:'';
+	}
+	.statusOk{
+		
+	}
+	.statusFail{
+		
+	}
+</style>
+<div style="background-color:#ffffff;width:100%;height: 100%;"></div>
+<div id="chkacc">
+		<table border="0" cellpadding="5" cellspacing="1" bgcolor="#f8f8f8" class="ui-widget-content ui-corner-all" style="border:5pt solid#e4e4e4;">	
+		<tr bgcolor="8FBC8F">
+			<td colspan="3" align='center'>ตรวจสอบอุปกรณ์เสริม</td>
+		</tr>
+		<tr>	
+		<td width="150" align="right">Office Status</td>
+		<td width="200" align="center">
+			<img name="office_status" src="/sales/img/ajax-ping-green-loader.gif" id="office_status_loader" class="pingLoader">
+		</td>		
+		<td width="80">
+			<img src="/sales/img/icon_check_16x16.png" id="office_status_result" class="pingResult">
+		</td>
+		</tr>
+		<tr>
+		<td align="right">Rounter Status</td>
+		<td align="center">
+			<img name="rounter_status" src="/sales/img/ajax-ping-green-loader.gif" id="rounter_status_loader" class="pingLoader">
+		</td>
+		<td><img src="/sales/img/icon_check_16x16.png" id="rounter_status_result" class="pingResult"></td>
+		</tr>
+		<tr>
+		<td align="right">Computer Status</td>
+		<td align="center">
+		<img name="computer_status" src="/sales/img/ajax-ping-green-loader.gif" id="computer_status_loader" class="pingLoader">
+		</td>
+		<td><img src="/sales/img/icon_check_16x16.png" id="computer_status_result" class="pingResult"></td>
+		</tr>
+		<tr>
+		<td align="right">EDC Status</td>
+		<td align="center">
+		<img name="edc_status" src="/sales/img/ajax-ping-green-loader.gif" id="edc_status_loader" class="pingLoader">
+		</td>
+		<td><img src="/sales/img/icon_check_16x16.png" id="edc_status_result" class="pingResult"></td>
+		</tr>
+		<tr>
+		<td align="right">CAM1 Status</td>
+		<td align="center">
+		<img name="cam1_status" src="/sales/img/ajax-ping-green-loader.gif" id="cam1_status_loader" class="pingLoader">
+		</td>
+		<td><img src="/sales/img/icon_check_16x16.png" id="cam1_status_result" class="pingResult"></td>
+		</tr>
+		<tr>
+		<td align="right">CAM2 Status</td>
+		<td align="center">
+		<img name="cam2_status" src="/sales/img/ajax-ping-green-loader.gif" id="cam2_status_loader" class="pingLoader">
+		</td>
+		<td><img src="/sales/img/icon_check_16x16.png" id="cam2_status_result" class="pingResult"></td>
+		</tr>
+		
+		<tr>
+		<td align="right">Bank1 Status</td>
+		<td align="center">
+		<img name="bank1_status" src="/sales/img/ajax-ping-green-loader.gif" id="bank1_status_loader" class="pingLoader">
+		</td>
+		<td><img src="/sales/img/icon_check_16x16.png" id="bank1_status_result" class="pingResult"></td>
+		</tr>
+		<tr>
+		<td align="right">Bank2 Status</td>
+		<td align="center">
+		<img name="bank2_status" src="/sales/img/ajax-ping-green-loader.gif" id="bank2_status_loader" class="pingLoader">
+		</td>
+		<td><img src="/sales/img/icon_check_16x16.png" id="bank2_status_result" class="pingResult"></td>
+		</tr>
+		<tr>			
+			<td colspan="3" align="center">				
+				<button name="startPing" id="startPing" class='btnGrayClean'>Start</button>&nbsp;
+				<button name="stopPing" id="stopPing" class='btnGrayClean'>Stop</button>
+			</td>			
+		</tr>
+		</table>
+
+</div>
+<script type="text/javascript">
+	function initStatus(){
+		$('img.pingLoader,img.pingResult').each(function(){
+			$(this).removeClass('showStatus').addClass('hideStatus');
+		});
+	}//func
+	
+	function showPingStatus(){
+		$('.pingLoader').each(function(){				
+			$(this).removeClass('hideStatus').addClass('showStatus');
+		});
+	}//func
+
+	function hidePingStatus(){
+		$('.pingLoader').each(function(){			
+			$(this).removeClass('showStatus').addClass('hideStatus');
+		});
+	}//func
+
+	function startPing(ip,acts){
+		var opts_ping={
+					type:'post',
+					url:'/sales/accessory/pingacc',
+					data:{
+						ip:ip,
+						actions:acts,
+						rnd:Math.random()
+					},success:function(data){			
+						//alert(data);			
+						$('img#' + acts + '_result').removeClass('hideStatus');
+						if(data=='1'){
+							$('img#' + acts + '_result').addClass('showStatus');
+							$('img#' + acts + '_loader').attr('src','/sales/img/Bar_Green01.png');
+						}else{
+							$('img#' + acts + '_result').addClass('showStatus');
+							$('img#' + acts + '_loader').attr('src','/sales/img/Bar_Gray01.png');
+							$('img#' + acts + '_result').attr('src','/sales/img/cross02.png');							
+						}
+						$('img#' + acts + '_loader').css({'height':'18'});						
+					}
+				};
+		$.ajax(opts_ping);		
+	}//func
+	
+	$(function(){
+		$('#chkacc').center({
+			vertical: true,
+			horizontal: true
+		});
+
+		initStatus();		
+		$('#startPing').click(function(evt){
+			evt.preventDefault();
+			showPingStatus();
+			var opts_getip={
+						type:'post',
+						url:'/sales/accessory/getipaccessory',
+						data:{
+							rnd:Math.random()
+						},success:function(data){							
+							var selip=$.parseJSON(data);							
+							startPing(selip.office,'office_status');
+							setTimeout(function(){
+									startPing(selip.rounter,'rounter_status');
+								},1000);	
+							setTimeout(function(){
+								startPing(selip.computer,'computer_status');
+							},2000);	
+							setTimeout(function(){
+								startPing(selip.edc,'edc_status');
+							},3000);	
+							setTimeout(function(){
+								startPing(selip.cam1,'cam1_status');
+							},4000);	
+							setTimeout(function(){
+								startPing(selip.cam2,'cam2_status');
+							},5000);	
+
+							setTimeout(function(){
+								startPing(selip.bank1,'bank1_status');
+							},6000);	
+
+							setTimeout(function(){
+								startPing(selip.bank2,'bank2_status');
+							},7000);								
+						}						
+					};
+			$.ajax(opts_getip);
+		});
+
+		$('#stopPing').click(function(evt){
+			evt.preventDefault();
+			$('.pingLoader').each(function(){				
+				$(this).attr('src','/sales/img/ajax-ping-green-loader.gif');
+			});
+			initStatus();
+			hidePingStatus();			
+		});
+		
+	});//ready
+</script>

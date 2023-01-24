@@ -1,0 +1,60 @@
+<style type="text/css">
+	a.sel_cardlost{
+		color:#0000ff;
+	}
+</style>
+<table width="100%" border="0"  cellpadding="3" cellspacing="1" bgcolor="#cccccc">
+<tr bgcolor="#80A29E">	
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">CODE</span></td>
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">NAME</span></td>
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">BIRTHDAY</span></td>
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">MOBILE NO</span></td>	
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">ADDRESS</span></td>	
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">REMARK</span></td>
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">APPLY DATE</span></td>
+		<td align="center"><span style="font-size:24px;color:#FFFFFF;">EXPIRE DATE</span></td>
+	</tr>
+	<?php	
+		$i=0;	
+		foreach($this->arr_json as $data){
+			$fullname=$data['name']."&nbsp;".$data['surname'];
+			$arr_apply=explode('-',$data['apply_date']);
+			$str_apply=$arr_apply[2]."/".$arr_apply[1]."/".$arr_apply[0];
+			
+			$arr_expire=explode('-',$data['expire_date']);
+			$str_expire=$arr_expire[2]."/".$arr_expire[1]."/".$arr_expire[0];
+			
+			$arr_bth=explode('-',$data['birthday']);
+			$str_bth=$arr_bth[2]."/".$arr_bth[1]."/".$arr_bth[0];
+			//*WR22092014
+			$address=$data['address']."&nbsp;".$data['sub_district'];
+			$address.=$data['district']."&nbsp;".$data['province_name'];			
+			$rows_json=json_encode($data, JSON_HEX_QUOT | JSON_HEX_APOS);			
+			($i%2==0)?$bg_color="#f2f2f2":$bg_color="#e7e7e7";
+			?>
+				<tr bgcolor="<?php echo $bg_color;?>">	
+					<?php
+						if($data['available']=='1'){
+							?>
+							<td align="center"><a href="#" id="<?php echo $data['member_no'];?>" idjson='<?php echo $rows_json;?>'   class="sel_cardlost"><?php echo $data['member_no'];?></a></td>
+							<?php 
+						}else{
+							?>
+							<td align="center"><?php echo $data['member_no'];?></td>
+							<?php 
+						}
+					?>
+					
+					<td align="center"><?php echo $fullname;?></td>
+					<td align="center"><?php echo $str_bth;?></td>
+					<td align="center"><?php echo $data['mobile_no'];?></td>					
+					<td align="left"><?php echo $address;?></td>
+					<td align="center"><?php echo $data['remark'];?></td>
+					<td align="center"><?php echo $str_apply;?></td>
+					<td align="center"><?php echo $str_expire;?></td>
+				</tr>
+			<?php 
+			$i++;
+		} 
+	?>
+</table>

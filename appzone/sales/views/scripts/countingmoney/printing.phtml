@@ -1,0 +1,1012 @@
+<?php
+@header("Content-type:text/html; charset=utf=8");
+$content=$this->content;
+
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->AddPage();
+$pdf->SetAutoPageBreak("off",1);
+
+$startY=0;
+$startX=0;//4
+$pdf->SetY($startY);
+$pdf->SetX($startX);	
+$line="---------------------------------------------------------------------------------------------------------------------";
+//$title1=iconv('UTF-8','cp874',$this->company_name);
+//$shop=$this->shop;
+$day=date("d");
+$month=date("m");
+$year=date("Y");
+$time=date("H:i:s");
+$date=date("d/m/Y");
+
+$startY=$startY+1;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Image('/var/www/pos/htdocs/stock/img/op-logo.gif',11,0);
+
+$startY=$startY+8;
+
+$line2_col_1=iconv('UTF-8','cp874',"ใบตรวจนับเงินสด ( เงินขายสินค้า PAY IN )");
+//$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line2_col_1",0,0,'L',0);
+
+$line3_col_1=iconv('UTF-8','cp874',"จุดขาย");
+//$doc_dt=date('d/m/Y', strtotime($this->doc_dt));
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line3_col_1,0,0,'L',0);
+$pdf->Cell(5,1,$this->branch_no,0,0,'L',0);
+$pdf->Cell(13,1,"",0,0,'L',0);
+$line3_col_2=iconv('UTF-8','cp874',$this->branch);
+$pdf->Cell(50,1,$line3_col_2,0,0,'L',0);
+
+$line4_col_1=iconv('UTF-8','cp874',"รหัสพนักงาน");
+$line4_col_3=iconv('UTF-8','cp874',"วันที่พิมพ์");
+$line4_col_5=iconv('UTF-8','cp874',"เวลา");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line4_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,$content[0]['user_id'],0,0,'L',0);
+$pdf->Cell(11,1,$line4_col_3,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(13,1,$date,0,0,'L',0);
+$pdf->Cell(5,1,$line4_col_5,0,0,'L',0);
+$pdf->Cell(10,1,$time,0,0,'L',0);
+
+
+$line5_col_1=iconv('UTF-8','cp874',"เงินขายสินค้า");
+$line5_col_2=iconv('UTF-8','cp874',"เวลาบันทึก");
+$line5_col_3=iconv('UTF-8','cp874',"จำนวน");
+$line5_col_5=iconv('UTF-8','cp874',"บาท");
+$tmp_date = explode("-",$content[0]['doc_date']);
+$doc_date = $tmp_date[2].'/'.$tmp_date[1].'/'.$tmp_date[0];
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line5_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(13,1,$doc_date,0,0,'L',0);
+$pdf->Cell(10,1,$line5_col_2,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(13,1,$content[0]['doc_time'],0,0,'L',0);
+$pdf->Cell(8,1,$line5_col_3,0,0,'L',0);
+$pdf->Cell(10,1,number_format($content[0]['total_amount'],2),0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(5,1,$line5_col_5,0,0,'L',0);
+
+
+
+$line6_col_1=iconv('UTF-8','cp874',"ประเภทเงินสด");
+$line6_col_2=iconv('UTF-8','cp874',"ธนบัตร/เหรียญ");
+$line6_col_3=iconv('UTF-8','cp874',"เงินรวม");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(15,1,$line6_col_1,0,0,'L',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_2,0,0,'L',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,$line6_col_3,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_2,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(11,1,$line6_col_3,0,0,'R',0);
+
+
+$number = $content[0]['amount_s_01']/1000;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"1,000",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_01'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_s_02']/500;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"500",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_02'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_s_03']/100;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"100",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_03'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$number = $content[0]['amount_s_04']/50;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"50",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_04'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_s_05']/20;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"20",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_05'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_s_06']/10;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"10",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_06'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_s_07']/5;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"5",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_07'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_s_08']/2;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"2",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_08'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_s_09']/1;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"1",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_09'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$number = $content[0]['amount_s_10']/0.5;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"0.50",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_10'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_s_11']/0.25;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"0.25",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_s_11'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$line6_col_1=iconv('UTF-8','cp874',"จำนวนเงินที่นับได้จริง");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_1,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['total_amount'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$line6_col_2=iconv('UTF-8','cp874',"จำนวนเงินขาด");
+//$line6_col_3=iconv('UTF-8','cp874',"จำนวนเงินเกิน");
+if($content[0]['balance_amount'] < 0){
+	$total = abs($content[0]['balance_amount']);	
+}else{
+	$total = 0.00;
+}
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_2,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($total,2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$line6_col_3=iconv('UTF-8','cp874',"จำนวนเงินเกิน");
+if($content[0]['balance_amount'] < 0){
+	$total = 0.00;
+}else{
+	$total = abs($content[0]['balance_amount']);
+}
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_3,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($total,2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+
+//===============   เงินสำรองทอน ===================================================================================
+
+$startY=$startY+7;
+
+$line2_col_1=iconv('UTF-8','cp874',"ใบตรวจนับเงินสด ( เงินสำรองทอน )");
+//$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line2_col_1",0,0,'L',0);
+
+/*
+$line3_col_1=iconv('UTF-8','cp874',"จุดขาย");
+//$doc_dt=date('d/m/Y', strtotime($this->doc_dt));
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line3_col_1,0,0,'L',0);
+$pdf->Cell(5,1,$this->branch_no,0,0,'L',0);
+$pdf->Cell(13,1,"",0,0,'L',0);
+$pdf->Cell(50,1,$this->branch,0,0,'L',0);
+
+$line4_col_1=iconv('UTF-8','cp874',"รหัสพนักงาน");
+$line4_col_3=iconv('UTF-8','cp874',"วันที่พิมพ์");
+$line4_col_5=iconv('UTF-8','cp874',"เวลา");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line4_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,$content[0]['user_id'],0,0,'L',0);
+$pdf->Cell(11,1,$line4_col_3,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(13,1,$date,0,0,'L',0);
+$pdf->Cell(5,1,$line4_col_5,0,0,'L',0);
+$pdf->Cell(10,1,$time,0,0,'L',0);
+*/
+
+$line5_col_1=iconv('UTF-8','cp874',"เงินสำรองทอน");
+$line5_col_3=iconv('UTF-8','cp874',"จำนวน");
+$line5_col_5=iconv('UTF-8','cp874',"บาท");
+$tmp_date = explode("-",$content[0]['doc_date']);
+$doc_date = $tmp_date[2].'/'.$tmp_date[1].'/'.$tmp_date[0];
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line5_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(13,1,$doc_date,0,0,'L',0);
+$pdf->Cell(8,1,$line5_col_3,0,0,'L',0);
+$pdf->Cell(10,1,number_format($content[0]['other_amount'],2),0,0,'L',0);
+$pdf->Cell(5,1,$line5_col_5,0,0,'L',0);
+
+
+
+$line6_col_1=iconv('UTF-8','cp874',"ประเภทเงินสด");
+$line6_col_2=iconv('UTF-8','cp874',"ธนบัตร/เหรียญ");
+$line6_col_3=iconv('UTF-8','cp874',"เงินรวม");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(15,1,$line6_col_1,0,0,'L',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_2,0,0,'L',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,$line6_col_3,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_2,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(11,1,$line6_col_3,0,0,'R',0);
+
+
+$number = $content[0]['amount_c_01']/1000;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"1,000",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_01'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_c_02']/500;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"500",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_02'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_c_03']/100;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"100",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_03'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$number = $content[0]['amount_c_04']/50;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"50",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_04'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_c_05']/20;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"20",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_05'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_c_06']/10;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"10",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_06'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_c_07']/5;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"5",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_07'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_c_08']/2;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"2",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_08'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_c_09']/1;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"1",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_09'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$number = $content[0]['amount_c_10']/0.5;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"0.50",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_10'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_c_11']/0.25;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"0.25",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_c_11'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$line6_col_1=iconv('UTF-8','cp874',"จำนวนเงินที่นับได้จริง");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_1,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['other_amount'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$line6_col_2=iconv('UTF-8','cp874',"จำนวนเงินขาด");
+//$line6_col_3=iconv('UTF-8','cp874',"จำนวนเงินเกิน");
+if($content[0]['balance_amount_c'] < 0){
+	$total = abs($content[0]['balance_amount_c']);	
+}else{
+	$total = 0.00;
+}
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_2,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($total,2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$line6_col_3=iconv('UTF-8','cp874',"จำนวนเงินเกิน");
+if($content[0]['balance_amount_c'] < 0){
+	$total = 0.00;
+}else{
+	$total = abs($content[0]['balance_amount_c']);
+}
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_3,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($total,2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+
+//======================= เงินสดย่อย =============================================================================================
+
+$startY=$startY+7;
+
+$line2_col_1=iconv('UTF-8','cp874',"ใบตรวจนับเงินสด ( เงินสดย่อย )");
+//$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line2_col_1",0,0,'L',0);
+/*
+$line3_col_1=iconv('UTF-8','cp874',"จุดขาย");
+//$doc_dt=date('d/m/Y', strtotime($this->doc_dt));
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line3_col_1,0,0,'L',0);
+$pdf->Cell(5,1,$this->branch_no,0,0,'L',0);
+$pdf->Cell(13,1,"",0,0,'L',0);
+$pdf->Cell(50,1,$this->branch,0,0,'L',0);
+
+$line4_col_1=iconv('UTF-8','cp874',"รหัสพนักงาน");
+$line4_col_3=iconv('UTF-8','cp874',"วันที่พิมพ์");
+$line4_col_5=iconv('UTF-8','cp874',"เวลา");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line4_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(10,1,$content[0]['user_id'],0,0,'L',0);
+$pdf->Cell(11,1,$line4_col_3,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(13,1,$date,0,0,'L',0);
+$pdf->Cell(5,1,$line4_col_5,0,0,'L',0);
+$pdf->Cell(10,1,$time,0,0,'L',0);
+*/
+
+$line5_col_1=iconv('UTF-8','cp874',"เงินสดย่อย");
+$line5_col_3=iconv('UTF-8','cp874',"จำนวน");
+$line5_col_5=iconv('UTF-8','cp874',"บาท");
+$tmp_date = explode("-",$content[0]['doc_date']);
+$doc_date = $tmp_date[2].'/'.$tmp_date[1].'/'.$tmp_date[0];
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,$line5_col_1,0,0,'L',0);
+$pdf->Cell(2,1," : ",0,0,'L',0);
+$pdf->Cell(13,1,$doc_date,0,0,'L',0);
+$pdf->Cell(8,1,$line5_col_3,0,0,'L',0);
+$pdf->Cell(10,1,number_format($content[0]['special_amount'],2),0,0,'L',0);
+$pdf->Cell(5,1,$line5_col_5,0,0,'L',0);
+
+
+
+$line6_col_1=iconv('UTF-8','cp874',"ประเภทเงินสด");
+$line6_col_2=iconv('UTF-8','cp874',"ธนบัตร/เหรียญ");
+$line6_col_3=iconv('UTF-8','cp874',"เงินรวม");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(15,1,$line6_col_1,0,0,'L',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_2,0,0,'L',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,$line6_col_3,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_2,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(11,1,$line6_col_3,0,0,'R',0);
+
+
+$number = $content[0]['amount_p_01']/1000;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"1,000",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_01'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_p_02']/500;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"500",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_02'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_p_03']/100;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"100",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_03'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$number = $content[0]['amount_p_04']/50;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"50",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_04'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_p_05']/20;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"20",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_05'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_p_06']/10;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"10",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_06'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_p_07']/5;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"5",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_07'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_p_08']/2;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"2",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_08'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_p_09']/1;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"1",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_09'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$number = $content[0]['amount_p_10']/0.5;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"0.50",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_10'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$number = $content[0]['amount_p_11']/0.25;
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"0.25",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$number,0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['amount_p_11'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$line6_col_1=iconv('UTF-8','cp874',"จำนวนเงินที่นับได้จริง");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_1,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($content[0]['special_amount'],2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+$line6_col_2=iconv('UTF-8','cp874',"จำนวนเงินขาด");
+//$line6_col_3=iconv('UTF-8','cp874',"จำนวนเงินเกิน");
+if($content[0]['balance_amount_p'] < 0){
+	$total = abs($content[0]['balance_amount_p']);	
+}else{
+	$total = 0.00;
+}
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_2,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($total,2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+$line6_col_3=iconv('UTF-8','cp874',"จำนวนเงินเกิน");
+if($content[0]['balance_amount_p'] < 0){
+	$total = 0.00;
+}else{
+	$total = abs($content[0]['balance_amount_p']);
+}
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+//$pdf->Cell(1,1,"",0,0,'L',0);;
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(13,1,"",0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,$line6_col_3,0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(12,1,number_format($total,2),0,0,'R',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(15,1,"...............",0,0,'C',0);
+$pdf->Cell(2,1,"  ",0,0,'L',0);
+$pdf->Cell(13,1,"..............",0,0,'L',0);
+
+
+
+
+$startY=$startY+8;
+$pdf->SetY($startY);
+
+$name='billcounting.pdf';
+$output=REPORT_PATH.$name;
+$output="/var/www/pos/htdocs/stock/report/".$name;
+@chmod(REPORT_PATH,0777);
+$pdf->Output($output,'F');
+ echo shell_exec("lp -o media=Letter $output");
+  if(@file_exists($output)){
+  	echo shell_exec("rm $output");
+  } 
+?>

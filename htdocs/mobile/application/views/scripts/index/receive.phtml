@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Receive</title>
+<link href="<?php echo $this->url;?>/css/bootstrap.css" rel="stylesheet">
+<link href="<?php echo $this->url;?>/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="<?php echo $this->url;?>/css/jquery.dataTables.css" rel="stylesheet">
+<script src="<?php echo $this->url;?>/js/jquery-2.1.1.min.js" type="text/javascript"></script>
+<script src="<?php echo $this->url;?>/js/jquery.dataTables.js" type="text/javascript"></script>
+<script src="<?php echo $this->url;?>/js/bootstrap-modal.js" type="text/javascript"></script>
+<script src="<?php echo $this->url;?>/js/bootstrap-transition.js" type="text/javascript"></script>
+<script type="text/javascript" language="javascript">
+$(document).ready(function(){
+    $('#myTable').dataTable();
+});
+
+function showdetail(id){
+	if(id == ""){
+		alert("ไม่พบรหัส");
+	}else{
+		$.ajax({type: "POST",url: "<?php echo $this->url?>/index/showdetail",data:{id:id},success:
+			function(data){
+				if(data !="n"){
+					show_detail_box(id);
+					$("#head_detail").html(data);
+					show_detail_box(id);	
+				}else{
+					alert("fail");
+				}
+			}
+		});
+	}
+}
+
+function save_qty(){
+		var id = $("#id").val();
+		var id_qty = $("#id_qty").val();
+		var head_id = $("#head_id").val();
+		if(isNaN(id_qty)){
+				alert("กรุณาใส่ข้อมูลเป็นตัวเลข");
+		}else{
+			$.ajax({type: "POST",url: "<?php echo $this->url?>/index/updateqty",data:{id:id,qty:id_qty},success:
+				function(data){
+					if(data!="n"){
+						alert("อับเดทข้อมูลสำเร็จ");
+						show_detail_box(head_id);
+						//closeWindow();
+						//$("#myModal").hide();
+						// $myModal.dialog('close');
+					}else{
+						alert("fail");
+					}
+				}
+			});
+		}
+}
+
+function enterkey(event){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox   
+	if (keyCode == 13) {
+		save_qty();
+	}
+}
+
+function show_qty(id,bar,qty){
+	$("#id").val(id);
+	$("#id_bar").html(bar);
+	$("#id_qty").val(qty);
+}
+
+function process(event,chk,id){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	var val =$("#val").val();
+	keyCode = event.which; // Firefox   
+	if (keyCode == 13) {
+		add_detail(id,val);
+	}
+}
+
+function add_detail(id,val){
+	if(val==""){
+		alert("กรุณาใส่ข้อมูล"); 
+	}else{
+		//alert(val);
+		$.ajax({type: "POST",url: "<?php echo $this->url?>/index/adddetail",data:{id:id,val:val},success:
+			function(data){
+				if(data!="n"){
+					show_detail_box(id);
+					$("#val").val("");	
+				}else{
+					alert("fail");
+				}
+			}
+		});
+	}
+}
+
+function show_detail_box(id){
+	if(id==""){
+		alert("กรุณาใส่ข้อมูล"); 
+	}else{
+		$.ajax({type: "POST",url: "<?php echo $this->url?>/index/detail",data:{id:id},success:
+			function(data){
+				//alert(data);
+				if(data != ""){
+					$("#head_id").val(id);
+					$("#detailbox").html(data);	
+				}else{
+					$("#detail_"+id+"").html(data);
+				}
+			}
+		});
+	}
+}
+
+</script>
+</head>
+<body>
+
+<div style="width:95%; margin:auto">
+<h2>ตรวจรับการส่งสินค้า</h2>
+   <table class="table table-bordered" id="myTable">
+   <thead>
+   		<tr>
+        	<th>#</th>
+            <th>Company</th>
+            <th>Branch ID</th>
+            <th>Doc No.</th>
+            <th>Refer.</th>
+            <th>Manage</th>
+        </tr>
+   </thead>
+   <tbody>
+   <?php foreach($this->arr as $index){  ?>
+        <tr>
+        	<td>#</td>
+            <td><?php echo $index['company_id'];?></td>
+            <td><?php echo $index['branch_id'];?></td>
+            <td><?php echo $index['doc_no'];?></td>
+            <td><?php echo $index['refer_doc_no'];?></td>
+            <td><i class="icon-edit" title="เพิ่มข้อมูล" onclick="showdetail('<?php echo $index['id'];?>');"></i></td>
+            <!-- Button to trigger modal -->
+
+ 
+<!-- Modal -->
+<!--
+<div id="myModal<?php //echo $index['id'];?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h5 id="myModalLabel">หมายเลข : <?php //echo $index['doc_no'];?>  รหัสบาร์โค๊ด:<?php //echo $index['refer_doc_no'];?></h5>
+  </div>
+  <div class="modal-body">
+    <p>
+   	<label>เพิ่มกล่อง: </label><input type="text" id="id_<?php //echo $index['id'];?>" value="" onKeyPress="return process(event,'add','id_<?php //echo $index['id'];?>');" />
+    </p>
+    <div id="detail_<?php //echo $index['id'];?>">
+    	
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    
+  </div>
+</div>-->
+        </tr>
+  <?php } ?>    
+   </tbody>
+   </table>
+</div>
+<div style="width:60%; margin:auto; background:#DAF4FE;">
+	<div id="head_detail" style="margin:4px">	
+    </div>
+    <input type="hidden" id="head_id" value="" />
+    <div id="detailbox">
+    </div>
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h5 id="myModalLabel">Picking: <span id="id_bar"></span></h5>
+  </div>
+  <div class="modal-body">
+    <p>
+    <input type="hidden" id="id" value="" />
+   	<label>จำนวน: </label><input type="text" id="id_qty" value="" onKeyPress="return enterkey(event);" />
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+     <button class="btn btn-primary" onclick="save_qty();">Save changes</button>
+  </div>
+</div>
+</div>   
+</body>
+</html>

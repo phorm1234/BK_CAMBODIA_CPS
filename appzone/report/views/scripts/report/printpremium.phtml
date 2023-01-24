@@ -1,0 +1,103 @@
+<?php
+//@header("Content-type:text/html; charset=utf=8");
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->SetMargins( 0,4,4 );  // ซ้าย , บน , ขวา
+
+$pdf->AddPage();
+$pdf->SetFont('CordiaNew','',5);
+//$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' ,'วันที่ออกเอกสาร '.$this->print_time ) , 0 , 1,'R' );
+
+$pdf->Image('/var/www/pos/htdocs/report/img/logo/op/op-logo.gif',8 ,0,0);
+$pdf->SetFont('CordiaNew','B',10);
+//$title1=iconv('UTF-8','cp874',"สรุปการชำระเงินจากลูกค้า");
+
+$line="==============================================================";
+$line2="---------------------------------------------------------------------------------------------------------------";
+
+$pdf->Ln(7);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','รายงานสินค้าแถมฟรี'));
+//$pdf->Ln(3);
+//$pdf->Cell(0,3,iconv('UTF-8','cp874','SSUP (THAILAND) CO.,LTD.'));
+$pdf->Ln(4);
+$pdf->Cell( 0  , 3 , iconv( 'UTF-8','cp874' ,'วันที่ออกเอกสาร '.$this->print_time ));
+$pdf->Ln(4);
+$pdf->Cell(0,3,iconv('UTF-8','cp874', 'จุดขาย ' .$this->branch_id.' '.$this->branch_name ));
+$pdf->Ln(4);
+$pdf->Cell(0,3,iconv('UTF-8','cp874',"เงื่อนไข  ตั้งแต่วันที่ ".$this->s_date." - ".$this->e_date));
+$pdf->Ln(4);
+$pdf->Cell(0,3,iconv('UTF-8','cp874',"รหัสสินค้า ".$this->product_start." - ".$this->product_end), 0 , 1);
+
+$pdf->SetFont('CordiaNew','',9);
+
+
+$pdf->Cell(0,3,$line);
+$pdf->Ln(4);
+
+$pdf->Cell( 8  , 4 , iconv( 'UTF-8','cp874' , 'ลำดับ' ) , 0 , 0 );
+$pdf->Cell( 12  , 4 , iconv( 'UTF-8','cp874' , 'รหัสสินค้า' ) , 0 , 0 );
+$pdf->Cell( 22  , 4 , iconv( 'UTF-8','cp874' , 'รายละเอียด' ) , 0 , 0 );
+$pdf->Cell( 10  , 4 , iconv( 'UTF-8','cp874' , 'จำนวน' ) , 0 , 0 ,'R');
+$pdf->Cell( 10  , 4 , iconv( 'UTF-8','cp874' , 'ราคา' ) , 0 , 0 ,'R');
+$pdf->Cell( 10  , 4 , iconv( 'UTF-8','cp874' , 'จำนวนเงิน' ) , 0 , 1 ,'R');
+//}
+$pdf->Cell(0,3,$line);
+$pdf->Ln(3);   
+
+$i = 1;
+$sum_quan =0;
+$sum_price =0;
+$sum_total_price =0;
+$bi = 0;
+$trs_data = $this->getpremium_data ;
+foreach($trs_data as $b){
+    
+        $sum_quan += $b['quan'];
+        $sum_price += $b['price'];
+        $sum_total_price += $b['total_price'];
+        $bi = count($trs_data);
+        
+
+$pdf->Cell( 8  , 4 , iconv( 'UTF-8','cp874' , $i++),0,0);
+$pdf->Cell( 18  , 4 , iconv( 'UTF-8','cp874' , $b['product_id']) , 0 , 0 );
+$pdf->Cell( 22  , 4 , iconv( 'UTF-8','cp874' , substr($b['name_print'], 0, 16)) , 0 , 0 ,'L');
+$pdf->Cell( 10  , 4 , iconv( 'UTF-8','cp874' , number_format($b['quan'], 0)) , 0 , 0 ,'R');
+$pdf->Cell( 10  , 4 , iconv( 'UTF-8','cp874' , number_format($b['price'], 2, '.', ',')) , 0 , 0 ,'R');
+$pdf->Cell( 10  , 4 , iconv( 'UTF-8','cp874' , number_format($b['total_price'], 2, '.', ',')) , 0 , 1 ,'R');  
+
+
+}
+
+$pdf->Cell(0,3,$line2);
+$pdf->Ln(3);  
+$pdf->Cell( 35  , 4 , iconv( 'UTF-8','cp874' , 'รวมจำนวนทั้งหมด :  '.$bi.' รายการ' ) , 0 , 0 ,'R');
+$pdf->Cell( 18  , 4 , iconv( 'UTF-8','cp874' , number_format($sum_quan, 0)) , 0 , 0 ,'R');
+$pdf->Cell( 18  , 4 , iconv( 'UTF-8','cp874' , number_format($sum_total_price, 2, '.', ',')) , 0 , 1 ,'R');  
+
+
+$pdf->Ln(5); 
+$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , 'ผู้ออกรายงาน / ตรวจทาน : _______________________________________ ' ) , 0 , 0 ,'R');
+
+$pdf->Ln(20);
+$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , '.' ) , 0 , 0 );
+//$pdf->Output();
+$name='printpremiumreport.pdf';
+$output="/var/www/pos/htdocs/report/printreport/".$name;
+//$pdf->Output($output,'F');
+@chmod($output,0777); 
+if(@file_exists($output)){
+		 shell_exec("rm $output");
+		@unlink($output);
+	}
+ 
+$pdf->Output($output,'F'); 
+shell_exec("lp -o media=Letter $output");
+	
+
+?>
+
+<script type="text/javascript">
+//self.close();
+</script>
+		

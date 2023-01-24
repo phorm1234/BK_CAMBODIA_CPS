@@ -1,0 +1,116 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=tis-620">
+<title>POS</title>
+	<link href='/sales/css/style.css' rel='stylesheet' type='text/css'>
+	<link href="/sales/css/themes/mvabs/jquery.ui.all.css" rel="stylesheet" type="text/css"/>
+	
+	<!--
+		<link href="/sales/css/themes/dark-hive/jquery-ui-1.8.9.custom.css" rel="stylesheet" type="text/css"/>
+		<link href="/sales/css/themes/Aristo/jquery-ui-1.8.7.custom.css" rel="stylesheet" type="text/css"/>
+		<link href="/sales/css/themes/cupertino/jquery-ui-1.8.10.custom.css" rel="stylesheet" type="text/css"/>
+	-->
+	<link href="/sales/js/plugin/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen"/>
+	<link href="/sales/css/flexigrid/flexigrid.css" rel="stylesheet" type="text/css">
+	
+	<script type="text/javascript" src="/sales/js/jquery-1.4.4.min.js"></script>	
+	<script type="text/javascript" src="/sales/js/jquery-ui-1.8.10.custom.min.js"></script>
+	
+	<script type="text/javascript" src="/sales/js/plugin/jquery.jclock.js.txt"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.alerts.js"></script>
+	
+	<script type="text/javascript" src="/sales/js/plugin/flexigrid.js"></script>
+	<script type="text/javascript" src="/sales/js/util/js_func.js"></script>
+	
+	<script type="text/javascript" src="/sales/js/shortcut.js"></script>
+		
+	<!--
+	<script type="text/javascript" src="/sales/js/shortcuts_v1.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.hotkeys.min.js"></script>
+	<script type="text/javascript" src="/sales/js/jquery.hotkeys-0.7.9.min.js"></script>
+	-->
+	<script type="text/javascript">
+	$(function(){
+		$('#box_time_server').jclock();
+	});
+	</script>
+	
+</head>
+<body>
+<div id="dialog" title=""></div>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="1" colspan="2">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+      
+      <tr>
+        <td width="17"><img src="/pos/img/top/top_08.jpg" width="17" height="50"></td>
+        <td>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="141"><img src="/pos/img/top/top_09.jpg" width="141" height="50"></td>
+              <td width="7"><img src="/pos/img/top/top_10.jpg" width="7" height="50"></td>
+              <td width="141"><img src="/pos/img/top/top_11.jpg" width="141" height="50"></td>
+              <td width="8"><img src="/pos/img/top/top_12.jpg" width="8" height="50"></td>
+              <td width="141"><img src="/pos/img/top/top_13.gif" width="141" height="50"></td>
+              <td width="8"><img src="/pos/img/top/top_14.jpg" width="8" height="50"></td>
+              <td width="141"><img src="/pos/img/top/top_15.jpg" width="141" height="50"></td>
+              <td width="8"><img src="/pos/img/top/top_16.jpg" width="8" height="50"></td>
+              <td width="141" background="/pos/img/top/top_16.jpg"><img src="/pos/img/top/top_17.jpg" width="141" height="50"></td>
+              <td background="/pos/img/top/top_16.jpg" align='right'><img src="/pos/img/top/top_19.jpg" width="243" height="50"></td>
+            </tr>
+        </table>		</td>
+        <td width="19"><img src="/pos/img/top/top_20.jpg" width="19" height="50"></td>
+      </tr>
+      <tr>
+        <td><img src="/pos/img/top/top_21.jpg" width="17" height="24"></td>
+        <td background="/pos/img/top/top_23.jpg"></td>
+        <td><img src="/pos/img/top/top_33.jpg" width="19" height="24"></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td width="94%" valign="top">
+	<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="22" height="27"><img src="/pos/img/body/body_01.jpg" width="22" height="27"></td>
+        <td background="/pos/img/body/body_02.jpg"></td>
+        <td width="22" height="27"><img src="/pos/img/body/body_04.jpg" width="22" height="27"></td>
+      </tr>
+      <tr>
+        <td background="/pos/img/body/body_05.jpg">&nbsp;</td>
+        <td valign="top">
+       <?php		
+			echo $this->layout()->content;
+		?>
+        </td>
+        <td background="/pos/img/body/body_07.jpg">&nbsp;</td>
+      </tr>
+      <tr>
+        <td height="1"><img src="/pos/img/body/body_10.jpg" width="22" height="27"></td>
+        <td background="/pos/img/body/body_11.jpg"></td>
+        <td><img src="/pos/img/body/body_12.jpg" width="22" height="27"></td>
+      </tr>
+    </table>
+	</td>
+  </tr>
+ <tr>
+    <td height="54" colspan="2" bgcolor="#EDF6FD">
+	<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td></td>
+			<td width="20%">
+			<table width="100%" height="100%" border="0" cellpadding="3" cellspacing="2">
+				<tr>
+					<td class="date_time" align="right"><img src="/pos/img/icon/icon_clock.png" align="absmiddle" border="0"> <?php echo date("d/m/Y");?></td>
+					<td align="left" width="37%"><div id="box_time_server" class="date_time">Time Server</div></td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	</td>
+  </tr>
+</table>
+</body>
+</html>

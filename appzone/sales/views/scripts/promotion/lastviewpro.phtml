@@ -1,0 +1,112 @@
+<style>
+
+.menu{color:#99CC00; bold;font-size:50px; }
+.menu-over{background-color:#223435; color:#99CC00; bold;font-size:50px;}
+
+</style>
+<?php
+$bgcolorHead=" bgcolor='#324F51'";
+$fontcolorHead="color:#FFFFFF; bold; font-size:30px;";
+$caseShort="";
+$showLine="N";
+
+
+$promo_code=$this->promo_code;
+$promo_seq=$this->promo_seq;
+echo "<input type='hidden' name='last_step_seq' id='last_step_seq' value=\"$promo_seq\">";
+
+
+
+$filename_product=$promo_code . "_" . $promo_seq . ".jpg";
+$path_filename_product="../../download_promotion/img_product/".$filename_product;
+//echo $path_filename_product;
+
+if($promo_code=="OX10020915" || $promo_code=="OX10050116" || $promo_code=="SS07070218"){
+	$html_product="<img src=\"$path_filename_product\" width='180px' height='150px'>";
+	
+}else{
+	$html_product="";
+}
+echo "<div id='xblinky' class='show_title' style='font-size: 20px;' align='right' >$this->desStep $html_product</div>";
+
+if($this->msg_limit!=''){
+	echo $this->msg_limit;
+	echo "<script>
+	document.getElementById('last_input_product').disabled=true;
+	document.getElementById('last_input_quantity').disabled=true;
+	document.getElementById('btnproduct').style.visibility = 'hidden';
+	</script>	";
+}else{
+	echo "<script>
+	document.getElementById('last_input_product').disabled=false;
+	document.getElementById('last_input_quantity').disabled=false;
+	
+
+	
+	</script>	";
+	
+	echo '<table width="80%" border="0" cellpadding="0" cellspacing="0"  align="left" style="padding-left:5px;">';	
+	
+	echo '<tr>';
+	echo "<td class='colum' align='center'><span  >#</span></td>";
+	echo "<td class='colum' align='center'><span  align='center'>PRODUCT</span></td>";
+	echo "<td class='colum' align='center'><span >PRODUCT NAME</span></td>";
+	echo "<td class='colum' align='center'><span >PRICE</span></td>";
+	echo "<td class='colum' align='center'><span >QUANTITY</span></td>";
+	echo "<td class='colum' align='right'><span >DECRIPTION</span></td>";
+	
+	echo '</tr>';
+					
+	
+	if($this->scanhotpro){
+		$no=1;
+		$count_rec=count($this->scanhotpro);
+		foreach($this->scanhotpro as $scanhotpro) {
+				$promo_seq=$scanhotpro['promo_seq'];
+				$prodcut_id=$scanhotpro['product_id'];
+				$name_product=$scanhotpro['name_product'];
+				$quantity=$scanhotpro['quantity'];
+				$quantity=number_format($quantity,0,'.',',');
+				$price=$scanhotpro['price'];
+				$type_discount=$scanhotpro['type_discount'];
+				$discount=$scanhotpro['discount'];
+	
+				if(strtolower($type_discount)=="price" || strtolower($type_discount)=="price1") {
+				$txtDes="แลกซื้อในราคา $discount บาท";
+				} else if(strtolower($type_discount)=="normal") {
+					$txtDes="ซื้อ";
+				} else if(strtolower($type_discount)=="free") {
+					$txtDes="แถม $quantity ชิ้น";
+				} else if(strtolower($type_discount)=="percent") {
+					$txtDes="ลด $discount %";
+				}
+				
+				if($promo_seq%2>0) {
+					$trcolor=" bgcolor='#FFFFFF'";
+					$fontcolor="font-size:20px; color:#000000;";
+				}else if($promo_seq%2==0){
+					$trcolor=" bgcolor='#F4F4F4'";
+					$fontcolor="font-size:20px; color:#000000;";
+				}
+				
+	
+	
+				echo '<tr>';
+				echo "<td  class='line' align='center'><span >$no</span></td>";
+				echo "<td  class='line' align='center'><span >$prodcut_id</span></td>";
+				echo "<td  class='line' align='left'><span >$name_product</span></td>";
+				echo "<td  class='line' align='center'><span >$price</span></td>";
+				echo "<td  class='line' align='center'><span >$quantity</span></td>";
+				echo "<td  class='line' align='right'><span >$txtDes</span></td>";
+				echo '</tr>';
+				
+				$no++;
+		}
+			
+			
+	
+	}
+	
+	echo '</table>';
+}
+?>

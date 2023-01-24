@@ -1,0 +1,43 @@
+<?php 
+$product_id=$this->product_id;
+?>
+<center>
+<table width="10%">
+	<tr>
+		<td><table id="flex1" style="display:none"></table></td>
+	</tr>
+</table>
+</center>
+<script type="text/javascript">
+var pWidth=(screen.width-(screen.width*(20/100)))-10;
+var pWidth=(screen.width-(screen.width*(2/100)))-10;
+var pWidth=(screen.width-(screen.width*(3/100)))-10;
+var txt="สอบถาม สินค้าคงเหลือ KM";
+$("#flex1").flexigrid({
+	url: 'getdataproductinventories?product_id=<?php echo $product_id;?>',
+	dataType: 'json',
+	colModel : [
+		{display: 'รหัสสินค้า', name : 'a.product_id', width : 100, sortable : true, align: 'center'},
+		{display: 'รายละเอียด', name : 'a.name_product', width : 250, sortable : true, align: 'center'},
+		{display: 'ราคา', name : 'b.price', width : 120, sortable : true, align: 'left'},
+		{display: 'คงเหลือ', name : 'a.onhand', width : 100, sortable : true, align: 'center'},
+		{display: 'สถานะสินค้า', name : 'a.product_status', width : 100, sortable : true, align: 'center'}
+		],
+	sortname: "a.product_id",
+	sortorder: "asc",
+	usepager: true,
+	title: txt,
+	useRp: true,
+	rp: 30,
+	showTableToggleBtn: true,
+	width: pWidth,
+	onSubmit: addFormData,
+	height: 300
+});
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+</script>

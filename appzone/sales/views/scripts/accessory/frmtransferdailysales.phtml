@@ -1,0 +1,139 @@
+<?php
+	if(!empty($this->cdoc_date)){
+		$arr_doc_date=explode("-",$this->cdoc_date);
+		$doc_date_show=$arr_doc_date[2]."/".$arr_doc_date[1]."/".$arr_doc_date[0];	
+	}
+?>
+<style type="text/css">
+.form-style-6{
+    font: 95% Arial, Helvetica, sans-serif;
+    max-width: 400px;
+    margin: 10px auto;
+    padding: 16px;
+    background: #F7F7F7;
+}
+.form-style-6 h1{
+    background: #43D1AF;
+    padding: 20px 0;
+    font-size: 140%;
+    font-weight: 300;
+    text-align: center;
+    color: #fff;
+    margin: -16px -16px 16px -16px;
+}
+.form-style-6 input[type="text"],
+.form-style-6 input[type="date"],
+.form-style-6 input[type="datetime"],
+.form-style-6 input[type="email"],
+.form-style-6 input[type="number"],
+.form-style-6 input[type="search"],
+.form-style-6 input[type="time"],
+.form-style-6 input[type="url"],
+.form-style-6 textarea,
+.form-style-6 select 
+{
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    background: #fff;
+    margin-bottom: 4%;
+    border: 1px solid #ccc;
+    padding: 3%;
+    color: #555;
+    font: 95% Arial, Helvetica, sans-serif;
+}
+.form-style-6 input[type="text"]:focus,
+.form-style-6 input[type="date"]:focus,
+.form-style-6 input[type="datetime"]:focus,
+.form-style-6 input[type="email"]:focus,
+.form-style-6 input[type="number"]:focus,
+.form-style-6 input[type="search"]:focus,
+.form-style-6 input[type="time"]:focus,
+.form-style-6 input[type="url"]:focus,
+.form-style-6 textarea:focus,
+.form-style-6 select:focus
+{
+    box-shadow: 0 0 5px #43D1AF;
+    padding: 3%;
+    border: 1px solid #43D1AF;
+}
+
+.form-style-6 input[type="submit"],
+.form-style-6 input[type="button"]{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    padding: 3%;
+    background: #43D1AF;
+    border-bottom: 2px solid #30C29E;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;    
+    color: #fff;
+}
+.form-style-6 input[type="submit"]:hover,
+.form-style-6 input[type="button"]:hover{
+    background: #2EBC99;
+}
+</style>
+
+<div class="form-style-6">
+<h1>Transfer Daily Sales</h1>
+<form>
+<input type="text" id="doc_date_show" name="field1" value="<?php echo $doc_date_show;?>" placeholder="Date Begin" readonly />
+<input type="hidden" id="doc_date" value="<?php echo $this->cdoc_date;?>"/>
+<input type="button" id="btnSubmit" value="START" />
+</form>
+</div>
+<script type="text/javascript">
+	$(function(){
+		 $("#btnSubmit").click( function(e){
+				e.preventDefault();		
+						jConfirm('DO YOU WANT TRANSFER DATA?','CONFIRM', function(r){
+					        if(r){
+					        	///////////////////////////// transfer /////////////////////////////////
+					        	var doc_date=$('#doc_date').val();
+					        	doc_date=$.trim(doc_date);
+					        	if(doc_date.length==0){
+					        		jAlert('PLEASE SPECIFY DATE TRANSFER','WARNING',function(){
+					    				$("#doc_date_show").focus();
+					    			});
+						        	return false;
+						        }else{
+						        	$.ajax({
+										type:'post',
+										url:'/sales/accessory/transferdailysales',
+										data:{
+											rnd:Math.random()//doc_date:doc_date,
+										},success:function(data){	
+											if(data=='Y'){												
+												jAlert('TRANSFER DATA SUCCESS','INFO',function(){														
+													return false;
+								    			});
+												return false;
+											}else{
+												jAlert("CAN'T TRANSFER DATA. PLEASE TRY AGAIN.","WARNING",function(){														
+													return false;
+								    			});
+												return false;
+												
+											}										
+										}
+									});
+							    }//end if
+					        	////////////////////////////  transfer /////////////////////////////////
+					        }
+					 });
+				return false;
+		});//end btnSubmit
+		
+		
+	});//ready
+</script>

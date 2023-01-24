@@ -1,0 +1,128 @@
+
+<style>
+.flexigrid div.fbutton .view_product {
+	background: url(/stock/img/view_choose.png) no-repeat center left;
+}
+
+.flexigrid div.fbutton .print {
+	background: url(/stock/img/emblem_print.png) no-repeat center left;
+}
+</style>
+<?php
+$doc_no=$this->doc_no;
+?>
+<center>
+<table width="10%">
+	<tr>
+		<td><table id="flex1" style="display:none"></table></td>
+	</tr>
+</table>
+<input type="hidden" name="doc_no" id="doc_no" value="<?php echo $doc_no;?>">
+</center>
+<script type="text/javascript">
+$(document).ready( function() {
+	$( "#dialog_process" ).html("<center><font color='blue'><img src='/stock/img/ajax-loader.gif' border='0' align='absmiddle'><br><b>กำลังดึงข้อมูล...</b></font></center>");
+	$( "#dialog_process" ).dialog( "open" );
+});
+
+
+$("#flex1").flexigrid({
+	url: 'datadifcheck?doc_no=<?php echo $doc_no;?>',
+	dataType: 'json',
+	colModel : [
+		{display: 'Product ID', name : 'product_id', width : 90, sortable : true, align: 'center'},
+		{display: 'Product Name', name : 'name_product', width : 150, sortable : true, align: 'left'},
+		{display: 'Price', name : 'price', width : 70, sortable : true, align: 'right'},
+		{display: 'On Hand', name : 'onhand', width : 85, sortable : true, align: 'center'},
+		{display: 'Couting', name : 'check', width : 80, sortable : true, align: 'center'},
+		{display: 'Lack(not enough)', name : 'dif', width : 80, sortable : true, align: 'center'},
+		{display: 'Excess', name : 'dif', width : 80, sortable : true, align: 'center'},
+		{display: 'Amount', name : 'sum', width : 100, sortable : false, align: 'right'}
+		],
+		buttons : [
+   		{name: 'Show product list', bclass: 'view_product', onpress : productaction},
+   		{name: 'Print Report of Difference', bclass: 'print', onpress : productaction},
+   		{name: 'Process product lack/excess', bclass: 'delete', onpress : productaction},
+   		{separator: true}
+   		],
+		searchitems : [
+		{display: 'Product ID', name : 'procuct_id'}
+		],
+	onSuccess:function(){
+		$( "#dialog_process" ).dialog( "close" );
+	},
+	sortname: "product_id",
+	sortorder: "asc",
+	usepager: true,
+	title: 'Doc. No. : <?php echo $doc_no;?>',
+	useRp: true,
+	rp: 25,
+	showTableToggleBtn: true,
+	width: 1000,
+	onSubmit: addFormData,
+	height: 500
+});
+
+function productaction(com, grid) {
+	var doc_no=$("#doc_no").val();
+	if($('.trSelected',grid).length>0){
+		var items = $('.trSelected',grid);
+		var itemlist ='';
+		for(i=0;i<items.length;i++){
+			itemlist+= items[i].id.substr(3)+",";
+			//itemlist= items[i].id.substr(3);
+		}
+	}
+	if (com == 'Show product list') {
+		if(itemlist==undefined){
+			jAlert('you did not select product!', 'Alert!');
+		}else{
+			$.ajax({type: "POST",url: "/stock/checkstock/viewporductcheckdif",data:{product_id:itemlist,doc_no:doc_no},success:
+				function(data){
+					$( "#view_productcheckdif" ).html(data);
+					$( "#view_productcheckdif" ).dialog( "open" );
+				}
+			});
+		} 
+	}
+
+	if (com == 'Print Report of Difference') {
+		$.ajax({type: "POST",url: "/stock/checkstock/viewcheckdiforderby",data:{doc_no:doc_no},success:
+			function(data){
+				$( "#view_orderby" ).html(data);
+				$( "#view_orderby" ).dialog( "open" );
+			}
+		});
+	}
+
+	if (com == 'Process product lack/excess') {
+				var doc_no=$("#doc_no").val();
+				$.ajax({type: "POST",url: "/stock/checkstock/frmpwd",data:{doc_no:doc_no},success:
+					function(data){
+						$( "#view_password" ).html(data);
+						$( "#view_password" ).dialog( "open" );
+					}
+				});
+
+	}
+}
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+	
+$('#sform').submit(function (){
+	$('#flex1').flexOptions({newp: 1}).flexReload();
+	return false;
+});
+
+function process2(event){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		process_stock();
+	}
+	event.stopPropagation("0");
+}
+</script>

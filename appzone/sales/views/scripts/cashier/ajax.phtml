@@ -1,0 +1,88 @@
+<?php 	
+	 if(is_array($this->arr_data)){
+	 		if(@$this->arr_data['action']=='getemployee'){
+	 			$str_emp="";
+	 			if(is_array($this->arr_data['data']) && !empty($this->arr_data['data'])){
+					foreach($this->arr_data['data'] as $row){
+						$str_emp.="&nbsp;".$row['name']."&nbsp;".$row['surname'];
+						/*
+						$name=iconv("tis-620","utf-8",$row['name']);
+						$surname=iconv("tis-620","utf-8",$row['surname']);						
+						$str_emp.="&nbsp;".$name."&nbsp;".$surname;
+						*/
+					}	
+	 			}else{
+	 				$str_emp="none";
+	 			}
+	 			echo $str_emp;
+			}//end action
+			
+			if(@$this->arr_data['action']=='memberinfo'){
+	 			echo $this->arr_data['data'];
+			}//end action
+			
+			if(@$this->arr_data['action']=='getSumCshTemp'){
+	 			echo $this->arr_data['data'];
+			}//end action
+			
+			if($this->arr_data['action']=='check_promotion'){
+				//print_r($this->arr_data['data']);
+				if($this->arr_data['data']){
+					$str_p="";
+					foreach($this->arr_data['data'] as $val){								
+							$str_p.=$val.",";
+					}
+					$str_p=substr($str_p,0,-1);
+					echo $str_p;					
+				}else{
+					echo '0';
+				}
+			}//end action
+			
+			if($this->arr_data['action']=='get_promotion'){
+				if($this->arr_data['data']){
+					foreach($this->arr_data['data'] as $row){								
+						echo $row['promo_des'];
+					}						
+				}else{
+					echo '';
+				}
+			}//end action
+			
+			if($this->arr_data['action']=='cancelBill'){
+				if($this->arr_data['data']){
+					if($this->arr_data['data']=='0'){
+						echo '0';
+					}else{
+						echo '1';
+					}
+				}else{
+					echo '0';
+				}
+			}//end action
+			
+			if($this->arr_data['action']=='cancelPro'){
+				if($this->arr_data['data']){
+					if($this->arr_data['data']=='0'){
+						echo "Can't delete item promotion.please try again.";
+					}else{
+						echo "Delete complete.";
+					}
+				}else{
+					echo "Can't delete promotion.please try again.";
+				}
+			}//end action
+			
+			if($this->arr_data['action']=='set_csh_tmp'){
+				echo $this->arr_data['data'];
+			}//end action
+			
+			//*WR20012015
+			if($this->arr_data['action']=='line_set_csh_tmp'){
+				echo $this->arr_data['data'];
+			}//end action
+			
+	  }else{
+	  	echo "none";
+	  }//
+?>

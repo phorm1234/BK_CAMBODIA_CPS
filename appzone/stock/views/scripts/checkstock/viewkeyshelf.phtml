@@ -1,0 +1,123 @@
+<script>
+$(function() {	
+//all hover and click logic for buttons
+	$(".fg-button")
+	.hover(
+		function(){ 
+			$(this).addClass("ui-state-hover"); 
+		},
+		function(){ 
+			$(this).removeClass("ui-state-hover"); 
+		}
+	)
+	.mousedown(function(){
+			$(this).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
+			if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ $(this).removeClass("ui-state-active"); }
+			else { $(this).addClass("ui-state-active"); }	
+	})
+	.mouseup(function(){
+		if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+			$(this).removeClass("ui-state-active");
+		}
+	});
+});
+</script>
+<?php 
+$shelf=$this->viewshelf;
+?>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+<?php
+$i=0;
+$countShlef=count($shelf);
+foreach($shelf as $val_shelf){
+	if($i=='0'){echo"<tr>";}
+?>
+	<td width="50%" valign="top">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table">
+	  <tr>
+		<td bgcolor="#CCCCCC" class="head_shelf"><table width="100%" border="0" cellspacing="0" cellpadding="2">
+			<tr>
+			  <td width="54%" align="left" class="text_head">Shelf <?php echo $val_shelf['shelf_no'];?></td>
+			  <td width="46%" align="right">
+			  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+				  <tr>
+					<td align="right">
+					<a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return add_floor('<?php echo $val_shelf['shelf_no'];?>','n');"><span class="ui-icon ui-icon-plusthick"></span>เพิ่มชั้นวาง</a>
+					<a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" title="แก้ไข" onClick="return add_shelf('<?php echo $val_shelf['shelf_no'];?>');"><span class="ui-icon ui-icon-pencil"></span> แก้ไข</a>					
+					<a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" title="ลบ" onClick="return del_shelf('<?php echo $val_shelf['shelf_no'];?>')"><span class="ui-icon ui-icon-trash"></span> ลบ</a> 					
+					</td>				  
+				</tr>
+			  </table>			  
+			  </td>
+			</tr>
+		</table>		
+		</td>
+	  </tr>
+	  <?php 
+	  $floor=$val_shelf['floor_no'];
+	  $countFloor=count($floor);
+	  foreach($floor as $val_floor){
+	  ?>
+	  <tr>
+		<td bgcolor="#CCCCCC" class="head_sub_shelf">
+		<table width="100%" border="0" cellspacing="2" cellpadding="0">
+			<tr>
+			  <td width="54%" align="left" class="sub_text_head"><?php echo $val_floor['floor_no'];?></td>
+			  <td width="46%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="right">
+                  <a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return add_room('<?php echo $val_shelf['shelf_no'];?>','<?php echo $val_floor['floor_no'];?>','n');"><span class="ui-icon ui-icon-plusthick"></span>เพิ่มห้องวางสินค้า</a>
+                  <a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" onClick="return add_floor('<?php echo $val_shelf['shelf_no'];?>','<?php echo $val_floor['floor_no'];?>');"><span class="ui-icon ui-icon-pencil"></span>แก้ไข </a>
+                  <a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" onClick="return del_floor('<?php echo $val_shelf['shelf_no'];?>','<?php echo $val_floor['floor_no'];?>');"><span class="ui-icon ui-icon-trash"></span>ลบ </a>                 
+                  </td>
+                </tr>
+              </table>
+              </td>
+			</tr>
+		</table>
+		</td>
+	  </tr>
+	  <tr>
+		<td bgcolor="#EFEFEF" class="td_sub_shelf">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+			<?php  
+			 $room=$val_floor['room_no'];
+			 $countRoom=count($room);		 
+			 foreach($room as $val_room){
+			?>
+			  <td class="td_sub_shelf_pord">
+			  <table width="100%" border="0" cellspacing="0" cellpadding="2">
+				  <tr>
+					<td align="left"><span class="txt_bold"><?php echo $val_room['room_no'];?></span></td>
+				  </tr>
+				  <tr>
+					<td align="center" class="txt_bold"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td width="81%" align="right">&nbsp;</td>
+                        <td width="9%" align="right"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return open_product('<?php echo $val_shelf['shelf_no'];?>','<?php echo $val_floor['floor_no'];?>','<?php echo $val_room['room_no'];?>');"><span class="ui-icon ui-icon-folder-open"></span>สินค้า </a></td>
+                        <td width="10%" align="right"><a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" onClick="return del_room('<?php echo $val_shelf['shelf_no'];?>','<?php echo $val_floor['floor_no'];?>','<?php echo $val_room['room_no'];?>');"><span class="ui-icon ui-icon-trash"></span>ลบ </a></td>
+                      </tr>
+                    </table>
+                    </td>
+				  </tr>
+			  </table>			  
+			  </td>
+			<?php
+			}
+			?>
+			</tr>
+		</table>
+		<?php
+		}
+		?>		
+		</td>
+	  </tr>
+	</table>	
+	</td>
+	<?php
+  	$i++;
+	if($i=='2'){echo"</tr>"; $i='0';}
+	}
+	?>
+</table>

@@ -1,0 +1,44 @@
+<table width="100%" border="0" cellspacing="1" cellpadding="5" bgcolor="#CCCCCC">
+<tr bgcolor="#FFF8C6">
+		<td align="center" colspan="5" align="center"><span style="font-size:23px;font-weigth:bold;color:#336666;">CONTACT CUSTOMER SERVICE ALIPAY TEL : 02-123-5700</span></td>
+	<tr>
+</table>
+<?php
+	if(!empty($this->arr_data)){
+?>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
+	<tr bgcolor="#FFF8C6">
+		<td align="center">storeid</td><td align="center">deviceid</td><td align="center">reqid</td><td align="center">amt</td><td align="center">status</td>
+	<tr>
+	<?php
+		$trn_status='';
+		$i=0;		
+		foreach($this->arr_data as $data){
+			if($data['respcode']=='0'){
+				$trn_status="OK";
+			}else{
+				$trn_status=$data['errmsg'];
+			}
+			//777720170404175054
+			//7777 20170404 175054
+			$req_id=substr($data['reqid'],0,4)." ";
+			$req_id.=substr($data['reqid'],4,8)." ";
+			$req_id.=substr($data['reqid'],12,6)." ";
+			
+			($i%2==0)?$bg_color="#FFFFFF":$bg_color="#ebebeb";
+			echo "<tr bgcolor='$bg_color'>
+				<td align='center'>$data[storeid]</td>
+				<td align='center'>$data[deviceid]</td>
+				
+				<td align='center'>$req_id</td>
+				
+				<td align='center'>$data[amount]</td>
+				<td align='center'>$trn_status</td>
+			<tr>";
+			$i++;
+		}
+	?>
+</table>
+<?php
+	}
+?>

@@ -1,0 +1,41 @@
+<div style="display:block;font-size:20px !important;font-family: PSLKittithadaBold !important;">
+<label>Employee ID : </label><br/>
+<label>
+<input type="text" size="15" id="cshdrw_employee_id" name="cshdrw_employee_id" class="keybarcode" style="font-size:19px !important;font-family: PSLKittithadaBold !important;"/>
+</label><br/>
+<label>Reason : </label><br/>
+<label>
+<!--<textarea id="remark" rows="2" cols="38" style="font-size:19px !important;font-family: PSLKittithadaBold !important;"></textarea>-->
+<select  id="remark_id">
+	<option value="0"> - Choose - </option>
+<?php 	
+	if(!empty($this->arr_remark)){
+		foreach($this->arr_remark as $data){
+		?>
+		<option value="<?php echo $data['remark_id'];
+		switch($data['remark_id']){
+			case "1": //ระบบมีปัญหาไม่เปิดอัตโนมัติ
+			$data['remark']="System error, does not open automatically.";
+			break;
+			case "2": //แลกเงิน,ทอนเงินลูกค้า
+			$data['remark']="Exchange money, give a change to customers";
+			break;
+			case "3": //ทอนเงินลูกค้าผิิด
+			$data['remark']="Give a wrong change to customers";
+			break;
+			case "4": //อื่นๆ(นับเงิน,ตรวจนับเงินทอน)
+			$data['remark']="Others(counting money,counting a change)";
+			break;
+			default: //default
+			$data['remark']=$data['remark'];
+		}
+		?>" ><?php echo $data['remark'];?></option>
+		<?php 
+		}
+	}
+?>
+</select>
+</label><br/>
+<input type="hidden" id="m_cashdrawer" value="<?php echo $this->m_cashdrawer;?>"/>
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+</div>

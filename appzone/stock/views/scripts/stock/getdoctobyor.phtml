@@ -1,0 +1,86 @@
+<?php
+$data = $this->data;
+?>
+<form name="frm_inv" id="frm_inv">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td height="30" width="3%" background="/stock/img/bg_header_blue.gif" align="center">&nbsp;</td>
+			<td width="120" background="/stock/img/bg_header_blue.gif" align="center">Doc. Date</td>
+			<td width="108" background="/stock/img/bg_header_blue.gif" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Doc. No.</td>
+			<td width="80" background="/stock/img/bg_header_blue.gif" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amount</td>
+			<td background="/stock/img/bg_header_blue.gif" align="center">&nbsp;</td>
+		</tr>
+	</table>
+	<?php
+	$i = 1;
+	foreach ($data as $val) {
+		//if($val['id']=="" or $val['flag']=="C"){
+		$val['id'] = 0;
+		if ($val['id'] == "") {
+			if ($i % 2) {
+				$color = "#eaebeb";
+			} else {
+				$color = "#f2f3f3";
+			}
+			$conv_date = explode("-", $val['doc_date']);
+			$conv_date = $conv_date[2] . "/" . $conv_date[1] . "/" . $conv_date[0];
+	?>
+			<label class="label_radio">
+				<input name="inv" id="inv" type="radio" value="<?php echo $val['doc_no']; ?>" <?php if ($i == 1) {
+																									echo "checked='checked'";
+																								} ?> onkeypress="return process_enter(event)"
+																								>
+				<?php if (!empty($val['doc_date'])) {
+					echo $conv_date;
+				} ?>&nbsp;&nbsp;&nbsp;&nbsp;
+				<?php if (!empty($val['doc_no'])) {
+					echo $val['doc_no'];
+				} ?>&nbsp;&nbsp;&nbsp;&nbsp;
+				<?php if (!empty($val['quantity'])) {
+					echo number_format($val['quantity'], 0, '.', ',');
+				} ?>
+			</label>
+	<?php
+			$i++;
+		}
+	}
+	?>
+</form>
+<script>
+	function setupLabel() {
+		if ($('.label_check input').length) {
+			$('.label_check').each(function() {
+				$(this).removeClass('c_on');
+			});
+			$('.label_check input:checked').each(function() {
+				$(this).parent('label').addClass('c_on');
+			});
+		};
+		if ($('.label_radio input').length) {
+			$('.label_radio').each(function() {
+				$(this).removeClass('r_on');
+			});
+			$('.label_radio input:checked').each(function() {
+				$(this).parent('label').addClass('r_on');
+			});
+		};
+	};
+	$(document).ready(function() {
+		$('body').addClass('has-js');
+		$('.label_check, .label_radio').click(function() {
+			setupLabel();
+		});
+		$('.label_check, .label_radio').dblclick(function() {
+			inputinv2();
+		});
+		setupLabel();
+	});
+
+	function process_enter(event) {
+		var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+		keyCode = event.which; // Firefox    
+		if (keyCode == 13) {
+			inputinv2();
+		}
+	}
+</script>

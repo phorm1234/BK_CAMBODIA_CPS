@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Admin Pos</title>
+	<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/gray/easyui.css"/>
+	<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/icon.css"/>	
+	<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery.easyui.min.js"></script>
+	<link rel="stylesheet" href="/pos/plugin/xhtml/css/screen.css" type="text/css" media="screen" title="default" />   
+</head>
+<body id="ipad">
+<input name="hiddentime" type="hidden" id="hiddentime" value="<?php echo date("H:i:s");?>" />
+
+
+        
+        
+        <div id="lockscreen">    
+           
+				<div id="loginbox" >
+					<div id="login-inner">
+					<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+					  <th>environment</th>
+					  <td>
+					 <?php echo $this->login_for;?> 
+					</td>
+					  </tr>
+					<tr>
+					<th>Username</th>
+					<td><input type="text" name="user_id" id="user_id" class="login-inp"  value='' /></td>
+					</tr>
+					<tr>
+					<th>Password</th>
+					<td><input type="password" name="password_id" id="password_id"  value=""  onfocus="this.value=''" class="login-inp" /></td>
+					</tr>
+					<tr>
+					<th></th>
+					<td><input type="button" onclick='checkLogin()' class="submit-login" /></td>
+					</tr>
+					</table>
+					</div>
+					<div class="clear"></div>
+				</div>
+         
+        </div>
+    </div>
+
+</body>
+</html>
+<script type="text/javascript">
+function checkLogin(){
+	if($("#user_id").val()=="") {
+		alert("กรุณาระบุ หรัสพนักงาน");
+		return false;
+	}else if($("#password_id").val()=="") {
+		alert("กรุณาระบุ  รหัสผ่าน  ");
+		return false;
+	}else{
+		$.get("/pos/admin/checkuser",{
+			env_id:$('#env_id').val(),
+			user_id:$('#user_id').val(),
+			password_id:$('#password_id').val(),
+			ran:Math.random()
+			},function(data){ 
+				if(data != 1){
+					$.messager.alert('ผลการตรวจสอบ',data,'error');
+				}else{
+					window.location="/pos/admin/permission";
+				}
+		});
+	}
+}//func
+$(function() {	
+	$('#user_id').keyup(function(e) {
+		if(e.keyCode == 13) {
+			$('#password_id').val('');
+			$('#password_id').focus();
+		}
+	});
+	
+	$('#password_id').keyup(function(e) {
+		if(e.keyCode == 13) {
+			checkLogin();
+		}
+	});
+	
+});
+</script>

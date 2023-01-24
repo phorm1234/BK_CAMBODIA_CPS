@@ -1,0 +1,31 @@
+<?php 
+$onhand=$this->data_onhand;
+$product=$this->data_product;
+$product_max=$this->data_product_max;
+if(!empty($product_max[0]['quantity'])){
+	$max_qty=$product_max[0]['quantity'];
+}else{
+	$max_qty=0;
+}
+$qty=$this->qty;
+$sum=$qty+$product[0]['qty'];
+if($qty<=0){
+	$status="0";
+}else{
+	if($qty>$onhand[0]['onhand']){
+		$status="1";
+	}else{
+		if($qty>$product_max[0]['quantity']){
+			$status="2";
+		}else{
+			$sum=$product_max[0]['quantity']-$product[0]['qty'];
+			if($qty>$sum){
+				$status="2";
+			}else{
+				$status="3";
+			}
+		}
+	}
+}
+echo $status;
+?>

@@ -1,0 +1,354 @@
+     <style type="text/css">  
+	 	body
+		{
+			line-height: 1.4em;
+		}
+		#box-table-a
+		{		 
+			font-size: 18px;
+			margin:5px;/*45*/
+			width:100%;
+			text-align: left;
+			border-collapse: collapse;
+		}
+		#box-table-a th
+		{
+			font-size: 18px;
+			font-weight: normal;
+			padding:5px;
+			background:#669999;
+			border-top: 4px solid #99cccc;
+			border-bottom: 1px solid #fff;
+			color:#FFF;
+		}
+		#box-table-a td
+		{
+			padding:5px;
+			background: #e8edee; 
+			border-bottom: 1px solid #fff;
+			color: #222;
+			border-top: 1px solid transparent;
+		}
+		#box-table-a tr:hover td
+		{
+			background: #99cccc;
+			color: #119;
+			cursor:pointer;
+		}        
+		.promotion-label {
+          	 padding:0 0 0 15px;/*35*/
+			}
+			.c_FF3333_img {
+				background: url(/sales/img/icon_no_16x16.png) no-repeat  center left;
+			}
+			.c_66FF99_img {
+				background: url(/sales/img/icon_yes_16x16.png) no-repeat  center left;
+			}
+			
+			.c_dfdfdf_img{
+				background: url(/sales/img/icon_wait_16x16.png) no-repeat  center left;				
+			}
+			.ui-tabs .ui-tabs-panel {
+			    padding: 0.1em 1.4em 1em 0;
+			}
+   </style>
+   <table id="box-table-a" width="100%" border="0">
+    <tbody>    
+        <?php 
+        	if(!empty($this->arr_promo)){ 
+	        	$i=1;
+	        	$str_promo="";
+	        	foreach($this->arr_promo as $data){
+					$new_bd = $data['remark'];
+	        		$data['promo_detail']=strip_tags($data['promo_detail']);
+	        		$rows_json=json_encode($data);
+	  				$id_tmp="n_".$i;		  				
+		  			echo "<tr id='$id_tmp' class='promo_priv' newbd='$new_bd' idpromo='".$rows_json."'>
+		  						<td>
+		  						<div class=' promotion-label c_".substr($data['promo_color'],1,6)."_img'>
+		  						&nbsp;".$data['promo_code']."&nbsp;&nbsp;&nbsp;".$data['promo_name']."&nbsp;&nbsp;&nbsp;".$data['promo_detail']."</div>		  				
+		  						</td>				  					
+		  					</tr>";  
+		  			$i++;
+	  			}//foreach	
+        	}else{
+        		echo "<tr align='center' id='n_1' name='n_1' idpromo='nodata'><td>PROMOTION NOT FOUND !!!</td></tr>";
+        	}
+        ?>
+        </tbody>        
+	 </table> 
+	 <div id="data-tmp"></div>
+	 <script type="text/javascript">
+	 	$(function(){
+	    	$('tr.promo_priv').each(function(){	
+		    	$(this).die('click');		    		   		
+	    		$(this).live('click',function(evt){	
+				var newbd = $(this).attr('newbd');
+				console.log(newbd);
+				$('#vt_taxid').val(newbd);
+					//**************************** start *********************	    			 
+	    			 //evt.stopImmediatePropagation();
+	    			evt.stopPropagation();
+	    			evt.preventDefault();					    
+				    if($(this).attr('idpromo')=='nodata'){
+				    	$('#dlgMemberPrivilege').dialog('close');
+				    	initFieldPromt();
+				    	return false;
+					}
+				    var selpromo=$.parseJSON($(this).attr('idpromo'));
+				    $('#csh_promo_code').val(selpromo.promo_code);
+				    $('#csh_promo_tp').val(selpromo.promo_tp);
+				    if(selpromo.promo_status=='N'){
+					    //ใช้สิทธิแล้ว
+				    	jAlert(selpromo.promo_detail,'ข้อความแจ้งเตือน',function(){
+							return false;
+						});	
+					    return false;
+					}
+				    
+				    $('#csh_trn_diary2_sl').val('Y');
+				    $('.tableNavMemberPriv ul').navigate('destroy');
+				    $('#dlgMemberPrivilege').dialog('close');				    
+				    //lock สิทธิที่ jinet 10.100.53.2
+				    $('#csh_promo_year').val(selpromo.promo_year);
+				    var opts_lockpriv={
+					    	type:'post',
+					    	url:'/sales/cashier/markmemberuse',
+					    	data:{
+					    		promo_code:selpromo.promo_code,
+					    		member_no:$('#csh_member_no').val(),
+					    		customer_id:$('#csh_customer_id').val(),
+					    		promo_year:selpromo.promo_year,
+					    		rnd:Math.random()									    		
+					    	},
+					    	success:function(data){
+						    	}
+					    };
+				    $.ajax(opts_lockpriv);
+					//*WR07032016 for support check card to idcard					
+					if(selpromo.promo_tp=='CHGCARD2ID' || selpromo.promo_tp=='O'){
+						if(selpromo.member_discount != 'Y'){
+	    					$('#csh_percent_discount').html('');
+	    				}
+						$("#csh_coupon_code").val(selpromo.promo_code);
+						playMstPromotion(selpromo.promo_code,'1');
+						$("#dlgOtherPromotion").dialog("close");
+					}else
+				    
+				    //ปัญหาโปรอยู่คนละตาราง
+				    if(selpromo.promo_pos=='L'){
+				    	 $('#csh_trn_diary2_sl').val('N');
+				    	 $('#csh_get_point').val('Y');	
+	    				 $('#csh_web_promo').val('Y');// สถานะใช้สิทธิสมาชิกบนเวบ						    				 
+	    				if(selpromo.xpoint!='' || selpromo.xpoint!='1'){
+	    				 	$("#csh_xpoint").val(selpromo.xpoint);						
+	    				}else{
+	    					$("#csh_xpoint").val('1');	
+		    			}
+	    				$('#other_promotion_title').html(selpromo.promo_name + " " + selpromo.promo_detail);
+		    			$('#status_pro').trigger('change');		 
+	    				initFieldPromt(); 
+				    }else if(selpromo.promo_tp=='NEWBIRTH'){
+					   $.ajax({
+							   		type:'post',
+							   		url:'/sales/member/otherpromo',
+							   		data:{
+				    					promo_code:selpromo.promo_code,
+				    					rnd:Math.random()
+				    			},
+				    			success:function(data){
+					    			if(data!=''){
+					    				 var objBirthDay=$.parseJSON(data);		
+					    				 $('#csh_promo_tp').val(objBirthDay.promo_tp);//*WR29072014										    				
+					    				 $('#csh_play_main_promotion').val(objBirthDay.play_main_promotion);
+					    				 $('#csh_play_last_promotion').val(objBirthDay.play_last_promotion);
+					    				 $('#csh_get_promotion').val(objBirthDay.get_promotion);
+					    				 $('#csh_start_baht').val(objBirthDay.start_baht);
+					    				 $('#csh_end_baht').val(objBirthDay.end_baht);
+					    				 $('#csh_discount_member').val(objBirthDay.discount_member);
+					    				 $('#csh_get_point').val(objBirthDay.get_point);	
+					    				 $("#csh_buy_type").val(objBirthDay.buy_type);
+					    				 $("#csh_buy_status").val(objBirthDay.buy_status);											    				
+					    				 $('#csh_web_promo').val('Y');
+					    				 var arr_birthday=$('#info_member_birthday').html().split('/');
+					    				 var arr_docdate=$('#csh_doc_date').html().split('/');
+					    				if(arr_birthday[1]==arr_docdate[1]){
+					    				 	$("#csh_xpoint").val(objBirthDay.xpoint);						
+					    				}else{
+					    					$("#csh_xpoint").val('1');	
+						    			}
+					    				 //birthday_month,xpoint
+					    				 $('#other_promotion_title').html(objBirthDay.promo_des);
+					    				 if(objBirthDay.type_discount=='PERCENT'){
+					    					 $('#csh_percent_discount').html(parseInt(objBirthDay.discount));
+						    			 }		
+						    			$('#status_pro').trigger('change');		 
+					    				initFieldPromt(); 
+						    		}
+					    		}//success
+						   });
+					}else if(selpromo.promo_code=='OX24171113'){//more point more value first purchase
+						$('#csh_get_point').val('N');
+						$("#csh_status_no").val('04');
+						$.ajax({
+						   		type:'post',
+						   		url:'/sales/member/promopointheadweb',
+						   		data:{
+			    					promo_code:selpromo.promo_code,
+			    					rnd:Math.random()
+			    			},
+			    			success:function(data){
+				    				if(data!=''){
+										var objFp=$.parseJSON(data);		
+										var point_total=$('#csh_point_total').html();
+										var fp_point=selpromo.point_first;
+										if(fp_point<=point_total){
+										$('#csh_point_total').html(fp_point);
+									}
+									$('#csh_play_main_promotion').val(objFp.play_main_promotion);
+									$('#csh_play_last_promotion').val(objFp.play_last_promotion);
+									$('#csh_get_promotion').val(objFp.get_promotion);
+									$('#csh_discount_member').val(objFp.member_discount);
+									$("#csh_promo_tp").val(objFp.promo_tp);
+									$("#csh_promo_id").val(objFp.promo_id);
+									$('#csh_percent_discount').html('0');
+									$('#csh_get_point').val(objFp.get_point);	
+									$('#csh_web_promo').val('Y');
+									$('#status_pro').trigger('change');		 
+									initFieldPromt(); 
+					    		}
+				    		}//success
+					   });
+					}else if(selpromo.promo_code=='OX10181113'){//get free point
+						//check buy 800 before
+						var member_no=$('#csh_member_no').val();
+						$.ajax({
+							type:'post',
+							url:'/sales/member/chknetbefore',
+							data:{
+								member_no:member_no,
+								net_amt:'800',
+								rnd:Math.random()
+							},success:function(data){
+								if(data=='Y'){									
+									//////////////// START ///////////////////
+									$("#csh_status_no").val('04');
+									$.ajax({
+									   		type:'post',
+									   		url:'/sales/member/promopointheadweb',
+									   		data:{
+						    					promo_code:selpromo.promo_code,
+						    					rnd:Math.random()
+						    			},
+						    			success:function(data){
+							    				if(data!=''){
+							    					var objGp=$.parseJSON(data);		
+													$('#other_promotion_title').html(objGp.promo_des);
+													$('#csh_point_used').val(objGp.point);													 
+													$('#csh_play_main_promotion').val(objGp.play_main_promotion);
+													$('#csh_play_last_promotion').val(objGp.play_last_promotion);
+													$('#csh_get_promotion').val(objGp.get_promotion);
+													$('#csh_discount_member').val(objGp.member_discount);
+													$("#csh_promo_tp").val(objGp.promo_tp);
+													$("#csh_promo_id").val(objGp.promo_id);
+													$('#csh_percent_discount').html('0');
+													$('#csh_get_point').val(objGp.get_point);	
+													$("#csh_start_baht").val(objGp.start_baht);
+													$("#csh_end_baht").val(objGp.end_baht);
+													$('#csh_web_promo').val('Y');
+													$('#status_pro').trigger('change');		 
+													initFieldPromt(); 
+								    		}
+							    		}//success
+								   });
+									//////////////// END ///////////////////////
+								}else{
+									jAlert('ต้องเปิดบิลซื้อผลิตภัณฑ์ครบ 800(สุทธิ) ก่อนใช้สิทธิเปิดบิลนี้ได้', 'ข้อความแจ้งเตือน',function(){							    		
+										return false;
+									});	
+									initFieldOpenBill();
+									return false;
+								}
+							}
+						});
+					}else{					  
+					    //other promotion in table promo_head
+					    $.ajax({
+						    type:'post',
+						    url:'/sales/member/memotherpro',
+						    data:{
+						    	promo_code:selpromo.promo_code,
+						    	rnd:Math.random()
+						    },success:function(data){
+							    if(data=='0'){
+							    	jAlert('PROMOTION NOT FOUND !!!', 'Warning message',function(){
+							    		$("#other_promotion_cmd").html('');
+								    	$('.tableNavMemberPriv ul').navigate('destroy');
+								  		$("#dlgOtherPromotion").dialog("close");
+								  		initFormCashier();
+										initFieldOpenBill();
+										return false;
+									});	
+							    	return false;
+								}
+							    var sel_promo=$.parseJSON(data);
+							    $('#csh_web_promo').val(sel_promo.web_promo);//forcheck not play with main promotion
+						    	$('#csh_gap_promotion').val('N');
+								$('#csh_trn_diary2_sl').val('Y');
+								 $('#csh_discount_member').val(sel_promo.discount_member);
+								if(parseInt(sel_promo.point)==0){
+									$('#csh_get_point').val('N');
+								}
+								if(sel_promo.discount_member=='N'){
+									$('#csh_percent_discount').html('0');
+								}
+								//alert(sel_promo.limite_qty);
+								$('#csh_limite_qty').val(sel_promo.limite_qty);
+								$('#csh_check_repeat').val(sel_promo.check_repeat);
+							    $('#csh_promo_tp').val(sel_promo.promo_tp);
+							    $('#csh_member_tp').val(sel_promo.member_tp);
+							    $('#csh_promo_discount').val(sel_promo.discount);
+							    $("#csh_promo_code").val(sel_promo.promo_code);
+							    $('#csh_promo_amt').val(sel_promo.promo_amt);
+							    $('#csh_promo_amt_type').val(sel_promo.promo_amt_type);
+								$('#csh_promo_point').val(sel_promo.point);
+								$('#csh_promo_point_to_discount').val(sel_promo.point_to_discount);	
+							  	$("#other_promotion_title").html(sel_promo.promo_des);
+							  	 if(parseInt(sel_promo.promo_amt)!=0 && sel_promo.promo_amt_type!=''){
+									//freebirth
+								    if(sel_promo.promo_amt_type=='L'){
+								    	$("#csh_start_baht").val('0');
+										$("#csh_end_baht").val(sel_promo.promo_amt);
+										$("#csh_buy_type").val('G');
+					    				$("#csh_buy_status").val('L');	
+					    				///////TEST 11062012///
+					    				$("#csh_play_main_promotion").val('N');
+					    				$("#csh_play_last_promotion").val('N');
+					    				//////TEST 11062012///////
+									}		
+									 $("#dlgOtherPromotion").dialog("close");
+									 initFieldPromt();
+								}else 	if(sel_promo.promo_tp=='M'){
+							  		getDiscountNetAmt();
+							  		$("#dlgOtherPromotion").dialog("close");
+									 initFieldPromt();
+							  	}else if(sel_promo.promo_tp=='F'){
+								  	//Test 05012013 สามารถยิงสินค้าแถมฟรีร่วมกับสินค้าอื่นได้							  		
+							  		$('#csh_get_point').val('Y');
+							  		$('#csh_trn_diary2_sl').val('N');
+							  		$('#csh_gap_promotion').val('Y');//เล่นระหว่างโปรได้
+							  		//Test 05012013
+							  		$("#other_promotion_cmd").html('');
+							  		$("#dlgOtherPromotion").dialog("close");							  																	  		
+							  		selProductFree(sel_promo.promo_code);
+								 }
+							}
+						 });										
+					    //other promotion in table promo_head
+					}		
+					//***************************** stop *****************************	    			
+	    		});		
+	    	
+	    	});						
+		 });//ready
+	 </script>

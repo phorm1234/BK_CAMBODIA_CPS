@@ -1,0 +1,118 @@
+<style>
+.flexigrid div.fbutton .flex {
+	background: url(/stock/img/icon_add.png) no-repeat center left;
+}
+</style>
+<script>
+$(function() {
+	$( "#dialog_get_docrq" ).dialog({
+		autoOpen: false,
+		width: 500,
+		height: 350,
+		modal: true,
+		open: function(event, ui) {
+	        $(".ui-widget-overlay").css('opacity',0.3);
+	    },
+		close: function(){
+			
+		}
+	});	
+});
+
+</script>
+<div id="dialog_get_docrq" title="Doc no."></div>
+<center>
+<table width="10%">
+	<tr>
+		<td><table id="flex1" style="display:none"></table></td>
+	</tr>
+</table>
+</center>
+<script type="text/javascript">
+var pWidth=(screen.width-(screen.width*(20/100)))-10;
+var pWidth=(screen.width-(screen.width*(2/100)))-10;
+var pWidth=(screen.width-(screen.width*(3/100)))-10;
+var txt="Status Transfer Out Doc.";
+$("#flex1").flexigrid({
+	url: 'getdatarq',
+	dataType: 'json',
+	colModel : [
+		{display: 'Date', name : 'doc_date', width : 100, sortable : true, align: 'center'},
+		{display: 'Doc. No.', name : 'doc_no', width : 230, sortable : true, align: 'center'},
+		{display: 'Status', name : 'status_transfer', width : 150, sortable : true, align: 'left'},
+		{display: 'Note', name : 'doc_remark', width : 300, sortable : true, align: 'left'}
+		],
+		buttons : [
+        {name: 'Approve to Transfer Out Doc.', bclass: 'flex', onpress : productaction},
+        {name: 'Doc. Description', bclass: 'flex', onpress : productaction},
+        {separator: true}
+        ],
+
+	sortname: "doc_date",
+	singleSelect: true,
+	sortorder: "desc",
+	usepager: true,
+	title: txt,
+	useRp: true,
+	rp: 40,
+	showTableToggleBtn: true,
+	width: pWidth,
+	onSubmit: addFormData,
+	height: 300
+});
+
+function productaction(com, grid) {
+	if($('.trSelected',grid).length>0){
+		var items = $('.trSelected',grid);
+		var itemlist ='';
+		for(i=0;i<items.length;i++){
+			itemlist+= items[i].id.substr(3)+",";
+		}
+	}
+	if (com == 'Approve to Transfer Out Doc.') {
+		if(itemlist==undefined){
+			jAlert('You have not select product list!', 'Alert!');;
+		}else{
+			$.ajax({type: "POST",url: "/stock/stock/checkstatusrq",data:{doc_no:itemlist},success:
+				function(data){
+					if(data=="Y"){
+						$.ajax({type: "POST",url: "/stock/stock/getdocnorq",data:{doc_no_rq:itemlist},success:
+							function(data){
+								$("#dialog_get_docrq").html(data);
+								$( "#dialog_get_docrq" ).dialog( "open" );
+							}
+						});
+					}else if(data=="C"){
+						jAlert('Reject Doc.!', 'Alert!');
+					}else if(data=="T"){
+						jAlert('Transfer Success!', 'Alert!');
+					}else if(data=="UC"){
+						jAlert('Cancle Doc!', 'Alert!');
+					}else{
+						jAlert('Waiting for Approve!', 'Alert!');
+					}
+				}
+			});
+		} 
+	}
+
+	if (com == 'Doc. Description') {
+		if(itemlist==undefined){
+			jAlert('You have not select product list!', 'Alert!');;
+		}else{
+			$.ajax({type: "POST",url: "/stock/stock/rqdetail",data:{doc_no:itemlist},success:
+				function(data){
+					$("#dialog_get_docrq").html(data);
+					$( "#dialog_get_docrq" ).dialog( "open" );
+				}
+			});
+		} 
+	}
+}
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+</script>

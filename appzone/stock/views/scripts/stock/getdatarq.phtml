@@ -1,0 +1,47 @@
+<?php
+$arr_data=$this->arr_data;
+$page=$this->page;
+$total=$this->total;
+if(empty($arr_data)){
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+}else{
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+	$i=1;
+	foreach($arr_data as $val){
+		$date=date('d/m/Y', strtotime($val['doc_date']));
+		
+		if($val['flag']=="C"){
+			$status="<font color='red'>Cancle Doc.</font>";
+		}else{
+			if($val['status_transfer']=="Y"){
+				$status="<font color='green'>Approved</font>";
+			}else if($val['status_transfer']=="C"){
+				$status="<font color='red'>Rejected Doc.</font>";
+			}else if($val['status_transfer']=="T"){
+				$status="<font color='#0646ca'>Transfered</font>";
+			}else{
+				$status="Waiting for Approve";
+			}
+		}
+		$data['rows'][] = 
+		array(
+			'id' => $val['doc_no'],
+			'cell' => 
+					array(
+							$date, 
+							$val['doc_no'], 
+							$status,
+							$val['doc_remark']
+						)
+		);
+		$i++;
+	}
+}
+echo json_encode($data);
+?>

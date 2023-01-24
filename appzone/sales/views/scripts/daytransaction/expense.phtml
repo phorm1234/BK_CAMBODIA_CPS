@@ -1,0 +1,244 @@
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+	<td valign="top">
+		<table width="100%" border="0" cellpadding="2" cellspacing="0" style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+			<tr bgcolor="#B9E7CF">
+				<td colspan="3"><span style='font-size:23px;color:#000000;'>&nbsp;Claim Expenses Doc.</span></td>
+			</tr>
+			<tr height="45" >
+				<td width="20%" align="right">Monthly Expense&nbsp;:</td>
+				<td width="20%">
+					<span id='doc_dt_show'></span>
+					<input type='hidden' id='doc_dt' name='doc_dt'></input>
+				</td>
+				<td>&nbsp;<a href="#" name="btnSelRound" id="btnSelRound" class='btnGrayClean' style='padding-top:5px;float:left;'>Edit</a></td>
+			</tr>
+			<tr height="45"  >
+				<td width="20%" align="right">Enter Employee ID&nbsp;:</td>
+				<td><input type="text" size="20" id="employee_id" class="input-text-pos ui-corner-all"></td>
+				<td>&nbsp;<a href="#" name="btnEdit" id="btnEdit" class='btnGrayClean' style='padding-top:5px;float:left;'>Confirm</a>&nbsp;<span id="employee_fullname"></span></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td align="center">&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="3" valign="top">
+					<div id="divexpense"></div>
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+</table>
+<div id="dlgRoundExpense"></div>
+<script type="text/javascript">
+	function getDocDt(){
+		var opts={
+					type:'post',
+					url:'/sales/daytransaction/getdocdt',
+					data:{
+						rnd:Math.random()
+					},success:function(data){
+						var json_exp=$.parseJSON(data);		
+						$("#doc_dt").val(json_exp.doc_dt);
+						var docdt_show="["+json_exp.expense_month+"] "+json_exp.start_date+" - "+json_exp.end_date;
+						$("#doc_dt_show").html(docdt_show);
+					}
+				};
+		$.ajax(opts);
+	}//func
+	function sendSave(JSONstring){		
+		var opts_save={
+					type:'post',
+					url:'/sales/daytransaction/saveexpense',
+					data:{
+						doc_dt:$("#doc_dt").val(),
+						json_string:JSONstring
+					},
+					success:function(data){
+						 jAlert('Save Successful','Save Result',function(b){
+							 $("#btnEdit").trigger('click');
+							 $("#employee_id").focus().select();
+		    				 return false;
+			    		 });
+					}
+				};
+		$.ajax(opts_save);
+	}//func
+	$(function(){
+		//get doc dt
+		getDocDt();
+		// $("#employee_id").focus(); 
+		//
+		$("#btnSelRound").click(function(){
+			var opts_dlgexpense={
+					autoOpen:false,
+					width:'40%',
+					modal:true,
+					resizeable:true,
+					position:'top',
+					showOpt: {direction:'up'},		
+					closeOnEscape:true,	
+					title:"Choose a date range",
+					open:function(){					
+						$("*:focus").blur();
+						$("#dlgRoundExpense").html("");
+						$.ajax({
+							type:'post',
+							url:'/sales/daytransaction/roundexpense',
+							cache:false,
+							data:{
+								actions:'brows_roundexpense',
+								now:Math.random()
+							},
+							success:function(data){
+								$("#dlgRoundExpense").html(data);
+								$(this).parent().find('select, input, textarea').blur();
+								$('.tableNavRoundExpense ul li').not('.nokeyboard').navigate({
+							        wrap:true
+							    }).click(function(evt){		
+								    evt.preventDefault();	
+								    var selround=$.parseJSON($(this).attr('idround'));
+								    //start
+									$("#doc_dt").val(selround.doc_dt);
+									var arr_round=selround.doc_dt.split('-');
+									var rnd=parseInt(arr_round[1]);
+									var docdt_show="["+rnd+"] "+selround.start_date+" - "+selround.end_date;
+									$("#doc_dt_show").html(docdt_show);
+									$("#divexpense").html('');
+									$("#employee_id").val(selround.employee_id);
+									$("#btnEdit").trigger('click');
+								    //end 
+								    $("#dlgRoundExpense").dialog("close");
+								});
+							}//end success function
+						});//end ajax pos
+					},
+					close:function(){
+						$('.tableNavRoundExpense ul').navigate('destroy');
+						$("#employee_id").focus();
+					}
+			};
+			$("#dlgRoundExpense").dialog("destroy");
+			$("#dlgRoundExpense").dialog(opts_dlgexpense);			
+			$("#dlgRoundExpense").dialog("open");
+		});//click brows
+		//
+		$("#employee_id").keypress(function(evt){
+			var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+	        if(key == 13){
+	            evt.preventDefault();
+	            var $employee_id=$("#employee_id");
+	            var $employee_id_val=$.trim($employee_id.val());
+	            if($employee_id_val.length==0){
+	            	 jAlert('Please Enter Employee ID','Msg Alert!',function(b){
+						 $employee_id.focus();
+	    				 return false;
+		    		 });
+		            return false;
+		        }
+	            $("#btnEdit").trigger('click');	           
+	            return false;
+	        }
+		});
+		//
+		$("#btnEdit").click(function(e){
+			e.preventDefault();
+			//check employee
+		    var $employee_id=$("#employee_id");
+	        var $employee_id_val=$.trim($employee_id.val());
+	        var opts_employee={
+		            type:"post",
+		            url:"/sales/cashier/getemp",
+		            data:{
+		            	employee_id:$employee_id_val,
+						actions:'saleman'
+	            	},
+	            	success:function(data){
+		            	var arr_data=data.split('#');
+		            	var employee_fullname=arr_data[1]+" "+arr_data[2];
+		            	if(data==''){
+		            		 jAlert('Employee ID not found!','Msg Alert!',function(b){
+								 $employee_id.focus();
+			    				 return false;
+				    		 });
+			            }else{
+			            	//start sale
+			            	$("#employee_fullname").html(employee_fullname);
+			            	var opts_expense={
+			    					type:'post',
+			    					url:'/sales/daytransaction/getexpense',
+			    					data:{
+			    						doc_dt:$("#doc_dt").val(),
+			    						rnd:Math.random()
+			    					},success:function(data){
+			    						$("#divexpense").empty().html(data);
+			    						//start
+			    						$("#btnSubmit").click(function(e){
+			    							e.preventDefault();
+			    							 var JSONObject = new Object;
+			    							      JSONObject.name ="expense";
+			    							      JSONObject.account = new Array;
+			    							var i=0;
+			    							$("input[name=new_amount]").each(function(){
+			    								JSONObject.account[i] = new Object;
+			    								JSONObject.account[i].account_code =this.id;
+			    								JSONObject.account[i].account_value =this.value;
+			    								i++;	
+			    							});
+			    							JSONstring = JSON.stringify(JSONObject);
+			    							sendSave(JSONstring);
+			    						});
+			    						$("#btnCancel").click(function(e){
+			    							e.preventDefault();
+			    							$("#btnEdit").trigger('click');
+			    						});
+			    						textboxes = $("input.inputkey");
+			    						$("input.inputkey").eq(0).focus();
+			    						textboxes_len=textboxes.length;
+			    						nextBox=0;
+			    						$(".inputkey").each(function(){
+			    							$(this).keypress(function(evt){
+			    								var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+			    						        if(key == 13){
+			    							        evt.stopPropagation();
+			    							        evt.preventDefault();
+			    							        currentBoxNumber = textboxes.index(this);
+			    							   
+			    							        if (textboxes[currentBoxNumber+1] != null) {
+			    							        	nextBox = textboxes[currentBoxNumber+1];			    				    					
+			    				    					nextBox.focus();
+			    							        }else{
+			    							        	$("#btnSubmit").focus();
+				    							    }
+			    							        //$(this).nextAll('.inputkey:first').focus();
+			    							        return false;
+			    						        }
+			    							});
+			    						});
+			    						//stop
+			    					}
+			    				};
+			    			$.ajax(opts_expense);
+			            	//end sale
+				        }
+		            	return false;
+		            }								            
+		    };
+	    	$.ajax(opts_employee);
+		});		
+
+		$("#btnSubmit").keypress(function(evt){
+			var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+	        if(key == 13){
+		        evt.stopPropagation();
+	            evt.preventDefault();
+	            $("#btnSubmit").trigger('click');
+	            return false;
+	        }
+		});
+		
+	});//ready
+</script>

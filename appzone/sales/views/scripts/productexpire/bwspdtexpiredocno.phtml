@@ -1,0 +1,54 @@
+  <style type="text/css">
+	<!--
+		tr.xtdover{
+			border:1pt solid#ff0000;
+			background-color:#ffcc99;
+		}
+		tr.xtdout{
+			border:0pt solid#ff0000;
+		}
+		/* test highlight*/
+		.datatablerowhighlight {
+		    background-color: #ffcc99 !important;
+			border-top:0pt solid#ff9933;
+			border-bottom:0pt solid#ff9933;
+		}
+	-->
+	</style>
+	<?php		
+	        if(!empty($this->arr_docno)){
+	   			echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' bgcolor='#cccccc' class='display' id='tableNavCnDocNo'>";
+	   			echo "<thead><tr height='32' bgcolor='#ebebeb' idd=''>
+	   						<th align='center'  style='width:10%;color:#333;font-size:24px;'>วันที่</th>
+	   						<th align='center' style='color:#333;font-size:24px;'>เลขที่เอกสาร</th>	   
+	        				<th align='center'  style='width:30%;color:#333;font-size:24px;'>สถานะ</th>	             			
+	   					</tr></thead><tbody>";
+	   			$i=1;
+	   			foreach($this->arr_docno as $data){
+		  				$id_tmp="n_".$i;
+		  				$rows_json=json_encode($data);  	
+		  				$flag=$data['flag'];
+		  				$str_flag="";
+		  				if($flag=='Y'){
+		  					$str_flag="ยืนยัน";
+		  				}else if($flag=='C'){
+		  					$str_flag="ยกเลิก";
+		  				}else{
+		  					$str_flag="รอ";
+		  				}
+		  				
+		  				($i%2==0)?$bg_color='#003333':$bg_color='#006666';
+			  			echo "<tr iddocno='".$rows_json."'>"
+			  					."<td align='center' >".$data['doc_date_show']."</td>"
+			  					."<td align='center' >".$data['doc_no']."</td>"		
+			  					."<td align='center' >".$str_flag."</td>"				  					
+			  					."</tr>";  
+			  			$i++;
+		  		}//foreach 
+		  		echo "</tbody>
+	  		<tfooter></tfooter>
+	  		</table>";
+  	}else{		
+  			echo "<p id='item_not_found' align='center'>ไม่พบข้อมูลเลขที่เอกสารที่รอการ Confirm</p>";     	
+   	}
+     ?>

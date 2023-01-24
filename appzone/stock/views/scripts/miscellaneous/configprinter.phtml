@@ -1,0 +1,28 @@
+<script>
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	editconfigprinter();
+});
+</script>
+<?php 
+$code_type=$this->code_type;
+?>
+<input type="hidden" name="code_type" id="code_type" value="<?php echo $code_type[0]['code_type'];?>"></input>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+  <tr>
+    <td height="20" width="15%" align="right" class="servBodL_right">เลือกประเภทเครื่องพิมพ์ : </td>
+    <td>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    	<tr>
+    		<td width="5%">
+    		<select name="default_status" id="default_status" class="NFText">
+				<option value="Y" <?php if($code_type[0]['default_status']=="Y"){echo "selected='selected'";}?>>Thermal Printer</option>
+				<option value="N" <?php if($code_type[0]['default_status']=="N"){echo "selected='selected'";}?>>Dot Matrix Printer</option>
+			</select>
+    		</td>
+    		<td><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return editconfigprinter();"><span class="ui-icon ui-icon-disk"></span>บันทึก  (F3)</a></td>
+    	</tr>
+    </table>
+    </td>
+  </tr>
+</table>

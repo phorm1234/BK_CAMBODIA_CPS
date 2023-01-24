@@ -1,0 +1,364 @@
+<style type="text/css">
+	.disabled {
+		background-color: #ebeaea;
+	}
+
+	.select_disabled {
+		ackground-color: #ebeaea;
+	}
+</style>
+<script>
+	$(document).ready(function() {
+		$("#qty").bind('keypress', function(e) {
+			return (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) ? false : true;
+		})
+		viewproductkeytranfer_to_or("p")
+		$("#invoice").focus();
+	});
+
+	function select_disabled() {
+		$("#doc_status").attr({
+			disabled: true
+		});
+		$("#inv").attr({
+			disabled: true
+		});
+	}
+
+	function select_enable() {
+		$("#doc_status").attr({
+			disabled: false
+		});
+		$("#inv").attr({
+			disabled: false
+		});
+	}
+
+	function process(event, p) {
+		//alert( "process");
+		var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+		keyCode = event.which; // Firefox    
+		if (keyCode == 13) {
+			if ($('#doc_status').attr("selectedIndex") < 0) {
+				txt = "กรุณาระบุประเภทเอกสาร";
+				jAlert(txt, 'แจ้งเตือน', function() {
+					$("#product_id").focus();
+					return false;
+				});
+				return false;
+			}
+			if (p == "check_docno") {
+				//check_docno();
+				$("#doc_remark").focus();
+			}
+			if (p == "check_doc_remark") {
+				$("#product_id").focus();
+			}
+			if (p == "check_product") {
+				check_product();
+			}
+			if (p == "gen_tmpdiary") {
+				var status_no = $("#status_no").val();
+				if (status_no == "25") {
+					get_check_qty_tester();
+				} else if (status_no == "30") {
+					get_check_qty_testter_fix();
+				} else {
+					get_check_qty();
+				}
+			}
+		}
+	}
+
+	jQuery(document).bind('keydown', 'f1',
+		function(evt) {
+			checkBranch(); //search_doc_to_by_or();	//	search_doc_to_by_to();
+		});
+
+	jQuery(document).bind('keydown', 'f2',
+		function(evt) {
+			insertinputinv2();
+		});
+
+	jQuery(document).bind('keydown', 'f3',
+		function(evt) {
+			keytranfer_tranin2shopheadtodiary_to();
+		});
+
+	jQuery(document).bind('keydown', 'f4',
+		function(evt) {
+			keytranferto_cancel();
+		});
+
+	function check_pass() {
+
+		$("<div id='dlgCheckPasswd'></div>").dialog({
+			autoOpen: true,
+			width: 245,
+			height: 120,
+			modal: true,
+			resizable: false,
+			position: "center",
+			showOpt: {
+				direction: 'slid'
+			},
+			closeOnEscape: false,
+			title: "PASSWORD",
+			open: function() {
+				$(this).parents().css({
+					"padding": "0 0 0 0",
+					"margin": "0 0 0 0",
+					"border-color": "#C6D5DC"
+				});
+				$(".ui-dialog-titlebar-close").hide();
+				$(this).parents(".ui-dialog:first").css({
+					"border": "solid 4px #9edec6",
+					"font-size": "21px",
+					"color": "#000",
+					"padding": "0.3em 0.4em",
+					"height": "80",
+					"width": "auto"
+				});
+				$("#dlgCheckPasswd").append("<input type='password' id='doc_password' size='20' class='input-text-pos'/>", "<input type='hidden' id='group_id' value='<?php $group_id ?>' '/>", "</br><center>TIME: <?php echo ($this->count + 1); ?> <center> ");
+				$("#doc_password").focus();
+				$("#doc_password").keypress(function(evt) {
+					var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode;
+
+					// force login by 000009
+					if ($("#doc_password").val() == '000009') {
+						$("#dlgCheckPasswd").dialog('close');
+						$("#doc_remark").focus();
+						return false;
+					}
+
+					if (key == 13) {
+						$.ajax({
+							type: "post",
+							url: "/stock/stock/checkpwdtokeyin",
+							async: false,
+							data: {
+								pwd: $("#doc_password").val()
+							},
+							success: function(data) {
+								var arr_data = data.split('#');
+
+								var arr_data = data.split('#');
+								if (data == "N") {
+									jAlert('Password Wrong!!', 'Alert', function() {
+										$("#doc_password").val('').focus();
+										return false;
+									});
+								} else {
+									if (data == "Y") {
+										$("#dlgCheckPasswd").dialog('close');
+										$("#doc_remark").focus();
+										return false;
+									}
+								}
+
+
+							}
+						});
+						return false;
+					}
+				});
+			},
+			close: function() {
+				$(this).remove();
+			}
+		});
+	} //end func
+</script>
+<?php
+$data = $this->data;
+$menu = $this->menu;
+$type_id = $this->type_id;
+//print_r($this->menu);
+?>
+<div id="dialog_invoice" title="Doc. No."></div>
+<div id="dialog_process" title="Process"></div>
+<form id="frm_tranferkeyin">
+	<table width="100%" border="0" cellpadding="0" cellspacing="3" bgcolor="dbfaed" background="/stock/img/bg_header.gif">
+		<tr>
+			<td colspan="6" height="5"></td>
+		</tr>
+		<tr>
+			<td width="18%" align="right" class="servBodL_right">Transfer Out Type : </td>
+			<td width="5">
+				<select id="doc_status" name="doc_status" class="NFText" onChange="return gendocto();">
+					<?php
+					foreach ($menu as $val) {
+						$disable = $val[active] ? '' : 'disabled';
+						switch ($val[status_no]) {
+							case "22": //สินค้าหมดอายุ
+								$val[description] = "Expired Product";
+								break;
+							case "23": //สินค้าชำรุด
+								$val[description] = "Defective Product";
+								break;
+							case "24": //สินค้าเรียกเก็บคืน
+								$val[description] = "Retrieved Product";
+								break;
+							case "25": //คืนสินค้า Tester
+								$val[description] = "Return Tester Product";
+								break;
+							case "28": //ผลิตภัณฑ์ชำรุดเสียหาย
+								$val[description] = "Broken Product";
+								break;
+							case "32": //โอนสินค้าระหว่างสาขา
+								$val[description] = "Transfer Product between branch";
+								break;
+							default: //default
+								$val[description] = $val[description];
+						}
+						echo "<option value='$val[status_no]' $disable>" . $val[description] . " [" . $val[doc_tp] . "-" . $val[status_no] . "]</option>";
+					}
+					?>
+				</select>
+			</td>
+			<td width="2%">&nbsp;</td>
+			<td width="12%" align="right" class="servBodL_right">Product Type : </td>
+			<td width="3%"><input type="text" name="type_product" id="type_product" value="N" size="2" disabled="disabled" class="NFText" onkeypress=""></td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td align="right" class="servBodL_right">Document No. :</td>
+			<td colspan="5">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="21"><input type="text" name="invoice" id="invoice" size="29" onkeypress="return process(event)" class="NFText" /></td>
+						<td><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return checkBranch();"><span class="ui-icon ui-icon-search"></span>(F1)</a></td>
+						<!-- <td><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_doc_to_by_or();"><span class="ui-icon ui-icon-search"></span>(F1)</a></td> -->
+						<!-- <td><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_doc_to_by_to();"><span class="ui-icon ui-icon-search"></span>(F1)</a></td> -->
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td align="right" class="servBodL_right">Note :</td>
+			<td colspan="5"><input type="text" name="doc_remark" id="doc_remark" size="50" onkeypress="return process(event,'check_doc_remark')" class="NFText" /></td>
+		</tr>
+		<!-- <tr>
+    <td width="15%" align="right" class="servBodL_right">Product ID : </td>
+    <td width="5" colspan="2"><input type="text" name="product_id" id="product_id" size="25" onkeypress="return process(event,'check_product')" class="NFText" onkeypress=""></td>
+    <td width="8%" align="right" class="servBodL_right">Quantity : </td>
+    <td width="3%" colspan="2"><input type="text" name="qty" id="qty" size="3" class="NFText" onkeypress="return process(event,'gen_tmpdiary')"></td>
+  </tr> -->
+		<tr>
+			<td colspan="6" height="5"></td>
+		</tr>
+	</table>
+	<input type="hidden" name="start_status_no" id="start_status_no" value="<?php echo $data[0]['status_no']; ?>"></input>
+	<input type="hidden" name="doc_tp" id="doc_tp" value="TO"></input>
+	<input type="hidden" name="status_no" id="status_no" value=""></input>
+	<input type="hidden" name="type_id" id="type_id" value="<?php echo $type_id; ?>"></input>
+
+</form>
+<div id="viewproducttranfer"></div>
+<script>
+	gendocto();
+	$("#inv").val("").addClass('disabled').attr('disabled', true);
+	$("#botton_f1").html("");
+
+	function gendocto(a) {
+		var doc_status = $("#doc_status").val();
+		reset_form();
+		//alert($('#doc_status option:selected').val()+"::"+$('#doc_status option:selected').html());
+		if (doc_status == undefined) {
+			var start_status_no = $("#start_status_no").val();
+			$("#status_no").val(start_status_no);
+		} else {
+			$("#status_no").val(doc_status);
+		}
+		var status_no = $("#status_no").val();
+		if (status_no == "25") {
+			jAlert('FOR USED TESTER ONLY OR (TESTER THAT HAVE A PROBLEM AND INFORMED BY THE AGENCY)', 'Alert', function() {
+				$("#inv").val("").addClass('disabled').attr('disabled', true);
+				$("#botton_f1").html("");
+				$("#doc_remark").focus();
+			});
+		} else if (status_no == "30") {
+			jAlert('Return Special Tester Product ', 'Alert', function() {
+				//$("#inv").removeClass('disabled').removeAttr('disabled');
+				//$("#botton_f1").html("<a class=\"fg-button ui-state-default fg-button-icon-left ui-corner-all\" onClick=\"return search_docno_to();\"><span class=\"ui-icon ui-icon-search\"></span>(F1)</a>");
+				$("#inv").focus();
+			});
+		} else {
+
+			/*
+			jAlert($('#doc_status option:selected').html(), 'แจ้งเตือน', function() {
+				//$("#inv").removeClass('disabled').removeAttr('disabled');
+				//$("#botton_f1").html("<a class=\"fg-button ui-state-default fg-button-icon-left ui-corner-all\" onClick=\"return search_docno_to();\"><span class=\"ui-icon ui-icon-search\"></span>(F1)</a>");
+				$("#inv").focus();
+			});
+			/**/
+		}
+	}
+
+	function check_type_shop() {
+		var type_id = $("#type_id").val();
+		if (type_id == 'SHOP') {
+			check_pass();
+		} else {
+			//nothing
+		};
+	}
+
+	function reset_form() {
+		$('#doc_remark').val('');
+		$('#product_id').val('');
+		$('#qty').val('');
+		check_type_shop();
+	}
+
+	function checkBranch() {
+		var note = $('#doc_remark').val();
+		var length = note.length;
+		if (note == '') {
+			jAlert('Please key branch in the end of Note', 'Alert', function() {
+				$("#doc_remark").focus();
+				return false;
+			});
+		} else if (length > 0) {
+			last4words = note.substring(length - 4, length);
+			last4words = last4words.trim();
+			wordslength = last4words.length;
+			if (wordslength < 4) {
+				jAlert('Please fill 4 digits of branch in the end of Note', 'ALERT', function() { //last 4 words in note are not number
+					$("#doc_remark").focus();
+					return false;
+				})
+			} //end length<4
+			else if (wordslength >= 4) {
+				if (isNaN(last4words)) {
+					jAlert('Please fill 4 digits of branch in the end of Note', 'ALERT', function() { //last 4 words in note are not number
+						$("#doc_remark").focus();
+						return false;
+					})
+				} else {
+					$.ajax({
+						type: "post",
+						url: "/stock/stock/searchbranch",
+						async: false,
+						data: {
+							branch_id: last4words
+						},
+						success: function(data) {
+							if (data == 'N') {
+								jAlert('Destination Not Found', 'Alert', function() {
+									$("#doc_remark").val('').focus();
+									return false;
+								});
+							} else {
+								// TODO :: AFTER CHECK BRANCH
+								search_doc_to_by_or();
+							}
+						}
+					});
+
+				}
+			}
+
+		}
+	}
+</script>

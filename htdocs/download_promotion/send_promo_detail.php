@@ -1,0 +1,43 @@
+<?php
+
+$sql_detail="select * from promo_detail_tmp  where  promo_code ='$promo_code' order by seq_pro ";
+$r_detail=mysql_db_query($dbname,$sql_detail,$conn_shop);
+$rows_detail=mysql_num_rows($r_detail);
+
+$del_detail="delete from promo_detail where promo_code='$promo_code' ";
+$r_del_detail=mysql_db_query($dbname,$del_detail,$conn_shop);
+
+$txt_detail="";
+$txt_start="INSERT INTO promo_detail( `corporation_id`, `company_id`, `promo_pos`, `promo_code`, `promo_tp`, `status_pro`, `seq_pro`, `order_st`, `product_id`, `location_id`, `product_status`, `start_date`, `end_date`, `round_date`, `show_promo`, `quantity`, `type_discount`, `discount`, `promo_baht`, `promo_price`, `promo_over`, `check_double`, `cal_amt`, `weight`, `doc_status`, `check_pro`, `get_point`, `discount_member`, `product_st`, `balance_qty`, `seq_order`, `re_calculate`, `limite_qty`, `reg_date`, `reg_time`, `reg_user`, `upd_date`, `upd_time`, `upd_user`) VALUES";
+
+$text_limit=300;
+$loop_run=$text_limit;
+$loop_gen=ceil($rows_detail/$text_limit);
+for($i_detail=1; $i_detail<=$rows_detail; $i_detail++){
+
+	$data_detail=mysql_fetch_array($r_detail);
+	
+	$gen="('$data_detail[corporation_id]','$data_detail[company_id]','$data_detail[promo_pos]','$data_detail[promo_code]','$data_detail[promo_tp]','$data_detail[status_pro]','$data_detail[seq_pro]','$data_detail[order_st]','$data_detail[product_id]','$data_detail[location_id]','$data_detail[product_status]','$data_detail[start_date]','$data_detail[end_date]','$data_detail[round_date]','$data_detail[show_promo]','$data_detail[quantity]','$data_detail[type_discount]','$data_detail[discount]','$data_detail[promo_baht]','$data_detail[promo_price]','$data_detail[promo_over]','$data_detail[check_double]','$data_detail[cal_amt]','$data_detail[weight]','$data_detail[doc_status]','$data_detail[check_pro]','$data_detail[get_point]','$data_detail[discount_member]','$data_detail[product_st]','$data_detail[balance_qty]','$data_detail[seq_order]','$data_detail[re_calculate]','$data_detail[limite_qty]','$data_detail[reg_date]','$data_detail[reg_time]','$data_detail[reg_user]','$data_detail[upd_date]','$data_detail[upd_time]','$data_detail[upd_user]')
+		
+	";
+	$txt_detail=$txt_detail . "," . $gen;
+	if($i_detail==$loop_run){
+			
+			$txt_detail=$txt_start . substr($txt_detail,1);
+			$rup_detail=mysql_db_query($dbname,$txt_detail,$conn_shop);
+
+			$txt_detail="";
+			$loop_run=$i_detail+$text_limit;
+	}
+	
+
+
+
+
+
+}
+$txt_detail=$txt_start . substr($txt_detail,1);
+
+$rup_detail=mysql_db_query($dbname,$txt_detail,$conn_shop);
+
+?>

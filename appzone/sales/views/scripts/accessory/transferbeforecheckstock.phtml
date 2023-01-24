@@ -1,0 +1,102 @@
+<script type="text/javascript">
+	$(function(){
+		$("<div id='dlgAuditChkStock'></div>").dialog({
+	     	   autoOpen:true,
+					width:'26%',		
+					height:120,	
+					modal:true,
+					resizable:false,
+					position:"center",
+					showOpt: {direction: 'slid'},		
+					closeOnEscape: true,
+					title:"รหัสผ่าน Audit",
+					open: function(){    
+						//$(this).parents().css({"padding":"0 0 0 0","margin":"0 0 0 0","border-color":"#C6D5DC"});
+	    			    //$(this).parents(".ui-dialog:first").find(".ui-dialog-content").css({"background-color":"#BCDCD7","font-size":"26px","color":"#FF0000","padding":"5 0.1em 0 0.1em"});	
+
+						$(this).parents(".ui-dialog:first").css({"padding":"3px","margin":"0 0 0 0","border-color":"#C6D5DC"});
+						$(this).dialog('widget')
+				            .find('.ui-dialog-titlebar')
+				            .removeClass('ui-corner-all')
+				            .addClass('ui-corner-top');
+		    			$(this).parents(".ui-dialog:first").find(".ui-dialog-content").css({"padding":"5px",
+		    				"background-color":"#BCDCD7","font-size":"27px","color":"#000"});
+						
+		   				$("#dlgAuditChkStock").append("<input type='password' id='audit_password' size='20' class='input-text-pos'/>");
+			   			$("#audit_password").focus();
+		   				$("#audit_password").keypress(function(evt){
+		   					var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+		   			        if(key == 13){
+			   			        $.ajax({
+				   			         type:"post",
+							            url:"/sales/cashier/getemp",
+							            async:false,
+							            data:{
+							            	employee_id:$("#audit_password").val(),
+											actions:'audit'
+						            	},
+						            	success:function(data){
+						            		var arr_data=data.split('#');
+											if($.trim(arr_data[0])==""){
+												jAlert('ไม่พบข้อมูล Audit กรุณาตรวจสอบอีกครั้ง','ข้อความแจ้งเตือน',function(){
+													$("#audit_password").focus();
+													return false;
+								    			});
+											}else if(data!=""){
+												//START PROCESS TRANFER DATA TO TABLE trn_tdiary2_ck
+												 jConfirm('คุณต้องการโอนข้อมูลเพื่อ CHECK STOCK  ใช่หรือไม่?','ยืนยัน TRANSFER DATA', function(r){
+												        if(r){
+												        	$("#proc_transfer").remove();
+												        	$("#dlgAuditChkStock").after("<div id='proc_transfer'><img src='/sales/img/activity_indicators_03.gif'/></div>");
+															var opts={
+																	   type:"POST",
+																	   url: "/sales/accessory/transfercheckstock",
+																	   cache:false,
+																	   data:{
+																   				act:'beforecheck',
+																   				rnd:Math.random()
+																   			},
+																	   success: function(data){
+																   				$("#proc_transfer").html('');
+																				$("#dlgAuditChkStock").dialog('close');
+																   				if(data=='Y'){
+																					jAlert('โอนข้อมูลสมบูรณ์', 'ผลการโอนข้อมูล',function(){																						
+																						return false;
+																					});	
+																				}else if(data=='N'){
+																					jAlert('เกิดความผิดพลาดบางอย่าง ไม่สามารถโอนข้อมูลได้', 'กรุณาตรวจสอบอีกครั้ง',function(){																						
+																						return false;
+																					});	
+																				}else if(data=='E'){																					
+																					jAlert('พบข้อมูลค้างอยู่ ไม่สามารถโอนข้อมูลได้ กรุณาตรวจสอบอีกครั้ง', 'ข้อความแจ้งเตือน',function(){																						
+																						return false;
+																					});	
+																				}
+																			
+																	   }
+																	};
+															$.ajax(opts);
+												        }
+												 });
+												//STOP PROCESS TRANFER DATA TO TABLE trn_tdiary2_ck
+												//$("#dlgAuditChkStock").dialog('close');												
+											}
+						            	}
+				   			        });
+			   			        return false;
+		   			        }
+			   			 });
+					},close:function(){
+		   				$(this).remove();
+		   			}
+	        });
+	});//ready
+</script>
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+<table width="100%" height="100%" bgcolor="#FFFFFF">
+	<tr>
+		<td valign="TOP">
+			<!-- ######### start ##########--><!-- ######### stop ##########-->
+		</td>
+	</tr>
+</table>

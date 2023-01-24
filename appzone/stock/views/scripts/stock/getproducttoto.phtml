@@ -1,0 +1,135 @@
+
+<style>
+.flexigrid div.fbutton .view_product {
+	background: url(/stock/img/view_choose.png) no-repeat center left;
+}
+
+.flexigrid div.fbutton .delete {
+	background: url(/stock/img/delete.png) no-repeat center left;
+}
+
+</style>
+<?php
+$doc_no=$this->doc_no;
+$sum=$this->sum;
+$chkdocno=$this->chkdocno;
+//echo $sum[0]['quantity'];
+//print_r($sum);
+/*if(!empty($sum[0]['quantity'])){
+	$sumall=($sum[0]['price']*$sum[0]['quantity']);
+}else{
+	$sumall=null;
+}*/
+?>
+<center>
+<table width="100%" bgcolor="#c6ffe8">
+	<tr>
+		<td><table id="flex1" style="display:none"></table></td>
+	</tr>
+	<tr>
+		<td>
+			<table width="100%" border="0" cellpadding="2" cellspacing="2" bgcolor="#ecfcf5" align="center">
+				<tr>
+					<td colspan="3" width="38%" align="right" background="/stock/img/bg_g.gif" class="font_sum">Total : </td>
+					<td width="10%" align="center"  background="/stock/img/bg_y.gif" class="font_sum"><?php echo number_format($sum[0]['quantity'], 0, '.', ',');?></td>
+					<td width="10%" align="center"  background="/stock/img/bg_y.gif" class="font_sum"><?php echo number_format($sum[0]['price'], 2, '.', ',');?></td>
+					<td colspan="2" background="/stock/img/bg_g.gif" class="font_sum" align="left"></td>
+				</tr>
+				<tr>
+					<td colsapan="3" height="30"></td>
+					<td width="10%" align="right" class="longfont"></td>
+					<td align="center" colspan="4">
+						<table width="100%" border="0" cellpadding="2" cellspacing="2">
+							<tr>
+							<td ><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return keytranfer_tranin2shopheadtodiary_to();"><span class="ui-icon ui-icon-disk"></span>Save  (F3)</a>
+								<a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return keytranfertoor_cancel();"><span class="ui-icon ui-icon-cancel"></span>Cancle (F4)</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<input type="hidden" name="doc_no" id="doc_no" value="<?php echo $doc_no;?>">
+<input type=hidden name="chk" id="chk" value="<?php echo $chkdocno;?>">
+</center>
+<script type="text/javascript">
+var pWidth=(screen.width-(screen.width*(20/100)))-10;
+var pWidth=(screen.width-(screen.width*(2/100)))-10;
+var pWidth=(screen.width-(screen.width*(3/100)))-10;
+var txt="Transfer Out <?php if(!empty($doc_no)){echo " : ".$doc_no;}?>";
+$("#flex1").flexigrid({
+	url: 'getdataproducttranfertoto?doc_no=<?php echo $doc_no;?>',
+	dataType: 'json',
+	colModel : [
+		{display: '#', name : 'seq', width : 50, sortable : true, align: 'center'},
+		{display: 'Product ID', name : 'product_id', width : 110, sortable : true, align: 'center'},
+		{display: 'Description', name : 'product_name', width : 250, sortable : true, align: 'left'},
+		{display: 'Price', name : 'price', width : 110, sortable : true, align: 'center'},
+		{display: 'Quantity', name : 'quantity', width : 110, sortable : true, align: 'center'},
+		{display: 'Amount', name : 'dif', width : 110, sortable : false, align: 'center'},
+		{display: 'Product Type', name : 'product_status', width : 110, sortable : true, align: 'center'}
+		],
+		// buttons : [
+      	// {name: 'Delete', bclass: 'delete', onpress : productaction},
+      	// {separator: true}
+      	// ],
+		searchitems : [
+		{display: 'Product ID', name : 'procuct_id'}
+		],
+	sortname: "seq",
+	sortorder: "asc",
+	usepager: true,
+	title: txt,
+	useRp: true,
+	rp: 30,
+	showTableToggleBtn: true,
+	width: pWidth,
+	onSubmit: addFormData,
+	height: 300
+});
+
+function productaction(com, grid) {
+	var doc_no=$("#doc_no").val();
+	if($('.trSelected',grid).length>0){
+		var items = $('.trSelected',grid);
+		var itemlist ='';
+		for(i=0;i<items.length;i++){
+			itemlist+= items[i].id.substr(3)+",";
+			//itemlist= items[i].id.substr(3);
+		}
+	}
+	if (com == 'Delete') {
+		if(itemlist==undefined){
+			jAlert('You did not select any items!', 'Alert');;
+		}else{
+			jConfirm('Confirm Delete', 'Alert', function(r) {
+				if(r==false){
+					return false;
+				}else{
+					$.ajax({type: "POST",url: "/stock/stock/deletetmplistto",data:{seq:itemlist},success:
+						function(data){
+							if(data=="y"){
+								checktempdiary_to();
+								viewproductkeytranfer_to("s");
+							}
+						}
+					});
+				}
+			});
+		} 
+	}
+}
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+	
+$('#sform').submit(function (){
+	$('#flex1').flexOptions({newp: 1}).flexReload();
+	return false;
+});
+</script>

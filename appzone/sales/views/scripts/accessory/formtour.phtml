@@ -1,0 +1,40 @@
+<table width="100%" border="0" cellpadding="2" cellspacing="1">
+	<tr>
+		<td width="25%" align="right"><span style="color:#000000;">คูปอง Barcode :</span></td>
+		<td>
+			<input type="text" size="25" id="tour_barcode" class="input-text-pos ui-corner-all keybarcode"></input>&nbsp;<span style='color:red;'>*</span>
+		</td>
+	</tr>
+	
+	<tr>
+		<td width="25%" align="right"><span style="color:#000000;">ประเทศ:</span></td>
+		<td>
+			<select id="tour_country" name="tour_country">	
+			<?php 
+			 echo "<option value='' selected>- เลือก -</option>";
+			  foreach($this->arr_countrylist as $data){
+			  	$country_code=$data['country_code'];
+			  	$country_name_th=$data['country_name_th'];
+			  	$country_name_en=$data['country_name_en'];
+			  	//echo"<option value='$country_code' selected>$country_name_th</option>";
+			  	echo"<option value='$country_code' selected>$country_name_en ($country_name_th)</option>";
+			  }
+			  
+			 ?>
+			</select>&nbsp;<span style='color:red;'>*</span>
+		</td>
+	</tr>
+	
+	<tr>
+		<td width="25%" align="right"><span style="color:#000000;">เลขที่ Passport :</span></td>
+		<td>
+			<input type="text" size="25" id="tour_passport_no" class="input-text-pos ui-corner-all"></input>&nbsp;<span style='color:red;'>*</span>
+		</td>
+	</tr>
+	<tr>
+		<td width="25%" align="right"><span style="color:#000000;">Email :</span></td>
+		<td>
+			<input type="text" size="25" id="tour_email" class="input-text-pos ui-corner-all"></input>
+		</td>
+	</tr>
+</table>

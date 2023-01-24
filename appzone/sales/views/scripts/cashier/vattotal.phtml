@@ -1,0 +1,117 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<?php
+	//print_r($this->arr_data);
+	if(!empty($this->arr_data)){		
+		$name=$this->arr_data[0]['name'];
+		$address1=$this->arr_data[0]['address1'];
+		$address2=$this->arr_data[0]['address2'];
+		$address3=$this->arr_data[0]['address3'];
+		$remark1=$this->arr_data[0]['remark1'];
+		$remark2=$this->arr_data[0]['remark2'];
+	}else{
+		$name='';
+		$address1='';
+		$address2='';
+		$address3='';
+		$remark1='';
+		$remark2='';
+	}	
+?>
+<form>
+<table width="100%" border="0" cellpadding="2" cellspacing="0">
+	<tr>
+		<td width="20%" align="right"><span style="color:#000000">NAME-SURNAME</span></td>
+		<td width="80%">
+			<input type="text" size="35" id="vt_name" value="<?php echo $name;?>" class="input-text-pos ui-corner-all">
+		</td>
+	</tr>
+	<tr>
+		<td align="right" valign="top"><span style="color:#000000">ADDRESS</span></td>
+		<td>
+			<input type="text" size="35" id="vt_address1" value="<?php echo $address1;?>" class="input-text-pos ui-corner-all"></input>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" valign="top">&nbsp;</td>
+		<td>
+			<input type="text" size="35" id="vt_address2" value="<?php echo $address2;?>" class="input-text-pos ui-corner-all"></input>
+		</td>
+	</tr>
+	<tr>
+		<td align="right" valign="top">&nbsp;</td>
+		<td>
+			<input type="text" size="35" id="vt_address3" value="<?php echo $address3;?>" class="input-text-pos ui-corner-all"></input>
+		</td>
+	</tr>
+	
+	
+	<tr>
+		<td width="20%" align="right"><span style="color:#000000">Tax ID</span></td>
+		<td width="80%">
+			<input type="text" size="35" name="taxid" id="taxid" value="<?php echo $remark1;?>" class="input-text-pos ui-corner-all">
+		</td>
+	</tr>
+	
+	<tr>
+		<td width="20%" align="right">
+			&nbsp;
+		</td>
+		<td width="80%">
+			<input type="radio" name="taxid_branch" id="taxid_branch" value="a" <?php if($remark2=='-1'){echo "checked";}?> checked>HEADQUARTERS
+		</td>
+	</tr>
+	<tr>
+		<td width="20%" align="right">
+			&nbsp;
+		</td>		
+		<td width="80%">
+			<input type="radio" name="taxid_branch" value="b" <?php if($remark2!='-1'){echo "checked";}?>>BRANCH NO :&nbsp;<input type="text" size="5" name="taxid_branch_seq" id="taxid_branch_seq" value="<?php if($remark2!='-1'){echo $remark2;}?>" class="input-text-pos ui-corner-all">
+		</td>
+	</tr>	
+	
+	<tr>
+		<td colspan="2" width="100%">
+		<table width='98%' border="0" bgcolor="#cecfea" class="ui-corner-all"> <!-- #e7eeb2 -->
+
+			<tr>
+				<td width="20%" align="right"><span style="color:#000000">COUNTRY :</span></td>
+				<td width="80%">
+					<select id="tour_country" name="tour_country">	
+					<?php 
+					 echo "<option value='' selected>- SELECT -</option>";
+					  foreach($this->arr_countrylist as $data){
+					  	$country_code=$data['country_code'];
+					  	$country_name_th=$data['country_name_th'];
+					  	$country_name_en=$data['country_name_en'];
+					  	echo"<option value='$country_code' selected>$country_name_en ($country_name_th)</option>";
+					  }			  
+					 ?>
+				</select>
+				</td>
+			<tr>				
+			<tr>
+				<td width="20%" align="right"><span style="color:#000000">PASSPORT NO :</span></td>
+				<td width="80%">
+					<input type="text" size="35" id="vt_passport_no" value="" class="input-text-pos ui-corner-all">
+				</td>
+			<tr>
+		</table>
+		</td>
+		
+	</tr>
+	
+</table>
+</form>
+</body>
+</html>
+<script type="text/javascript">
+$(function(){
+	$("input[name='radioName']:checked").val();
+	//*WR modify 22052017    							
+	$('select#tour_country option[value=""]').attr("selected",true);
+});//ready
+</script>

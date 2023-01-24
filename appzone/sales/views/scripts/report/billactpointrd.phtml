@@ -1,0 +1,161 @@
+<?php
+	include(FPDF_PATH."/fpdf.php");
+        $hl=5;
+        $hl1=4;
+        $hl2=3;
+        $l2br=4;
+        $maxdoc=72;
+         $logo="/op-logo.gif";
+        $pdf=new FPDF('P','mm','a23');
+        $pdf->SetThaiFont();
+        $pdf->AddPage();
+        $startY=2;
+        $startX=0;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->SetMargins(0,2,0); 
+        $pdf->SetAutoPageBreak("off",1);
+        $pdf->Image(LOGO_PATH.$logo,2,0,65);
+        $startY+=$l2br;
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);
+        if($this->print_no==0){
+        	$copy_status="ต้นฉบับ";
+        }else{
+        	$copy_status="สำเนาพิมพ์ครั้งที่ ".$this->print_no;
+        }
+        $pdf->SetFont('CordiaNew','B',13);
+        if($this->arr_h[0]['branch_tp']=='F'){
+        	if($this->arr_h[0]['title_line1']!=''){
+        		$pdf->Cell($maxdoc-2,$hl,iconv('UTF-8','cp874',$this->arr_h[0]['title_line1']),0,0,'C',0);     
+        		$startY+=$l2br;
+			    $pdf->SetY($startY);
+				$pdf->SetX($startX);   		
+        	}
+        	
+        	if($this->arr_h[0]['title_line2']!=''){        		
+        		$pdf->Cell($maxdoc-2,$hl,iconv('UTF-8','cp874',$this->arr_h[0]['title_line2']),0,0,'C',0);   
+        		$startY+=$l2br;
+			    $pdf->SetY($startY);
+				$pdf->SetX($startX);     		
+        	}
+        	
+	       	if($this->arr_h[0]['title_line3']!=''){        		
+	        		$pdf->Cell($maxdoc-2,$hl,iconv('UTF-8','cp874',$this->arr_h[0]['title_line3']),0,0,'C',0);   
+	        		$startY+=$l2br;
+				    $pdf->SetY($startY);
+					$pdf->SetX($startX);     		
+	        }
+        	
+       	  	if($this->arr_h[0]['title_line4']!=''){        		
+        		$pdf->Cell($maxdoc-2,$hl,iconv('UTF-8','cp874',$this->arr_h[0]['title_line4']),0,0,'C',0);   
+        		$startY+=$l2br;
+			    $pdf->SetY($startY);
+				$pdf->SetX($startX);     		
+        	}       	
+        	
+        }else{
+		        $pdf->Cell($maxdoc,$hl,iconv('UTF-8','cp874',$this->arr_h[0]['company_name_print']),0,0,'C',0); 		
+		        $startY+=$l2br;
+			    $pdf->SetY($startY);
+				$pdf->SetX($startX); 
+        }
+        $pdf->SetFont('CordiaNew','B',13);
+        $pdf->Cell($maxdoc,$hl,iconv('UTF-8','cp874',"เอกสารใช้สิทธิแลกคะแนนสมาชิก"),0,0,'C',0); 
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->SetFont('CordiaNew','B',9);
+        $pdf->Cell($maxdoc,$hl,iconv('UTF-8','cp874',"<$copy_status>"),0,0,'C',0); 
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+     
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->SetFont('CordiaNew','B',10);
+        //$pdf->Cell($maxdoc,$hl1,"Branch : ".$this->csh_branch_id." ".iconv('UTF-8','cp874',$this->arr_h[0]['branch_name']),0,0,'L',0); 
+        $pdf->Cell(59,$hl1,"Branch : ".$this->csh_branch_id." ".iconv('UTF-8','cp874',$this->arr_h[0]['branch_name']),0,0,'L',0);
+        $pdf->Cell(13,$hl1,"#".$this->arr_h[0]['computer_no'],0,0,'R',0);
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        
+        $pdf->Cell(8,$hl1,"Rcpt : ",0,0,'L',0); 
+		$pdf->Cell(25,$hl1,$this->arr_h[0]['doc_no'],0,0,'L',0);	
+		$pdf->Cell(6,$hl1,"",0,0,'L',0);
+		$arr_docdate=explode("-",$this->arr_h[0]['doc_date']);
+		$doc_date_show=$arr_docdate[2]."/".$arr_docdate[1]."/".$arr_docdate[0];
+		$pdf->Cell(33,$hl1,$doc_date_show." ".$this->arr_h[0]['doc_time'],0,0,'R',0); 
+		
+       	$startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->Cell(13,$hl1,"Member ID : ",0,0,'L',0); 
+        $pdf->Cell(34,$hl1,$this->arr_h[0]['member_id'],0,0,'L',0);
+        $pdf->Cell(12,$hl1,"Cashier :",0,0,'R',0); 
+        $pdf->Cell(13,$hl1,$this->arr_h[0]['saleman_id'],0,0,'R',0);		
+        //--------- member info -----------------
+       	$startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->Cell(13,$hl1,iconv('UTF-8','cp874',"นามผู้ซื้อ : "),0,0,'L',0); 
+        $pdf->Cell(59,$hl1,iconv('UTF-8','cp874',$this->arr_h[0]['name']),0,0,'L',0);      
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->Cell(13,$hl1,iconv('UTF-8','cp874',"ที่อยู่ : "),0,0,'L',0); 
+        $pdf->Cell(59,$hl1,iconv('UTF-8','cp874',$this->arr_h[0]['address1']),0,0,'L',0);      
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->Cell(13,$hl1,"   ",0,0,'L',0); 
+        $pdf->Cell(59,$hl1,iconv('UTF-8','cp874',$this->arr_h[0]['address2']),0,0,'L',0);   
+       	$startY+=$l2br;
+        $pdf->SetY($startY);
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+
+	    $pdf->SetFont('CordiaNew','B',10);
+        foreach($this->arr_actpointdetail as $dataL){
+        	$pdf->Cell(8,$hl2,"",0,0,'L',0);
+	        $pdf->Cell(40,$hl2,iconv('UTF-8','cp874',$dataL['promo_des']),0,0,'L',0); 
+	        $startY+=$l2br;
+        	$pdf->SetY($startY);
+        }      
+     	$pdf->SetFont('CordiaNew','B',10);
+       	$startY+=$l2br;
+        $pdf->SetY($startY);
+       	$pdf->Cell(20,$hl1,iconv('UTF-8','cp874',"คะแนนที่ใช้สิทธิ์ :"),0,0,'L',0); 
+        $pdf->Cell(7,$hl1,abs($this->arr_h[0]['redeem_point']),0,0,'L',0);
+        $pdf->Cell(10,$hl1,iconv('UTF-8','cp874',"คะแนน"),0,0,'L',0); 
+        $startY+=$l2br;
+       	$startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->Cell($maxdoc,$hl,iconv('UTF-8','cp874',"ขอสงวนสิทธิเข้าร่วมกิจกรรม หากไม่มีเอกสารนี้มาแสดง"),0,0,'L',0); 
+        $startY+=$l2br;
+       	$startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->Cell(32,$hl1,"www.orientalprincesssociety.com",0,0,'L',0);
+        $pdf->Cell(8,$hl1,"",0,0,'L',0); 
+        $pdf->Cell(32,$hl1,"Beauty Line : 0-2642-6606",0,0,'L',0); 
+        $startY+=$l2br;
+        $pdf->SetY($startY);
+        $pdf->Cell(30,$hl1,iconv('UTF-8','cp874',"เบอร์โทรศัพท์สาขา : ".$this->arr_h[0]['branch_tel']),0,0,'L',0);
+		$pdf->Cell(17,$hl1,"",0,0,'L',0); 
+        $pdf->Cell(10,$hl1,"",0,0,'L',0); 
+        $pdf->Cell(20,$hl1,"",0,0,'L',0);       
+        $name='/billactpointrd.pdf';
+	    $output=REPORT_PATH.$name;
+	    @chmod(REPORT_PATH,0777);
+	    $pdf->Output($output,'F');
+//		echo shell_exec("lp -o media=Letter $output");
+//		if(@file_exists($output)){
+//			echo shell_exec("rm $output");			
+//		}
+		$print2ip=$this->arr_h[0]['print2ip'].":631";
+		if($this->arr_h[0]['print2ip']=='LOCAL'){
+			echo shell_exec("lp -o media=Letter $output");
+		}else{
+			echo shell_exec("lpr -H $print2ip $output");
+		}	
+		if(@file_exists($output)){
+			echo shell_exec("rm $output");		
+		}
+?>

@@ -1,0 +1,248 @@
+<table width="100%" height="100%" border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td valign="TOP">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" >
+	<tr>
+		<td width="10%" align="right" bgcolor="#e2e2e2">TYPE CARD</td>
+		<td width="10%"><input type="radio" name="cardtype" value="N" checked></input>NEW CARD</td>
+		<td><input type="radio" name="cardtype" value="L"></input>LOST/DAMAGE CARD</td>
+	</tr>
+	<tr>
+		<td align="right" bgcolor="#e2e2e2">MEMBER ID</td>
+		<td colspan="2"><input type="text" size="25" id="member_id" name="member_id" class="input-text-pos"></input></td>
+	</tr>
+</table>
+<table id="tblRegCard"></table>
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+	function flgCommand(com,grid){
+		if(com=='Refresh'){
+			var card_type=$("input[@name=cardtype]:checked").val();
+			$("#tblRegCard").flexOptions({newp:1,qtype:'card_type',query:card_type}).flexReload();
+		}//if refresh
+		
+		if (com == 'Delete') {
+			var del_list='';
+			var del_list_show='';
+			$('.trSelected', grid).each(function() {
+				del_list+= $(this).attr('absid')+"#";
+				del_list_show+=$(this).attr('id').substr(3)+",";
+			});
+			del_list=del_list.substring(0,del_list.length-1);
+			del_list_show=del_list_show.substring(0,del_list_show.length-1);
+			jConfirm('คุณต้องการลบรายการ '+del_list_show+' ใช่หรือไม่?','ยืนยันการลบรายการ', function(r){
+		        if(r){
+					var opts={
+							   type:"POST",
+							   cache:false,
+							   url: "/sales/member/delregcard",
+							   data:{
+						   				items:del_list,
+						   				action:'removeFormGrid'
+						   			},
+							   success: function(data){
+										if(data=='0'){
+											 jAlert('ไม่สามารถลบรายการดังกล่าวได้','ข้อความแจ้งเตือน',function(){
+												 return false;
+											  });
+										}else{
+											getRegCard();
+										}
+							   }
+							};
+					$.ajax(opts);
+		        }
+			});
+
+		/*	
+		if (com == 'Delete') {
+			var del_list='';
+			$('.trSelected', grid).each(function() {
+				var arr_data = $(this);
+				for(i=0;i<arr_data.length;i++){
+					del_list+= arr_data[i].id.substr(3)+"#";
+				}//    
+			});
+			del_list=del_list.substring(0,del_list.length-1);
+			//alert(del_list);
+			jConfirm('คุณต้องการลบรายการบัตรสมาชิก '+del_list+' ใช่หรือไม่?','ยืนยันการลบรายการ', function(r){
+		        if(r){
+					var opts={
+							   type:"POST",
+							   cache:false,
+							   url: "/sales/member/delregcard",
+							   data:{
+						   				items:del_list,
+						   				action:'removeFormGrid'
+						   			},
+							   success: function(data){
+										if(data=='0'){
+											 jAlert('ไม่สามารถลบบัตรนี้ได้ หรือบัตรนี้ถูกใช้สมัครแล้ว','ข้อความแจ้งเตือน',function(){
+												 return false;
+											  });
+										}else{
+						   					getRegCard();
+										}
+							   }
+							};
+					$.ajax(opts);
+		        }
+			});
+			*/
+	        if(del_list==''){
+	        	 jAlert('กรุณาเลือกรายการที่ต้องการลบ','ข้อความแจ้งเตือน',function(){
+					 return false;
+				  });
+		    }
+		}//if delete
+	}//func
+	
+	function getRegCard(){	
+		var card_type=$("input[@name=cardtype]:checked").val();
+		$.ajax({
+			type:'post',
+			url:'/sales/member/getpageregcard',
+			cache: false,
+			data:{				
+				rp:10,
+				tblname:'com_register_new_card',
+				card_type:card_type,
+				now:Math.random()
+			},
+			success:function(data){	
+				$("#tblRegCard").flexOptions({newp:data,qtype:'card_type',query:card_type}).flexReload();
+				return false;
+			}
+		});
+	}//func
+	
+	$(function(){
+		$("#member_id").focus();
+		$("#member_id").numeric(false);
+		$("#member_id").keypress( function(evt) {
+			var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+	        if(key == 13) {
+	            evt.preventDefault();
+	            var member_id=jQuery.trim($("#member_id").val());	
+	            var card_type=$("input[@name=cardtype]:checked").val();
+	            if(member_id==''){
+	            	jAlert("กรุณาระบุ รหัสสมาชิก","ข้อความแจ้งเตือน",function(){
+	            		$("#member_id").val('').focus();
+		            	return false;
+			        });
+			        return false;
+		        }
+
+		       if(member_id.substr(0,3)=='885'){
+		        	jAlert("รหัสสมาชิกไม่สามารถขึ้นต้อนด้วย 885","ข้อความแจ้งเตือน",function(){
+		            	$("#member_id").val('').focus();
+		            	return false;
+			        });
+			        return false;
+			    }
+
+		        if(member_id.length!=13){
+		        	jAlert("กรุณาระบุ รหัสสมาชิกความยาว 13 หลัก","ข้อความแจ้งเตือน",function(){
+		            	$("#member_id").val('').focus();
+		            	return false;
+			        });
+			        return false;
+			    }
+		        
+		        var opts={
+				        	type:'post',
+				        	url:'/sales/member/regnewcard',
+				        	cache:false,
+				        	data:{
+		        				member_id:member_id,
+		        				card_type:card_type
+		        			},
+		        			success:function(data){
+		        				if(data=='5'){
+			        				jAlert("บัตรนี้มีสถานะบัตรเสีย/บัตรหาย ไม่สามารถบันทึกเป็นบัตรใหม่ได้","ข้อความแจ้งเตือน",function(){
+			    		            	$("#member_id").focus();
+			    		            	return false;
+			    			        });
+				        		}else if(data=='6'){
+			        				jAlert("ไม่พบข้อมูลบัตรเสีย/บัตรหาย ไม่สามารถบันทึกเป็นบัตรเสีย/บัตรหายได้","ข้อความแจ้งเตือน",function(){
+			    		            	$("#member_id").focus();
+			    		            	return false;
+			    			        });
+				        		}else if(data=='2'){
+			        				jAlert("รหัสสมาชิกไม่ถูกต้อง","ข้อความแจ้งเตือน",function(){
+			    		            	$("#member_id").focus();
+			    		            	return false;
+			    			        });
+				        		}else if(data=='3'){
+				        			jAlert("รหัสสมาชิกถูกใช้สมัครสมาชิกแล้ว","ข้อความแจ้งเตือน",function(){
+			    		            	$("#member_id").focus();
+			    		            	return false;
+			    			        });
+					        	}else if(data=='4'){
+				        			jAlert("รหัสสมาชิกถูกลงทะเบียนแล้ว ไม่สามารถลงทะเบียนซ้ำได้","ข้อความแจ้งเตือน",function(){
+			    		            	$("#member_id").focus();
+			    		            	return false;
+			    			        });
+					        	}else if(data=='1'){
+				        			getRegCard();
+				        			$("#member_id").val('').focus();
+					        	}
+			        			
+			        		}
+				        };
+		        $.ajax(opts);
+	            return false;
+	        }
+	    });
+		//init flexigrid
+		var card_type=$("input[@name=cardtype]:checked").val();
+		var gHeight=377;
+		if ((screen.width>=1280) && (screen.height>=1024)){
+			gHeight=(screen.height-(screen.height*(32/100)));
+		}
+			
+		$("#tblRegCard").flexigrid(
+				{
+					url:'/sales/member/regcard',
+					dataType: 'json',
+					colModel : [
+						{display: '#', name : 'id', width :50, sortable : true, align: 'center'},
+						{display: 'MEMBR ID', name : 'member_id', width : 150, sortable : true, align: 'center'},
+						{display: 'REGISTER DATE', name : 'register_date',width :120, sortable : false, align:'center'},
+						{display: 'ACTIVATE DATE', name : 'apply_date', width :120, sortable : false, align: 'center'},
+						{display: 'TYPE CARD', name : 'card_type', width :120, sortable : false, align: 'center'},
+						{display: 'REMARK', name : 'remark', width :250, sortable : false, align: 'center'}
+						],
+					sortname: "id",
+					sortorder: "asc",
+					action:'gettmp',
+					usepager:true,
+					singleSelect: false,
+					nowrap: false,
+					qtype:'card_type',
+					query:card_type,
+					title:'LIST CARD',
+					useRp:true,
+					rp:10,
+					buttons : [
+					{name:'Delete',bclass: 'flgBtnDelClass',onpress : flgCommand},
+					{separator: true},
+					{name:'Refresh',bclass:'flgBtnRefClass',onpress :flgCommand}					
+					],	
+					searchitems : [
+						{display:'รหัสสมาชิก',name:'member_id'}
+					],			
+					showTableToggleBtn:true,
+					striped:false,
+					height:gHeight
+				}
+		);//end flexigrid	
+
+		$("input[name=cardtype]:radio").click(function(){
+			var card_type=$("input[@name=cardtype]:checked").val();
+			$("#tblRegCard").flexOptions({newp:1,qtype:'card_type',query:card_type}).flexReload();
+		});
+	});//ready
+</script>

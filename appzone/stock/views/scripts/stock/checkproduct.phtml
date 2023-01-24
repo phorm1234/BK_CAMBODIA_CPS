@@ -1,0 +1,26 @@
+<?php 
+$status_no=$this->status_no;
+$dat=$this->data;
+$check=count($dat);
+if($status_no==25){
+	if($check>0){
+		$product_check=substr($dat[0]['product_id'],0,2);
+		//echo $product_check;
+		//echo "----".$dat[0]['type'];
+		if($product_check=="11" or $dat[0]['type']=="T"){
+			$status="y";
+		}else{
+			$status="y";
+		}
+	}else{
+		$status="n";
+	}
+}else{
+	if($check>0){
+		$status="y";
+	}else{
+		$status="n";
+	}
+}
+echo $status;
+?>

@@ -1,0 +1,103 @@
+<!-- 
+<link href='/sales/css/datatables/jquery.dataTables.css' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="/sales/js/plugin/jquery.dataTables.js"></script>   
+-->
+<style>
+<!--
+	tr.xtdover{
+		border:1pt solid#ff0000;
+		background-color:#ffcc99;
+	}
+	tr.xtdout{
+		border:0pt solid#ff0000;
+	}
+	/* test highlight*/
+	.datatablerowhighlight {
+	    background-color: #ffcc99 !important;
+		border-top:1pt solid#ff9933;
+		border-bottom:1pt solid#ff9933;
+	}
+-->
+</style>
+<p align="center"><u>TODAY</u></p>
+<?php
+   			echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' bgcolor='#cccccc' class='display' id='datatables_promoitems'>";
+   			echo "<thead><tr height='32' bgcolor='#ebebeb' idd=''>
+   						<th align='center' width='15%'>PROMOTION CODE</th>
+   						<th align='center'>DESCRIPTION</th>
+   						<th align='center' width='10%'>START DATE</th>
+   						<th align='center' width='10%'>END DATE</th>
+   						<th align='center' width='10%'>MEMBER  ONLY</th>
+   					</tr></thead><tbody>";
+   			$i=1;
+	  		foreach($this->arr_promo as $data){
+	  				$id_tmp="n_".$i;
+	  				$rows_json=json_encode($data);
+	  				($i%2==0)?$bg_color='#003333':$bg_color='#006666';
+	  				$arr_sdate=explode('-',$data['start_date']);
+	  				$str_sdate=$arr_sdate[2]."/".$arr_sdate[1]."/".$arr_sdate[0];
+	  				$arr_edate=explode('-',$data['end_date']);
+	  				$str_edate=$arr_edate[2]."/".$arr_edate[1]."/".$arr_edate[0];
+		  			echo "<tr idd='".$rows_json."'>"
+		  					."<td align='center' >".$data['promo_code']."</td>"
+		  					."<td align='left' >".$data['promo_des']."</td>"
+		  					."<td align='center' >".$str_sdate."</td>"
+		  					."<td align='center' >".$str_edate."</td>"
+		  					."<td align='center' >".$data['member_tp']."</td>"
+		  					."</tr>";  
+		  			$i++;
+	  		}//foreach 
+	  			
+	  		echo "</tbody>
+	  		<tfooter></tfooter>
+	  		</table>";
+   ?>
+   <div id="dlg_promoitems_details"></div>
+   <script type="text/javascript">
+   			function dlgPromoDetails(promo_code){
+   	   			var opts_details={
+   	   	   				autoOpen:false,
+   						width:'80%',		
+   						height:450,	
+   						modal:true,
+   						resizable:true,
+   						position:"center",
+   						showOpt: {direction: 'up'},		
+   						closeOnEscape: true,	
+   						title:"<span class='ui-icon ui-icon-cart'></span>PROMOTION DETAIL :  "+promo_code,
+   						open: function(){  
+   							$(this).parents(".ui-dialog:first").css({"padding":"3px","margin":"0 0 0 0","border-color":"#C6D5DC"});
+   							$(this).dialog('widget')
+   					            .find('.ui-dialog-titlebar')
+   					            .removeClass('ui-corner-all')
+   					            .addClass('ui-corner-top');
+   						    $(this).parents(".ui-dialog:first")
+   						    .find(".ui-dialog-content")
+   						    .css({"background-color":"#BCDCD7","font-size":"26px","color":"#0000FF","padding":"0 0 0 0"});	
+   							$.ajax({
+   	   								type:'post',
+   	   								url:'/sales/cashier/promoitemsdetail',
+   	   								data:{
+   	   	   									promo_code:promo_code,
+   	   	   									rnd:Math.random()
+   	   	   								},
+   	   	   								success:function(data){
+   	    	   	   							$('#dlg_promoitems_details').empty().html(data);
+   	    						       		$('#datatables_promoitems_details').dataTable( {
+   	    						       			"fnDrawCallback": function(){
+   	    							       		      $('table#datatables_promoitems_details td').bind('mouseenter', function () { $(this).parent().children().each(function(){$(this).addClass('datatablerowhighlight');}); });
+   	    							       		      $('table#datatables_promoitems_details td').bind('mouseleave', function () { $(this).parent().children().each(function(){$(this).removeClass('datatablerowhighlight');}); });
+   	    							       		}
+   	    									} );
+   	   	   	   							}
+   	   							});
+   							
+   						},close:function(){
+   	   					}
+   	    	   	};
+   	   			$('#dlg_promoitems_details').dialog('destroy');
+   	   			$('#dlg_promoitems_details').dialog(opts_details);
+   	   			$('#dlg_promoitems_details').dialog('open');
+   	   		}//func
+	  		</script>
+ 

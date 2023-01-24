@@ -1,0 +1,24 @@
+<?php 	
+	$arr_field=explode(',',$this->str_field);	
+	$num_field=count($arr_field);
+	if($num_field>0){
+		echo "<table width='100%' border='0' cellpadding='0' cellspacing='5' ";		
+		for($i=0;$i<count($arr_field);$i++){
+			if($arr_field[$i]=='T'){
+				echo '<tr><td align="right">เบอร์โทรศัพท์&nbsp;:</td><td><input type="text" size="20" id="sms_mobile" class="input-text-pos ui-corner-all"></input></td></tr>';
+			}else if($arr_field[$i]=='R'){
+				echo '<tr><td align="right">Redeem Code&nbsp;:</td><td><input type="text" size="20" id="redeem_code" class="input-text-pos ui-corner-all"></input></td></tr>';
+			}else if($arr_field[$i]=='M'){
+				echo '<tr><td align="right">รหัสบัตรสมาชิก&nbsp;:</td><td><input type="text" size="20" id="sms_member_no" class="input-text-pos ui-corner-all"></input></td></tr>';
+			}else if($arr_field[$i]=='C'){
+				echo '<tr><td align="right">รหัสบัตรประชาชน&nbsp;:</td><td><input type="text" size="20" id="sms_card_id" class="input-text-pos ui-corner-all"></input></td></tr>';
+			}
+		}
+		echo "</table>";
+		echo "<table width='100%' bgcolor='#FFFFCC' border='0' cellpadding='0' cellspacing='5' style='border:1pt solid#444;'";		
+		echo "<tr><td>";
+		echo "<u>วิธีการตรวจสอบเบอร์โทร</u><br> AIS กด *545#, DTACT กด *102#, TRUE กด *933# <br>แล้วกดปุ่มโทรออก";
+		echo "</td><tr>";
+		echo "</table>";
+	}
+?>

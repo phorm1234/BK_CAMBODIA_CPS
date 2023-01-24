@@ -1,0 +1,108 @@
+<div id='alldialog' style="display:none">
+	
+		<div id="mtreesysmenu" class="easyui-menu" style="width:120px;">
+			<div onclick="pastemenu()" iconCls="icon-sentper">Sent Menu</div>
+			<div onclick="reloadmenuid()" iconCls="icon-reload">Reload Menu</div>
+			<div class="menu-sep"></div>
+			<div onclick="formmenusystem()" iconCls="icon-add">Add Menu</div>
+			<div onclick="editcommenuid()" iconCls="icon-edit">Edit Menu</div>
+			<div onclick="delcommenuid()" iconCls="icon-no">Del Menu</div>
+			<div class="menu-sep"></div>
+		</div>
+		  
+		  
+		<div id="mtreepermission" class="easyui-menu" style="width:120px;">
+			<div onclick="pastepertogroup()" iconCls="icon-sentper">Sent Permission</div>
+			<div onclick="removemenuinper()" iconCls="icon-undo">Cancle Menu</div>
+			<div class="menu-sep"></div>
+			<div onclick="reloadPermission()" iconCls="icon-reload">Load Permission</div>
+			<div onclick="divpermission()" iconCls="icon-add">Add Permission</div>
+			<div onclick="editpermission()" iconCls="icon-edit">Edit Permission</div>
+			<div onclick="removeemenupermission()" iconCls="icon-cancel">Del Permission</div>
+			<div class="menu-sep"></div>
+		</div>
+		
+		
+		<div id="mgroup" class="easyui-menu" style="width:120px;">
+			<div onclick="removepermissioningroup()" iconCls="icon-cancel">Del Permission</div>
+			<div class="menu-sep"></div>
+			<div onclick="appendgroup()" iconCls="icon-add">Add Group</div>
+			<div onclick="editgroup()" iconCls="icon-edit">Edit Group</div>
+			<div onclick="removegroup()" iconCls="icon-no">Del Group</div>
+			<div class="menu-sep"></div>
+
+		</div>
+
+		<div id="divpermission" icon="icon-save" title="บันทึก Permission" style="padding:5px;width:350px;height:200px;">
+		  <table width="100%" border="0">
+		    <tr>
+		      <td><div align="right">ประเภทสิทธิการใช้งาน</div></td>
+		      <td><input name="perm_id_insert" type="text" id="perm_id_insert" size="20" /></td>
+		    </tr>
+		    <tr>
+		      <td><div align="right">หมายเหตุ</div></td>
+		      <td><textarea name="remark" id="remark" cols="20"></textarea></td>
+		    </tr>
+		  </table>
+		</div>
+		
+		<div id="divgroup" icon="icon-save" title="บันทึก กลุ่มผู้ใช้งาน" >
+			<table border="0" align="center">
+			    <tr>
+			      <td><div align="right">รหัส กลุ่มผู้ใช้งาน</div></td>
+			      <td><input name="group_id" type="text" id="group_id" size="15" /></td>
+			    </tr>
+			    <tr>
+			      <td><div align="right">สถานะ</div></td>
+			      <td><select name="cancel" id="cancel">
+			        <option value="1">ปกติ</option>
+			        <option value="0">ระงั้บ</option>
+			      </select>      </td>
+			    </tr>
+			    <tr>
+			      <td><div align="right">หมายเหตุ</div></td>
+			      <td><textarea name="remark_group" cols="20" id="remark_group"></textarea></td>
+			    </tr>
+			  </table>
+		</div>
+	
+		<div align="center" title="เมนูระบบ" id='divmenusystem'>		
+				<form action="/pos/admin/updatecommenuid" method="post" enctype="multipart/form-data" name="formsystemmenu" id="formsystemmenu">
+				<table border="0">
+				    <tr>
+				      <td><div align="right">menu ที่อ้างอิง</div></td>
+				      <td><input name="menu_ref" type="text" id="menu_ref" size="15" readonly="" /></td>
+				    </tr>
+				    <tr>
+				      <td><div align="right">ลำดับของ menu</div></td>
+				      <td><input name="menu_seq" type="text" id="menu_seq" size="5" /></td>
+				    </tr>
+				    <tr>
+				      <td><div align="right">ชื่อของ menu</div></td>
+				      <td><input name="menu_name" type="text" id="menu_name" /></td>
+				    </tr>
+				    <tr>
+				      <td><div align="right">url  ที่เรียกใช้จาก menu</div></td>
+				      <td><input name="menu_exec" type="text" id="menu_exec" /></td>
+				    </tr>
+				    <tr>
+				      <td><div align="right">รูปที่ใช้แสดงผล menu</div></td>
+				      <td><input name="menu_picture" type="file" id="menu_picture" /></td>
+				    </tr>
+				    
+				    <tr>
+				      <td><div align="right">สถานะ menu</div></td>
+				      <td>
+					  <select name="status_menu" id="status_menu">
+				        <option value="1">ใช้งานปกติ</option>
+				        <option value="0">ระงับใช้</option>
+				      </select>		          </td>
+				    </tr>
+				    <tr>
+				      <td>&nbsp;</td>
+				      <td><div align="left" id="iconmenu"></div></td>
+			      </tr>
+				  </table>
+			  </form>
+		</div>	
+</div>

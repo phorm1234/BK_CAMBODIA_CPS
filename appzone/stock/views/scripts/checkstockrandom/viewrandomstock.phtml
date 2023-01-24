@@ -1,0 +1,53 @@
+<?php
+$data=$this->data;
+echo "<pre>";
+//print_r($data);
+echo "</pre>";
+?>
+<hr size="1"></hr>
+<form name="frm_rand_stock" id="frm_rand_stock">
+<table width="100%" border="0" cellpadding="1" cellspacing="1" bgcolor="#ffffff">
+  <tr bgcolor="#eff2f0">
+  	<td colspan="13" align="right"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return print_random_stock();"><span class="ui-icon ui-icon-print"></span>พิมพ์ </a></td>
+  </tr>
+  <tr>
+    <td width="50" valign="top" class="servBodL_center">รหัสสินค้า</td>
+    <td width="50" valign="top" class="servBodL_center">รายละเอียด</td>
+    <td width="50" valign="top" class="servBodL_center">ราคา</td>
+    <td width="15" valign="top" class="servBodL_center">เลือก<br />สินค้า 1</td>
+    <td width="15" valign="top" class="servBodL_center">เลือก<br />สินค้า 2</td>
+    <td width="50" valign="top" class="servBodL_center">ยอด<br />ยกมา</td>
+    <td width="50" valign="top" class="servBodL_center">ยอด<br />ยกไป</td>
+    <td width="50" valign="top" class="servBodL_center">ยอดขาย<br /> 30 วันย้อนหลัง</td>
+    <td width="50" valign="top" class="servBodL_center">ยอด<br />โอนเข้า</td>
+    <td width="50" valign="top" class="servBodL_center">ยอด<br />โอนออก</td>
+    <td width="50" valign="top" class="servBodL_center">ยอด<br />ปรับปรุงเข้า</td>
+    <td width="50" valign="top" class="servBodL_center">ยอด<br />ปรับปรุงออก</td>
+    <td width="50" valign="top" class="servBodL_center">ยอด<br />ลดหนี้</td>
+  </tr>
+  <?php 
+  $i=1;
+  foreach($data as $val){
+  	if($i%2){$color="#f2fced";}else{$color="#fbfcfa";}
+  ?>
+  <tr bgcolor="<?php echo $color;?>">
+    <td valign="top" height="23"><?php echo $val['product_id'];?></td>
+    <td><?php echo $val['name_product'];?></td>
+    <td valign="top" align="center"><?php echo  number_format($val['price'], 0, '.', ',');?></td>
+    <td valign="top" align="center"><?php echo $val['option1'];?></td>
+    <td valign="top" align="center"><input type="checkbox" name="option_1[]" id="option_1[]" value="<?php echo $val['product_id'];?>" /></td>
+    <td valign="top" align="center"><?php echo number_format($val['begin'], 0, '.', ',');?></td>
+    <td valign="top" align="center"><?php echo number_format($val['onhand'], 0, '.', ',');?></td>
+    <td valign="top" align="center"><?php echo number_format($val['qty_sale_30_day'], 0, '.', ',');?></td>
+    <td valign="top" align="center"><?php echo number_format($val['qty_tran_in'], 0, '.', ',');?></td>
+    <td valign="top" align="center"><?php echo number_format($val['qty_tran_out'], 0, '.', ',');?></td>
+    <td valign="top" align="center"><?php echo number_format($val['qty_adjust_in'], 0, '.', ',');?></td>
+    <td valign="top" align="center"><?php echo number_format($val['qty_adjust_out'], 0, '.', ',');?></td>
+    <td valign="top" align="center"><?php echo number_format($val['qty_cn'], 0, '.', ',');?></td>
+  </tr>
+  <?php 
+  $i++;
+  }
+  ?>
+</table>
+</form>

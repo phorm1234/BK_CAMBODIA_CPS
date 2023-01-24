@@ -1,0 +1,43 @@
+<?php
+$arr_data=$this->arr_data;
+$page=$this->page;
+$total=$this->total;
+if(empty($arr_data)){
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+}else{
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+	$i=1;
+	foreach($arr_data as $val){
+		$quantity_normal=number_format($val['quantity_normal'], 0, '.', ',');
+		$quantity_promo1=number_format($val['quantity_promo1'], 0, '.', ',');
+		$quantity_promo2=number_format($val['quantity_promo2'], 0, '.', ',');
+		$quantity_promo3=number_format($val['quantity_promo3'], 0, '.', ',');
+		$data['rows'][] = 
+		array(
+			'id' => $val['product_id'],
+			'cell' => 
+					array(
+							$val['product_id'], 
+							$quantity_normal, 
+							$quantity_promo1, 
+							$val['start_date1'], 
+							$val['end_date1'], 
+							$quantity_promo2, 
+							$val['start_date2'], 
+							$val['end_date2'],  
+							$quantity_promo3, 
+							$val['start_date3'], 
+							$val['end_date3']
+						)
+		);
+		$i++;
+	}
+}
+echo json_encode($data);
+?>

@@ -1,0 +1,32 @@
+<?php
+$data=$this->arr_data;
+?>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+  <tr bgcolor="">
+    <td height="25" background="/stock/img/bg_header_blue.gif" align="center">Shelf No</td>
+    <td background="/stock/img/bg_header_blue.gif" align="center">Floor No</td>
+    <td background="/stock/img/bg_header_blue.gif" align="center">Room No</td>
+    <td background="/stock/img/bg_header_blue.gif" align="center">รหัสสินค้า</td>
+    <td background="/stock/img/bg_header_blue.gif" align="center">สถานะ</td>
+  </tr>
+ <?php 
+ $count=count($data);
+ if($count>0){
+ 	$i=1;
+	 foreach($data as $val){
+	 if($i%2){$color="#eaebeb";}else{$color="#f2f3f3";}
+	 $quantity=number_format($val['quantity'], 0, '.', ',');
+	 ?>
+	  <tr bgcolor="<?php echo $color;?>">
+	    <td height="20" align="center"><?php if(!empty($val['shelf_no'])){echo $val['shelf_no'];}?></td>
+	    <td align="center"><?php if(!empty($val['floor_no'])){echo $val['floor_no'];}?></td>
+	    <td align="center"><?php if(!empty($val['room_no'])){echo $val['room_no'];}?></td>
+	    <td align="center"><?php if(!empty($val['product_id'])){echo $val['product_id'];}?></td>
+	    <td align="center"><?php if(!empty($val['product_status'])){echo $val['product_status'];}?></td>
+	  </tr>
+	 <?php 
+	 $i++;
+	 }
+ }
+ ?>
+</table>

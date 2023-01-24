@@ -1,0 +1,125 @@
+<link href='/sales/css/inventory/pickinglist.css' rel='stylesheet' type='text/css'>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td valign="top" >
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+		<tr bgcolor="#B9E7CF" height="40">
+			<td colspan="4"><span style='font-size:23px;color:#000000;'> ใบตรวจรับการส่งสินค้า</span></td>
+		</tr >
+		<tr height="32">
+			<td width="5%" align="right">เลขที่ : </td>
+			<td width="5%">
+				<input type="text" name="txt_plno" id="txt_plno" size="30" class="input-text-pos keybarcode" value="<?php echo $this->txt_plno?>" readonly />
+			</td>
+			<td width="5%" align="right">วันที่ : </td>
+			<td width="20%">
+				<input type="text" name="txt_ddate" id="txt_ddate" size="30" class="input-text-pos keybarcode" value="<?php echo $this->txt_ddate;?>" readonly />
+			</td>
+		</tr>
+		
+		<tr height="32">
+			<td width="5%" align="right">หมายเหตุ : </td>
+			<td colspan="3">
+				<input type="text" name="txt_remark" id="txt_remark" size="50" class="input-text-pos keybarcode" />
+			</td>
+		</tr>
+		
+		<tr height="32">
+			<td width="5%" align="right">Document No : </td>
+			<td width="5%">
+				<input type="text" name="txt_pl" id="txt_pl" size="30" class="input-text-pos keybarcode" style="text-transform:uppercase" />
+			</td>
+			<td width="5%" align="right">จำนวนกล่อง  : </td>
+			<td width="20%">
+				<input type="text" maxlength="2" name="txt_cbox" id="txt_cbox" size="5" class="input-text-pos keybarcode" value="1"  />
+				สถานะ  : 
+				<select id="slt_promo_st" >
+					<option value="N"> ปกติ (N) </option>
+					<option value="O"> เกิน (O) </option>
+				</select>
+			</td>
+		</tr>
+	</table>
+	
+	<div class="margin10"></div>
+	
+	<table id="grd_picking"></table>	
+	<table width="100%" cellspacing="2" cellpadding="2" border="0" bgcolor="#ecfcf5" align="center">
+		<tbody>
+			<tr>
+			<td class="font_remark" width="100%" background="/stock/img/bg_g.gif" height="35" align="left"> G : ใบจัดส่งสินค้า / I : ใบกำกับสินค้า / P : ใบ Picking List </td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="margin10"></div>
+	
+	<table width="100%" border="0">
+		<tbody>
+			<tr>
+				<td></td>
+				<td align="right" width="60%">
+					<a href="#" class='btnGrayClean' id="btnSave" onclick="saveTmp()">บันทึก(F10)</a>
+					<a href="#" class='btnGrayClean' id="btnCancel" onclick="cancelTmp()">ยกเลิก</a>
+				</td>
+		    </tr>
+	    </tbody>
+    </table>
+    
+    <input type="hidden" name="txt_seq" id="txt_seq" value="0" />
+    <input type="hidden" name="txt_lgs_status" id="txt_lgs_status" value="0" />
+    <input type="hidden" name="emp" id="emp" value="0" />
+    
+    <input type="hidden" name="hdn_detail_lgs_no" id="hdn_detail_lgs_no" value="" />
+    <input type="hidden" name="hdn_detail_lgs_all" id="hdn_detail_lgs_all" value="0" />
+    <input type="hidden" name="hdn_detail_lgs_control" id="hdn_detail_lgs_control" value="0" />
+    <input type="hidden" id="txt_box_amount" name="txt_box_amount" vaue="0" />
+    <div id="dlg_inventory" style="display:none;">
+    	<input type='text' size='18' id='chk_saleman_id' />
+    </div> <!-- check employee -->
+    
+    <div id="dlg_box" style="display:none;">
+    	<table>
+	    	<tr>
+	    		<td><label style="text-align:center;">จำนวนกล่องที่ต้องส่งคืน KM</label></td>
+	    		<td><input type="text" id="txt_box_qty" name="txt_box_qty" size="5" maxlength="5" style="text-align:right;" disabled/></td>
+	    	</tr>
+	    	<tr>
+	    		<td><label style="text-align:center;">จำนวนกล่องที่ส่งคืนจริง</label></td>
+	    		<td><input type="text" id="txt_box_qty_r" name="txt_box_qty_r" size="5" maxlength="5" style="text-align:right;"/></td>
+	    	</tr>
+    	</table>    	
+    </div> <!-- add blank box -->
+    
+    <div id="dlg_detail_lgs" style="display:none;">
+    	<table>
+	    	<tr height="32">
+				<td align="right">เลขที่จัดส่ง : </td>
+				<td>
+					<input type="text" name="txt_detail_lgs_no" id="txt_detail_lgs_no" size="30" class="input-text-pos keybarcode" value="" readonly />
+				</td>
+			</tr>
+			<tr height="32">
+				<td align="right">จำนวนกล่องที่ส่งทั้งหมด : </td>
+				<td>
+					<input type="text" name="txt_detail_lgs_all" id="txt_detail_lgs_all" size="10" maxlength="5" class="input-text-pos" value="" />
+				</td>
+			</tr>
+			<tr height="32">
+				<td align="right">จำนวนกล่องที่ควบคุม : </td>
+				<td>
+					<input type="text" name="txt_detail_lgs_control" id="txt_detail_lgs_control" size="10" maxlength="5" class="input-text-pos" value="" />
+				</td>
+			</tr>
+    	</table>
+    </div> <!-- add detail LGS -->
+
+</td>
+</tr>
+</table>
+
+<input type="hidden" id="txt_sum_pick" name="txt_sum_pick" value="" />
+<input type="hidden" id="txt_sum_box" name="txt_sum_box" value="" />
+<input type="hidden" id="hdn_md5" name="hdn_md5" value="<?php echo md5('first');?>" />
+<script type="text/javascript" src="/sales/js/inventory/pickinglist.js"></script>

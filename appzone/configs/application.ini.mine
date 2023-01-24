@@ -1,0 +1,83 @@
+[production]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+includePaths.library = APPLICATION_PATH "/../../libraryzone/library.11.5"
+
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+appnamespace = "Application"
+
+resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+resources.frontController.params.displayExceptions = 0
+
+<<<<<<< .mine
+resources.multidb.db1.adapter = "pdo_mysql"
+resources.multidb.db1.host = "localhost"
+resources.multidb.db1.username = "root"
+resources.multidb.db1.password = ""
+resources.multidb.db1.dbname = "pos_ssup"
+resources.multidb.db1.charset = "tis620"
+resources.multidb.db1.isDefaultTableAdapter = true
+
+resources.multidb.db2.adapter = "pdo_mysql"
+resources.multidb.db2.host = "localhost"
+resources.multidb.db2.username = "root"
+resources.multidb.db2.password = ""
+resources.multidb.db2.dbname = "pos_ssup"
+resources.multidb.db2.charset = "tis620"
+
+resources.multidb.dbOnline1.adapter = "pdo_mysql"
+resources.multidb.dbOnline1.host = "localhost"
+resources.multidb.dbOnline1.username = "root"
+resources.multidb.dbOnline1.password = ""
+resources.multidb.dbOnline1.dbname = "pos_ssup"
+resources.multidb.dbOnline1.charset = "tis620"
+
+
+>>>>>>> .r43
+resources.multidb.dbOfline.adapter = "pdo_mysql"
+resources.multidb.dbOfline.host = "localhost"
+<<<<<<< .mine
+resources.multidb.dbOfline.username = "root"
+resources.multidb.dbOfline.password = ""
+resources.multidb.dbOfline.dbname = "pos_ssup"
+
+resources.multidb.dbOfline.username = "root"
+resources.multidb.dbOfline.password = ""
+resources.multidb.dbOfline.dbname = "pos_ssup"
+>>>>>>> .r43
+resources.multidb.dbOfline.charset = "tis620"
+resources.multidb.dbOfline.isDefaultTableAdapter = true
+
+;*WR18052011
+resources.cachemanager.acl.frontend.name = Core
+resources.cachemanager.acl.frontend.customFrontendNaming = false
+resources.cachemanager.acl.frontend.options.lifetime = 7200
+resources.cachemanager.acl.frontend.options.automatic_serialization = true
+resources.cachemanager.acl.backend.name = File
+resources.cachemanager.acl.backend.customBackendNaming = false
+resources.cachemanager.acl.backend.options.cache_dir = APPLICATION_PATH "/../../libraryzone/library.11.5/SSUP/Cache"
+resources.cachemanager.acl.frontendBackendAutoload = false
+   
+resources.layout.layoutPath = APPLICATION_PATH "/layouts"
+resources.view[] =
+email.TransportOptions.host     = "smtp.gmail.com"
+email.TransportOptions.auth     = "login"
+email.TransportOptions.username = "isarawong@gmail.com"
+email.TransportOptions.password = "volvo2011"
+email.TransportOptions.ssl      = "ssl"
+email.TransportOptions.port     = 465
+
+
+[testing : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+common.params.brand = op
+common.params.comno = 1
+common.params.shop = 7777
+
+[development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+resources.frontController.params.displayExceptions = 1	
+

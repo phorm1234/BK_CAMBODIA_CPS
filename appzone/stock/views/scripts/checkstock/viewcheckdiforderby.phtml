@@ -1,0 +1,56 @@
+<script>
+$(function() {	
+//all hover and click logic for buttons
+	$(".fg-button")
+	.hover(
+		function(){ 
+			$(this).addClass("ui-state-hover"); 
+		},
+		function(){ 
+			$(this).removeClass("ui-state-hover"); 
+		}
+	)
+	.mousedown(function(){
+			$(this).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
+			if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ $(this).removeClass("ui-state-active"); }
+			else { $(this).addClass("ui-state-active"); }	
+	})
+	.mouseup(function(){
+		if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+			$(this).removeClass("ui-state-active");
+		}
+	});
+});
+</script>
+<?php
+$doc_no=$this->doc_no;
+?>
+<form name="frm_orderby" id="frm_orderby">
+<input type="hidden" name="orderby" id="orderby" value="product_id"></input>
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+  <tr>
+    <td><input type="radio" id="sel_rpt" name="sel_rpt" value="a" checked="checked"></input></td>
+    <td>All Result</td>
+  </tr>
+  <tr>
+    <td><input type="radio" id="sel_rpt" name="sel_rpt" value="w"></input></td>
+    <td>All Differences Result</td>
+  </tr>
+  <tr>
+    <td width="3%"><input type="radio" id="sel_rpt" name="sel_rpt" value="1"></input></td>
+    <td>Lack/Out of Stock</td>
+  </tr>
+  <tr>
+    <td width="3%"><input type="radio" id="sel_rpt" name="sel_rpt" value="0"></input></td>
+    <td>Excess Stock</td>
+  </tr>
+  <tr>
+    <td colspan="2"><hr size="1"></hr></td>
+  </tr>
+</table>
+</form>
+<form name="send_print_dif" id="send_print_dif" action="printcheckdif" method="post" target="_blank">  
+	<input type="hidden" name="product_id_pdf" id="product_id_pdf" value="">
+	<input type="hidden" name="doc_no_pdf" id="doc_no_pdf" value="">
+	<input type="hidden" name="sel_rpt_pdf" id="sel_rpt_pdf" value="">
+</form>

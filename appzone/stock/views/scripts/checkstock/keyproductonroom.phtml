@@ -1,0 +1,64 @@
+<script>
+$('document').ready(function(){
+	var procd=$("#procd").val();
+	$("#"+procd).focus().select();
+});
+</script>
+<?php
+$productData=$this->data;
+$product_id=$this->product_id;
+$doc_no=$this->doc_no;
+?>
+รหัสสินค้า : <?php echo $product_id;?>
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr>
+  	<td width="5%" height="25" background="/stock/img/bg_header_blue.gif" align="center">ลำดับ</td>
+    <td width="15%" height="25" background="/stock/img/bg_header_blue.gif" align="center"><strong>Shelf</strong></td>
+    <td background="/stock/img/bg_header_blue.gif" align="center"><strong>Room</strong></td>
+    <td background="/stock/img/bg_header_blue.gif" align="center" width="15%"><strong>Quantity</strong></td>
+  </tr>
+  <?php 
+  $i=0;
+  $j=1;
+  $sum_qty=null;
+  if(!empty($productData)){
+	  foreach($productData as $valProduct){
+	  $sum_qty=$sum_qty+$valProduct['quantity'];
+	  if($i%2){$color="#eaebeb";}else{$color="#f2f3f3";}
+	  /*if(!empty($qty[$i]['product_id'])){
+		  if($valProduct['product_id']==$qty[$i]['product_id']){
+		  	if($qty[$i]['quantity']=="0.00"){
+		  		$quantity="";
+		  	}else{
+		  		//$quantity=number_format($qty[$i]['quantity']);
+		  		$quantity=$qty[$i]['quantity'];
+		  	}
+		  }
+	  }*/
+	  ?>
+	  <?php 
+	  $next_id="prod_".$product_id."_".$valProduct['room_no']."_".$valProduct['seq'];
+	  if($j==1){
+	  	echo "<input type='hidden' name='procd' id='procd' value='$next_id'>";
+	  }
+	  ?>
+	  <tr bgcolor="<?php echo $color;?>" ref="2">
+	  	<td><?php echo $j;?></td>
+	    <td ref="1" align="center"><?php echo $valProduct['shelf_no'];?></td>
+	    <td ref="1" align="center"><?php echo $valProduct['room_no'];?></td>
+	    <td align="center"><input type="text" id="<?php echo $next_id;?>" name="<?php echo $next_id;?>" value="<?php echo number_format($valProduct['quantity']);?>" size="3" onKeyUp="return savelisttagroom('<?php echo $next_id;?>','<?php echo $valProduct['room_no'];?>','<?php echo $product_id;?>','<?php echo $doc_no;?>','<?php echo $valProduct['seq'];?>')"  class="nexttxt"></td>
+	  </tr>
+	  <?php 
+	  $i++;
+	  $j++;
+	  }
+	  $sum_qty=number_format($sum_qty);
+	  echo "
+	  <tr>
+	  	<td colspan='3' align='right'>รวม : </td>
+	  	<td align='center'>$sum_qty</td>
+	  </tr>
+	  ";
+  }
+  ?>
+</table>

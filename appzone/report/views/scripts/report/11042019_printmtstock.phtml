@@ -1,0 +1,1111 @@
+<?php
+//@header("Content-type:text/html; charset=utf=8");
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a4');
+$pdf->SetThaiFont();
+$pdf->SetMargins( 5,10,0 );  // ซ้าย , บน , ขวา
+
+$pdf->AddPage();
+
+$pdf->Image('/var/www/pos/htdocs/report/img/logo/op/op-logo.gif',75,0,0);
+$pdf->SetFont('CordiaNew','',16);
+//$title1=iconv('UTF-8','cp874',"สรุปการชำระเงินจากลูกค้า");
+
+$line="======================================================================================";
+
+$pdf->Ln(3);
+$pdf->Cell(0,7,iconv('UTF-8','cp874','สรุปสินค้าคงเหลือ'),0,0,'C');
+$pdf->Ln(7);
+$pdf->Cell(0,7,iconv('UTF-8','cp874','บริษัท โอ.พี. เนเชอรัล โปรดักส์ จำกัด'),0,0,'C');
+$pdf->Ln(7);
+$pdf->Cell( 0,7, iconv( 'UTF-8','cp874' ,'วันที่ออกเอกสาร '.$this->print_time ),0,0,'C');
+$pdf->Ln(7);
+$pdf->Cell( 10  , 7 , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell(0,7,iconv('UTF-8','cp874','สาขา : '.$this->branch_id.' '.$this->branch_name ),0,0,'L');
+$pdf->Ln(7);
+$pdf->Cell( 10  , 7 , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell(0,7,iconv('UTF-8','cp874',"เงื่อนไข  ตั้งแต่วันที่ ".$this->s_date." - ".$this->e_date),0,0,'L');
+$pdf->Ln(7);
+$pdf->Cell( 10  , 7 , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell( 30  , 7 , iconv( 'UTF-8','cp874' , 'รูปแบบ : '.$this->report_detail.' ('.$this->condition.')' ) , 0 , 1 ,'L');
+
+
+
+$pdf->Cell(0,7,$line,0,0,'C');
+$pdf->Ln(3);
+
+$y = 7;
+
+
+/*if ($this->aoutcome_data =="" || $this->getamt_data == "" || $this->qbackamt_data == "" || $this->otheramt_data = ""
+        || $this->chincomeamt_data == "" || $this->choutamt_data == "" || $this->getbill_data == "")
+{
+$this->aoutcome_data = "0.00" ;    
+$this->getamt_data  = "0.00" ; 
+$this->qbackamt_data = "0.00" ;    
+$this->otheramt_data = "0.00" ;    
+$this->chincomeamt_data = "0.00" ;    
+$this->choutamt_data = "0.00" ;   
+$this->getbill_data = "0.00" ; 
+}*/
+$sum_begin = 0 ;
+$sum_balance = 0;
+$sum_sl = 0 ;
+$sum_dn = 0 ;
+$sum_cn = 0 ;
+$sum_ti = 0 ;
+$sum_tto = 0 ;
+$sum_ai = 0 ;
+$sum_ao = 0 ;
+$sum_onhand = 0;
+$sum_amount_sl = 0;
+$sum_amount_dn = 0;
+$sum_amount_cn = 0;
+$sum_amount_ti = 0;
+$sum_amount_tto = 0;
+$sum_amount_ai = 0;
+$sum_amount_ao = 0;
+$sum_amt_begin = 0;
+$sum_amt_onhand = 0;
+$sum_amount_amt_tto = 0;
+
+$i = 1;
+if($this->condition == "สินค้าทั้งหมด" and $this->report_detail =="แสดงรายละเอียด"){
+
+$pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , '#CODE' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'BEGIN' ) , 0 , 0 ,'R' );
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'SALE' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'DN' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'CN' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'TI' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'TO' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'AI' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'AO' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'BAL' ) , 0 , 1 ,'R');
+
+
+$pdf->Cell(0,3,$line,0,0,'C');
+$pdf->Ln(4);
+
+
+if($this->gettrs_data2 <> ""){   // วันที่ มากกว่า 01
+    $trs_data = $this->gettrs_data2 ;
+
+foreach($trs_data as $b){
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    /*$sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];*/
+                   // $sum_onhand+=$b_onhand;
+                    
+                    $b_balance = $b_onhand+$b['sl2']+$b['dn2']+$b['cn2']+$b['ti2']+$b['tto2']+$b['ai2']+$b['ao2']; // balance set 2
+                    $sum_onhand+=$b_onhand; // รวม begin ใหม่ ( > วันที่ 01)
+                    $sum_sl+=$b['sl2'];
+                    $sum_dn+=$b['dn2'];
+                    $sum_cn+=$b['cn2'];
+                    $sum_ti+=$b['ti2'];
+                    $sum_tto+=$b['tto2'];
+                    $sum_ai+=$b['ai2'];
+                    $sum_ao+=$b['ao2'];
+                    $sum_amount_sl+=$b['amt_sl2'];
+                    $sum_amount_dn+=$b['amt_dn2'];
+                    $sum_amount_cn+=$b['amt_cn2'];
+                    $sum_amount_ti+=$b['amt_ti2'];
+                    $sum_amount_tto+=$b['amt_tto2'];
+                    $sum_amount_ai+=$b['amt_ai2'];
+                    $sum_amount_ao+=$b['amt_ao2'];
+                    $sum_balance+=$b_balance; // รวม balance ใหม่
+                    
+                    $sum_amt_begin += $b_onhand*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_balance*$b['price'];
+       
+ 
+$pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , $i++."  ".$b['product_id'] ) , 0 , 0 ,'R');
+$pdf->Cell( 130  , $y , iconv( 'UTF-8','cp874' , substr($b['name_product'], 0, 45) ) , 0 , 1  ,'L');
+$pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' ,  abs($b_onhand) ) , 0 , 0  ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['sl2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['dn2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['cn2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ti2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['tto2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ai2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ao2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b_balance) ) , 0 , 1 ,'R');
+    
+
+    }
+    
+$pdf->Cell(0,7,$line,0,0,'C');
+  $pdf->Ln(7);  
+  $pdf->Cell( 6  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 80  , $y , iconv( 'UTF-8','cp874' , 'สรุปรายงาน') , 0 , 1 ,'L'); 
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_onhand)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_begin), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ti)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ti), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_sl)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_sl), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_tto)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_tto), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_cn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_cn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_dn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_dn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ai)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ai), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ao)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ao), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_balance)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_onhand), 2, '.', ',')) , 0 , 1 ,'R');    
+
+    
+  
+} //end gettrs_data2
+    
+else{  // เลือกข้อมูลตั้งแต่วันที่ 1
+    
+    $trs_data = $this->gettrs_data1 ;
+    foreach($trs_data as $b){
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];
+                    $sum_onhand+=$b_onhand;
+                    
+                    
+                    
+                    $sum_amt_begin += $b['begin']*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_onhand*$b['price'];
+                    
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , $i++."  ".$b['product_id'] ) , 0 , 0 ,'R');
+    $pdf->Cell( 130  , $y , iconv( 'UTF-8','cp874' , substr($b['name_product'], 0, 45) ) , 0 , 1  ,'L');
+    $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' ,  abs($b['begin']) ) , 0 , 0  ,'R');
+    $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['sl']) ) , 0 , 0 ,'R');
+    $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['dn']) ) , 0 , 0 ,'R');
+    $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['cn']) ) , 0 , 0 ,'R');
+    $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ti']) ) , 0 , 0 ,'R');
+    $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['tto']) ) , 0 , 0 ,'R');
+    $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ai']) ) , 0 , 0 ,'R');
+    $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ao']) ) , 0 , 0 ,'R');
+    $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b_onhand) ) , 0 , 1 ,'R');
+    
+    }
+    
+  $pdf->Cell(0,7,$line,0,0,'C');
+  $pdf->Ln(7);  
+  $pdf->Cell( 6  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 80  , $y , iconv( 'UTF-8','cp874' , 'สรุปรายงาน') , 0 , 1 ,'L'); 
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_onhand)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_begin), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ti)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ti), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_sl)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_sl), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_tto)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_tto), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_cn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_cn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_dn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_dn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ai)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ai), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ao)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ao), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_balance)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_onhand), 2, '.', ',')) , 0 , 1 ,'R');    
+    
+} //end gettrs_data1
+
+
+}elseif($this->condition == "สินค้าทั้งหมด" and $this->report_detail =="สรุปยอดรวม"){
+
+    if($this->gettrs_data2 <> ""){   // วันที่ มากกว่า 01
+    $trs_data = $this->gettrs_data2 ;
+
+foreach($trs_data as $b){
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    /*$sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];*/
+                   // $sum_onhand+=$b_onhand;
+                    
+                    $b_balance = $b_onhand+$b['sl2']+$b['dn2']+$b['cn2']+$b['ti2']+$b['tto2']+$b['ai2']+$b['ao2']; // balance set 2
+                    $sum_onhand+=$b_onhand; // รวม begin ใหม่ ( > วันที่ 01)
+                    $sum_sl+=$b['sl2'];
+                    $sum_dn+=$b['dn2'];
+                    $sum_cn+=$b['cn2'];
+                    $sum_ti+=$b['ti2'];
+                    $sum_tto+=$b['tto2'];
+                    $sum_ai+=$b['ai2'];
+                    $sum_ao+=$b['ao2'];
+                    $sum_amount_sl+=$b['amt_sl2'];
+                    $sum_amount_dn+=$b['amt_dn2'];
+                    $sum_amount_cn+=$b['amt_cn2'];
+                    $sum_amount_ti+=$b['amt_ti2'];
+                    $sum_amount_tto+=$b['amt_tto2'];
+                    $sum_amount_ai+=$b['amt_ai2'];
+                    $sum_amount_ao+=$b['amt_ao2'];
+                    $sum_balance+=$b_balance; // รวม balance ใหม่
+                    
+                    $sum_amt_begin += $b_onhand*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_balance*$b['price'];
+  
+    }
+    
+  
+ // $pdf->Cell(0,3,$line,0,0,'C');
+  $pdf->Ln(7);  
+  $pdf->Cell( 6  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 80  , $y , iconv( 'UTF-8','cp874' , 'สรุปรายงาน') , 0 , 1 ,'L'); 
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_onhand)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_begin), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ti)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ti), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_sl)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_sl), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_tto)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_tto), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_cn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_cn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_dn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_dn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ai)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ai), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ao)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ao), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_balance)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_onhand), 2, '.', ',')) , 0 , 1 ,'R');    
+
+    
+  
+} //end gettrs_data2
+    
+else{  // เลือกข้อมูลตั้งแต่วันที่ 1
+    
+    $trs_data = $this->gettrs_data1 ;
+    foreach($trs_data as $b){
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];
+                    $sum_onhand+=$b_onhand;
+                    
+                    
+                    
+                    $sum_amt_begin += $b['begin']*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_onhand*$b['price'];                 
+  
+    }
+    
+    
+ // $pdf->Cell(0,3,$line,0,0,'C');
+  $pdf->Ln(7);  
+  $pdf->Cell( 6  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 80  , $y , iconv( 'UTF-8','cp874' , 'สรุปรายงาน') , 0 , 1 ,'L'); 
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_onhand)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_begin), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ti)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ti), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_sl)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_sl), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_tto)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_tto), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_cn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_cn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_dn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_dn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ai)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ai), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ao)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ao), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_balance)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_onhand), 2, '.', ',')) , 0 , 1 ,'R');    
+    
+} //end gettrs_data1
+    
+    
+}  // end สรุปยอดรวม
+ 
+elseif($this->condition == "เฉพาะสินค้าเคลื่อนไหว" and $this->report_detail =="แสดงรายละเอียด"){
+    //echo "all";
+$pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , '#CODE' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'BEGIN' ) , 0 , 0 ,'R' );
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'SALE' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'DN' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'CN' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'TI' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'TO' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'AI' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'AO' ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' , 'BAL' ) , 0 , 1 ,'R');
+
+
+$pdf->Cell(0,3,$line,0,0,'C');
+$pdf->Ln(4);
+
+
+if($this->gettrs_data2 <> ""){   // วันที่ มากกว่า 01
+    $trs_data = $this->gettrs_data2 ;
+
+foreach($trs_data as $b){
+    
+     if($b['sl2'] == 0 and $b['dn2'] == 0 and $b['cn2'] == 0 and $b['ti2'] == 0 and $b['tto2'] == 0 and $b['ai2'] == 0 and $b['ao2'] == 0 ){
+         echo "";}else{
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก                   
+                    $b_balance = $b_onhand+$b['sl2']+$b['dn2']+$b['cn2']+$b['ti2']+$b['tto2']+$b['ai2']+$b['ao2']; // balance set 2
+                    $sum_onhand+=$b_onhand; // รวม begin ใหม่ ( > วันที่ 01)
+                    $sum_sl+=$b['sl2'];
+                    $sum_dn+=$b['dn2'];
+                    $sum_cn+=$b['cn2'];
+                    $sum_ti+=$b['ti2'];
+                    $sum_tto+=$b['tto2'];
+                    $sum_ai+=$b['ai2'];
+                    $sum_ao+=$b['ao2'];
+                    $sum_amount_sl+=$b['amt_sl2'];
+                    $sum_amount_dn+=$b['amt_dn2'];
+                    $sum_amount_cn+=$b['amt_cn2'];
+                    $sum_amount_ti+=$b['amt_ti2'];
+                    $sum_amount_tto+=$b['amt_tto2'];
+                    $sum_amount_ai+=$b['amt_ai2'];
+                    $sum_amount_ao+=$b['amt_ao2'];
+                    $sum_balance+=$b_balance; // รวม balance ใหม่
+                    
+                    $sum_amt_begin += $b_onhand*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_balance*$b['price'];
+       
+ 
+$pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , $i++."  ".$b['product_id'] ) , 0 , 0 ,'R');
+$pdf->Cell( 130  , $y , iconv( 'UTF-8','cp874' , substr($b['name_product'], 0, 45) ) , 0 , 1  ,'L');
+$pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' ,  abs($b_onhand) ) , 0 , 0  ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['sl2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['dn2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['cn2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ti2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['tto2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ai2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ao2']) ) , 0 , 0 ,'R');
+$pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b_balance) ) , 0 , 1 ,'R');
+    
+         }
+    }
+    
+$pdf->Cell(0,3,$line,0,0,'C');
+  $pdf->Ln(7);  
+  $pdf->Cell( 6  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 80  , $y , iconv( 'UTF-8','cp874' , 'สรุปรายงาน') , 0 , 1 ,'L'); 
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_onhand)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_begin), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ti)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ti), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_sl)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_sl), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_tto)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_tto), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_cn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_cn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_dn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_dn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ai)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ai), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ao)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ao), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_balance)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_onhand), 2, '.', ',')) , 0 , 1 ,'R');    
+    
+    
+  
+} //end gettrs_data2
+    
+else{  // เลือกข้อมูลตั้งแต่วันที่ 1
+    
+    $trs_data = $this->gettrs_data1 ;
+    foreach($trs_data as $b){
+        
+        if($b['sl'] == 0 and $b['dn'] == 0 and $b['cn'] == 0 and $b['ti'] == 0 and $b['tto'] == 0 and $b['ai'] == 0 and $b['ao'] == 0 ){
+         echo "";}else{
+             
+         
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];
+                    $sum_onhand+=$b_onhand;
+                    
+                    
+                    
+                    $sum_amt_begin += $b['begin']*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_onhand*$b['price'];
+                    
+            $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , $i++."  ".$b['product_id'] ) , 0 , 0 ,'R');
+            $pdf->Cell( 130  , $y , iconv( 'UTF-8','cp874' , substr($b['name_product'], 0, 45) ) , 0 , 1  ,'L');
+            $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' ,  abs($b['begin']) ) , 0 , 0  ,'R');
+            $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['sl']) ) , 0 , 0 ,'R');
+            $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['dn']) ) , 0 , 0 ,'R');
+            $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['cn']) ) , 0 , 0 ,'R');
+            $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ti']) ) , 0 , 0 ,'R');
+            $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['tto']) ) , 0 , 0 ,'R');
+            $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ai']) ) , 0 , 0 ,'R');
+            $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b['ao']) ) , 0 , 0 ,'R');
+            $pdf->Cell( 19  , $y , iconv( 'UTF-8','cp874' ,  abs($b_onhand) ) , 0 , 1 ,'R');
+    
+        }
+    }
+  $pdf->Cell(0,3,$line,0,0,'C');
+  $pdf->Ln(7);  
+  $pdf->Cell( 6  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 80  , $y , iconv( 'UTF-8','cp874' , 'สรุปรายงาน') , 0 , 1 ,'L'); 
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_onhand)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_begin), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ti)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ti), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_sl)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_sl), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_tto)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_tto), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_cn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_cn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_dn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_dn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ai)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ai), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ao)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ao), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_balance)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_onhand), 2, '.', ',')) , 0 , 1 ,'R');    
+    
+} //end gettrs_data1
+
+
+}elseif($this->condition == "เฉพาะสินค้าเคลื่อนไหว" and $this->report_detail =="สรุปยอดรวม"){
+
+    if($this->gettrs_data2 <> ""){   // วันที่ มากกว่า 01
+    $trs_data = $this->gettrs_data2 ;
+
+foreach($trs_data as $b){
+    
+     if($b['sl2'] == 0 and $b['dn2'] == 0 and $b['cn2'] == 0 and $b['ti2'] == 0 and $b['tto2'] == 0 and $b['ai2'] == 0 and $b['ao2'] == 0 ){
+         echo "";}else{
+            
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก                                     
+                    $b_balance = $b_onhand+$b['sl2']+$b['dn2']+$b['cn2']+$b['ti2']+$b['tto2']+$b['ai2']+$b['ao2']; // balance set 2
+                    $sum_onhand+=$b_onhand; // รวม begin ใหม่ ( > วันที่ 01)
+                    $sum_sl+=$b['sl2'];
+                    $sum_dn+=$b['dn2'];
+                    $sum_cn+=$b['cn2'];
+                    $sum_ti+=$b['ti2'];
+                    $sum_tto+=$b['tto2'];
+                    $sum_ai+=$b['ai2'];
+                    $sum_ao+=$b['ao2'];
+                    $sum_amount_sl+=$b['amt_sl2'];
+                    $sum_amount_dn+=$b['amt_dn2'];
+                    $sum_amount_cn+=$b['amt_cn2'];
+                    $sum_amount_ti+=$b['amt_ti2'];
+                    $sum_amount_tto+=$b['amt_tto2'];
+                    $sum_amount_ai+=$b['amt_ai2'];
+                    $sum_amount_ao+=$b['amt_ao2'];
+                    $sum_balance+=$b_balance; // รวม balance ใหม่
+                    
+                    $sum_amt_begin += $b_onhand*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_balance*$b['price'];
+  
+            }
+    }
+  
+  $pdf->Cell(0,3,$line,0,0,'C');
+  $pdf->Ln(7);  
+  $pdf->Cell( 6  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 80  , $y , iconv( 'UTF-8','cp874' , 'สรุปรายงาน') , 0 , 1 ,'L'); 
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_onhand)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_begin), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ti)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ti), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_sl)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_sl), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_tto)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_tto), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_cn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_cn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_dn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_dn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ai)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ai), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ao)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ao), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_balance)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_onhand), 2, '.', ',')) , 0 , 1 ,'R');    
+        
+
+    
+  
+} //end gettrs_data2
+    
+else{  // เลือกข้อมูลตั้งแต่วันที่ 1
+    
+    $trs_data = $this->gettrs_data1 ;
+    foreach($trs_data as $b){
+        
+        if($b['sl'] == 0 and $b['dn'] == 0 and $b['cn'] == 0 and $b['ti'] == 0 and $b['tto'] == 0 and $b['ai'] == 0 and $b['ao'] == 0 ){
+         echo "";}else{
+             
+         
+                    $b_onhand = $b['begin']+$b['sl']+$b['dn']+$b['cn']+$b['ti']+$b['tto']+$b['ai']+$b['ao']; // balance set แรก
+                    $sum_begin+=$b['begin']; 
+                    $sum_sl+=$b['sl'];
+                    $sum_dn+=$b['dn'];
+                    $sum_cn+=$b['cn'];
+                    $sum_ti+=$b['ti'];
+                    $sum_tto+=$b['tto'];
+                    $sum_ai+=$b['ai'];
+                    $sum_ao+=$b['ao'];
+                    $sum_amount_sl+=$b['amt_sl'];
+                    $sum_amount_dn+=$b['amt_dn'];
+                    $sum_amount_cn+=$b['amt_cn'];
+                    $sum_amount_ti+=$b['amt_ti'];
+                    $sum_amount_tto+=$b['amt_tto'];
+                    $sum_amount_ai+=$b['amt_ai'];
+                    $sum_amount_ao+=$b['amt_ao'];
+                    $sum_onhand+=$b_onhand;
+                    
+                    $sum_amt_begin += $b['begin']*$b['price']; // รวมราคา begin
+                    $sum_amt_onhand += $b_onhand*$b['price'];                 
+  
+            }
+    }
+    
+  $pdf->Cell(0,3,$line,0,0,'C');
+  $pdf->Ln(7);  
+  $pdf->Cell( 6  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 80  , $y , iconv( 'UTF-8','cp874' , 'สรุปรายงาน') , 0 , 1 ,'L'); 
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_onhand)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกมา (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_begin), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ti)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'รับ (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ti), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_sl)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ขาย (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_sl), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_tto)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'คืน (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_tto), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_cn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'CN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_cn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_dn)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'DN (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_dn), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ai)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ เข้า (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ai), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_ao)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ADJ ออก (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amount_ao), 2, '.', ',')) , 0 , 1 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (ชิ้น) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , abs($sum_balance)) , 0 , 0 ,'R');
+  $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+  $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , 'ยกไป (เงิน) : ') , 0 , 0 ,'L');
+  $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , number_format(abs($sum_amt_onhand), 2, '.', ',')) , 0 , 1 ,'R');    
+    
+} //end gettrs_data1
+    
+}
+
+$pdf->Ln(7); 
+$pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 ); 
+$pdf->Cell( 100  , $y , iconv( 'UTF-8','cp874' , 'เลขที่บิลอย่างย่อ') , 0 , 1 ,'L'); 
+$arrsl_bill=$this->getbillsl_data;
+foreach($arrsl_bill as $bsl){
+	$pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+    $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , $bsl['min(`doc_no`)']." - ".$bsl['max(`doc_no`)']) , 0 , 1 ,'L');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , 'รวม') , 0 , 0 ,'R');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($bsl['quantity']), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , 'จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($bsl['amount']), 2, '.', ',')) , 0 , 1 ,'R');
+}
+
+$pdf->Ln(4);  
+$pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell( 100  , $y , iconv( 'UTF-8','cp874' , 'เลขที่รับสินค้า') , 0 , 1 ,'L'); 
+$arrti_bill=$this->getbillti_data;
+$ti_sum_quantity_detail = 0;
+$ti_sum_amount_detail =0;
+foreach($arrti_bill as $c){
+     $ti_sum_quantity_detail+=$c['quantity'];
+     $ti_sum_amount_detail+=$c['amount'];
+    $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+    $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , $c['doc_no'].'       รวม  ') , 0 , 0 ,'L');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' ,  number_format(abs($c['quantity']), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน       ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($c['amount']), 2, '.', ',')) , 0 , 1 ,'R');
+}
+	
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , 'รวม') , 0 , 0 ,'R');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($ti_sum_quantity_detail), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($ti_sum_amount_detail), 2, '.', ',')) , 0 , 1 ,'R');
+$pdf->Ln(4);
+
+$pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , 'เลขที่ใบส่งสินค้า') , 0 , 1 ,'L'); 
+$arrdn_bill=$this->getbilldn_data;
+$dn_sum_quantity_detail = 0;
+$dn_sum_amount_detail =0;
+foreach($arrdn_bill as $bsl){
+	$pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+    $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , $bsl['min(`doc_no`)']." - ".$bsl['max(`doc_no`)']) , 0 , 1 ,'L');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , 'รวม') , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , number_format(abs($bsl['quantity']), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($bsl['amount']), 2, '.', ',')) , 0 , 1 ,'R');
+}
+$pdf->Ln(4);
+
+$pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , 'เลขที่คืนสินค้า') , 0 , 1 ,'L'); 
+$arrto_bill=$this->getbillto_data;
+$to_sum_quantity_detail = 0;
+$to_sum_amount_detail =0;
+foreach($arrto_bill as $c){
+     $to_sum_quantity_detail+=$c['quantity'];
+     $to_sum_amount_detail+=$c['amount'];
+     $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+    $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , $c['doc_no'].'       รวม  ') , 0 , 0 ,'L');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , number_format(abs($c['quantity']), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($c['amount']), 2, '.', ',')) , 0 , 1 ,'R');
+}
+//if($to_sum_quantity_detail > '0'){ 
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , 'รวม') , 0 , 0 ,'R');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($to_sum_quantity_detail), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($to_sum_amount_detail), 2, '.', ',')) , 0 , 1 ,'R');
+//}
+$pdf->Ln(4);
+
+$pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , 'เลขที่ลดหนี้') , 0 , 1 ,'L'); 
+$arrcn_bill=$this->getbillcn_data;
+$cn_sum_quantity_detail = 0;
+$cn_sum_amount_detail =0;
+foreach($arrcn_bill as $c){
+     $cn_sum_quantity_detail+=$c['quantity'];
+     $cn_sum_amount_detail+=$c['amount'];
+     $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+    $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , $c['doc_no'].'       รวม  ') , 0 , 0 ,'L');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , number_format(abs($c['quantity']), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($c['amount']), 2, '.', ',')) , 0 , 1 ,'R');
+}
+//if($cn_sum_quantity_detail > '0'){ 
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , 'รวม') , 0 , 0 ,'R');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($cn_sum_quantity_detail), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($cn_sum_amount_detail), 2, '.', ',')) , 0 , 1 ,'R');
+//}
+$pdf->Ln(4);
+
+$pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , 'เลขที่ปรับปรุงเข้า') , 0 , 1 ,'L'); 
+$arrai_bill=$this->getbillai_data;
+$ai_sum_quantity_detail = 0;
+$ai_sum_amount_detail =0;
+foreach($arrai_bill as $c){
+     $ai_sum_quantity_detail+=$c['quantity'];
+     $ai_sum_amount_detail+=$c['amount'];
+     $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+    $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , $c['doc_no'].'       รวม  ') , 0 , 0 ,'L');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , number_format(abs($c['quantity']), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($c['amount']), 2, '.', ',')) , 0 , 1 ,'R');
+}
+//if($ai_sum_quantity_detail > '0'){ 
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , 'รวม') , 0 , 0 ,'R');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($ai_sum_quantity_detail), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($ai_sum_amount_detail), 2, '.', ',')) , 0 , 1 ,'R');
+//}
+$pdf->Ln(4);
+
+$pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , 'เลขที่ปรับปรุงออก') , 0 , 1 ,'L'); 
+$arrao_bill=$this->getbillao_data;
+$ao_sum_quantity_detail = 0;
+$ao_sum_amount_detail =0;
+foreach($arrao_bill as $c){
+     $ao_sum_quantity_detail+=$c['quantity'];
+     $ao_sum_amount_detail+=$c['amount'];
+     $pdf->Cell( 10  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+    $pdf->Cell( 50  , $y , iconv( 'UTF-8','cp874' , $c['doc_no'].'       รวม  ') , 0 , 0 ,'L');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , number_format(abs($c['quantity']), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($c['amount']), 2, '.', ',')) , 0 , 1 ,'R');
+}
+//if($ao_sum_quantity_detail > '0'){ 
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , 'รวม') , 0 , 0 ,'R');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($ao_sum_quantity_detail), 0, '.', ',')) , 0 , 0 ,'R');
+    $pdf->Cell( 20  , $y , iconv( 'UTF-8','cp874' , '    จำนวนเงิน ') , 0 , 0 ,'L');
+    $pdf->Cell( 30  , $y , iconv( 'UTF-8','cp874' , number_format(abs($ao_sum_amount_detail), 2, '.', ',')) , 0 , 1 ,'R');
+//}
+$pdf->Ln(10);
+
+$pdf->Cell( 0  , $y , iconv( 'UTF-8','cp874' , 'ลงชื่อ : _______________________________________  ผู้จัดการร้าน ' ) , 0 , 0 ,'R');
+
+$pdf->Ln(10);
+$pdf->Cell( 0  , $y , iconv( 'UTF-8','cp874' , '.' ) , 0 , 0 );
+//$pdf->Output();
+$name='mt_stockreport.pdf';
+$output="/var/www/pos/htdocs/report/printreport/".$name;
+//$pdf->Output($output,'F');
+@chmod($output,0777); 
+if(@file_exists($output)){
+		 shell_exec("rm $output");
+		@unlink($output);
+	}
+ 
+$pdf->Output($output,'F'); 
+shell_exec("lp -o media=a4 $output");
+	
+
+?>
+
+<script type="text/javascript">
+//self.close();
+</script>
+		

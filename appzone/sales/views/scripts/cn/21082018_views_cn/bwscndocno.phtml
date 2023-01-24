@@ -1,0 +1,67 @@
+  <style type="text/css">
+	<!--
+		tr.xtdover{
+			border:1pt solid#ff0000;
+			background-color:#ffcc99;
+		}
+		tr.xtdout{
+			border:0pt solid#ff0000;
+		}
+		/* test highlight*/
+		.datatablerowhighlight {
+		    background-color: #ffcc99 !important;
+			border-top:0pt solid#ff9933;
+			border-bottom:0pt solid#ff9933;
+		}
+	-->
+	</style>
+	<?php		
+		//	echo "<pre>";
+		//	print_r($this->arr_docno);
+		//	echo "</pre>";			
+		
+//				$i=1;		      
+//	        	if(!empty($this->arr_cndocno)){
+//		        	foreach($this->arr_cndocno as $data){
+//		        		$rows_json=json_encode($data);
+//		  				$id_tmp="n_".$i;
+//			  			echo "<li id='$id_tmp' name='$id_tmp' class='btn_sel' iddocno='".$rows_json."'>".$data['doc_date_show']."&nbsp;&nbsp;".$data['doc_no']."</li>";  
+//			  			$i++;
+//		  			}//foreach
+//	        	}else{
+//	        		$id_tmp="n_1";
+//	        		$str_cn="";
+//	        		echo "<li id='$id_tmp' name='$id_tmp' class='btn_sel' iddocno='nodata'>ไม่พบรายการเปิดบิล</li>";  
+//	        	}
+		
+	
+	        if(!empty($this->arr_cndocno)){
+	   			echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' bgcolor='#cccccc' class='display' id='tableNavCnDocNo'>";
+	   			echo "<thead><tr height='32' bgcolor='#ebebeb' idd=''>
+	   						<th align='center'  style='width:10%;color:#333;font-size:24px;'>Date</th>
+	   						<th align='center' style='color:#333;font-size:24px;'>Doc. No.</th>	   						
+	        				<th align='center'  style='width:15%;color:#333;font-size:24px;'>Members ID</th>
+	        				<th align='center'  style='width:10%;color:#333;font-size:24px;'>Type</th>	
+	        				<th align='center'  style='width:15%;color:#333;font-size:24px;'>Cancle Status</th>	             			
+	   					</tr></thead><tbody>";
+	   			$i=1;
+	   			foreach($this->arr_cndocno as $data){
+		  				$id_tmp="n_".$i;
+		  				$rows_json=json_encode($data);  				
+		  				($i%2==0)?$bg_color='#003333':$bg_color='#006666';
+			  			echo "<tr iddocno='".$rows_json."'>"
+			  					."<td align='center' >".$data['doc_date_show']."</td>"
+			  					."<td align='center' >".$data['doc_no']."</td>"			  				
+			  					."<td align='center' >".$data['member_id']."</td>"
+			  					."<td align='center' >".$data['status_no']."</td>"		
+			  					."<td align='center' >".$data['flag']."</td>"				  					
+			  					."</tr>";  
+			  			$i++;
+		  		}//foreach 
+		  		echo "</tbody>
+	  		<tfooter></tfooter>
+	  		</table>";
+  	}else{		
+  			echo "<p id='item_not_found' align='center'>Not found the data of Doc. No. that's particulars match with promotion or customers already get products.</p>";     	
+   	}
+     ?>

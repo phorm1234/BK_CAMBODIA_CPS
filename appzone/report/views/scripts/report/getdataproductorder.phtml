@@ -1,0 +1,35 @@
+<?php
+$arr_data=$this->arr_data;
+$page=$this->page;
+$total=count($arr_data);
+if(empty($arr_data)){
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+}else{
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+	$i=1;
+	foreach($arr_data as $val){
+		$fix=number_format($val['quantity_normal'], 0, '.', ',');
+		$onhand=number_format($val['onhand'], 0, '.', ',');
+		$price=number_format($val['price'], 2, '.', ',');
+		$qty=number_format($val['quantity'], 0, '.', ',');
+		$amount=number_format($val['amount'], 2, '.', ',');
+		if($val['refer_doc_no']!=""){
+			$transit="-";
+		}else{
+			$transit=number_format($val['transit'], 0, '.', ',');
+		}
+		$data['rows'][] = array(
+			'id' => $val['seq'],
+			'cell' => array($i,$val['product_id'], $val['name_product'], $fix, $onhand, $transit, $price, $qty, $amount)
+		);
+		$i++;
+	}
+}
+echo json_encode($data);
+?>

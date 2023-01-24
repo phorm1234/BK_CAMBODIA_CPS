@@ -1,0 +1,514 @@
+<?php 
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->AddPage();
+$pdf->SetAutoPageBreak("off",1);
+
+$startY=2;
+$startX=0;//4
+$pdf->SetY($startY);
+$pdf->SetX($startX);	
+//--------------------------------------------------------------------
+/*$title0=iconv('UTF-8','cp874',"รายงานการสุ่มเช็ค Stock");
+$title1="O.P. NATURAL PRODUCTS CO.,LTD";
+$title2="89/1 Soi Ratchataphan,Rachaprarop";
+$title2_1="Rd. Makkasun Rachatevee Bangkok 10400.";
+$title4="TAX INVOICE / RECEIPT";
+$head_form="INVENTORY TAG FORM";
+$shop="7777";
+$day=date("d");
+$month=date("m");
+$year=date("Y");
+$date="$day/$month/$year";
+$start_date="01/$month/$year";
+$time=date("h:i:s");*/
+$line="----------------------------------------------------------------------------------------------------------------------------------------------";
+
+$line_1=iconv('UTF-8','cp874',"แบบฟอร์มสรุปผลการตรวจนับ STOCK สินค้า");
+$startY=$startY+1;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_1",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'C',0);
+
+$startY=$startY+2;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(3,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(25,1,"[    ] OP",0,0,'L',0);
+$pdf->Cell(25,1,"[    ] CPS",0,0,'L',0);
+$pdf->Cell(25,1,"[    ] GNC",0,0,'L',0);
+
+$line_4=iconv('UTF-8','cp874',"ประเภทการตรวจนับ");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_4",0,0,'L',0);
+
+$line_5_col_1=iconv('UTF-8','cp874',"100% ตามรอบปกติ");
+$line_5_col_2=iconv('UTF-8','cp874',"100% โอนย้าย/ลาออก");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(3,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(30,1,"[    ] ".$line_5_col_1,0,0,'L',0);
+$pdf->Cell(30,1,"[    ] ".$line_5_col_2,0,0,'L',0);
+
+$line_6_col_1=iconv('UTF-8','cp874',"สุ่มตรวจนับ 1,2");
+$line_6_col_2=iconv('UTF-8','cp874',"100% ปิด Shop");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(3,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(30,1,"[    ] ".$line_6_col_1,0,0,'L',0);
+$pdf->Cell(30,1,"[    ] ".$line_6_col_2,0,0,'L',0);
+
+$line_7_col_1=iconv('UTF-8','cp874',"อื่นๆ..........................................................................................");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(3,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(30,1,"[    ] ".$line_7_col_1,0,0,'L',0);
+
+$line_8=iconv('UTF-8','cp874',"จุดขาย..................................................................................................");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_8",0,0,'L',0);
+
+$line_9=iconv('UTF-8','cp874',"รหัส...................................วันที่ตรวจนับ.............................................");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_9",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(49,0,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(12,0,"UNIT",0,0,'C',0);
+$pdf->Cell(12,0,"BAHT",0,0,'C',0);
+
+$line_12=iconv('UTF-8','cp874',"STOCK สินค้าคงเหลือจุดขาย ณ วันตรวจนับ");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(47,1,$line_12,0,0,'L',0);
+$pdf->Cell(12,1,"[        ]",0,0,'C',0);
+$pdf->Cell(12,1,"[             ]",0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(21,1,"Ref. Doc. No.",0,0,'L',0);
+$pdf->Cell(27,1," : ",0,0,'L',0);
+$pdf->Cell(9,1,"[",0,0,'L',0);
+$pdf->Cell(15,1,"]",0,0,'R',0);
+
+$line_16=iconv('UTF-8','cp874',"สรุปการตรวจนับสต๊อก : ");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_16",0,0,'L',0);
+
+$line_17=iconv('UTF-8','cp874',"สินค้าเกินจากตรวจเพื่อปรับเข้า STOCK");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(47,1,$line_17,0,0,'L',0);
+$pdf->Cell(12,1,"[        ]",0,0,'C',0);
+$pdf->Cell(12,1,"[             ]",0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(21,1,"Ref. Doc. No.",0,0,'L',0);
+$pdf->Cell(27,1," : ",0,0,'L',0);
+$pdf->Cell(9,1,"[",0,0,'L',0);
+$pdf->Cell(15,1,"]",0,0,'R',0);
+
+$line_19=iconv('UTF-8','cp874',"สินค้าแถมขาดจากการตรวจนับเพื่อปรับออก TO");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(47,1,$line_19,0,0,'L',0);
+$pdf->Cell(12,1,"[        ]",0,0,'C',0);
+$pdf->Cell(12,1,"[             ]",0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(21,1,"Ref. Doc. No.",0,0,'L',0);
+$pdf->Cell(27,1," : ",0,0,'L',0);
+$pdf->Cell(9,1,"[",0,0,'L',0);
+$pdf->Cell(15,1,"]",0,0,'R',0);
+
+$line_21=iconv('UTF-8','cp874',"สินค้าขาดจากการตรวจนับ เพื่อเปิดปิล Tester");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(47,1,$line_21,0,0,'L',0);
+$pdf->Cell(12,1,"[        ]",0,0,'C',0);
+$pdf->Cell(12,1,"[             ]",0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(21,1,"Ref. Doc. No.",0,0,'L',0);
+$pdf->Cell(27,1," : ",0,0,'L',0);
+$pdf->Cell(9,1,"[",0,0,'L',0);
+$pdf->Cell(15,1,"]",0,0,'R',0);
+
+$line_23=iconv('UTF-8','cp874',"สินค้าขาด");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(47,1,$line_23,0,0,'L',0);
+$pdf->Cell(12,1,"[        ]",0,0,'C',0);
+$pdf->Cell(12,1,"[             ]",0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(21,1,"Ref. Doc. No.",0,0,'L',0);
+$pdf->Cell(27,1," : ",0,0,'L',0);
+$pdf->Cell(9,1,"[",0,0,'L',0);
+$pdf->Cell(15,1,"]",0,0,'R',0);
+
+$line_25=iconv('UTF-8','cp874',"รวม");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(47,1,$line_25,0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(12,1,"[        ]",0,0,'C',0);
+$pdf->Cell(12,1,"[             ]",0,0,'C',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'C',0);
+
+$line_27=iconv('UTF-8','cp874',"หมายเหตุ");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(10,1,$line_27,0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(12,1,"....................................................................................................",0,0,'L',0);
+
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(10,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(12,1,"....................................................................................................",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(10,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(12,1,"....................................................................................................",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'C',0);
+
+$line_30=iconv('UTF-8','cp874',"เอกสาร..................................................................................................");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_30",0,0,'L',0);
+
+$line_31=iconv('UTF-8','cp874',"ประจำเดือน.................................ที่ยังไม่เรียบร้อย ให้นำมา CLEAR");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_31",0,0,'L',0);
+
+$line_32=iconv('UTF-8','cp874',"ถายใน...................................................................................................");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_32",0,0,'L',0);
+
+$line_33=iconv('UTF-8','cp874',"ผู้จัดการ้าน.............................................................................................");
+$startY=$startY+8;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_33",0,0,'L',0);
+
+$line_34=iconv('UTF-8','cp874',"ผู้ตรวจนับ...............................................................................................");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_34",0,0,'L',0);
+
+$line_35=iconv('UTF-8','cp874',"ผู้ช่วยผู้จัดการร้าน..................................................................................");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_35",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->Cell(51,0,$line,0,0,'C',0);
+
+$line_37=iconv('UTF-8','cp874',"การเคลียร์ผล ขาด/เกิน Stock กับแผนก AUDIT");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(48,1,"$line_37",0,0,'L',0);
+
+$line_38=iconv('UTF-8','cp874',"ยอดสรุป ณ จุดขาย ขาด/เกิน จำนวน......................บาท");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"1.",0,0,'L',0);
+$pdf->Cell(48,1,"$line_38",0,0,'L',0);
+
+$line_39=iconv('UTF-8','cp874',"ปรับปรุงตามเอกสาร/หลักฐานแนบ จำนวน......................บาท");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->Cell(48,1,"$line_39",0,0,'L',0);
+
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(10,1,"OPERATION : ",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(12,1,".....................................................................................................................",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(12,1,".....................................................................................................................",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(12,1,".....................................................................................................................",0,0,'L',0);
+
+$line_44=iconv('UTF-8','cp874',"ยอด STOCK ยกมาที่ทางบัญชีตรวจสอบ และ Confirm แล้ว");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"2.",0,0,'L',0);
+$pdf->Cell(48,1,"$line_44",0,0,'L',0);
+
+$line_45=iconv('UTF-8','cp874',"[    ] ถูกต้อง เป็นจำนวน.............................ชิ้น");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->Cell(48,1,"$line_45",0,0,'L',0);
+
+$line_46=iconv('UTF-8','cp874',"[    ] ไม่ถูกต้อง เนื่องจาก.....................................................................");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->Cell(48,1,"$line_46",0,0,'L',0);
+
+$line_47=iconv('UTF-8','cp874',"สรุปผลเช็ค STOCK สุทธิ [    ] ขาด  [    ] เกิน จำนวน..................บาท");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(48,1,"$line_47",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(10,1,"OPERATION : ",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(12,1,".....................................................................................................................",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(12,1,".....................................................................................................................",0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(12,1,".....................................................................................................................",0,0,'L',0);
+
+$startY=$startY+7;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(60,1,"APPROVED BY......................................................",0,0,'C',0);
+$pdf->SetFont('CordiaNew','',10);
+
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(60,1,"INTERNAL AUDIT",0,0,'C',0);
+$pdf->SetFont('CordiaNew','',10);
+
+$line_end=iconv('UTF-8','cp874',"ลงชื่อ....................................................................");
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(60,1,$line_end,0,0,'C',0);
+$pdf->SetFont('CordiaNew','',8);
+
+$startY=$startY+4;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,1,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',10);
+$pdf->Cell(60,1,"ROM/ROC",0,0,'C',0);
+$pdf->SetFont('CordiaNew','',10);
+
+$name='print.pdf';
+$output=REPORT_PATH.$name;
+$output="/var/www/pos/htdocs/stock/report/".$name;
+@chmod(REPORT_PATH,0777);
+$pdf->Output($output,'F');
+echo shell_exec("lp -o media=Letter $output");
+if(@file_exists($output)){
+	echo shell_exec("rm $output");
+} 
+
+//$pdf->Output();
+

@@ -1,0 +1,41 @@
+<?php 
+$date=$this->date;
+$data=$this->data;
+$chk_quota=$this->checkquota;
+$count_quota=count($chk_quota);
+$chk_type=$this->chk_type;
+$product_lock=$this->product_lock;
+$count=count($data);
+$count2=count($product_lock);
+
+if($chk_type=="y"){
+	if($data=="t"){
+		$get_data="t";
+	}else{
+		if($count>0){
+			$get_data="y";
+		}else{
+			$get_data="n";
+		}
+	}
+}else{
+	if($count_quota>0){
+		if($count2>0){
+			if($date>=$product_lock[0]['start_date'] and $date<=$product_lock[0]['end_date']){
+				$get_data="w";
+			}else{
+				$get_data="y";
+			}
+		}else{
+			if($count>0){
+				$get_data="y";
+			}else{
+				$get_data="n";
+			}
+		}
+	}else{
+		$get_data="q";
+	}
+}
+echo $get_data;
+?>

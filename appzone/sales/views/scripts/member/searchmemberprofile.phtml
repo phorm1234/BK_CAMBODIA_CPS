@@ -1,0 +1,67 @@
+<style type="text/css">
+	a.hl_sel{
+		color:#0000ff;
+	}
+	a.hl_sel2{
+		color:#333333;
+	}
+</style>
+<table width="100%" border="0"  cellpadding="3" cellspacing="1" bgcolor="#cccccc">
+<tr bgcolor="#80A29E">	
+		<td align="center" width="10%"><span style="font-size:24px;color:#FFFFFF;">รหัส</span></td>
+		<td align="center" width="10%"><span style="font-size:24px;color:#FFFFFF;">ชื่อ-นามสกุล</span></td>
+		<td align="center" width="10%"><span style="font-size:24px;color:#FFFFFF;">เบอร์โทรศัพท์</span></td>
+		<td align="center" width="10%"><span style="font-size:24px;color:#FFFFFF;">วันเกิด</span></td>	
+		<td align="center" width="10%"><span style="font-size:24px;color:#FFFFFF;">วันสมัคร</span></td>
+		<td align="center" width="10%"><span style="font-size:24px;color:#FFFFFF;">วันหมดอายุ</span></td>		
+	</tr>
+	<?php	
+		if(!empty($this->arr_json)){		
+		$i=0;	
+		foreach($this->arr_json as $data){
+			$fullname=$data['name']."&nbsp;".$data['surname'];	
+			$arr_birthday=explode("-",$data['birthday']);
+			$birthday=$arr_birthday[2]."/".$arr_birthday[1]."/".$arr_birthday[0];			
+			$arr_expire_date=explode("-",$data['expire_date']);
+			$shw_expire_date=$arr_expire_date[2]."/".$arr_expire_date[1]."/".$arr_expire_date[0];			
+			$arr_apply_date=explode("-",$data['apply_date']);
+			$shw_apply_date=$arr_apply_date[2]."/".$arr_apply_date[1]."/".$arr_apply_date[0];			
+			$show_info=$data['address']." ".$data['sub_district']." ".$data['district']." ".$data['province_name']." ".$data['zip'];
+			$rows_json=json_encode($data, JSON_HEX_QUOT | JSON_HEX_APOS);			
+			($i%2==0)?$bg_color="#f2f2f2":$bg_color="#e7e7e7";
+			?>
+				<tr bgcolor="<?php echo $bg_color;?>">	
+					<?php
+						if($data['expire_status']!='2' && $data['err_status']!='Y'){
+					?>
+					<td align="center"><a href="#" id="<?php echo $data['member_no'];?>" class="sch_member hl_sel"><?php echo $data['member_no'];?></a></td>
+					<?php 
+						}else{
+					?>
+					<td align="center"><a href="#" id="<?php echo $data['member_no'];?>" class="sch_member hl_sel2"><?php echo $data['member_no'];?></a></td>
+					<?php 
+						}
+					?>
+					<td align="center"><?php echo $fullname;?></td>
+					<td align="center"><?php echo $data['mobile_no'];?></td>					
+					<td align="center"><?php echo $birthday;?></td>					
+					<td align="center"><?php echo $shw_apply_date;?></td>					
+					<?php 
+						if($data['expire_status']!='2' && $data['err_status']!='Y'){
+					?>
+					<td align="center"><?php echo $shw_expire_date;?></td>
+					<?php 
+						}else{
+					?>
+					<td align="center"><font color="#FF0000"><?php echo $shw_expire_date;?></font></td>
+					<?php 
+						}
+					?>					
+				</tr>
+			<?php 
+			$i++;
+		} 
+		
+		}//end if
+	?>
+</table>

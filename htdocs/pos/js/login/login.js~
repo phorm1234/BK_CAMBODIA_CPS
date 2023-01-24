@@ -1,0 +1,127 @@
+var clear_timer_keybarcode=null;
+//---------------------------------------------------------------------------------
+function stopTimerKeyBarcode(){
+    if(clear_timer_keybarcode){
+        clearTimeout(clear_timer_keybarcode);
+        clear_timer_keybarcode=null;
+    }
+}//func
+//---------------------------------------------------------------------------------
+function clsBarCode($obj){
+        $obj.val('');
+}//func
+//---------------------------------------------------------------------------------
+$(function(){
+    $('#user_id').keyup(function(e) {
+        if(e.keyCode == 13) {
+        	$('#password').focus();
+        }
+     });
+    check_key_login();
+});
+//---------------------------------------------------------------------------------
+function killall(){
+		jConfirm('ท่านต้องการ ออกจากระบบ POS.ใช่หรือไม่?','ข้อความยืนยัน', function(r){
+		        if(r){
+		        	//window.opener='x';
+		        	window.close();
+		        	//$.get("/pos/login/killall",{ran:Math.random()},function(){});
+		        }else{
+		        	return false;
+		        }
+		});
+}
+//---------------------------------------------------------------------------------
+function check_key_login(){
+	$('#user_id').focus();
+	$.get("/pos/login/checkkeylogin",{
+		ran:Math.random()
+		},function(data){ 
+			if(data!=""){
+				//$("#checkkeylogin").html(data);
+				$("#user_id").keypress( function(evt) {
+					    var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode;
+					    var objBarcode=$(this);
+					    if(key == 13){
+					        if($(this).val().length != 0){
+					            return false;
+					        }
+					        stopTimerKeyBarcode();
+					        $('#password').focus();
+					        return false;
+					    }else{
+					        stopTimerKeyBarcode();
+				            clear_timer_keybarcode=setTimeout(function(){clsBarCode(objBarcode)},100);
+					    }
+					});
+			}else{
+				$("#user_id").val("");
+			}
+			
+	});
+}
+//---------------------------------------------------------------------------------
+function checkversion(){
+		$.get("/pos/login/checkversion",{
+			ran:Math.random()
+			},function(data){ 
+				//alert(data);
+				if(data=='Y'){
+					jConfirm('Version ระบบ ไม่ตรงกับ Server ท่านต้องการ Update เดี๋ยวนี้ใช่หรือไม่?','ข้อความยืนยัน', function(r){
+					        if(r){
+					        	updateversionpos();
+					        }else{
+					        	checkLogin();
+					        }
+					});//jconfirm
+				}else{
+					checkLogin();
+				}
+		});
+}
+//---------------------------------------------------------------------------------
+function checkLogin(){
+	if($("#user_id").val()=="") {
+		alert("กรุณาระบุ หรัสพนักงาน");
+		return false;
+	}else if($("#password").val()=="") {
+		alert("กรุณาระบุ  รหัสผ่าน  ");
+		return false;
+	}else{
+		$.get("/pos/login/checklogin",{
+			user_id:$("#user_id").val(),
+			password:$("#password").val(),
+			env_id:$("#env_id").val(),
+			ran:Math.random()
+			},function(data){
+					if(data == 1){
+						window.location='/pos/index/index';
+					}else{
+						//if(data=="test"){window.location='/pos/index/index';}
+						alert(data);
+						$("#user_id").val("");
+						$("#password").val("");
+						return false;
+					}
+					
+					
+		});
+	}
+}
+//---------------------------------------------------------------------------------
+function updateversionpos(){
+	var win = $.messager.progress({
+		title:'Please waiting',
+		msg:'Loading data...'
+	});
+	$.get("/pos/admin/updateversionpos",{ 
+		ran:Math.random()
+		},function(data){
+			if(data=='success'){
+				$.messager.progress('close');
+				alert('เรียบร้อยแล้วกรุณา Login ใหม่');
+			}
+	});
+	
+}
+//---------------------------------------------------------------------------------

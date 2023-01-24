@@ -1,0 +1,10 @@
+<?php 
+$status=$this->data;
+$ex=explode(":",$status);
+$ex=array(
+		'status'=>$ex[0],
+		'doc_no'=>$ex[1]
+		);
+$ex=json_encode($ex);
+echo $ex;
+?>

@@ -1,0 +1,48 @@
+<?php 
+$data=$this->data;
+?>
+<form name="frm_gp" id="frm_gp">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="30" width="30%" align="right" class="servBodL_right">รหัส Barcode : </td>
+    <td>
+    <?php 
+    if(!empty($data[0]['barcode'])){
+    	echo $data[0]['barcode'];
+    }else{
+    ?>
+    <input type="text" name="i_barcode" id="i_barcode" class="NFText" autocomplete="off">
+    <?php 
+    }
+    ?>
+    </td>
+  </tr>
+  <tr>
+    <td height="30" width="30%" align="right" class="servBodL_right">รายละเอียด : </td>
+    <td><textarea name="desc" id="desc" cols="35" rows="3" class="NFText"><?php if($data!="n"){echo $data[0]['description'];}?></textarea></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+		<div id="viewgp"></div>
+	</td>
+  </tr>
+  <tr>
+    <td height="30" width="30%" align="right" class="servBodL_right">%GP : </td>
+    <td><input type="text" name="gp" id="gp" class="NFText" value="<?php if($data!="n"){echo $data[0]['gp'];}?>" autocomplete="off"></td>
+  </tr>
+  <tr>
+    <td height="30" width="30%" align="right" class="servBodL_right">วันที่เริ่มต้น : </td>
+    <td><input type="text" name="start_date" id="start_date" value="<?php if($data!="n"){echo $data[0]['start_date'];}?>" class="NFText" autocomplete="off"></td>
+  </tr>
+  <tr>
+    <td height="30" width="30%" align="right" class="servBodL_right">วันที่สิ้นสุด : </td>
+    <td><input type="text" name="end_date" id="end_date" value="<?php if($data!="n"){echo $data[0]['end_date'];}?>" class="NFText" autocomplete="off"></td>
+  </tr>
+  <tr>
+    <td height="40"></td>
+    <td><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return save_form_gp();"><span class="ui-icon ui-icon-disk"></span>บันทึก </a></td>
+  </tr>
+</table>
+<input type="hidden" name="barcode" id="barcode" value="<?php if($data!="n"){echo $data[0]['barcode'];}?>"></input>
+<input type="hidden" name="status_edit" id="status_edit" value="<?php if($data!="n"){echo "y";}?>"></input>
+</form>

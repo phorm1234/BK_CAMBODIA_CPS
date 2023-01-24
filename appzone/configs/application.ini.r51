@@ -1,0 +1,112 @@
+[production]
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+includePaths.library = APPLICATION_PATH "/../../libraryzone/library.11.5"
+bootstrap.path = APPLICATION_PATH "/Bootstrap.php"
+bootstrap.class = "Bootstrap"
+appnamespace = "Application"
+
+resources.frontController.controllerDirectory = APPLICATION_PATH "/controllers"
+resources.frontController.params.displayExceptions = 0
+
+
+resources.multidb.db1.adapter = "pdo_mysql"
+resources.multidb.db1.host = "localhost"
+resources.multidb.db1.username = "root"
+resources.multidb.db1.password = "SSUP2007"
+resources.multidb.db1.dbname = "pos_ssup"
+resources.multidb.db1.charset = "tis620"
+resources.multidb.db1.isDefaultTableAdapter = true
+
+
+resources.multidb.db2.adapter = "pdo_mysql"
+resources.multidb.db2.host = "localhost"
+resources.multidb.db2.username = "root"
+resources.multidb.db2.password = "123456"
+resources.multidb.db2.dbname = "sealand"
+resources.multidb.db2.charset = "utf8"
+
+resources.layout.layoutPath = APPLICATION_PATH "/layouts"
+resources.view[] =
+email.TransportOptions.host     = "smtp.gmail.com"
+email.TransportOptions.auth     = "login"
+email.TransportOptions.username = "isarawong@gmail.com"
+email.TransportOptions.password = "volvo2011"
+email.TransportOptions.ssl      = "ssl"
+email.TransportOptions.port     = 465
+
+
+[staging : production]
+
+[testing : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+
+[development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+resources.frontController.params.displayExceptions = 1
+
+;WR06052011
+[brand]
+	common.params.brand = op
+	brand = op	
+
+[brand2]
+	common.params.brand = cps
+	brand = cps
+	
+[brand3]
+	common.params.brand = gnc
+	brand = gnc
+	
+[ssup]
+	common.params.org = ssup
+	
+
+[license]
+	common.params.license=Retails Soft
+
+[pos_startup]
+
+	system = "stand alone"
+	com_type = "server"
+	computer_no = "1"
+
+***  database POS system
+
+[db_normal]
+   db_master = "db_pos"
+   db_username = "system"
+   db_password = "012345"
+   db_location = "localhost"
+
+***  database Redemption Point 
+***  SMS Promotion
+***  Member Profile
+   
+[db_internet]
+   db_master = "db_pos"
+   db_username = "system"
+   db_password = "012345"
+   db_location = "localhost"
+
+[db_common]
+   db_master = "db_pos"
+   db_username = "system"
+   db_password = "012345"
+   db_location = "localhost"
+
+[db_receive]
+   db_master = "db_pos"
+   db_username = "system"
+   db_password = "012345"
+   db_location = "localhost"
+
+[db_transfer]
+   db_master = "db_pos"
+   db_username = "system"
+   db_password = "012345"
+   db_location = "localhost"
+
+

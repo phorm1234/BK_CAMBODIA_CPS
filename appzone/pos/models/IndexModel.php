@@ -1,0 +1,1214 @@
+<?php 
+class Model_IndexModel{
+	//--------------------------------------------------------
+function icondesktop(){
+	$session = new Zend_Session_Namespace('empprofile');
+	$empprofile=$session->empprofile;
+	$perm_id=$empprofile['perm_id'];
+	$corporation_id=$empprofile['corporation_id'];
+	$company_id=$empprofile['company_id'];
+	
+	$objConf=new Model_Mydbpos();
+	$sql=" SELECT * FROM com_menu WHERE type_menu='program' AND status_menu='1' ";
+	$res=$objConf->fetchAllrows($sql);
+	$arr=array();
+   	foreach($res as $data){
+   		$menu_id=$data['menu_id'];
+	   	$sql0=" 
+		SELECT * FROM com_permission_menu  
+		WHERE menu_id='$menu_id' 
+		AND perm_id='$perm_id'";	
+	   	$res0=$objConf->fetchAllrows($sql0);
+	   	$c=count($res0);
+		if($c>0){
+			$menu_picture=$data['menu_picture'];
+	 		if($menu_picture==""){
+	 			$menu_picture="/pos/images/ricons/Calendar.png";
+	 		}
+	   		$menu_exec=$data['menu_exec'];
+	 		if($menu_exec==""){
+	 			$menu_exec="#";
+	 		}
+	 		$type_open="true";
+	   		$menu_name=$data['menu_name'];
+			$menu_id=$data['menu_id'];
+			array_push($arr,array(
+			'menu_id'=>$menu_id,
+			'text'=>$menu_name,
+			'icon'=>$menu_picture,
+			'link'=>$menu_exec,
+			'isIframe'=>$type_open));
+		}
+   	}
+  return json_encode($arr);
+}
+
+//-------------------------------------------------------------------
+function onlinestatus(){
+	$objConf=new Model_Mydbpos();
+	$sql="SELECT * FROM `com_branch_computer` LIMIT 0 , 1";
+	$run=$objConf->fetchAllrows($sql);
+	foreach($run as $arrf){
+		return $arrf['online_status'];
+	}
+}
+
+//-------------------------------------------------------------------
+function childicon($menu_id){
+	if(!empty($menu_id)){
+	    $sql=" SELECT * FROM com_menu WHERE menu_ref='$menu_id'";
+		$objConf=new Model_Mydbpos();
+		return $objConf->fetchAllrows($sql);
+	}
+}
+//-------------------------------------------------------------------
+function getmaxidnew($company_id){
+	$objConf=new Model_Mydbpos();
+	$objConf->checkDbOnline('short_news','textconten');
+	
+	$today=date("Y-m-d H:i:s");
+	$sql="
+	SELECT MAX(id) AS max_id FROM textconten 
+	WHERE  '$today'  
+	BETWEEN  day_start  AND day_end  
+	AND brand='$company_id' ";
+	$run=$objConf->fetchAllrows($sql);
+	foreach($run as $arrf){
+		$max_id=$arrf['max_id'];
+	}
+	return $max_id; 
+}
+//-------------------------------------------------------------------
+function getshortnew($company_id){
+	$objConf=new Model_Mydbpos();
+	$objConf->checkDbOnline('short_news','textconten');
+	
+	$today=date("Y-m-d H:i:s");
+	$sql="
+	SELECT * FROM textconten 
+	WHERE  '$today'  
+	BETWEEN  day_start  AND day_end  
+	AND brand='$company_id' ORDER BY `textconten`.`id` DESC ";
+	$run=$objConf->fetchAllrows($sql);
+	
+	$list="";
+	foreach($run as $arrf){
+		$content=$arrf['content'];
+		$hconten=$arrf['hconten'];
+		$id=$arrf['id'];
+		
+		$list.="<li onmouseout=\"resume()\" onmouseover=\"pause()\" onclick=\"showNew('$content')\"><span class='author'></span>$hconten</li>";
+	}
+	return $list; 
+	
+}
+//-------------------------------------------------------------------
+function getShotNews($company_id){
+	$objConf=new Model_Mydbpos();
+	$objConf->checkDbOnline('center_new','textconten');
+
+	$today=date("Y-m-d H:i:s");
+	$sql="
+	SELECT * FROM textconten 
+	WHERE '$today' 
+	BETWEEN  day_start  AND day_end  AND brand='$company_id'";
+	$rs=$objConf->fetchAllrows($sql);
+
+	if(count($rs) > 0){
+		$objConf->checkDbOnline('short_news','textconten');
+
+		$del=" TRUNCATE `textconten`";
+		$objConf->deldata($del);
+		foreach($rs as $arr){
+			$hconten=$arr['hconten'];
+			$brand=$arr['brand'];
+			$content=$arr['content'];
+			$day_start=$arr['day_start'];
+			$day_end=$arr['day_end'];
+			$day_regist=$arr['day_regist'];
+			$day_update=$arr['day_update'];
+			$user_id=$arr['user_id'];
+			$user=$arr['user'];
+			$data=array(
+				"hconten"=>$hconten,
+				"content"=>$content,
+				"day_start"=>$day_start,
+				"day_end"=>$day_end,
+				"day_regist"=>$day_regist,
+				"day_update"=>$day_update,
+				"user_id"=>$user_id,
+				"user"=>$user,
+				"brand"=>$brand
+			);
+			$table="textconten";
+			$run=$objConf->insertdata($table,$data);
+		}
+	}
+}
+//-------------------------------------------------------------------
+function namemenu($menu_id){
+	if(!empty($menu_id)){
+	    $sql=" SELECT * FROM com_menu WHERE menu_id='$menu_id'";
+		$objConf=new Model_Mydbpos();
+		$res=$objConf->fetchAllrows($sql);
+		return $res[0]['menu_name'];
+	}
+}
+//-------------------------------------------------------------------
+function menu_exec($menu_id){
+	if(!empty($menu_id)){
+	    $sql=" SELECT menu_exec FROM com_menu WHERE menu_id='$menu_id'";
+		$objConf=new Model_Mydbpos();
+		$res=$objConf->fetchAllrows($sql);
+		return $res[0]['menu_exec'];
+	}
+}
+//-------------------------------------------------------------------
+function treemenuref($menu_id){
+	$sql=" SELECT * FROM com_menu WHERE menu_ref='$menu_id' ORDER BY `menu_seq` ASC ";
+	$objConf=new Model_Mydbpos();
+	$res=$objConf->fetchAllrows($sql);
+    $rows=array();
+	foreach($res as $data){
+		$menu_id=$data['menu_id'];
+		$menu_name=$data['menu_name'];
+		$menu_exec=$data['menu_exec'];
+		$countchild=$this->checkHavechildNode($menu_id);   
+		if($countchild > 0){
+			//closed
+			$arr=$this->childNode($menu_id);
+			array_push($rows,array("id"=>$menu_exec,"text"=>$menu_name,"state"=>"open","children" =>$arr));
+		}else{
+			array_push($rows,array('id'=>$menu_exec,'text'=>$menu_name));
+		}
+	}
+   return json_encode($rows);
+}//
+
+//-------------------------------------------------------------------	
+function com_branch_os(){
+	$objConf=new Model_Mydbpos();
+	$objConf->checkDbOnline('sent','com_branch_os');
+	$data=$_SERVER;
+	echo "<pre>";
+	print_r($_SERVER);
+	echo "</pre>";
+	
+	///*
+	$table='com_branch_os';
+	$objConf->insertdata($table,$data);
+	$computer_ip=$_SERVER['HTTP_HOST']; 
+	$where="computer_ip='$computer_ip'";
+	$objConf->updatedata($table,$data,$where);
+	$os=php_uname('s');
+	$data = array(
+		'os' =>$os,
+		'upd_date'=>date('Y-m-d'),
+		'upd_time'=>date('H:i:s'),
+		'upd_user'=>'005949'
+	);
+	$objConf->updatedata($table,$data,$where);
+	//*/
+
+}	
+//----------------------------------------------------------------------------------------	
+
+function childNode($menu_id){
+	$objConf=new Model_Mydbpos();
+	$arr=array();
+	if(!empty($menu_id)){
+		$sql=" SELECT * FROM com_menu WHERE menu_ref='$menu_id' ORDER BY `menu_seq` ASC ";
+		$objConf=new Model_Mydbpos();
+		$res=$objConf->fetchAllrows($sql);
+	    foreach($res as $data){
+	    	$menu_id=$data['menu_id'];
+	    	$menu_name=$data['menu_name'];
+	    	$menu_exec=$data['menu_exec'];
+			$countchild=$this->checkHavechildNode($menu_id);      
+			if($countchild > 0){
+				array_push($arr,array("id"=>$menu_exec,"text"=>$menu_name,"state"=>"closed","children" =>$this->childNode($menu_id)));
+			}else{
+		    	array_push($arr,array('id'=>$menu_exec,'text'=>$menu_name));
+			}
+	    }
+	}
+   return $arr;
+}
+//-------------------------------------------------------------------
+function checkHavechildNode($menu_id){
+	if(!empty($menu_id)){
+	    $sql=" SELECT * FROM com_menu WHERE menu_ref='$menu_id'";
+		$objConf=new Model_Mydbpos();
+		$res=$objConf->fetchAllrows($sql);
+	  	$c = count($res);
+	   	if($c < 1)return 0;
+	   	return $c;
+	}
+}
+//-------------------------------------------------------------------
+function gadgetstime(){
+	return "
+		<ul id='analog-clock' class='analog'>
+		  <li class='hour'></li>
+		  <li class='min'></li>
+		  <li class='sec'></li>
+		  <li class='meridiem'></li>
+		</ul>
+		<div  class='jclock'></div>
+	";
+}
+//-------------------------------------------------------------------
+function sentdatatooffice(){
+	error_reporting(E_ALL);
+	ini_set('display_errors', '1');
+	ini_set('display_errors','On');
+	set_time_limit(0);
+	header("Content-type:text/html; charset=utf-8");  
+	//--------------------------------------------------------------------------------------------
+	$session = new Zend_Session_Namespace('empprofile');
+	$empprofile=$session->empprofile;
+	$SHOP=$empprofile['branch_id'];
+	$BRAND=$empprofile['company_id'];
+	
+	//echo "เรียบร้อยแล้ว";
+	//exit();
+	
+	$server="10.100.53.2";
+	$user_name="trn_to_office";
+	$password="trn_to_office";
+	$dbshop_dest="transfer_to_office";
+	$connect_sever= @mysql_connect($server,$user_name,$password);
+	if(!$connect_sever){
+		echo"ไม่สามารถติดต่อ Server ได้ ";
+		exit();
+	}
+	mysql_close($connect_sever);
+	//--------------------------------------------------------------------------------------------
+	$connect_soure = mysql_connect("localhost","pos-ssup",'P0z-$$up');   
+	mysql_query("SET NAMES UTF8");
+	$pos_ssup="pos_ssup";
+	$db="transfer_to_office";
+	mysql_select_db($pos_ssup, $connect_soure);
+	mysql_select_db($db,$connect_soure);
+	
+	$foder="$SHOP";
+	$path="/var/www/pos/htdocs/transfer_to_office/$foder";
+	if(is_dir($path)){
+			$this->full_rmdir($path);
+	}
+	//--------------------------------------------------------------------------------------------
+	$sql="SELECT * FROM `conf_map_table` WHERE 	sql_query='manual' ";	  
+	$result=mysql_query($sql,$connect_soure);
+	$rows=mysql_num_rows($result);
+	while($arr=mysql_fetch_array($result)){
+				$table_to_dbf=$arr['table_to_dbf'];
+				$table_to_dbf=strtoupper($table_to_dbf);
+				if($table_to_dbf=="PRODUCT2"){
+					$sql_t=" TRUNCATE TABLE PRODUCT2_TMP ";
+					$run=mysql_query($sql_t,$connect_soure);
+				}
+				$sql_t=" TRUNCATE TABLE $table_to_dbf ";
+				$run=mysql_query($sql_t,$connect_soure);
+				if($run>0){
+					$this->transfer_to_office_manual($table_to_dbf,$path);
+				}
+	}
+	//--------------------------------------------------------------------------------------------
+	$n=date('n');
+	$y=date('Y');
+	$table_to_dbf="com_stock_master";
+	$sql_t="TRUNCATE TABLE transfer_to_office.`com_stock_master` ";
+	$run=mysql_query($sql_t,$connect_soure);
+	
+	$sql_0="
+	INSERT INTO transfer_to_office.`com_stock_master`(`id`, `corporation_id`, `company_id`, `branch_id`, `branch_no`, `product_id`, `month`, `year`, `product_status`, `begin`, `onhand`, `allocate`, `reg_date`, `reg_time`, `reg_user`, `upd_date`, `upd_time`, `upd_user`)
+	SELECT *
+	FROM pos_ssup.`com_stock_master`
+	WHERE 
+	pos_ssup.`com_stock_master`.month='$n'
+	AND pos_ssup.`com_stock_master`.year='$y'";
+	$this->run_sql($table_to_dbf,$sql_0,$path);
+	mysql_close($connect_soure);
+	//--------------------------------------------------------------------------------------------
+	$localhost="localhost";
+	$password='P0z-$$up';
+	$user_name="pos-ssup";
+	$pos_ssup="pos_ssup";
+	//--------------------------------------------------------------------------------------------
+	$localhost = mysql_connect("localhost","$user_name",'P0z-$$up');   
+	mysql_query("SET NAMES UTF8");
+	mysql_select_db($pos_ssup, $localhost);
+	//--------------------------------------------------------------------------------------------
+	$upate="UPDATE `com_doc_date` SET `reg_user` = '$SHOP' WHERE 1";
+	mysql_query($upate,$localhost);
+	//--------------------------------------------------------------------------------------------
+	$command = "mysqldump -u$user_name -p'$password' --no-create-db --no-create-info --replace  pos_ssup com_doc_date > $path/com_doc_date.sql";
+	system($command);
+	//--------------------------------------------------------------------------------------------
+	$command = "mysqldump -u$user_name -p'$password' --no-create-db --no-create-info --replace  pos_ssup com_dayend_time > $path/com_dayend_time.sql";
+	system($command);
+	mysql_close($localhost);
+	//--------------------------------------------------------------------------------------------
+	$server="10.100.53.2";
+	$user_name="trn_to_office";
+	$password="trn_to_office";
+	$connect_server= mysql_connect($server,$user_name,$password);
+	if($connect_server){
+		$command = "mysql -h$server -u$user_name -p$password  transfer_to_office <  $path/com_doc_date.sql";
+		system($command);
+		
+		$command = "mysql -h$server -u$user_name -p$password  transfer_to_office <  $path/com_dayend_time.sql";
+		system($command);
+	}
+	mysql_close($connect_server);
+	//--------------------------------------------------------------------------------------------
+	$this->gen_dbf($SHOP,$BRAND);
+}
+//--------------------------------------------------------------------------------------------
+function gen_dbf($SHOP,$BRAND){	
+
+	$BRAND=urlencode($BRAND);
+	$SHOP=urlencode($SHOP);
+	
+	$url="http://10.100.53.2/ims/transfer_to_office/mysql_to_dbf.php?BRAND=$BRAND&SHOP=$SHOP";
+	$fp = fopen($url, "r");
+	$text=fgetss($fp, 4096);
+	echo $text;
+}	
+//--------------------------------------------------------------------------------------------
+function full_rmdir($dirname){
+        if ($dirHandle = opendir($dirname)){
+            $old_cwd = getcwd();
+            chdir($dirname);
+
+            while ($file = readdir($dirHandle)){
+                if ($file == '.' || $file == '..') continue;
+
+                if (is_dir($file)){
+                    if (!full_rmdir($file)) return false;
+                }else{
+                    if (!unlink($file)) return false;
+                }
+            }
+
+            closedir($dirHandle);
+            chdir($old_cwd);
+            if (!rmdir($dirname)) return false;
+
+            return true;
+        }else{
+            return false;
+        }
+ }
+//--------------------------------------------------------------------------------------------
+function transfer_to_office_manual($table_to_dbf,$path){
+	
+	$connect_soure = mysql_connect("localhost","pos-ssup",'P0z-$$up');   
+	mysql_query("SET NAMES UTF8");
+	$pos_ssup="pos_ssup";
+	
+	$sql00="SELECT * FROM  pos_ssup.com_doc_date WHERE 	1 ";	  
+	$result00=mysql_query($sql00,$connect_soure);
+	$arr00=mysql_fetch_array($result00);
+	$doc_date=$arr00['doc_date'];
+	
+	switch ($table_to_dbf) {
+			case "CHG_CARD":
+					$insert="
+					INSERT INTO `transfer_to_office`.`CHG_CARD` ( `BRAND`, `SHOP`, `FLAG`, `DOC_DT`, `OLD_MEM`, `NEW_MEM`, `NAME`, `STATUS_CREATE`, `DATE_CREATE`, `TIME_CREATE`)
+					SELECT     
+					pos_ssup. trn_diary1.company_id,
+					pos_ssup. trn_diary1.branch_id,
+					pos_ssup. trn_diary1.flag,
+					pos_ssup. trn_diary1.doc_date,
+					pos_ssup. trn_diary1.member_id,
+					pos_ssup. trn_diary1.refer_member_id,
+					pos_ssup. trn_diary1.name,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary1
+					WHERE      
+					pos_ssup.trn_diary1.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "DATAEXPN":
+					$insert="
+				INSERT INTO transfer_to_office.`DATAEXPN` (`BRAND` , `SHOP` , `EMP_ID` , `DOC_DT` , `EDIT_DT` , `EXPN_DT` , `SEQ` , `ACC_CODE` ,`AMOUNT` , `REMARK` , `STATUS_CREATE` , `DATE_CREATE` , `TIME_CREATE` )
+					SELECT     
+					pos_ssup.com_expense_head.company_id,
+					pos_ssup.com_expense_head.branch_id,
+					pos_ssup.com_expense_head.employee_id,
+					pos_ssup.com_expense_list.doc_dt,
+					pos_ssup.com_expense_list.edit_dt,
+					pos_ssup.com_expense_list.expense_dt,
+					pos_ssup.com_expense_list.id,
+					pos_ssup.com_expense_list.account_code,
+					pos_ssup.com_expense_list.amount,
+					pos_ssup.com_expense_list.remark,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.com_expense_head
+					LEFT JOIN   pos_ssup.com_expense_list
+					ON pos_ssup.com_expense_head.corporation_id = pos_ssup.com_expense_list.corporation_id
+					AND   pos_ssup.com_expense_head.company_id = pos_ssup.com_expense_list.company_id
+					AND   pos_ssup.com_expense_head.branch_id = pos_ssup.com_expense_list.branch_id
+					AND   pos_ssup.com_expense_head.doc_dt = pos_ssup.com_expense_list.doc_dt
+					WHERE      
+					pos_ssup.com_expense_head.doc_dt BETWEEN date_add('$doc_date',interval -75 day)  AND date_add('$doc_date',interval -1 day)
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "DIARY1":
+					$insert="
+					INSERT INTO `transfer_to_office`.`DIARY1` ( `DOC_NO`, `DOC_DT`, `DOC_TP`, `FLAG`, `BRAND`, `SHOP`,  `MEMBER`, `CO_PROMO`, `REF_NO`, `QUANTITY`, `AMOUNT`, `DISCOUNT`, `COUPON`, `NET_AMT`, `VAT`, `CASH`, `CHANGE`, `PAID`, `EMP_ID`, `PRINT`, `TIME`, `MACHINE`, `NEW_MEMBER`,  `CN_STATUS`, `USE_STAMP`,  `STATUS`, `STATUS_CREATE`, `DATE_CREATE`, `TIME_CREATE`)
+					SELECT     
+					pos_ssup.trn_diary1.doc_no,
+					pos_ssup.trn_diary1.doc_date,
+					pos_ssup.trn_diary1.doc_tp,
+					pos_ssup.trn_diary1.`flag`,
+					pos_ssup.trn_diary1.company_id,
+					pos_ssup.trn_diary1.branch_id,
+					pos_ssup.trn_diary1.member_id,
+					pos_ssup.trn_diary1.application_id,
+					if(pos_ssup.trn_diary1.refer_doc_no='',pos_ssup.trn_diary1.refer_member_id,pos_ssup.trn_diary1.refer_doc_no),
+					pos_ssup.trn_diary1.quantity,
+					pos_ssup.trn_diary1.amount,
+					if(pos_ssup.trn_diary1.status_no='02',pos_ssup.trn_diary1.discount,''),
+					if(pos_ssup.trn_diary1.status_no='03',pos_ssup.trn_diary1.special_discount,if(pos_ssup.trn_diary1.status_no='04',pos_ssup.trn_diary1.special_discount,'')),
+					pos_ssup.trn_diary1.net_amt,
+					pos_ssup.trn_diary1.vat,
+					pos_ssup.trn_diary1.pay_cash,
+					pos_ssup.trn_diary1.`change`,
+					pos_ssup.trn_diary1.paid,
+					pos_ssup.trn_diary1.saleman_id,
+					pos_ssup.trn_diary1.print_no,
+					pos_ssup.trn_diary1.`doc_time`,
+					pos_ssup.trn_diary1.pos_id,
+					if(pos_ssup.trn_diary1.status_no='01','T',''),
+					pos_ssup.trn_diary1.cn_status,
+					pos_ssup.trn_diary1.total_point,
+					pos_ssup.trn_diary1.status_no,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary1
+					WHERE      
+					pos_ssup.trn_diary1.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+			case "DIARY2":
+					$insert="
+					INSERT INTO transfer_to_office.`DIARY2` (
+					`DOC_NO`,`DOC_DT`,`DOC_TP`,`FLAG`,`BRAND`,`SHOP`,`SEQ`,`PROMO_CODE`,`PRODUCT`,`PRICE`,`QUANTITY`,`AMOUNT`,`MEMBER_CRD`,`DIS_CARD`,`DISCOUNT`,`NET_AMT`,`NO_VAT`,`EXCLUDE`,`GP`,`LOT_NO`,`LOT_EXPIRE`,`STATUS`,`STATUS_CREATE` , `DATE_CREATE` , `TIME_CREATE`  )
+					SELECT     
+					pos_ssup.trn_diary2.doc_no,
+					pos_ssup.trn_diary2.doc_date,
+					pos_ssup.trn_diary2.doc_tp,
+					pos_ssup.trn_diary2.`flag`,
+					pos_ssup.trn_diary2.company_id,
+					pos_ssup.trn_diary2.branch_id,
+					pos_ssup.trn_diary2.`seq`,
+					pos_ssup.trn_diary2.promo_code,
+					pos_ssup.trn_diary2.product_id,
+					pos_ssup.trn_diary2.price,
+					pos_ssup.trn_diary2.quantity,
+					pos_ssup.trn_diary2.amount,
+					pos_ssup.trn_diary1.member_percent,
+					pos_ssup.trn_diary2.member_discount1,
+					if(pos_ssup.trn_diary2.status_no='03',pos_ssup.trn_diary2.special_discount,''),
+					pos_ssup.trn_diary2.net_amt,
+					if(pos_ssup.trn_diary2.tax_type='N','T',if(pos_ssup.trn_diary2.tax_type='V','F','')),
+					if(pos_ssup.trn_diary2.discount_member='N','T',if(pos_ssup.trn_diary2.discount_member='V','F','')),
+					pos_ssup.trn_diary2.gp,
+					pos_ssup.trn_diary2.lot_no,
+					pos_ssup.trn_diary2.lot_expire,
+					pos_ssup.trn_diary2.status_no,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary2
+					LEFT JOIN   pos_ssup.trn_diary1
+					ON pos_ssup.trn_diary2.doc_no = pos_ssup.trn_diary1.doc_no
+					AND   pos_ssup.trn_diary2.company_id = pos_ssup.trn_diary1.company_id
+					AND   pos_ssup.trn_diary2.branch_id = pos_ssup.trn_diary1.branch_id
+					WHERE      
+					pos_ssup.trn_diary2.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "DIARY3":
+					$insert="
+					INSERT INTO `transfer_to_office`.`DIARY3` ( `DOC_NO`, `DOC_DT`, `FLAG`, `BRAND`, `SHOP`, `NAME`, `ADDRESS`, `CREDIT`, `SLIP`, `REMARK`, `STATUS_CREATE`, `DATE_CREATE`, `TIME_CREATE`)
+					SELECT     
+					pos_ssup.trn_diary1.doc_no,
+					pos_ssup.trn_diary1.doc_date,
+					pos_ssup.trn_diary1.`flag`,
+					pos_ssup.trn_diary1.company_id,
+					pos_ssup.trn_diary1.branch_id,
+					pos_ssup.trn_diary1.name,
+					CONCAT( pos_ssup.trn_diary1.`address1` , pos_ssup.trn_diary1.`address2` , pos_ssup.trn_diary1.`address3` ),
+					pos_ssup.trn_diary1.credit_no,
+					pos_ssup.trn_diary1.paid,
+					pos_ssup.trn_diary1.doc_remark,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary1
+					WHERE      
+					pos_ssup.trn_diary1.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "DIARY4":
+					$insert="
+					INSERT INTO `transfer_to_office`.`DIARY4` (`DOC_NO`, `DOC_DT`, `FLAG`, `BRAND`, `SHOP`, `SEQ`, `COUPON`, `QUANTITY`, `AMOUNT`, `STATUS_CREATE`, `DATE_CREATE`, `TIME_CREATE`) 
+					SELECT     
+					pos_ssup.trn_diary1.doc_no,
+					pos_ssup.trn_diary1.doc_date,
+					pos_ssup.trn_diary1.`flag`,
+					pos_ssup.trn_diary1.company_id,
+					pos_ssup.trn_diary1.branch_id,
+					pos_ssup.trn_diary1.id,
+					pos_ssup.trn_diary1.coupon_code,
+					pos_ssup.trn_diary1.quantity,
+					pos_ssup.trn_diary1.coupon_discount,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary1
+					WHERE      
+					pos_ssup.trn_diary1.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "DIARY5":
+					$insert="
+					INSERT INTO `transfer_to_office`.`DIARY5` ( `DOC_NO`, `DOC_DT`, `FLAG`, `BRAND`, `SHOP`, `MEMBER`, `SEQ`,  `QUANTITY`, `BAHT`, `POINT1`, `POINT2`,`STATUS`, `STATUS_CREATE`, `DATE_CREATE`, `TIME_CREATE`) 
+					SELECT     
+					pos_ssup.trn_diary1.doc_no,
+					pos_ssup.trn_diary1.doc_date,
+					pos_ssup.trn_diary1.`flag`,
+					pos_ssup.trn_diary1.company_id,
+					pos_ssup.trn_diary1.branch_id,
+					pos_ssup.trn_diary1.member_id,
+					pos_ssup.trn_diary1.id,
+					pos_ssup.trn_diary1.quantity,
+					pos_ssup.trn_diary1.amount,
+					pos_ssup.trn_diary1.point1,
+					pos_ssup.trn_diary1.point2,
+					pos_ssup.trn_diary1.status_no,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary1
+					WHERE      
+					pos_ssup.trn_diary1.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					AND (pos_ssup.trn_diary1.point1> 0 OR pos_ssup.trn_diary1.point2>0)
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "IQDIARY2":
+					$insert="
+					INSERT INTO `IQDIARY2` (`DOC_NO` , `DOC_DT` , `DOC_TP` , `FLAG` , `BRAND` , `SHOP` ,  `SEQ` ,  `PRODUCT` ,  `PRICE` , `QUANTITY` , `AMOUNT` , `NET_AMT` , `STATUS` , `STATUS_CREATE` , `DATE_CREATE` , `TIME_CREATE` )
+					SELECT     
+					pos_ssup.trn_diary2_iq.doc_no,
+					pos_ssup.trn_diary2_iq.doc_date,
+					pos_ssup.trn_diary2_iq.doc_tp,
+					pos_ssup.trn_diary2_iq.`flag`,
+					pos_ssup.trn_diary2_iq.company_id,
+					pos_ssup.trn_diary2_iq.branch_id,
+					pos_ssup.trn_diary2_iq.`seq`,
+					pos_ssup.trn_diary2_iq.product_id,
+					pos_ssup.trn_diary2_iq.price,
+					pos_ssup.trn_diary2_iq.quantity,
+					pos_ssup.trn_diary2_iq.amount,
+					pos_ssup.trn_diary2_iq.net_amt,
+					pos_ssup.trn_diary2_iq.status_no,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary2_iq
+					WHERE      
+					pos_ssup.trn_diary2_iq.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "MEM_PT":
+					$insert="
+					INSERT DELAYED IGNORE INTO `MEM_PT` (`DOC_NO`, `DOC_DT`, `FLAG`, `MEMBER`, `POINT`, `AMOUNT`, `NET_AMT`, `STATUS`, `STATUS_CREATE`, `DATE_CREATE`, `TIME_CREATE`)  
+					SELECT     
+					pos_ssup.trn_diary1.doc_no,
+					pos_ssup.trn_diary1.doc_date,
+					pos_ssup.trn_diary1.`flag`,
+					pos_ssup.trn_diary1.member_id,
+					pos_ssup.trn_diary1.total_point,
+					pos_ssup.trn_diary1.`amount`,
+					pos_ssup.trn_diary1.net_amt,
+					pos_ssup.trn_diary1.status_no,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary1
+					WHERE
+					(pos_ssup.trn_diary1.`flag`<> 'C' OR pos_ssup.trn_diary1.`flag`<>'c')
+					AND pos_ssup.trn_diary1.total_point <> 0
+					AND pos_ssup.trn_diary1.member_id <> ''     
+					AND pos_ssup.trn_diary1.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "NEW_MEM":
+					$insert="
+					INSERT INTO transfer_to_office.`NEW_MEM` ( `BRAND` , `SHOP` , `MEMBER` ,  `TITLE` , `F_NAME` , `S_NAME` , `SEX` , `BIRTH` ,  `ADDRESS1` , `ADDRESS2` , `ADDRESS3` , `PROVINCE` , `POST` , `TELE` , `VALID_DT` , `EXPIRE_DT` ,  `APPLI_CODE`  , `STATUS_CREATE` , `DATE_CREATE` , `TIME_CREATE` )
+					SELECT     
+					pos_ssup.crm_card.company_id,
+					pos_ssup.crm_card.apply_shop,
+					pos_ssup.crm_card.member_no,
+					pos_ssup.crm_profile.title,
+					pos_ssup.crm_profile.name,
+					pos_ssup.crm_profile.surname,
+					pos_ssup.crm_profile.sex,
+					pos_ssup.crm_profile.birthday,
+					CONCAT( pos_ssup.crm_profile.`h_address` , pos_ssup.crm_profile.`h_soi` , pos_ssup.crm_profile.`h_road` ),
+					CONCAT( pos_ssup.crm_profile.`h_soi` , pos_ssup.crm_profile.`h_road` ),
+					CONCAT( pos_ssup.crm_profile.`h_district` , pos_ssup.crm_profile.`h_amphur`),
+					pos_ssup.crm_profile.h_province,
+					pos_ssup.crm_profile.h_postcode,
+					pos_ssup.crm_profile.mobile_no,
+					pos_ssup.crm_card.apply_date,
+					pos_ssup.crm_card.expire_date,
+					pos_ssup.crm_card.apply_promo,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.crm_card
+					LEFT JOIN   pos_ssup.crm_profile
+					ON  (pos_ssup.crm_card.customer_id = pos_ssup.crm_profile.customer_id) 
+					WHERE      
+					pos_ssup.crm_card.apply_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "ORDIARY2":
+					$insert="
+					INSERT INTO `ORDIARY2` ( `DOC_NO` , `DOC_DT` , `DOC_TP` , `FLAG` , `BRAND` , `SHOP` , `SEQ` ,  `PRODUCT` ,  `PRICE` , `QUANTITY` , `AMOUNT` ,`NET_AMT`	, `STATUS` , `STATUS_CREATE` , `DATE_CREATE` , `TIME_CREATE` )
+					SELECT     
+					pos_ssup.trn_diary2_or.doc_no,
+					pos_ssup.trn_diary2_or.doc_date,
+					pos_ssup.trn_diary2_or.doc_tp,
+					pos_ssup.trn_diary2_or.`flag`,
+					pos_ssup.trn_diary2_or.company_id,
+					pos_ssup.trn_diary2_or.branch_id,
+					pos_ssup.trn_diary2_or.`seq`,
+					pos_ssup.trn_diary2_or.product_id,
+					pos_ssup.trn_diary2_or.`price`,
+					pos_ssup.trn_diary2_or.`quantity`,
+					pos_ssup.trn_diary2_or.`amount`,
+					pos_ssup.trn_diary2_or.`net_amt`,
+					pos_ssup.trn_diary2_or.status_no,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary2_or
+					WHERE      
+					pos_ssup.trn_diary2_or.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+
+			case "RQDIARY2":
+					$insert="
+					INSERT DELAYED IGNORE INTO `RQDIARY2` (`DOC_NO`, `DOC_DT`, `DOC_TP`, `FLAG`, `BRAND`, `SHOP`,  `SEQ`,  `PRODUCT`,  `PRICE`, `QUANTITY`, `AMOUNT`, `NET_AMT`,  `STATUS`, `STATUS_CREATE`, `DATE_CREATE`, `TIME_CREATE`)  
+					SELECT     
+					pos_ssup.trn_diary2_rq.doc_no,
+					pos_ssup.trn_diary2_rq.doc_date,
+					pos_ssup.trn_diary2_rq.doc_tp,
+					pos_ssup.trn_diary2_rq.`flag`,
+					pos_ssup.trn_diary2_rq.company_id,
+					pos_ssup.trn_diary2_rq.branch_id,
+					pos_ssup.trn_diary2_rq.`seq`,
+					pos_ssup.trn_diary2_rq.product_id,
+					pos_ssup.trn_diary2_rq.`price`,
+					pos_ssup.trn_diary2_rq.`quantity`,
+					pos_ssup.trn_diary2_rq.`amount`,
+					pos_ssup.trn_diary2_rq.`net_amt`,
+					pos_ssup.trn_diary2_rq.status_no,
+					'',
+					CURDATE(),
+					CURTIME()
+					FROM  pos_ssup.trn_diary2_rq
+					WHERE      
+					pos_ssup.trn_diary2_rq.doc_date BETWEEN date_add('$doc_date',interval -15 day)  AND date_add('$doc_date',interval -1 day) 
+					";
+				$this->run_sql($table_to_dbf,$insert,$path);
+			break;
+			case "PRODUCT2":
+					$this->product($table_to_dbf,$path);
+			break;
+
+	}//end switch 
+}
+//--------------------------------------------------------------------------------------------
+function product($table_to_dbf,$path){
+		$y=date('Y');
+		$m=date('m');
+		$dateget="$y-$m-01";
+		
+		$connect_soure = mysql_connect("localhost","pos-ssup",'P0z-$$up');   
+		mysql_query("SET NAMES UTF8");
+		$pos_ssup="pos_ssup";
+		$db="transfer_to_office";
+	
+		mysql_select_db($pos_ssup, $connect_soure);
+		mysql_select_db($db, $connect_soure);
+	
+		$sql="SELECT MONTH(date_add('$dateget',interval -13 MONTH)) AS m,YEAR(date_add('$dateget',interval -13 MONTH)) AS y ";
+		$res=mysql_query($sql,$connect_soure);
+		$data_get=mysql_fetch_array($res);
+		$month_old=$data_get['m'];
+		$year_old=$data_get['y'];
+	
+		$Year=$year_old;
+		$Month=$month_old;
+		$end_loop=$month_old+13;
+		for($i=$month_old;$i<$end_loop;$i++){
+				if($Year==$y && $Month==$m){
+				$insert=$this->PRODUCT2_TMP($Year,$Month);
+				$this->run_sql($table_to_dbf,$insert,$path);
+				}else{
+					$insert=$this->PRODUCT2_TMP($Year,$Month);
+					$this->run_sql($table_to_dbf,$insert,$path);
+	
+					if($Month==12){
+						$Year++;
+						$Month=1;
+						$insert=$this->PRODUCT2_TMP($Year,$Month);
+						$this->run_sql($table_to_dbf,$insert,$path);
+					}
+				}
+			$Month++;
+		}
+		$this->PRODUCT2($table_to_dbf,$path);
+}
+
+function PRODUCT2($table_to_dbf,$path){
+	$insert="
+	INSERT INTO `PRODUCT2`(`BRAND`, `SHOP`, `PRODUCT`, `BALANCE`, `BG_01`, `BG_02`, `BG_03`, `BG_04`, `BG_05`, `BG_06`, `BG_07`, `BG_08`, `BG_09`, `BG_10`, `BG_11`, `BG_12`, `STATUS_CREATE`, `DATE_CREATE`, `TIME_CREATE`) 
+	SELECT `BRAND`, `SHOP`, `PRODUCT`, SUM(`BALANCE`), SUM(`BG_01`), SUM(`BG_02`),SUM(`BG_03`),SUM(`BG_04`),SUM(`BG_05`),SUM(`BG_06`),SUM(`BG_07`),SUM(`BG_08`),SUM(`BG_09`),SUM(`BG_10`),SUM(`BG_11`),SUM(`BG_12`),`STATUS_CREATE`,`DATE_CREATE`,`TIME_CREATE`
+	FROM PRODUCT2_TMP
+	GROUP BY `BRAND`,`SHOP`,`PRODUCT`";
+	  $this->run_sql($table_to_dbf,$insert,$path);
+}
+//--------------------------------------------------------------------------------------------
+function PRODUCT2_TMP($Year,$Month){
+		if($Month<10){
+			$BG="0$Month";
+		}else{
+			$BG=$Month;
+		}
+
+		$y=date('Y');
+		$m=date('m');
+
+		$BG="BG_$BG";
+
+		if($Year==$y && $Month==$m){
+				$sql="
+				INSERT INTO transfer_to_office.`PRODUCT2_TMP` (`BRAND` , `SHOP` , `PRODUCT` , `BALANCE` , `$BG` , `STATUS_CREATE` , `DATE_CREATE` , `TIME_CREATE` )
+				SELECT     
+				pos_ssup.com_stock_master.company_id,
+				pos_ssup.com_stock_master.branch_id,
+				pos_ssup.com_stock_master.product_id,
+				pos_ssup.com_stock_master.onhand,
+				pos_ssup.com_stock_master.`begin`,
+				'',
+				CURDATE(),
+				CURTIME()
+				FROM  pos_ssup.com_stock_master
+				WHERE  
+				com_stock_master.year='$Year'
+				AND  com_stock_master.month='$Month'
+				";	
+		}else{
+				$sql="
+				INSERT INTO transfer_to_office.`PRODUCT2_TMP` (`BRAND` , `SHOP` , `PRODUCT` ,  `$BG` , `STATUS_CREATE` , `DATE_CREATE` , `TIME_CREATE` )
+				SELECT     
+				pos_ssup.com_stock_master.company_id,
+				pos_ssup.com_stock_master.branch_id,
+				pos_ssup.com_stock_master.product_id,
+				pos_ssup.com_stock_master.`begin`,
+				'',
+				CURDATE(),
+				CURTIME()
+				FROM  pos_ssup.com_stock_master
+				WHERE  
+				com_stock_master.year='$Year'
+				AND  com_stock_master.month='$Month'
+				";	
+		}
+		return $sql;
+}
+//--------------------------------------------------------------------------------------------
+function run_sql($table_to_dbf,$insert,$path){
+			//echo "$insert<br><br>";
+			//return false;
+			$pos_ssup="pos_ssup";
+			$db="transfer_to_office";
+			$localhost = mysql_connect("localhost","pos-ssup",'P0z-$$up');   
+			mysql_query("SET NAMES UTF8");
+			mysql_select_db($pos_ssup, $localhost);
+			mysql_select_db($db, $localhost);
+			$run_insert=mysql_query($insert,$localhost);
+			if($run_insert>0){
+				$this->get_data($table_to_dbf,$path);
+			}
+}
+//--------------------------------------------------------------------------------------------
+function get_data($table_to_dbf,$path){
+		$localhost="localhost";
+		$user_name="pos-ssup";
+		$password='P0z-$$up';
+
+		if(!is_dir($path)){
+				system("mkdir -m 777 $path");
+		}
+
+		$command = "mysqldump -h$localhost -u$user_name -p$password --no-create-db --no-create-info --replace  transfer_to_office $table_to_dbf > $path/$table_to_dbf.sql";
+		system($command);
+		$this->sent_data($table_to_dbf,$path);
+}
+//--------------------------------------------------------------------------------------------
+function sent_data($table_to_dbf,$path){
+		$server="10.100.53.2";
+		$user_name="trn_to_office";
+		$password="trn_to_office";
+		$connect_server= mysql_connect($server,$user_name,$password);
+		if($connect_server){
+			$command = "mysql -h$server -u$user_name -p$password  transfer_to_office <  $path/$table_to_dbf.sql";
+			system($command);
+		}
+}
+//--------------------------------------------------------------------------------------------
+	function datatobranch(){
+		error_reporting(E_ALL);
+		ini_set('display_errors','On');
+		define("DB1", "pos_ssup");
+		define("DB2", "transfer_to_branch");
+		$hostname="localhost";
+		$username="pos-ssup";
+		$password='P0z-$$up';
+	
+		$dbh1 = mysql_connect($hostname, $username, $password); 
+		$dbh2 = mysql_connect($hostname, $username, $password, true);
+		mysql_select_db(DB1, $dbh1);
+		mysql_select_db(DB2, $dbh2);
+	
+		//---------------------------------------------------------------------------
+		$Y=date('Y');
+		$m=date('m');
+		$d=date('d');
+		$H=date('H');
+		$i=date('i');
+		$s=date('s');
+		$backup="backup$Y$m$d$H$i$s";
+		$comman="mysqldump -h$hostname -u$username -p$password  pos_ssup > /var/www/dbposbackup/$backup.sql";
+		shell_exec($comman);
+		$fbackup="$backup.tar.gz";
+		$comman="tar -zcpvf $fbackup  /var/www/dbposbackup/$backup.sql";
+		shell_exec($comman); 
+		$comman="mv /var/www/pos/htdocs/pos/$fbackup /var/www/dbposbackup/$fbackup";
+		shell_exec($comman);   
+		system("rm -f /var/www/dbposbackup/$backup.sql");
+		//---------------------------------------------------------------------------
+		
+		$reg_date=date("Y-m-d");
+		$reg_time=date("H:i:s");
+		$reg_user="is-wirat";	
+		$sql_trancate=" TRUNCATE TABLE `trn_diary1`  ";
+		$res_trancate=mysql_query($sql_trancate,$dbh2);	
+		
+		///////////////////// new update 02/05/2012
+		
+		$sql_insert="INSERT INTO `trn_diary1` ( `corporation_id`,
+								`doc_no`,`doc_date`,`doc_tp`,`flag`,`company_id`,`branch_id`,`member_id`,`co_promo_code`,`refer_doc_no`,`quantity`,
+								`amount`,`discount`,`coupon_discount`,`net_amt`,`vat`,`pay_cash`,`change`,`paid`,`saleman_id`,`print_no`,`create_time`,
+								`pos_id`,`new_member_st`,`cn_status`,`total_point`,`status_no`,
+								`name`,`address1`,`address2`,`address3`,`credit_no`,`doc_remark`,
+								 `coupon_code`, 
+								 `point1`,`point2`,`reg_date`,`reg_time`,`reg_user` 
+						) 
+						SELECT 
+								'OP',
+								a.DOC_NO,a.DOC_DT,a.DOC_TP,a.FLAG,a.BRAND,a.SHOP,a.MEMBER,a.CO_PROMO,a.REF_NO,a.QUANTITY,
+								a.AMOUNT,a.DISCOUNT,a.COUPON,a.NET_AMT,a.VAT,a.CASH,a.CHANGE,a.PAID,a.EMP_ID,a.PRINT,a.TIME,
+								a.MACHINE,a.NEW_MEMBER,a.CN_STATUS,a.USE_STAMP,a.STATUS,
+								
+								b.NAME,SUBSTRING(b.ADDRESS,1,35),SUBSTRING(b.ADDRESS,36,35),SUBSTRING(b.ADDRESS,71,30),b.CREDIT,b.REMARK,
+								c.COUPON,
+								d.POINT1,d.POINT2,'$reg_date','$reg_time','$reg_user'
+						FROM 
+								DIARY1 as a LEFT JOIN DIARY3 as b on a.DOC_NO=b.DOC_NO
+								LEFT JOIN DIARY4 as c on a.DOC_NO=c.DOC_NO 
+								LEFT JOIN DIARY5 as d on a.DOC_NO=d.DOC_NO";		
+			
+		
+			$res_insert=mysql_query($sql_insert,$dbh2);
+			if($res_insert){
+				echo "<hr>INSERT trn_diary1 IS COMPLETE.<BR>";
+				$sql_trancate2=" TRUNCATE TABLE `trn_diary2`  ";
+				$res_trancate2=mysql_query($sql_trancate2,$dbh2);	
+				try{
+						$sql_insert2="INSERT INTO `trn_diary2` ( `corporation_id`,
+												 `doc_no`,
+												 `doc_date`,
+												 `doc_tp`,
+												 `flag`,
+												 `company_id`,
+												 `branch_id`,
+												 `seq`,
+												 `promo_code`,
+												 `product_id`,
+												 `price`,
+												 `quantity`,
+												 `amount`,
+												 `member_percent1`,
+												 `member_discount1`,
+												 `discount`,
+												 `net_amt`,
+												 `tax_type`, 
+												 `discount_member`,
+												 `gp`,
+												 `lot_no`,
+												 `lot_expire`,
+												 `status_no`,
+												 `stock_st`,
+												 `reg_date`,`reg_time`,`reg_user`) 
+										SELECT 
+												'OP',
+												DOC_NO,
+												DOC_DT,
+												DOC_TP,
+												FLAG,
+												BRAND,
+												SHOP,
+												SEQ,
+												PROMO_CODE,
+												PRODUCT,
+												PRICE,
+												QUANTITY,
+												AMOUNT,	
+												MEMBER_CRD,
+												DIS_CARD,
+												DISCOUNT,
+												NET_AMT,	
+												NO_VAT,
+												EXCLUDE,
+												GP,
+												LOT_NO,
+												LOT_EXPIRE,
+												STATUS,
+												CASE DOC_TP 
+													WHEN 'AI' THEN '1'
+													WHEN 'AO' THEN '-1'
+													WHEN 'CK' THEN '0'
+													WHEN 'CN' THEN '1'
+													WHEN 'DN' THEN '-1'
+													WHEN 'DO' THEN '-1'
+													WHEN 'IQ' THEN '0'
+													WHEN 'ME' THEN '0'
+													WHEN 'RD' THEN '0'
+													WHEN 'RQ' THEN '0'
+													WHEN 'SL' THEN '-1'
+													WHEN 'TI' THEN '1'
+													WHEN 'TO' THEN '-1'
+													WHEN 'VT' THEN '-1'
+												END AS stock_st,
+												'$reg_date','$reg_time','$reg_user'
+										FROM 
+												DIARY2 ";
+						$res_insert2=mysql_query($sql_insert2,$dbh2);
+						
+				}catch(Exception $e){
+							echo 'Message: ' .$e->getMessage();
+				}
+				if($res_insert2){
+					echo "<hr>INSERT trn_diary2 IS COMPLETE.";
+				}else{
+					echo "<hr>FAIL TO INSERT trn_dirary2";
+				}
+				
+			}else{
+				echo "<hr>FAIL TO INSERT trn_dirary1";
+			}
+			
+		
+			
+			$sql_trancate=" TRUNCATE TABLE pos_ssup.trn_diary1  ";
+			$res_trancate=mysql_query($sql_trancate,$dbh1);	
+			
+			$sql_trancate=" TRUNCATE TABLE pos_ssup.trn_diary2  ";
+			$res_trancate=mysql_query($sql_trancate,$dbh1);	
+			
+			$sql_d1="INSERT INTO  pos_ssup.trn_diary1 SELECT* FROM  transfer_to_branch.trn_diary1` ";
+			$res_d1=mysql_query($sql_d1,$dbh1);
+			if($res_d1){
+				echo "<hr>INSERT TO pos_ssup.trn_diary1 IS COMPLETE!";
+				$sql_d2="INSERT INTO  pos_ssup.trn_diary2 SELECT* FROM  transfer_to_branch.trn_diary2` ";
+				$res_d2=mysql_query($sql_d2,$dbh1);
+				if($res_d2){
+					echo "<hr>INSERT TO pos_ssup.trn_diary2 IS COMPLETE!";
+				}else{
+					echo "<hr>FAIL TO INSERT pos_ssup.trn_diary2!";
+				}
+			}else{
+				echo "<hr>FAIL TO INSERT pos_ssup.trn_diary1!";
+			}
+		
+			mysql_close($dbh1);//pook
+			mysql_close($dbh2);//pook
+			
+		/*
+		$sql_insert="INSERT INTO `trn_diary1` ( `corporation_id`,
+								`doc_no`,`doc_date`,`doc_tp`,`flag`,`company_id`,`branch_id`,`member_id`,`co_promo_code`,`refer_doc_no`,`quantity`,
+								`amount`,`discount`,`coupon_discount`,`net_amt`,`vat`,`pay_cash`,`change`,`paid`,`saleman_id`,`print_no`,`create_time`,
+								`pos_id`,`new_member_st`,`cn_status`,`total_point`,`status_no`, 
+								`name`,`address1`,`address2`,`address3`,`credit_no`,`doc_remark`,
+								 `coupon_code`, 
+								 `point1`,`point2`,`reg_date`,`reg_time`,`reg_user` 
+						) 
+						SELECT 
+								'OP',
+								a.DOC_NO,a.DOC_DT,a.DOC_TP,a.FLAG,a.BRAND,a.SHOP,a.MEMBER,a.CO_PROMO,a.REF_NO,a.QUANTITY,
+								a.AMOUNT,a.DISCOUNT,a.COUPON,a.NET_AMT,a.VAT,a.CASH,a.CHANGE,a.PAID,a.EMP_ID,a.PRINT,a.TIME,
+								a.MACHINE,a.NEW_MEMBER,a.CN_STATUS,a.USE_STAMP,a.STATUS,
+								b.NAME,SUBSTRING(b.ADDRESS,1,35),SUBSTRING(b.ADDRESS,36,35),SUBSTRING(b.ADDRESS,71,30),b.CREDIT,b.REMARK,
+								c.COUPON,
+								d.POINT1,d.POINT2,'$reg_date','$reg_time','$reg_user'
+						FROM 
+								DIARY1 as a LEFT JOIN DIARY3 as b on a.DOC_NO=b.DOC_NO
+								LEFT JOIN DIARY4 as c on a.DOC_NO=c.DOC_NO 
+								LEFT JOIN DIARY5 as d on a.DOC_NO=d.DOC_NO";		
+			
+			$res_insert=mysql_query($sql_insert,$dbh2);
+			if($res_insert){
+				echo "<hr>INSERT trn_diary1 IS COMPLETE.<BR>";
+				$sql_trancate2=" TRUNCATE TABLE `trn_diary2`  ";
+				$res_trancate2=mysql_query($sql_trancate2,$dbh2);	
+				try{
+						$sql_insert2="INSERT INTO `trn_diary2` ( `corporation_id`,
+												 `doc_no`,
+												 `doc_date`,
+												 `doc_tp`,
+												 `flag`,
+												 `company_id`,
+												 `branch_id`,
+												 `seq`,
+												 `promo_code`,
+												 `product_id`,
+												 `price`,
+												 `quantity`,
+												 `amount`,
+												 `member_percent1`,
+												 `member_discount1`,
+												 `discount`,
+												 `net_amt`,
+												 `tax_type`, 
+												 `discount_member`,
+												 `gp`,
+												 `lot_no`,
+												 `lot_expire`,
+												 `status_no`,
+												 `reg_date`,`reg_time`,`reg_user`) 
+										SELECT 
+												'OP',
+												DOC_NO,
+												DOC_DT,
+												DOC_TP,
+												FLAG,
+												BRAND,
+												SHOP,
+												SEQ,
+												PROMO_CODE,
+												PRODUCT,
+												PRICE,
+												QUANTITY,
+												AMOUNT,	
+												MEMBER_CRD,
+												DIS_CARD,
+												DISCOUNT,
+												NET_AMT,	
+												NO_VAT,
+												EXCLUDE,
+												GP,
+												LOT_NO,
+												LOT_EXPIRE,
+												STATUS,
+												'$reg_date','$reg_time','$reg_user'
+										FROM 
+												DIARY2 ";
+						$res_insert2=mysql_query($sql_insert2,$dbh2);
+				}catch(Exception $e){
+							echo 'Message: ' .$e->getMessage();
+				}
+				if($res_insert2){
+					echo "<hr>INSERT trn_diary2 IS COMPLETE.";
+				}else{
+					echo "<hr>FAIL TO INSERT trn_dirary2";
+				}
+				
+			}else{
+				echo "<hr>FAIL TO INSERT trn_dirary1";
+			}
+			
+			$sql_trancate=" TRUNCATE TABLE pos_ssup.trn_diary1  ";
+			$res_trancate=mysql_query($sql_trancate,$dbh1);	
+			
+			$sql_trancate=" TRUNCATE TABLE pos_ssup.trn_diary2  ";
+			$res_trancate=mysql_query($sql_trancate,$dbh1);	
+			
+			$sql_d1="INSERT INTO  pos_ssup.trn_diary1 SELECT* FROM  transfer_to_branch.trn_diary1` ";
+			$res_d1=mysql_query($sql_d1,$dbh1);
+			if($res_d1){
+				echo "<hr>INSERT TO pos_ssup.trn_diary1 IS COMPLETE!";
+				$sql_d2="INSERT INTO  pos_ssup.trn_diary2 SELECT* FROM  transfer_to_branch.trn_diary2` ";
+				$res_d2=mysql_query($sql_d2,$dbh1);
+				if($res_d2){
+					echo "<hr>INSERT TO pos_ssup.trn_diary2 IS COMPLETE!";
+				}else{
+					echo "<hr>FAIL TO INSERT pos_ssup.trn_diary2!";
+				}
+			}else{
+				echo "<hr>FAIL TO INSERT pos_ssup.trn_diary1!";
+			}
+			
+		*/		
+	}
+	
+	//-------------------------------------------------------------------	
+	
+}
+?>

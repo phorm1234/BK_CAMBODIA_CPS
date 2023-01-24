@@ -1,0 +1,155 @@
+<script>
+$(document).ready( function() {
+	$("#doc_no_start").focus();
+});
+
+function process(event,p){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		
+	}
+}
+
+jQuery(document).bind('keydown', 'f2',
+function (evt){
+	insert_textbox();
+});
+
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	print_preview('OR','trn_diary1_or');
+});
+
+
+
+function search_invoice_by_type(doc_type,input_text){
+	var tbl="trn_diary1_or";
+	$.ajax({type: "POST",url: "/stock/stock/getdoctp",data:{doc_type:doc_type,tbl:tbl},success:
+		function(data){
+		$("#get_textbox").val(input_text);
+		$("#dialog_type_doc_no").html(data);
+		$("#dialog_type_doc_no" ).dialog( "open" );
+	}});
+}
+
+$(function() {
+	$( "#dialog_type_doc_no" ).dialog({
+		autoOpen: false,
+		height: 300,
+		width: 550,
+		modal: true,
+		open: function(event, ui) {
+	        $(".ui-widget-overlay").css('opacity',0.3);
+	        $(".ui-dialog-titlebar").show();
+	    },
+		buttons: {
+			"เลือก (F2)": function() {
+				insert_textbox();
+			},
+			"ออก (Esc)": function() {
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			
+		}
+	});	
+	$( "#dialog_preview" ).dialog({
+		autoOpen: false,
+		height: 500,
+		width: 550,
+		modal: true,
+		open: function(event, ui) {
+	        $(".ui-widget-overlay").css('opacity',0.3);
+	        $(".ui-dialog-titlebar").show();
+	    },
+		buttons: {
+			"พิมพ์เอกสาร": function() {
+				print_rq_return('OR','trn_diary1_or');
+			},
+			"ยกเลิก (Esc)": function() {
+				$("#dialog_preview").dialog( "close" );
+			}
+		},
+		close: function() {
+			
+		}
+	});
+});
+
+function print_preview(doc_type,tbl){
+	var doc_no_start=$("#doc_no_start").val();
+	var doc_no_end=$("#doc_no_end").val();
+	var txt_head="สั่งสินค้า";
+	$.ajax({type: "POST",url: "/stock/stock/previewor",data:{doc_no_start:doc_no_start,doc_no_end:doc_no_end,doc_type:doc_type,tbl:tbl,txt_head:txt_head},success:
+		function(data){
+			$("#dialog_preview").html(data);
+			$( "#dialog_preview" ).dialog( "open" );
+		}
+
+	});
+}
+
+function insert_textbox(){
+	var doc_no = $("input[name='getinv']:checked").val();
+	var txtbox=$("#get_textbox").val();
+	$("#"+txtbox).val(doc_no);
+	$("#dialog_type_doc_no" ).dialog( "close" );
+}
+
+function print_rq_return(doc_type,tbl){
+	jConfirm('ยืนยันการพิมพ์?', 'แจ้งเตือน', function(r) {
+		if(r==false){
+			return false;
+		}else{
+			var doc_no_start=$("#doc_no_start").val();
+			var doc_no_end=$("#doc_no_end").val();
+			$.ajax({type: "POST",url: "/stock/stock/getdocnore",data:{doc_no_start:doc_no_start,doc_no_end:doc_no_end,doc_type:doc_type,tbl:tbl},dataType: 'json',success:
+				function(data){
+					for (i in data)
+					{
+					  printre(data[i].doc_no);
+					}		
+				}
+
+			});
+		}
+	});	
+	
+}
+function printre(doc_no){
+	$.ajax({type: "POST",url: "/stock/stock/printor",data:{doc_no:doc_no},success:
+		function(data){
+			
+		}
+	});
+}
+</script>
+<div id="dialog_type_doc_no" title="เลขที่เอกสาร"></div>
+<div id="dialog_preview" title="Preview"></div>
+<table width="100%" border="0" cellpadding="0" cellspacing="2" bgcolor="#e9f2f8" background="/stock/img/bg_header.gif">
+  <tr>
+  	<td colspan="5" height="5"></td>
+  </tr>
+  <tr>
+    <td height="20" align="right" class="servBodL_right">DOCUMENT NO. : </td>
+    <td width="10%"><input type="text" name="doc_no_start" id="doc_no_start" size="27" class="NFText" autocomplete="off" onkeypress="return process(event)"></td>
+    <td width="7%">
+    <a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_invoice_by_type('OR','doc_no_start');"><span class="ui-icon ui-icon-search"></span>Search </a>
+    </td>
+  </tr>
+  <tr>
+    <td height="20" align="right" class="servBodL_right">END DOCUMENT NO. : </td>
+    <td width="10%"><input type="text" name="doc_no_end" id="doc_no_end" size="27" class="NFText" autocomplete="off" onkeypress="return process(event)"></td>
+    <td width="7%">
+    <a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_invoice_by_type('OR','doc_no_end');"><span class="ui-icon ui-icon-search"></span>Search </a>
+    </td>
+  </tr>
+  <tr>
+    <td height="20" align="right" class="servBodL_right"></td>
+    <td width="10%"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return print_preview('OR','trn_diary1_or');"><span class="ui-icon ui-icon-print"></span>PRINT</a></td>
+    <td width="7%"></td>
+  </tr>
+</table>
+<input type="hidden" name="get_textbox" id="get_textbox" value=""></input>

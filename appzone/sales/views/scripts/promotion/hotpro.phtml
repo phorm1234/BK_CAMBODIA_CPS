@@ -1,0 +1,50 @@
+<?php
+$chkprice=$this->chkprice;
+if($chkprice=="price_null"){
+	echo "price_null";
+	return false;
+}
+$hotpro=$this->hotpro;
+$product_id=$this->hotpro_product_search;
+$quantity=$this->hotpro_quantity_search;
+$sumSeq1=$this->sumSeq1;
+
+
+
+if($hotpro){ //Have Promotion
+	if(count($hotpro)>1){ 
+		echo "<table  border='1' id='select-m' >";
+		$i=0;
+		foreach($hotpro as $dataHotpro) {
+			$promo_des=$dataHotpro['promo_des'];
+			$promo_code=$dataHotpro['promo_code'];
+			
+			$setVal=$promo_code;
+			$textName="radio0".++$i;
+			$active = $i==1?"active":"";
+			
+		  	echo "<tr>";
+    		echo "<td onclick=\"gipro('$promo_code','1');\">$promo_code=>$promo_des.</td>";
+  			echo "</tr>";
+  			
+			//echo "<td onclick=\"gipro('$promo_code','1');\"><span style='color:#FFFFFF;'>$promo_des</span></td>";
+			//echo "	<li class='$active' var1='$setVal'><input name='test' class='test' id='$textName' type='radio' value='1' checked ><div var1='$setVal'>".$promo_code." => ".$promo_des."</div></li>";
+
+		}
+		echo '</table>';
+	}else if(count($hotpro)==1){
+			$promo_code=$hotpro[0]['promo_code'];
+			
+			echo "gipro('$promo_code')";
+
+			
+
+	}
+		
+}else{ //nopro
+	
+	echo "promotionDetail('N')";
+}
+	
+
+?>

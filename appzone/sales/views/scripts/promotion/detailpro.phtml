@@ -1,0 +1,141 @@
+<table border="0" >
+  <tr>
+    <td ><span style='color:#FFFFFF;font-weight: bold;'>รหัสสินค้า</span></td>
+    <td>
+      <input type="text" name="input_product" id="input_product" onKeyDown="if (event.keyCode == 13){addproductdetail();}">
+    </td>
+    <td><span style='color:#FFFFFF;font-weight: bold;'>จำนวน</span></td>
+    <td>
+      <input name="input_quantity" id="input_quantity" type="text" size="5" value=1 onKeyDown="if (event.keyCode == 13){addproductdetail();}">
+    </td>
+  </tr>
+</table>
+<?php 
+//header("Content-type:text/html; charset=tis-620"); 
+$detailPro=$this->detailPro;
+$promo_code=$this->promo_code;
+$doc_no=$this->doc_no;
+$product_id=$this->product_id;
+$price=$this->price;
+$seq=$this->seq;
+
+
+echo "<input type='hidden' name='promo_code_hide' id='promo_code_hide' value='$promo_code'>";
+echo "<input type='hidden' name='price_hide' id='price_hide' value='$price'>";
+
+echo "<input type='hidden' name='product_id_first' id='product_id_first' value='$product_id'>";
+
+
+$bgcolorHead="bgcolor='#324F51'";
+$fontcolorHead="color:#FFFFFF;font-weight: bold;";
+$work="No";
+if(count($detailPro)>0){
+	
+			 echo '<table width="100%" border="0" cellpadding="2" cellspacing="1" bgcolor="#cccccc">';
+			 
+			 $i=1;
+             foreach($detailPro as $data){       	
+             	$promo_code=$data['promo_code'];
+             	$promo_des=$data['promo_des'];
+             	$seq_pro=$data['seq_pro'];
+             	$product_id=$data['product_id'];
+             	$name_product=$data['name_product'];
+             	$price=$data['price'];
+             	$quantity=number_format($data['quantity'],0,'.',',');
+				$compare=$data['compare'];
+				if($i==1){
+					echo "<input type='hidden' name='compare_hide' id='compare_hide' value='$compare'>";
+             	}
+				if($compare=="G"){
+					$compare_sms="สินค้าแถมฟรี หรือสิทธิ์ซื้อ ราคาน้อยกว่า หรือเท่ากับสินค้าซื้อ";
+				}else if($compare=="L"){
+					$compare_sms="สินค้าแถมฟรี หรือสิทธิ์ซื้อ ราคาน้อยกว่าสินค้าซื้อ";
+				}else{
+					$compare_sms="ไม่เปรียบเทียบราคา";
+				}
+             	$type_discount=$data['type_discount'];
+             	$discount=$data['discount'];
+             	
+
+             	
+				if(strtolower($type_discount)=="price") {
+					$txtDes="แลกซื้อในราคา $discount บาท";
+				} else if(strtolower($type_discount)=="normal") {
+					$txtDes="ซื้อ";
+				} else if(strtolower($type_discount)=="free") {
+					$txtDes="แถม $quantity ชิ้น";
+				} else if(strtolower($type_discount)=="percent") {
+					$txtDes="ลด $discount %";
+				}
+				
+				$promo_seq=$data['promo_seq'];
+				$quantity_short=$data['quantity_short'];
+				$chkSelect=$data['chkSelect'];
+				if($promo_seq==$seq_pro){//Seq นี้มียิงมาบ้างแล้ว
+					if($chkSelect=="N"){//ยังไม่ยิง
+						//echo "scanerr1\n";
+						if($work=="No"){
+							echo "<input type='hidden' name='seq_hide' id='seq_hide' value='$seq_pro'>";
+							$work="Yes";
+						}
+						$bgcolorErr="bgcolor=\"#F4F4F4\"";
+						$fontcolor="color:#000000;";
+					}else{//ยิงแล้ว
+						//echo "scaneok\n";
+						$bgcolorErr="bgcolor=\"#99CC00\"";
+						$fontcolor="color:#000000;font-weight: bold;";
+					}
+				}else{//ยิงแล้ว
+					$bgcolorErr="bgcolor=\"#508083\"";
+					$fontcolor="color:#FFFFFF;font-weight: bold;";
+				}
+				
+				
+				
+				if($i==1) {
+					
+					echo '<tr>';
+					echo "<td colspan='6' ><span style='color:#000000;font-weight: bold;'>$promo_code&nbsp;$promo_des &nbsp;&nbsp; เงื่อนไข : $compare : $compare_sms &nbsp;</span></td>";
+					echo '</tr>';
+					
+					echo '<tr>';
+					echo "<td $bgcolorHead height='30' align='center'><span style='$fontcolorHead'>ลำดับ</span></td>";
+					echo "<td $bgcolorHead align='left'><span style='$fontcolorHead' >รายละเอียด</span></td>";
+					echo "<td $bgcolorHead align='center'><span style='$fontcolorHead'>รหัสสินค้า</span></td>";
+					echo "<td $bgcolorHead align='center'><span style='$fontcolorHead'>สินค้า</span></td>";
+					echo "<td $bgcolorHead align='right'><span style='$fontcolorHead'>ราคา</span></td>";
+					echo "<td $bgcolorHead align='right'><span style='$fontcolorHead'>จำนวน</span></td>";
+					
+					echo '</tr>';
+					
+					echo '<tr >';
+					echo "<td $bgcolorErr ><span style='$fontcolor'>$seq_pro</span></td>";
+					echo "<td $bgcolorErr ><span style='$fontcolor'>$txtDes</span></td>";
+					echo "<td $bgcolorErr ><span style='$fontcolor'>$product_id</span></td>";
+					echo "<td $bgcolorErr ><span style='$fontcolor'>$name_product</span></td>";
+					echo "<td $bgcolorErr align='right'><span style='$fontcolor'>$price</span></td>";
+					echo "<td $bgcolorErr align='right'><span style='$fontcolor'>$quantity</span></td>";
+					
+					echo '</tr>';
+				} else {
+					echo '<tr >';
+					echo "<td $bgcolorErr ><span style='$fontcolor'>$seq_pro</span></td>";
+					echo "<td $bgcolorErr ><span style='$fontcolor'>$txtDes</span></td>";
+					echo "<td $bgcolorErr ><span style='$fontcolor'>$product_id</span></td>";
+					echo "<td $bgcolorErr ><span style='$fontcolor'>$name_product</span></td>";
+					echo "<td $bgcolorErr align='right'><span style='$fontcolor'>$price</span></td>";
+					echo "<td $bgcolorErr align='right'><span style='$fontcolor'>$quantity</span></td>";
+					echo '</tr>';
+				}
+				
+				$i++;
+			}
+			
+			echo '</table>';
+                
+             
+			
+}   
+//echo "<br><input type='button' id='btnCancle' name='btnCancle' value='ไม่เล่นโปรโมชั่น' onclick=\"set_product_nopro('$doc_no','$product_id','$seq');\">";
+?>
+

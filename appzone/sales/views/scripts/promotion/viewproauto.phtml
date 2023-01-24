@@ -1,0 +1,78 @@
+<style>
+
+
+</style>
+<?php
+$bgcolorHead=" bgcolor='#324F51'";
+$fontcolorHead="color:#FFFFFF; bold; font-size:30px;";
+$caseShort="";
+$showLine="N";
+
+
+$promo_code=$this->promo_code;
+
+
+
+
+
+echo "<input type='hidden' id='keep' >";
+
+echo "<br><br><br>";
+echo '<table width="80%" border="0" cellpadding="0" cellspacing="0"  align="center">';	
+
+
+echo '<tr >';
+echo "<td  class='colum' align='center'><span  >#</span></td>";
+echo "<td  class='colum' align='center'><span  align='center'>PRODUCT ID</span></td>";
+echo "<td  class='colum' align='center'><span >PRODUCT NAME</span></td>";
+echo "<td  class='colum' align='right'><span >PRICE</span></td>";
+echo "<td  class='colum' align='right'><span >QUANTITY</span></td>";
+
+
+
+echo '</tr>';
+				
+
+if($this->scanhotpro){
+	$i=1;
+	foreach($this->scanhotpro as $scanhotpro) {
+			$id=$scanhotpro['id'];
+			$promo_seq=$scanhotpro['promo_seq'];
+			$prodcut_id=$scanhotpro['product_id'];
+			$name_product=$scanhotpro['name_product'];
+			$quantity=$scanhotpro['quantity'];
+			$quantity=number_format($quantity,0,'.',',');
+			$price=$scanhotpro['price'];
+
+
+			$trid="tr".$id;
+			
+			if($promo_seq%2>0) {
+				$trcolor=" bgcolor='#FFFFFF'";
+				$fontcolor="font-size:20px; color:#000000;";
+			}else if($promo_seq%2==0){
+				$trcolor=" bgcolor='#F4F4F4'";
+				$fontcolor="font-size:20px; color:#000000;";
+			}
+			
+
+
+			echo "<tr id='$trid'  class='view_auto_unclick' style='cursor:pointer' onclick=\"dellistauto('$id');\">";
+			echo "<td     align='center'><span >$i</span></td>";
+			echo "<td     align='center'><span '>$prodcut_id</span></td>";
+			echo "<td     align='left'><span >$name_product</span></td>";
+			echo "<td     align='right'><span '>$price</span></td>";
+			echo "<td     align='right'><span >$quantity</span></td>";
+			echo '</tr>';
+			
+			$i++;
+	}
+		
+		
+
+}
+
+echo '</table>';
+
+
+?>

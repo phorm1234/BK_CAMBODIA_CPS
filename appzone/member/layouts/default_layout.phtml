@@ -1,0 +1,47 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>POS ONLINE</title>
+	<link href='/sales/css/style.css' rel='stylesheet' type='text/css'>
+	<link href='/member/css/style.css' rel='stylesheet' type='text/css'>
+	<link href="/sales/css/themes/dark-hive/jquery-ui-1.8.18.custom.css" rel="stylesheet" type="text/css"/>
+	
+	<link href="/sales/js/plugin/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen"/>
+	<link href="/sales/css/flexigrid/flexigrid.css" rel="stylesheet" type="text/css">
+	<link href="/member/css/validationEngine.jquery.css" rel="stylesheet" type="text/css">
+	
+	<script type="text/javascript" src="/sales/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="/sales/js/jquery-ui-1.8.18.custom.min.js"></script>	
+	
+	<script type="text/javascript" src="/sales/js/plugin/jquery.jclock.js.txt"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.alerts.js"></script>	
+	<script type="text/javascript" src="/sales/js/plugin/flexigrid.js"></script>
+	<script type="text/javascript" src="/sales/js/util/posglobal.js"></script>
+	
+	<script type="text/javascript" src="/sales/js/shortcut.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.maskMoney.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.numeric.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.enabledisable.js"></script>
+	<script type="text/javascript" src="/sales/js/plugin/jquery.navigate.js"></script>
+	
+	<script type="text/javascript" src="/member/js/member.js"></script>
+	<script type="text/javascript" src="/member/js/jquery.validationEngine.js"></script>
+	<script type="text/javascript" src="/member/js/jquery.validationEngine-th.js"></script>
+	
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var newstyle = "/sales/css/style1024.css";
+			if ((screen.width>=1280) && (screen.height>=1024)){
+				newstyle = "/sales/css/style1280.css";
+			}
+			$('<link/>').attr({ rel:"stylesheet",href:newstyle}).appendTo($('head'));
+		});
+	</script>
+</head>
+<body>
+       <?php		
+			echo $this->layout()->content;
+		?>
+</body>
+</html>

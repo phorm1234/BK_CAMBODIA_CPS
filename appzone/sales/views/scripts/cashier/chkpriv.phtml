@@ -1,0 +1,68 @@
+<?php 	
+
+	echo"
+		<table width='100%' border='0' cellpadding='0' cellspacing='5' ";
+	$chk_arr = explode(',',$this->promo_tp);
+	print_r($this->promo_tp);
+	while($t = array_shift($chk_arr)){
+
+		switch($t){
+		case 'P':
+			echo"<tr>
+			<td align='right'>Coupon Code &nbsp;:</td>
+			<td><input type='text' size='20' id='coupon_code' name='coupon_code' class='input-text-pos ui-corner-all'></input></td>
+			<td>&nbsp;</td></tr>";
+			break;
+		case 'C':
+			echo"<tr>
+			<td align='right'>บัตรประชาชน &nbsp;:</td>
+			<td><input type='text' size='20' id='cid_card' name='cid_card' class='input-text-pos ui-corner-all'></input></td>
+			<td>&nbsp;</td></tr>";
+			break;
+		case 'T':
+			echo"<tr>
+			<td align='right'>หมายเลขโทรศัพท์มือถือ. &nbsp;:</td>
+			<td><input type='text' size='20' id='mobile' name='mobile' class='input-text-pos ui-corner-all'></input></td>
+			<td>&nbsp;</td></tr>";
+			break;
+		case 'B':
+			echo "<tr>
+			<td align='right' >Coupon Code &nbsp;:</td>
+			<td id='fixmobilelabel'><input type='hidden' size='20' id='mobile' name='mobile' class='input-text-pos ui-corner-all'></input><input type='text' size='20' id='coupon_code' name='coupon_code' class='input-text-pos ui-corner-all'></td>
+			<td>&nbsp;</td></tr>";
+		}
+	
+	}
+		echo "<tr id='otp_set'>
+			<td align='right'>OTP Code. &nbsp;:</td>
+			<td><input type='text' size='20' id='otp' name='otp' class='input-text-pos ui-corner-all'></input></td>
+			<td>&nbsp;</td></tr>";
+
+	echo	"</table>";		
+
+	
+?>
+
+<script type="text/javascript">
+	$('#otp_set').hide();
+
+$(function(){	
+	$('#form_tour_barcode').keydown(function(e){
+		if(e.which === 13) {
+			proussd($('#form_tour_barcode').val());
+		}
+	});
+
+});
+<?php
+if($this->promo_tp=='M'){
+	//echo "alert('OK::'+csh_member_no);$('#dlgTour').dialog(\"close\");";
+	
+}else if($this->promo_tp=='B'){
+		//echo "alert('OK::'+$('#csh_mobile_no').val());";
+		//echo "$('#fixmobilelabel').append($('#csh_mobile_no').val());";
+		//echo "$('#fixmobilelabel').append(' (ตรวจสอบหมายเลขโทรศัพท์สมาชิก แล้วกด OK เพื่อส่ง OTP Code)');";
+		echo "$('#mobile').val($('#csh_mobile_no').val());";
+	}
+?>
+</script>

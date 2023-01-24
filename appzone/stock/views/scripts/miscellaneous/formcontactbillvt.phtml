@@ -1,0 +1,74 @@
+<script>
+$(document).ready( function() {
+	$("#doc_tpye").focus();
+});
+
+jQuery(document).bind('keydown', 'f1',
+function (evt){
+	search_bill_vt('VT');
+});
+
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	eidt_contace_bill_vt();
+});
+
+$(function() {
+	
+	$( "#dialog_bill_vt" ).dialog({
+		autoOpen: false,
+		height: 450,
+		width: 400,
+		modal: true
+	});
+	
+});
+
+
+function process_billdetail(event){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		$doc_no=$("#doc_tpye").val();
+		getbillvtdetail($doc_no);
+	}
+}
+
+</script>
+<div id="dialog_bill_vt" title="บิลเงินสด"></div>
+<form id="frm">
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+  <tr>
+    <td height="20" width="15%" align="right" class="servBodL_right">DOCUMENT NO. : </td>
+    <td>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    	<tr>
+    		<td width="5%"><input type="text" name="doc_tpye" id="doc_tpye" class="NFText" autocomplete="off" onkeypress="return process_billdetail(event)" size="25"></td>
+    		<td><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_bill_vt('VT');"><span class="ui-icon ui-icon-search"></span>(F1)</a></td>
+    	</tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td height="20" width="15%" align="right" class="servBodL_right">NAME-SURNAME : </td>
+    <td><input type="text" name="fullname" id="fullname" class="NFText" autocomplete="off" size="50"></input></td>
+  </tr>
+  <tr>
+    <td height="20" width="15%" align="right" class="servBodL_right">ADDRESS : </td>
+    <td><input type="text" name="addr1" id="addr1" class="NFText" autocomplete="off" size="80"></input></td>
+  </tr>
+  <tr>
+    <td height="20" width="15%" align="right"></td>
+    <td><input type="text" name="addr2" id="addr2" class="NFText" autocomplete="off" size="80"></input></td>
+  </tr>
+  <tr>
+    <td height="20" width="15%" align="right"></td>
+    <td><input type="text" name="addr3" id="addr3" class="NFText" autocomplete="off" size="80"></input></td>
+  </tr>
+  <tr>
+    <td height="20" width="15%" align="right"></td>
+    <td><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return eidt_contace_bill_vt();"><span class="ui-icon ui-icon-disk"></span>SAVE</a></td>
+  </tr>
+</table>
+<input type="hidden" name="edit_doc_on" id="edit_doc_on" class="NFText" autocomplete="off" size="50"></input>
+</form>

@@ -1,0 +1,35 @@
+<?php
+$arr_data=$this->arr_data;
+$page=$this->page;
+$total=count($arr_data);
+if(empty($arr_data)){
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+}else{
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+	$i=1;
+	foreach($arr_data as $val){
+		$start_date=date('d/m/Y', strtotime($val['start_date']));
+		$end_date=date('d/m/Y', strtotime($val['end_date']));
+		$data['rows'][] = 
+		array(
+			'id' => $val['barcode'],
+			'cell' => 
+					array(
+							$val['barcode'], 
+							$val['description'], 
+							$val['gp'], 
+							$start_date, 
+							$end_date
+						)
+		);
+		$i++;
+	}
+}
+echo json_encode($data);
+?>

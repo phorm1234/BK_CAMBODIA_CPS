@@ -1,0 +1,85 @@
+<style>
+
+
+</style>
+<?php
+$bgcolorHead=" bgcolor='#324F51'";
+$fontcolorHead="color:#FFFFFF; bold; font-size:30px;";
+$caseShort="";
+$showLine="N";
+
+
+$promo_code=$this->promo_code;
+$promo_seq=$this->promo_seq;
+
+
+
+echo "<div id='xblinky' class='show_title' style='font-size: 20px;' >$this->desStep</div>";
+
+
+echo "<br><br><br>";
+echo '<table width="80%" border="0" cellpadding="0" cellspacing="0"  align="center">';	
+
+
+echo '<tr class=\"colum_tr\">';
+echo "<td  class='colum' align='center'><span  >ลำดับ</span></td>";
+echo "<td  class='colum' align='center'><span  align='center'>รหัสสินค้า</span></td>";
+echo "<td  class='colum' align='center'><span >สินค้า</span></td>";
+echo "<td  class='colum' align='right'><span >ราคา</span></td>";
+echo "<td  class='colum' align='right'><span >จำนวน</span></td>";
+echo "<td  class='colum' align='center'><span >รายละเอียด</span></td>";
+
+echo '</tr>';
+				
+
+if($this->scanhotpro){
+		
+	foreach($this->scanhotpro as $scanhotpro) {
+			$promo_seq=$scanhotpro['promo_seq'];
+			$prodcut_id=$scanhotpro['product_id'];
+			$name_product=$scanhotpro['name_product'];
+			$quantity=$scanhotpro['quantity'];
+			$quantity=number_format($quantity,0,'.',',');
+			$price=$scanhotpro['price'];
+			$type_discount=$scanhotpro['type_discount'];
+			$discount=$scanhotpro['discount'];
+			$discount=number_format($discount,0,'.',',');
+
+			if(strtolower($type_discount)=="price") {
+			$txtDes="แลกซื้อในราคา $discount บาท";
+			} else if(strtolower($type_discount)=="normal") {
+				$txtDes="ตัวหลัก";
+			} else if(strtolower($type_discount)=="free") {
+				$txtDes="ตัวแถม";
+			} else if(strtolower($type_discount)=="percent") {
+				$txtDes="ลด $discount %";
+			}
+			
+			if($promo_seq%2>0) {
+				$trcolor=" bgcolor='#FFFFFF'";
+				$fontcolor="font-size:20px; color:#000000;";
+			}else if($promo_seq%2==0){
+				$trcolor=" bgcolor='#F4F4F4'";
+				$fontcolor="font-size:20px; color:#000000;";
+			}
+			
+
+
+			echo '<tr>';
+			echo "<td   class='line' align='center'><span >$promo_seq</span></td>";
+			echo "<td   class='line' align='center'><span '>$prodcut_id</span></td>";
+			echo "<td   class='line' align='left'><span >$name_product</span></td>";
+			echo "<td   class='line' align='right'><span '>$price</span></td>";
+			echo "<td   class='line' align='right'><span >$quantity</span></td>";
+			echo "<td   class='line' align='center'><span >$txtDes</span></td>";
+			echo '</tr>';
+	}
+		
+		
+
+}
+
+echo '</table>';
+
+
+?>

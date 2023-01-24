@@ -1,0 +1,51 @@
+ <?php
+    	if(!empty($this->arr_destshop)){ 
+    ?>
+	<style>
+	<!--
+		tr.xtdover{
+			border:1pt solid#ff0000;
+			background-color:#ffcc99;
+		}
+		tr.xtdout{
+			border:0pt solid#ff0000;
+		}
+		/* test highlight*/
+		.datatablerowhighlight {
+		    background-color: #ffcc99 !important;
+			border-top:1pt solid#ff9933;
+			border-bottom:1pt solid#ff9933;
+		}
+	-->
+	</style>
+	
+	<?php
+   			echo "<table width='100%' border='0' cellpadding='0' cellspacing='0' bgcolor='#cccccc' class='display' id='datatables_listdestshop'>";
+   			echo "<thead><tr height='32' bgcolor='#ebebeb' idd=''>
+   						<th align='center'  style='width:10%;color:#333;font-size:24px;'>company id</th>
+						<th align='center'  style='width:10%;color:#333;font-size:24px;'>branch id</th>
+   						<th align='center' style='width:15%;color:#333;font-size:24px;'>branch name</th>
+        				<th align='center'  style='width:15%;color:#333;font-size:24px;'>ip</th>
+   					</tr></thead><tbody>";
+   			$i=1;
+   			
+   			foreach($this->arr_destshop as $data){
+	  				$id_tmp="n_".$i;
+	  				$rows_json=json_encode($data);
+	  				($i%2==0)?$bg_color='#003333':$bg_color='#006666';
+		  			echo "<tr idd='".$rows_json."'>"
+		  					."<td align='center' >".$data['company_id']."</td>"
+		  					."<td align='center' >".$data['branch_id']."</td>"
+		  					."<td align='center' >".$data['branch_name']."</td>"
+		  					."<td align='center' >".$data['com_ip']."</td>"
+		  					."</tr>";  
+		  			$i++;
+	  		}//foreach 
+	  			
+	  		echo "</tbody>
+	  		<tfooter></tfooter>
+	  		</table>";
+    	}else{
+    		echo "<p align='center' id='item_not_found'>ไม่พบข้อมูล</p>";
+    	}
+     ?>

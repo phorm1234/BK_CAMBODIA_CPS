@@ -1,0 +1,54 @@
+<script>
+$(document).ready( function() {
+	getshelfdata();
+	$( "#dialog_key_product_room" ).dialog({
+		autoOpen: false,
+		width: 500,
+		height: 500,
+		modal: true,
+		open: function(event, ui) {
+	        $(".ui-widget-overlay").css('opacity',0.9);
+	        $(".ui-dialog-titlebar").show();
+	    },
+		close: function(){
+	    	getshelfdata();
+	    	$("#search_product_id").focus().select();
+		}
+	});
+});
+
+</script>
+<div id="dialog_product_listtag" title="รายการสินค้า"></div>
+<div id="dialog_key_product_room" title="รายการสินค้า"></div>
+<div id="dialog_add_shlef" title="เพิ่ม Shlef"></div>
+<div id="dialog_process" title="Process"></div>
+<?php 
+$json_doc_no=$this->jsondata;
+$doc_no=json_decode($json_doc_no,true);
+echo "
+
+<table width='100%' border='0'>
+	<tr>
+		<td class='sub_text_head'>บันทึกข้อมูลการตรวจนับ</td>
+		<td align='right'>
+		เอกสารเลขที่ : 
+		<select id='doc_no' onChange='return getshelfdata();'>
+		";
+			foreach($doc_no as $val_doc_no){
+				echo "<option value='".$val_doc_no['doc_no']."'>".$val_doc_no['doc_no']."</option>";
+			}
+		echo "
+		</select>
+		รหัสห้อง : <input type='text' name='search_room' id='search_room' value='' size='13' onkeypress='return search_room(event);'> 
+		รหัสสินค้า : <input type='text' name='search_product_id' id='search_product_id' value='' size='13' onkeypress='return search_product_listtag_room(event);'>
+		</td>
+	</tr>
+	<tr>
+		<td colspan='2'><hr size='1'></td>
+	</tr>
+	<tr>
+		<td colspan='2'><div id='view_key_shelf'></div></td>
+	</tr>
+</table>
+";
+?>

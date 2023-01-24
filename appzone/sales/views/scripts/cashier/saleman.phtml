@@ -1,0 +1,54 @@
+<?php if($this->lockfinger=="N"){ ?>
+	<input type="text" size="25" id="chk_saleman_id" class="input-text-pos ui-corner-all keybarcode">
+<?php }else{ ?>
+<script>
+	$(document).ready(function(){
+		//$("#showsaleman").hide();
+		$( "#fingerscan" ).html('<iframe src="/finger_shop/index.php/compare/index/<?php echo $this->session_employee_id;?>?now='+Math.random()+'" width="500" height="350">');
+		setTimeout(function() {
+			reloadcompare();
+		},2000);
+	});
+
+function reloadcompare(){
+	$.ajax({
+		  type: "POST",
+		  url: "/sales/cashier/getuserid?now="+Math.random(),
+		  data:{id_card:""},
+		  dataType:"json"
+		})
+		  .success(function(msg) { 
+				if(msg.status == "y"){
+					//alert(msg.password);
+					$("#chk_saleman_id").val(msg.userid);
+					$("#chk_saleman_id").trigger($.Event("keypress", { keyCode: 13 }));
+				}else if(msg.status == "sk"){
+					$( "#fingerscan" ).html('<iframe src="/finger_shop/index.php/idcard/index?now='+Math.random()+'" width="490" height="350">');
+					setTimeout(function() {
+						reloadcompare();
+					},1000);
+				}else if(msg.status == "f"){
+					$( "#fingerscan" ).html('<iframe src="/finger_shop/index.php/compare/index?now='+Math.random()+'" width="500" height="350">');
+					jAlert("คุณไม่มีสิทธิ์เข้าใช้ระบบ");
+					setTimeout(function() {
+						reloadcompare();
+					},1000);
+				}else if(msg.status == "n" || msg.status==""){
+					setTimeout(function() {
+						reloadcompare();
+					},1000);
+				}
+		  	});
+	
+	}
+// $("#user_id").keyup(function(){
+//     if($(this).val().length == 6){
+//       check_user();
+// 	 }
+// });
+
+	
+</script>
+<p id="fingerscan" ></p>
+<input type="hidden" size="25" id="chk_saleman_id" class="input-text-pos ui-corner-all keybarcode">
+<?php }?>

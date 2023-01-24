@@ -1,0 +1,44 @@
+ <?php 
+      	if(!empty($this->arr_promo)){
+       		$obj=$this->arr_promo;
+       	}
+    ?>
+<table width="100%" align="center" border="0" cellpadding="5" cellspacing="0" >
+				<tr>
+					<td width="20%" align="right">
+						รหัสโปรโมชั่น&nbsp;:
+					</td>
+					<td align="left">
+						<?php echo $obj->actHead[0]->promo_code;?>
+						&nbsp;&nbsp;
+						<?php echo $this->hdesc;?>
+					</td>
+					<td width="20%">	&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="20%" align="right">รายละเอียด&nbsp;:</td>
+					<td width="20%" colspan="2">&nbsp;</td>
+				</tr>
+				<?php
+					foreach($obj->actList as $data){
+						?>
+						<tr>
+							<td width="10%" align="right"><?php echo $data->line;?></td>
+							<td align="left"><?php echo $data->promo_des;?></td>
+							<td width="20%">&nbsp;</td>
+						</tr>
+						<?php 
+					} 
+				?>
+				
+				<tr>
+					<td width="20%" align="right">
+						คะแนนที่ใช้&nbsp;:
+					</td>
+					<td aligh="left">
+						<?php echo $obj->actHead[0]->point;?>&nbsp;คะแนน
+					</td>
+					<td width="20%">	&nbsp;</td>
+				</tr>
+			
+			</table>

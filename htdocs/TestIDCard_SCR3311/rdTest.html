@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Cache-Control" content="no-store"> 
+<meta http-equiv="Content-Language" content="th"> 
+<meta http-equiv="content-Type" content="text/html; charset=window-874"> 
+<meta http-equiv="content-Type" content="text/html; charset=tis-620"> 
+<title> demo smartcard national reader</title>
+
+</head>
+
+
+<body>
+
+	<script type="text/javascript">
+		
+		function onreadid() {
+			var reader = document.idcard.getSelectReader();
+			if(reader==null)
+			{
+				alert( "no has card reader"); return;
+			}
+
+			var bret = document.idcard.selectReader(reader);
+			if(bret == false)
+			{
+				alert( "cannot select reader"); return;
+			}
+			
+			alert( "can card selectReader" + reader); 
+			if(document.idcard.isCardPresented()==false)
+			{
+				alert( "no has idcard present"); return;
+			}
+			
+			if(document.idcard.cardConnect()==false)
+			{
+				alert( "cannnot connect card reader"); return;
+			}
+			
+			alert( "can connect card reader"); return;
+		}
+		
+/*		
+		function getCardReaders() {
+			var readers = document.idcard.getReaderList();
+			if(readers==null)
+			{
+				alert('no have cardreader exist');
+				return ;
+			}
+			var ar = readers.split(";");
+			document.write ( 'beging' );
+			for( var i=0; i < ar.length ; i++)
+				document.write ( ar[i] );
+		}
+*/		
+	</script>
+
+<APPLET CODE = 'rdListReader.RdCardReader' archive=rdTest/RdTestCard.jar  name='idcard' WIDTH = "200" HEIGHT = "200">
+</APPLET>
+
+</div>
+
+
+<!-- <input type="button" value="List" style="width:100px;" onclick="getCardReaders()"/></td> -->
+
+<input type="button" value="readIDCard" style="width:100px;" onclick="onreadid()"/>
+
+
+</body>
+
+</html>

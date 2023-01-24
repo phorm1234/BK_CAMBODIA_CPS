@@ -1,0 +1,31 @@
+<?php
+$arr_data=$this->arr_data;
+$page=$this->page;
+$total=count($arr_data);
+if(empty($arr_data)){
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+}else{
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+	$i=1;
+	foreach($arr_data as $val){
+		//$ex_mfg=explode("-",$val['mfg_date']);
+		//$date_mfg=$ex_mfg[2]."/".$ex_mfg[1]."/".$ex_mfg[0];
+		$sumprice=$val['price']*$val['quantity'];
+		$sumprice="<font color='blue'>".number_format($sumprice, 2, '.', ',')."</font>";
+		$qty=number_format($val['quantity'], 0, '.', ',');
+		$price=number_format($val['price'], 2, '.', ',');
+		$data['rows'][] = array(
+			'id' => $val['seq'],
+			'cell' => array($i,$val['product_id'], $val['name_product'], $price, $qty, $sumprice, $val['product_status'])
+		);
+		$i++;
+	}
+}
+echo json_encode($data);
+?>

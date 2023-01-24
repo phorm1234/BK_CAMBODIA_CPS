@@ -1,0 +1,70 @@
+<?php 
+$txt=$this->txt;
+?>
+<script>
+$(document).ready( function() {
+	$("#barcode").focus();
+	viewgp();
+});
+
+jQuery(document).bind('keydown', 'f1',
+function (evt){
+	search_gp();
+});
+
+$(function() {
+	$( "#dialog_gp" ).dialog({
+		autoOpen: false,
+		height: 450,
+		width: 400,
+		modal: true
+	});
+
+	$( "#dialog_frm_gp" ).dialog({
+		autoOpen: false,
+		height: 450,
+		width: 400,
+		modal: true
+	});
+	
+});
+function process_gp(event){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		var barcode=$("#barcode").val();
+		//alert(barcode);
+		viewgp();
+	}
+}
+function viewgp(){
+	var barcode=$("#barcode").val();
+	var txt=$("#txt").val();
+	$.ajax({type: "POST",url: "/stock/miscellaneous/getgp",data:{barcode:barcode,txt:txt},success:
+	function(data){
+		$("#viewgp").html(data);
+	}}); 
+}
+
+</script>
+<div id="dialog_gp" title="Barcode"></div>
+<div id="dialog_frm_gp" title="Form"></div>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="20" width="12%" align="right" class="servBodL_right">ป้อนรหัส Barcode : </td>
+    <td>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    	<tr>
+    		<td width="5%"><input type="text" name="barcode" id="barcode" class="NFText" autocomplete="off" onkeypress="return process_gp(event)"></td>
+    		<td><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_gp();"><span class="ui-icon ui-icon-search"></span>(F1)</a></td>
+    	</tr>
+    </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+		<div id="viewgp"></div>
+	</td>
+  </tr>
+</table>
+<input type="hidden" name="txt" id="txt" value="<?php echo $txt;?>"></input>

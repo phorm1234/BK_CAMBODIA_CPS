@@ -1,0 +1,19 @@
+<table width="100%" border="0" cellpadding="2" cellspacing="1">	
+	<tr><td colspan="2">&nbsp;</td></tr>	
+	<tr>
+		<td width="25%" align="right"><span style="color:#000000;">Printer : </span></td>
+		<td>
+			<select id="printer" name="printer">	
+			<?php 
+			 echo "<option value='' selected>- เลือก -</option>";
+			  foreach($this->arr_printer as $data){
+			  	$printer_name=$data['printer_name'];			  	
+			  	$printer_type=$data['printer_type'];
+			  	$printer_type=$printer_name."#".strtoupper($printer_type);
+			  	echo"<option value='$printer_type'>$printer_name</option>";
+			  }			  
+			 ?>
+			</select>&nbsp;<span style='color:red;'>*</span>
+		</td>
+	</tr>
+</table>

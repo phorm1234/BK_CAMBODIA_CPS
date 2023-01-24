@@ -1,0 +1,13 @@
+<?php
+$dataChkPro=$this->dataChkPro;
+print_r($dataChkPro);
+if($dataChkPro){
+	foreach($dataChkPro as $data){    
+		$promo_code=$data['promo_code'];
+		$promo_des=$data['promo_des'];
+		
+		echo "<input type='button' onclick=\"lastgipro('$promo_code','1');\" value=\"$promo_code=>$promo_des\"><br>";
+	
+	}
+}
+?>

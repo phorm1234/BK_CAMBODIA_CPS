@@ -1,0 +1,30 @@
+<?php 
+$shelf=$this->viewshelf;
+?>
+<div id="dialog" title="Add data"></div>
+<div id="dialog_product" title="Product List"></div>
+<div id="dialog_tranfer" title="Transfer Product List Between Room"></div>
+<div id="dialog_process" title="Process"></div>
+<table width="100%" border="0" cellspacing="3" cellpadding="0">
+  <tr>
+    <td><button onClick="return add_shelf('n');" id="create_shelf">Create Product Shelf</button></td>
+    <td align="right">Select Shelf : 
+		<select id="sel_shelf" onChange="return select_shelf();">
+			<option value="">All</option>
+			<?php 
+			if(!empty($shelf)){
+				foreach($shelf as $val_shelf){
+					echo "<option value='".$val_shelf['shelf_no']."'>".$val_shelf['shelf_no']."</option>";
+				}
+			}
+			?>
+		</select>
+	</td>
+  </tr>
+  <tr>
+    <td colspan="2"><div id="view"></div></td>
+  </tr>
+  <tr>
+    <td> </td>
+  </tr>
+</table>

@@ -1,0 +1,54 @@
+<script  type="text/javascript" src="/sales/js/jquery-1.4.4.min.js"></script>
+<script  type="text/javascript" src="/sales/js/jquery-ui-1.8.10.custom.min.js"></script>
+<script  type="text/javascript" src="/sales/js/promotion/promotion.js"></script>
+<link href="/sales/css/themes/dark-hive/jquery-ui-1.8.9.custom.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">	
+
+
+	
+	</script>
+	<div id="dialog-promotion" title="โปรโมชั่น"><div id='promotion'></div></div>
+	<div id="dialog-modal" title="เลือกโปรโมชั่น"><div id='listPro'></div></div>
+	<div id="dialog-hotpro" title="Hot Promotion"><div id='hotpro'></div></div>
+
+<?php
+
+		echo '<table border=0>';		
+			echo '<tr>';
+			echo "<td>Seq</td>";
+			echo "<td>promo_code</td>";
+			echo "<td width='200'>promo_detail</td>";
+			echo "<td>promo_seq</td>";
+			echo "<td>promo_pos</td>";
+			echo "<td>promo_st</td>";
+			echo "<td>promo_tp</td>";
+			echo "<td>Product</td>";
+			echo "<td>Price</td>";
+			echo "<td>Quantity</td>";
+			echo "<td>Amount</td>";
+			echo "<td>Net_amt</td>";
+			echo '</tr>';
+		foreach($this->diary2 as $dataDiary2) {
+			echo '<tr>';
+			echo "<td>$dataDiary2[seq]</td>";
+			echo "<td>$dataDiary2[promo_code]</td>";
+			echo "<td width='200'></td>";
+			echo "<td>$dataDiary2[promo_seq]</td>";
+			echo "<td>$dataDiary2[promo_pos]</td>";
+			echo "<td>$dataDiary2[promo_st]</td>";
+			echo "<td>$dataDiary2[promo_tp]</td>";			
+			echo "<td>$dataDiary2[product_id]</td>";
+			echo "<td>$dataDiary2[price]</td>";
+			echo "<td>$dataDiary2[quantity]</td>";
+			echo "<td>$dataDiary2[amount]</td>";
+			echo "<td>$dataDiary2[net_amt]</td>";
+			echo '</tr>';
+		}
+		echo '</table>';
+		
+		echo "<input type='button' value='Promotion' onclick='mappro();'>";
+		echo "<input type='button' value='Hot Promotion' onclick='hotpro();'>";
+		
+
+?>
+<div id='showPro'></div>

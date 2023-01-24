@@ -1,0 +1,36 @@
+<?php
+$dataList=$this->dataList;
+?>
+<table>
+<tr>
+<td>seq</td>
+<td>product_id</td>
+<td>quatity</td>
+<td>type_discount</td>
+<td>discount</td>
+</tr>
+<?php 
+
+foreach($dataList as $data){   
+	$seq_pro=$data['seq_pro'];    
+	$product_id=$data['product_id'];  
+	$quantity=$data['quantity'];  
+	$type_discount=$data['type_discount'];  
+	$discount=$data['discount'];  
+
+	echo "<tr>";
+	echo "<td>$seq_pro</td>";
+	echo "<td>$product_id</td>";
+	echo "<td>$quantity</td>";
+	echo "<td>$type_discount</td>";
+	echo "<td>$discount</td>";
+	echo "</tr>";
+	
+}
+?>
+
+
+
+
+
+</table>

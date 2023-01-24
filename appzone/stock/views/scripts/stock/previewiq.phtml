@@ -1,0 +1,72 @@
+<?php
+$data=$this->data;
+$txt_head=$this->txt_head;
+$count=count($data);
+if($count>0){
+/*echo "<pre>";
+print_r($data);
+echo "</pre>";*/
+?>
+<table width='100%' border='0' cellspacing='0' cellpadding='0'>
+	<tr>
+		<td><?php echo $txt_head;?></td>
+	</tr>
+</table>
+<table width='100%' border='0' cellspacing='0' cellpadding='0' bgcolor='#fff'>
+<?php 
+foreach($data as $val){
+	$doc_dt=date('d/m/Y', strtotime($val['doc_date']));
+	if($val['flag']=="C"){
+		$flag="<font color='red'><ยกเลิก></font>";
+	}else{
+		$flag="";
+	}
+?>
+	<tr bgcolor="#f2f0f0">
+		<td colspan="3">เลขที่เอกสาร : <?php echo $val['doc_no'];?></td>
+		<td colspan="2">เวลาเอกสาร : <?php echo $doc_dt;?></td>
+	</tr>
+	<tr>
+		<td>Remark : </td>
+		<td colspan="3"><?php if(!empty($val['remark'])){echo $val['remark'];}?></td>
+		<td valign="right"><?php echo $flag;?></td>
+	</tr>
+	<?php 
+	$i=0;
+	foreach($val['detail'] as $detail){
+		$qty=number_format($detail['quantity'], 0, '.', ',');
+		$price=number_format($detail['price'],2);
+		$amount=number_format($detail['amount'],2);
+		$product_name=substr($detail['name_product'],0,15)
+	?>	
+	<tr>
+		<td><?php echo $qty;?></td>
+		<td><?php echo $detail['product_id'];?></td>
+		<td><?php echo $product_name;?></td>
+		<td><?php echo $price;?></td>
+		<td><?php echo $amount;?></td>
+	</tr>
+	<?php
+	$i++;	
+	}
+	$sum_qty=number_format($val['sum_qty'], 0, '.', ',');
+	$sum_price=number_format($val['price'], 0, '.', ',');
+	?>
+	<tr bgcolor="#f8f6f6">
+		<td><?php echo $sum_qty;?></td>
+		<td colspan="3">จำนวนทั้งหมด : <?php echo $i;?> รายการ</td>
+		<td><?php echo $sum_price;?></td>
+	</tr>
+	<tr>
+		<td colspan="5"><hr size="1"></hr></td>
+	</tr>
+<?php 
+$i="";
+}
+?>
+</table>
+<?php 
+}else{
+	echo "ไม่มีรายการเอกสาร";	
+}
+?>

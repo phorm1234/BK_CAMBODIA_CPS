@@ -1,0 +1,29 @@
+<style type="text/css">
+	a.pro_rp_sp{
+		color:#009999;
+	}
+</style>
+<?php 
+	if(!empty($this->arr_promo)){
+		?>
+		<table width="100%" border="0" cellpadding="5" cellspacing="5" bgcolor="#7B949C"><!-- CED7EB -->
+		<?php		
+		$i=0;
+		foreach($this->arr_promo as $arr_promo){
+			$promo_id=$arr_promo['promo_id'];			
+			($i%2==0)?$bg_color="#FFFFFF":$bg_color="#F2F2F2";
+			?>
+			<tr bgcolor="<?php echo $bg_color;?>">
+				<td width="20%" align="center">
+					<a href="#" class="pro_rp_sp" id="<?php echo $promo_id;?>" iddes="<?php echo $arr_promo['promo_des'];?>"><?php echo $arr_promo['promo_id'];?></a>
+				</td>
+				<td align="left"><?php echo $arr_promo['promo_des'];?></td>
+			</tr>
+			<?php 
+			$i++;
+		}//foreach
+		?>
+		</table>
+		<?php 
+	}
+?>

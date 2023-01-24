@@ -1,0 +1,23 @@
+delete from member_register
+where
+id_card in('3801400600224','3101801054138','1100800170919','3100504391058','3101800600252')
+
+select *   from trn_diary1
+where
+idcard in('3801400600224','3101801054138','1100800170919','3100504391058','3101800600252')
+
+
+delete
+FROM trn_diary1
+WHERE doc_date >= '2015-05-11'
+AND coupon_code LIKE '3409900553439%'
+AND application_id = 'OPMGMC300'
+AND flag <> 'C'
+ORDER BY doc_date, doc_time;
+delete from crm_card where member_no like '999999%';
+update `com_register_new_card` 
+set apply_date='0000-00-00',apply_time='00:00:00',remark=''
+WHERE member_id like '99999999999%';
+delete from trn_diary1 where idcard='3801400600224' and application_id='OPMGMC300';
+delete from member_register where id_card='3801400600224';
+delete from member_history where id_card='3801400600224';

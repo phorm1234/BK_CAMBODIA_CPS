@@ -1,0 +1,112 @@
+<?php
+//@header("Content-type:text/html; charset=utf=8");
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+
+//$pdf->SetMargins( 0,2,0 );  // ซ้าย , บน , ขวา
+$startY=2;
+$startX=0;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetMargins(0,2,0);
+$pdf->SetAutoPageBreak("off",1);  
+$pdf->AddPage();
+$pdf->SetFont('CordiaNew','',5);
+//$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' ,'วันที่ออกเอกสาร '.$this->print_time ) , 0 , 1,'R' );
+
+//$pdf->Image('/var/www/pos/htdocs/report/img/logo/op/op-logo.gif',8 ,0,0);
+$pdf->Image('/var/www/pos/htdocs/sales/img/op/ssup_logo.gif',20,0,35);
+
+//$title1=iconv('UTF-8','cp874',"รายงานสรุปยอดขาย");
+
+$line="----------------------------------------------------------------------------------------------";
+$lnbr=4;
+$pdf->SetFont('CordiaNew','B',13);
+$pdf->Ln(8);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','SSUP (CAMBODIA) CO.LTD.'),0,0,'C');
+$pdf->Ln(3);
+$pdf->SetFont('CordiaNew','B',12);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','รายงานสรุปยอดขาย'),0,0,'C');
+$pdf->Ln($lnbr);
+$pdf->SetFont('CordiaNew','B',11);
+$pdf->Cell(0,3,iconv('UTF-8','cp874',"ประจำวันที่  ".$this->s_date." - ".$this->e_date),0,1,'C');
+$pdf->Ln($lnbr);
+$pdf->Cell( 40  , $lnbr , iconv( 'UTF-8','cp874' ,'วันที่พิมพ์เอกสาร '.$this->print_time ),0,0,'L');
+$pdf->Cell( 28  , $lnbr , iconv( 'UTF-8','cp874' ,'เวลา '.$this->ptime ),0,0,'R');
+$pdf->Ln($lnbr);
+$pdf->Cell(0,$lnbr,iconv('UTF-8','cp874','จุดขาย : '.$this->branch_id .' ('.$this->branch_name .')' ));
+$pdf->Ln($lnbr);
+
+$pdf->SetFont('CordiaNew','',10);
+$pdf->Cell(0,3,$line);
+$pdf->Ln($lnbr);
+
+$a = 5;
+$b = 7;
+$c = 10;
+$d = 30;//38
+$e = 20;//22
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , '#' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'รหัส' ) , 0 , 0 ,'C' );
+$pdf->Cell( $d  , 4 , iconv( 'UTF-8','cp874' , 'รายละเอียด' ) , 0 , 0,'C' );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'จำนวน' ) , 0 , 0,'C' );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , 'ราคา' ) , 0 , 0,'C' );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , 'ราคาสุทธิ' ) , 0 , 1,'C' );
+
+$pdf->Ln(1);
+$pdf->Cell(0,3,$line,0,1);
+$pdf->Ln(1);
+
+$i=1;$q=0;$m=0;$n=0; foreach ($this->get_data as $v){
+	$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , $i ) , 0 , 0  );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , $v['product_id'] ) , 0 , 0 ,'C' );
+	$pdf->Cell( $d  , 4 , iconv( 'UTF-8','cp874' , $v['name_print'] ) , 0 , 0,'L' );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($v['quantity']) ) , 0 , 0,'C' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($v['amount'],2) ) , 0 , 0,'R' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($v['net_amt'],2) ) , 0 , 1,'R' );
+	$i++;
+	$q = $q + $v['quantity'] ;
+	$m = $m + $v['amount'] ;
+	$n = $n + $v['net_amt'] ;
+}
+	
+$pdf->Ln(2);
+$pdf->Cell(0,2,$line,0,1);
+$pdf->Ln(2);
+
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'รวม' ) , 0 , 0 );
+	$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , $i-1 ) , 0 , 0  );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , ' จำนวน ' ) , 0 , 0 );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($q) ) , 0 , 0 );
+	$pdf->Cell( $e  , 4 , iconv( 'UTF-8','cp874' , number_format($m,2) ) , 0 , 0 ,'R' );
+	$pdf->Cell( $e  , 4 , iconv( 'UTF-8','cp874' , number_format($n,2) ) , 0 , 1 ,'R' );
+
+$pdf->Ln(4);
+$pdf->Cell(0,2,$line,0,1);
+
+$pdf->Ln(8);
+
+$pdf->Cell( 28  , 4 , iconv( 'UTF-8','cp874' , 'ลายเซ็นต์พนักงานขาย  :  __________________________________' ) , 0 , 0 );
+
+//$pdf->Ln(20);
+//$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , '.' ) , 0 , 0 );
+//$pdf->Output();
+$name='printsalesummary.pdf';
+$output="/var/www/pos/htdocs/reportshop/printreport/".$name;
+//$pdf->Output($output,'F');
+@chmod($output,0777); 
+if(@file_exists($output)){
+		 shell_exec("rm $output");
+		@unlink($output);
+	}
+ 
+$pdf->Output($output,'F'); 
+shell_exec("lp -o media=Letter $output");
+?>
+
+<script type="text/javascript">
+//self.close();
+</script>
+		

@@ -1,0 +1,28 @@
+<?php 
+$json_doc_no=$this->jsondata;
+$doc_no=json_decode($json_doc_no,true);
+echo "
+<table width='100%' border='0'>
+	<tr>
+		<td class='sub_text_head'>ปรับยอดสินค้า</td>
+		<td align='right' width='35%'>
+		<b>เอกสาร : </b>
+		<select id='doc_no' onChange='return balance_product();'>
+			<option>เลขที่</option>
+		";
+			foreach($doc_no as $val_doc_no){
+				echo "<option value='".$val_doc_no['doc_no']."'>".$val_doc_no['doc_no']."</option>";
+			}
+		echo "
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<td colspan='2'><hr size='1'></td>
+	</tr>
+	<tr>
+		<td colspan='2'><div id='view_balanceproduct'></div></td>
+	</tr>
+</table>
+";
+?>

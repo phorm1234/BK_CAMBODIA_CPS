@@ -1,0 +1,56 @@
+<script>
+$(document).ready( function() {
+	$("#room_no").focus();
+});
+function process(event,chk){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		if(chk=="room_name"){
+			$("#room_desc").focus();
+		}
+
+		if(chk=="room_desc"){
+			save_room();
+		}
+	}
+	event.stopPropagation();
+}
+</script>
+<?php
+$checkeditroom=$this->checkeditroom;
+$shelf_no=$this->shelf_no;
+$floor_no=$this->floor_no;
+$room=$this->room;
+$seq=count($room)+1;
+$seq="00".$seq;
+$seq=substr($seq,-2);
+if($checkeditroom=="n"){
+	$room_no_up=$checkeditroom;
+}else{
+	$room_no_up=$checkeditroom[0]['room_no'];
+}
+?>
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+ <tr>
+	<td width="25%" class="sub_text_head_form">รหัส Shelf : </td>
+	<td width="80%"><?php echo $shelf_no;?></td>
+  </tr>
+  <tr>
+	<td class="sub_text_head_form">รหัสชั้นวางสินค้า : </td>
+	<td><?php echo $floor_no;?></td>
+  </tr>
+  <tr>
+	<td class="sub_text_head_form">รหัสห้องวางสินค้า : </td>
+	<td><span class="sub_text_head_form"><input name="room_no" id="room_no" type="text" class="input" value="<?php if(!empty($shelfData['room_no'])){echo $shelfData['room_no'];}else{echo $floor_no."-".$seq;}?>" onKeyPress="return process(event,'room_name');"></span></td>
+  </tr>
+  <tr>
+	<td valign="top" class="sub_text_head_form">รายละเอียด : </td>
+	<td>
+	<input name="room_desc" id="room_desc" type="text" class="input" value="<?php if(!empty($shelfData['desc'])){echo $shelfData['desc'];}?>" onKeyPress="return process(event,'room_desc');" size="50">
+	</td>
+  </tr>
+</table>
+<input type="hidden" name="shelf_no" id="shelf_no" value="<?php echo $shelf_no;?>">
+<input type="hidden" name="floor_no" id="floor_no" value="<?php echo $floor_no;?>">
+<input type="hidden" name="room_no_up" id="room_no_up" value="<?php echo $room_no_up;?>">
+<input type="hidden" name="chk_func_save" id="chk_func_save" value="room">

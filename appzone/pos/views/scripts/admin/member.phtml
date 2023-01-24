@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>Member</title>
+       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="/pos/plugin/ipad/style/grid.css" type="text/css" media="screen"/>
+        <link rel="stylesheet" href="/pos/plugin/ipad/style/main.css" type="text/css" media="screen"/>
+        <script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery-1.7.1.min.js"></script>
+        <script type="text/javascript" src="/pos/plugin/ipad/js/cookies.js"></script>
+        
+        <script src="/pos/js/flexigrid.js"></script>
+		<link type="text/css" rel="stylesheet" media="screen" href="/pos/css/flexigrid/flexigrid.css" />	
+		<script type='text/javascript' src='/pos/js/member/member.js'></script>
+    </head>
+    <body>
+    <div id="safari">
+        <div id="navbar">
+            <div id="title"> Member </div>
+            <div id="bookmarks" class="icon">book</div>
+            
+            <div id="urlCont">
+                <form id="urlgo">
+                    <input type="text" id="url" placeholder="member_nane OR surname" value=""/>
+                </form>
+                <div id="refresh">R</div>
+                <div id="stop">S</div>
+            </div>
+            <div id="searchCont">
+                <form id="searchgo">
+                    <input type="text" placeholder="member_no" id="search"/>
+                </form>
+            </div>
+        </div>
+        <div id="tabs_cont">
+            <div id="browser_overlay">
+                <div  width="884" height="591" scrolling="no">
+					<form action="/pos/admin/tablemember" method="post" enctype="multipart/form-data" name="sform" id="sform">
+						<table id='fixgrids'></table>
+					</form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+	<div id='alldialog' style="display:none">
+		<div id="diveditmemmber" icon="icon-save" title="แก้ไขข้อมูลสมาชิก" >
+			<table border="0" align="center">
+			    <tr>
+			      <td><div align="right">ชื่อ</div></td>
+			      <td><input name="name" type="text" id="name" /></td>
+			    </tr>
+			    <tr>
+			      <td><div align="right">นามสกุล</div></td>
+			      <td><input name="surname" type="text" id="surname" /></td>
+		      </tr>
+			    <tr>
+			      <td><div align="right">วันเกิด </div></td>
+			      <td><input name="birthday" type="text" id="birthday" /></td>
+			    </tr>
+			    <tr>
+			      <td><div align="right">โทรศัพท์มือถือ</div></td>
+			      <td><input name="mobile_no" type="text" id="mobile_no" /></td>
+			    </tr>
+			    <tr>
+			      <td><div align="right">เลขที่บัตรสมาชิก</div></td>
+			      <td><input name="member_no" type="text" id="member_no" /></td>
+		      </tr>
+			    <tr>
+			      <td><div align="right">วันที่บัตรหมดอายุ</div></td>
+			      <td><input name="expire_date" type="text" id="expire_date" /></td>
+		      </tr>
+			    <tr>
+			      <td><div align="right">รหัสประเภทบัตร</div></td>
+			      <td><input name="cardtype_id" type="text" id="cardtype_id" /></td>
+		      </tr>
+			    <tr>
+			      <td><div align="right">รหัสโปรโมชั่นที่ใช้สมัคร</div></td>
+			      <td><input name="apply_promo" type="text" id="apply_promo" /></td>
+		      </tr>
+			  </table>
+		</div>
+	</div>
+</body>
+</html>

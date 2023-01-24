@@ -1,0 +1,96 @@
+<?php	
+	include(FPDF_PATH."/fpdf.php");      
+        $hl=5;
+        $hl1=4;
+        $hl2=3;
+        $l2br=4;
+        $maxdoc=72;
+        $logo="/op-logo.gif";
+        $pdf=new FPDF('P','mm','tm-t88iv');
+        $pdf->SetThaiFont();
+        $pdf->AddPage();
+        $startY=2;
+        $startX=0;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->SetMargins(0,2,0); 
+        $pdf->SetAutoPageBreak("off",1);
+        $pdf->Image(LOGO_PATH.$logo,2,0,65);
+        $startY+=8;
+        $pdf->SetY($startY);
+		$pdf->SetX($startX);		
+        $pdf->SetFont('CordiaNew','B',13); 
+        $pdf->Cell($maxdoc,$hl,iconv('UTF-8','cp874','รายงานสรุปยอดขายพนักงาน'),0,0,'C',0); 
+        $startY+=$l2br;
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->SetFont('CordiaNew','',10);//B
+        $pdf->Cell(10,$hl1,iconv('UTF-8','cp874',"จุดขาย : ").$this->branch_id." ".iconv('UTF-8','cp874',$this->branch_name),0,0,'L',0); 
+        $pdf->Cell(25,$hl1,$this->arr_h[0]['tax_id'],0,0,'L',0);
+        $pdf->Cell(4,$hl1,"",0,0,'L',0);
+        $arr_cdate=explode('-',date('Y-m-d'));
+        $cdate=$arr_cdate[2]."/".$arr_cdate[1]."/".$arr_cdate[0];
+        $pdf->Cell(33,$hl1,iconv('UTF-8','cp874',"วันที่พิมพ์ : ").$cdate,0,0,'R',0); 
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+        $pdf->SetFont('CordiaNew','',10);
+        $date_between=$this->date_start." ".iconv('UTF-8','cp874','ถึง')." ".$this->date_stop;
+        $pdf->Cell(33,$hl1,iconv('UTF-8','cp874',"วันที่ : ").$date_between,0,0,'L',0); 
+       $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX);   
+        $pdf->Cell($maxdoc,$hl1,"----------------------------------------------------------------------------------------------------",0,0,'C',0); 
+       $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX);  
+        //--------- product item ------------------
+      	$pdf->SetFont('CordiaNew','',10);      	
+      	$pdf->Cell(18,$hl2,iconv('UTF-8','cp874',"รหัสพนักงาน"),0,0,'C',0);
+      	$pdf->Cell(18,$hl2,iconv('UTF-8','cp874',"ชื่อ-นามสกุล"),0,0,'C',0);
+        $pdf->Cell(10,$hl2,iconv('UTF-8','cp874',"จำนวนบิล"),0,0,'C',0);	     
+        $pdf->Cell(14,$hl2,"Gross",0,0,'C',0);       
+        $pdf->Cell(14,$hl2,"Net",0,0,'C',0);     
+        $startY+=2;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+      	$pdf->Cell($maxdoc,$hl1,"----------------------------------------------------------------------------------------------------",0,0,'C',0);  
+        $startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+		
+		foreach($this->arr_employee as $key=>$data){
+			$n_bill=$data['n_bill'];
+			number_format($data['sum_amount'],'2','.',',').
+			$sum_amount=number_format($data['sum_amount'],'2','.',',');
+			$sum_net=number_format($data['sum_net'],'2','.',',');
+			$fullname=$data['fullname'];
+	        $pdf->Cell(18,$hl2,$key,0,0,'C',0);
+	        $pdf->Cell(18,$hl2,iconv('UTF-8','cp874',$fullname),0,0,'C',0);
+	        $pdf->Cell(10,$hl2,$n_bill,0,0,'C',0);	     
+	        $pdf->Cell(14,$hl2,number_format($data['sum_amount'],2),0,0,'C',0);       
+	        $pdf->Cell(14,$hl2,number_format($data['sum_net'],2),0,0,'C',0);     
+	        $startY+=$l2br;
+		    $pdf->SetY($startY);
+			$pdf->SetX($startX); 
+		}
+     
+        //--------- product item ------------------
+       
+      	$startY+=$l2br;
+	    $pdf->SetY($startY);
+		$pdf->SetX($startX); 
+       
+        $name='/rptsalebyemp.pdf';
+	    $output=REPORT_PATH.$name;	 
+	    @chmod(REPORT_PATH,0777);
+	    
+	    //$pdf->Output();exit();
+	      
+	    $pdf->Output($output,'F');
+		echo shell_exec("lp -o media=Letter $output");
+		if(@file_exists($output)){
+			echo shell_exec("rm $output");			
+		}
+?>

@@ -1,0 +1,700 @@
+<style type="text/css">   
+    .div-table{display:table; width: 700px;  }
+    .div-table-row{display:table-row;}
+ 
+    .div-table-col1{display:table-cell; padding-left:  10px; padding-right:  100px; width: 250px;}
+    .div-table-col2{display:table-cell; padding-left:  50px; }
+    .div-table-col3{display:table-cell; padding-left:  50px; float: right;}
+	.div-table-col4{display:table-cell; padding-left:  10px; width: 600px;}
+    
+	.div-table2{display:table; width: 700px;  }
+    .div-table-row2{display:table-row;}
+ 
+    .div-table-coll1{display:table-cell; padding-right:  100px; width: 250px; border: 1px;}
+    
+    
+    
+</style>
+
+
+    
+
+<p align="center">
+    <!-- <img src="/sales/img/cps/logo_cps_new_s.png"> -->
+  <br><br>Payment Summary Report<br>
+    On Date <?php echo $this->s_date. " - " .$this->e_date ; ?></p>
+
+<div class="div-table">
+<div class="div-table-row">   
+    <div class="div-table-col1">Print Time <?php echo $this->print_time ;?></div>
+    
+    <div class="div-table-col3">Time  <?php echo $this->ptime ;?></div>
+    
+</div>
+<div class="div-table-row">
+    <div class="div-table-col1">Branch :  <?php echo $this->branch_id.' '.$this->branch_name ;?></div>
+    
+    
+</div>
+</div>
+
+<hr>
+
+<div class="div-table">
+
+<div class="div-table-row">
+          <div class="div-table-col1">Total amout</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->amount_data, 2, '.', ',') ;?> USD</div>
+</div>
+    
+   
+<div class="div-table-row">
+          <div class="div-table-col1">Discount</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->discount_data, 2, '.', ',') ;?> USD</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">Credit</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->credit_data, 2, '.', ',') ;?> USD</div>
+</div>
+
+<?php
+    // var_dump('<pre>',$this->othercredit_data);
+    // die;
+    if(sizeof($this->othercredit_data)>0){
+        foreach($this->othercredit_data as $data_sub)
+        {
+            echo '<div class="div-table-row">
+            <div class="div-table-col1">'.$data_sub['description'].'</div>
+            <div class="div-table-col2"></div>
+            <div class="div-table-col3">'.number_format($data_sub['amount'], 2, '.', ',').' USD</div>
+            </div>';
+            // echo $data_sub['seq'];
+        }
+
+    }
+
+?>
+<div class="div-table-row">
+          <div class="div-table-col1">Cash Coupon / voucher </div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->netcashcoupon, 2, '.', ',') ;?> USD</div>
+</div>
+<!--<div class="div-table-row">
+          <div class="div-table-col1">หักลดหนี้ เครดิต</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php// echo "" ;?> USD</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">ยอดสุทธิ เครดิต</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php// echo number_format($this->credit_data, 2, '.', ',') ;?> USD</div>
+</div>-->
+<div class="div-table-row">
+          <div class="div-table-col1">Cash</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->cash_data, 2, '.', ',') ;?> USD</div>
+</div>
+
+</div>
+
+<div class="div-table">
+
+<div class="div-table-row">
+
+          <div class="div-table-col1">(40) Change &nbsp;&nbsp; (G) &nbsp;&nbsp; <?php echo number_format($this->getgross_data) ;?> USD </div>
+          
+          <div class="div-table-col2">,   <?php echo number_format($this->getquan_data) ;?></div>
+          <div class="div-table-col3"> (N) &nbsp; <?php echo number_format($this->getamt_data, 2, '.', ',') ;?> USD</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">(41) refund &nbsp;&nbsp; (G) &nbsp;&nbsp; <?php echo number_format($this->qbackgross_data) ;?> USD </div>
+          <div class="div-table-col2">,   <?php echo number_format($this->qback_data) ;?></div>
+          <div class="div-table-col3">(N) &nbsp; <?php echo number_format($this->qbackamt_data, 2, '.', ',') ;?> USD</div>
+</div>
+</div>
+
+<div class="div-table">
+
+<div class="div-table-row">
+          <div class="div-table-col1">reduce credit debt</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->getcn_credit, 2, '.', ',') ;?> USD</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">reduce cash debt</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->getcn_cash, 2, '.', ',') ;?> USD</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">Missing product bill (19)</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->getbill_data, 2, '.', ',') ;?> USD</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">Amount of PAY IN</div>
+          <div class="div-table-col2"></div>
+          <div class="div-table-col3"><?php echo number_format($this->payin, 2, '.', ',') ;?> USD</div>
+</div>
+<!--</table>-->
+</div>
+
+<hr>
+
+<div class="div-table">
+<!--<table width="550">-->
+<div class="div-table-row">
+          <div class="div-table-col1">Product Transfer in</div>
+          <div class="div-table-col2"> <?php echo number_format($this->qincome_data) ;?></div>
+          <div class="div-table-col3"><?php echo number_format($this->aincome_data, 2, '.', ',') ;?> USD</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">Product Transfer out</div>
+          <div class="div-table-col2"> <?php echo number_format($this->qoutcome_data) ;?></div>
+          <div class="div-table-col3"><?php echo number_format($this->aoutcome_data, 2, '.', ',') ;?> USD</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">Adjust In</div>
+          <div class="div-table-col2"> <?php echo number_format($this->qchincome_data) ;?></div>
+          <div class="div-table-col3"><?php echo number_format($this->chincomeamt_data, 2, '.', ',') ;?> USD</div>
+</div>
+<div class="div-table-row">
+          <div class="div-table-col1">Adjust Out</div>
+          <div class="div-table-col2"> <?php echo number_format($this->qchoutcome_data) ;?></div>
+          <div class="div-table-col3"><?php echo number_format($this->choutcomeamt_data, 2, '.', ',') ;?> USD</div>
+</div>
+<!--</table>-->
+</div>
+
+<hr>
+
+<div class="div-table">
+<!--<table width="550" >-->
+
+           <?php 
+          $newmember = $this->getmember_data;
+          
+          //print_r($newmember);
+          /*
+          $count = count($newmember);
+          
+            if ($count > 0){ 
+                
+                $countsum = 0;
+                $sumnew = 0;
+                foreach($newmember as $m){  
+                        
+                    //$sumnew =$sumnew+$m['sum_net_amt'];
+                    $sumnew+=$m['sum_net_amt'];
+                    
+                        
+                        echo "<div class=div-table-row>
+                        		<div class=div-table-col1>". $m['promo_code']."</div>
+                        		<div class='div-table-col2'> " .$m['count(a.doc_no)']." </div>
+                        		<div class=div-table-col3>" .number_format($m['sum_net_amt'], 2, '.', ','). "  USD</div>
+                        		</div>";
+                          
+                }
+                
+               echo "<div class=div-table-row>
+               			<div class=div-table-col1> ** รวม </div>
+               			<div class='div-table-col2'> " .$countsum." </div>
+               			<div class=div-table-col3>" . number_format($sumnew, 2, '.', ','). "  USD</div>
+               			</div>";
+                // echo"<div class='div-table-row'><div class=div-table-col> ********* รวม   ".$countsum."   ใบ ". number_format($sumnew, 2, '.', ',')."   USD</div></div>"; 
+                
+            }
+          */
+          ?> 
+<div class="div-table-row">
+          <div class="div-table-col1">New Member details</div>
+		<div class="div-table-col2"><?php echo @number_format($newmember[0]['newmem']) ;?></div>
+		<div class="div-table-col3"><?php echo @number_format($newmember[0]['sum_net_amt']) ;?></div>
+</div>
+
+<div class="div-table-row">
+          <div class="div-table-col1">Member </div>
+          <div class="div-table-col2"><?php echo @number_format($this->getmember_data2) ;?></div>
+          <div class="div-table-col3"><?php echo @number_format($this->getmemamt_data, 2, '.', ',') ;?> USD</div>
+</div>
+
+<div class="div-table-row">
+          <div class="div-table-col1">Walk in </div>
+          <div class="div-table-col2"><?php echo @number_format($this->getwalkin_data) ;?></div>
+          <div class="div-table-col3"><?php echo @number_format($this->getwkamt_data, 2, '.', ',') ;?> USD</div>
+</div>
+</div>
+    <br><br>
+    <div class="div-table">
+<div class="div-table-row">
+    <div class="div-table-col1"><b>Credit card details</b></div>  
+</div>
+<div class="div-table-row">
+ <div class="div-table-col4">
+
+    <?php
+    $sumkbank = 0 ;
+    $sumbblbank = 0 ;
+    $sumscbbank = 0 ;
+    $sumaba=0;
+    $sum_bank=0;
+    $arr_data=$this->getpaid_data;
+    $count = count($arr_data);
+
+    if(sizeof($this->detailcredit_data)>0){
+        $order_detail ='';
+        // var_dump('<pre>',$this->detailcredit_data);
+        // echo "size array = ".sizeof($this->detailcredit_data);
+        $sum_detailcredit=0;
+        for($i=0;$i<sizeof($this->detailcredit_data);$i++) // big O => O(n)
+        {
+
+            if($order_detail =='' || $this->detailcredit_data[$i]['credit_tp']==$order_detail)
+            {
+                if($order_detail ==''){
+                    echo "<br>".$this->detailcredit_data[$i]['description']."<br>";
+                }
+                $order_detail = $this->detailcredit_data[$i]['credit_tp'];
+            
+                echo number_format($this->detailcredit_data[$i]['amount'], 2, '.', ',')." / " ;          
+                $sum_detailcredit+= $this->detailcredit_data[$i]['amount'];   
+            }
+            else
+            {
+                // echo "ORDERDETAIL => ".$order_detail." DETAILCREDIT => ".$this->detailcredit_data[$i]['credit_tp'];
+                // echo "CHECK total";
+                echo"<br> Total ".number_format($sum_detailcredit, 2, '.', ',')." USD <br>"; 
+                $sum_detailcredit=0;
+                echo "<br>";
+                $order_detail = $this->detailcredit_data[$i]['credit_tp'];
+                echo $this->detailcredit_data[$i]['description']."<br>";
+                echo number_format($this->detailcredit_data[$i]['amount'], 2, '.', ',')." / " ;
+                $sum_detailcredit+= $this->detailcredit_data[$i]['amount'];              
+            }
+            if(sizeof($this->detailcredit_data)-1==$i)
+            {
+                // echo "SIZE DETAIL =>  ".sizeof($this->detailcredit_data)."  and i =>".$i;
+                echo"<br> Total ".number_format($sum_detailcredit, 2, '.', ',')." USD <br>"; 
+                echo "<br>";
+            }
+            $sum_bank+=$this->detailcredit_data[$i]['amount'];           
+        }
+    }
+
+// echo "<br>";
+//   $arr_data4=$this->getpaid_data4;
+//     $count4 = count($arr_data4);
+//     if ($count4 > 0){ 
+//       echo "ABA Pay <br>";
+//         foreach($arr_data4 as $m){     
+//          //echo "<div class="div-table-row"><div class="div-table-col1">";
+//          $sumaba+=$m['pay_credit'];
+//          echo number_format($m['pay_credit'], 2, '.', ',')." / " ; 
+        
+//         }   
+//       echo"<br> Total ".number_format($sumaba, 2, '.', ',')." USD <br>";  
+//     }        
+// $sum_bank = $sumkbank+$sumbblbank+$sumscbbank+$sumaba;
+$sum_count = sizeof($this->detailcredit_data);
+  
+    if ($sum_bank > 0 and $sum_count > 0){
+    echo "************* รวมทั้งหมด ".$sum_count."  ฉบับ <br>" ;
+    echo "************* Total of money ".number_format($sum_bank, 2, '.', ',')."  USD";
+    }
+    
+?> 
+</div>
+</div>
+</div>
+<hr>
+<div class="div-table">
+
+<?php
+$arr_bill=$this->getbill_datano;
+foreach($arr_bill as $b){ 
+   /* if ($b['doc_tp'] =="SL"){
+        echo "<div class=div-table-row><div class=div-table-col>เลขที่บิลอย่างย่อ</div></div>";
+        echo "<div class=div-table-row><div class=div-table-col>".$b['min(`doc_no`)']." - ". $b['max(`doc_no`)']." = ".$b['count(`doc_no`)']." ฉบับ" ;
+        echo "</div></div>";
+            }
+     elseif ($b['doc_tp'] =="DN") {
+         echo '<div class=div-table-row><div class=div-table-col>ใบส่งสินค้า</div></div>';
+        echo '<div class=div-table-row><div class=div-table-col>'.$b['min(`doc_no`)']." - ". $b['max(`doc_no`)']." = ".$b['count(`doc_no`)']." ฉบับ" ;
+        echo "</div></div>";
+     }*/
+    if($b['remark']=='บิลอย่างย่อ'){
+        $b['remark']='Short bill';
+    };
+    if($b['remark']=='โอนเข้า'){
+        $b['remark']='Transfer in';
+    };
+    echo "<div class='div-table-row'>
+            <div class='div-table-col1' style='width:600px;'><u>".$b['remark']."</u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".$b['count']." &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Quantity " .number_format($b['quantity'], 0, '.', ','). "   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Amount " .number_format($b['amount'], 0, '.', ','). "  USD</div>                
+            
+          </div>
+          <div class='div-table-row'>
+            <div class='div-table-col1'>".$b['min']." - ".$b['max']."</div>
+          </div><br>";
+    
+     }
+?>
+</div>
+
+<u>Bill canceled</u>
+<div class="div-table">
+<?php
+$arr_cancel=$this->getcancel_data;
+$countarr = 0;
+$amt = 0;
+foreach($arr_cancel as $c){ 
+    $countarr = count($arr_cancel);
+    $amt += $c['amount'];
+    echo "<div class='div-table-row'>
+            <div class='div-table-col1'>". $c['doc_no'] ."</div>       
+            <div class='div-table-col2'>". number_format($c['quantity'], 0, '.', ',') ."</div>
+            <div class='div-table-col3'>". number_format($c['amount'], 2, '.', ',') ."  USD</div> 
+          </div>";    
+    }
+echo "<div class='div-table-row'>
+    <div class='div-table-col1'><br>** Total ". $countarr ." bill    , Total of money  ".number_format($amt, 2, '.', ',') ." USD  </div>     
+</div>";
+
+?>
+    
+</div>
+
+<hr>
+
+<b>Member discount details</b>
+<?php
+    
+   // $sum_mem_dis = 0;    
+    $arr_mem5=$this->getmember5_dis_data;
+   // $count4 = count($arr_mem);
+    foreach($arr_mem5 as $m){
+ /*   if ($count4 > 0){ 
+     
+        foreach($arr_mem as $m){     
+         
+         $sum_mem_dis+=$m['member_discount1'];
+        // echo number_format($m['member_discount1'], 2, '.', ',')." / " ; 
+        
+        }   
+    } */   
+       // echo" ส่วนลด 5%  = ".$count4." ฉบับ     =".number_format($sum_mem_dis, 2, '.', ',')." USD <br>";
+        echo "
+    <div class='div-table'>
+    <div class='div-table-row'>
+            <div class='div-table-col1'>Member discount 5%</div>
+            <div class='div-table-col2'> ".$this->getmember5_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." USD</div>
+
+    </div>";
+    
+    }   
+    
+    $arr_mem15=$this->getmember15_dis_data;
+    foreach($arr_mem15 as $m){
+        echo "
+    
+    <div class='div-table-row'>
+            <div class='div-table-col1'>Member discount 15%</div>
+            <div class='div-table-col2'> ".$this->getmember15_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." USD</div>
+
+    </div>"; 
+        
+    }
+    
+     $arr_mem15_10=$this->getmember15_10_dis_data;
+    foreach($arr_mem15_10 as $m){
+        echo "
+    
+    <div class='div-table-row'>
+            <div class='div-table-col1'>Member discount 15% + 10%</div>
+            <div class='div-table-col2'> ".$this->getmember15_10_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." USD</div>
+
+    </div>"; 
+        
+    }
+    
+     $arr_mem25=$this->getmember25_dis_data;
+    foreach($arr_mem25 as $m){
+        echo "
+    
+    <div class='div-table-row'>
+            <div class='div-table-col1'>Member discount 25%</div>
+            <div class='div-table-col2'> ".$this->getmember25_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." USD</div>
+
+    </div>"; 
+        
+    }
+    
+    $arr_mem50=$this->getmember50_dis_data;
+    foreach($arr_mem50 as $m){
+        echo "
+    
+    <div class='div-table-row'>
+            <div class='div-table-col1'>Employee discount coupon 50%</div>
+            <div class='div-table-col2'> ".$this->getmember50_count_data."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_net_amt'], 2, '.', ',')." USD</div>
+
+    </div>"; 
+        
+    }
+    
+    echo "</div>";
+    
+    echo "<hr><b>Promotion discount details</b>";
+    echo "<div class='div-table'>";
+    
+    //$sum_disc = 0;    
+    $arr_disc=$this->disc_data;
+    //$count5 = count($arr_disc);
+   /* if ($count5 > 0){ 
+     
+        foreach($arr_disc as $m){     
+         
+         $sum_disc+=$m['discount'];
+        // echo number_format($m['member_discount1'], 2, '.', ',')." / " ; 
+        
+        }   
+    }    */
+       // echo" ส่วนลด 5%  = ".$count4." ฉบับ     ".number_format($sum_mem_dis, 2, '.', ',')." USD <br>";
+    foreach($arr_disc as $m){    
+        echo "
+
+    <div class='div-table-row'>
+            <div class='div-table-col1'>Discount promotions</div>
+            <div class='div-table-col2'> ".$this->count_discount_trn2."   </div>
+            <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." USD</div>
+
+    </div>";
+    }
+    
+    //$sum_coupon_disc = 0;    
+    $arr_coupon_disc=$this->coupon_disc_data;
+    foreach($arr_coupon_disc as $m){
+    /*$count6 = count($arr_coupon_disc);
+    if ($count6 > 0){ 
+     
+        foreach($arr_coupon_disc as $m){     
+         
+         $sum_coupon_disc+=$m['coupon_discount'];
+        // echo number_format($m['member_discount1'], 2, '.', ',')." / " ; 
+        
+        }   
+    } */   
+       // echo" ส่วนลด 5%  = ".$count4." ฉบับ     =".number_format($sum_mem_dis, 2, '.', ',')." USD <br>";
+        echo "
+
+<div class='div-table-row'>
+          <div class='div-table-col1'>Discount coupon</div>
+          <div class='div-table-col2'> ".$this->count_coupon_discount."   </div>
+          <div class='div-table-col3'>". number_format($m['sum_discount'], 2, '.', ',')." USD</div>
+
+</div>";
+    
+    }
+    
+echo"<br><b>Birthday privileges bill</b>";    
+
+    $arr_newbirth=$this->newbirth_data;
+    foreach($arr_newbirth as $m){     
+    
+    switch ($m['promo_code']) {
+    case "OM02071113":
+        $code = "25%  2500.-";
+        break;
+    case "OM02081113":
+        $code =  "35%  2000.-";
+        break;
+    case "OM02091113":
+        $code =  "35%  3000.-";
+        break;
+    case "OX02651014":
+        $code = "25%  2500.-";
+        break;
+    case "OX02671014":
+         $code =  "35%  2000.-";
+        break;
+    case "OX02691014":
+         $code =  "35%  3000.-";
+        break;            
+	}
+    
+    
+		echo"
+    	  <div class='div-table-row'>
+          <div class='div-table-col1'>".$m['promo_code']."      ".$code."</div>
+          <div class='div-table-col2'>".$m['count']." </div>
+          <div class='div-table-col3'>". number_format($m['amount'], 2, '.', ',')." USD</div>
+		  </div>";
+    }
+   
+
+    $arr_pointdata=$this->point_data;
+    if($arr_pointdata){
+    echo"<br><b>Standard Point</b>";  
+    }
+    
+    foreach($arr_pointdata as $p){     
+    
+    switch ($p['promo_code']) {
+    case "STKER1":
+        $pcode = "50 POINT";
+        break;
+    case "STKER2":
+        $pcode = "100 POINT";
+        break;
+    case "STKER3":
+        $pcode = "150 POINT";
+        break;
+    case "STKER4":
+        $pcode = "200 POINT";
+        break;
+    case "STKER5":
+        $pcode = "250 POINT";
+        break;
+	}
+    
+    
+		echo"
+    	  <div class='div-table-row'>
+          <div class='div-table-col1'>".$pcode."</div>
+          <div class='div-table-col2'>".$p['count']." </div>
+          <div class='div-table-col3'>". number_format($p['amount'], 2, '.', ',')." USD</div>
+		  </div>";
+    }
+    
+   $arr_new_pointdata=$this->newpoint_data;
+   if($arr_new_pointdata){
+   echo"<br><b>New Standard Point</b>";    
+	}
+    
+    foreach($arr_new_pointdata as $np){     
+    
+    switch ($np['promo_code']) {
+    case "OM19180415":
+        $npcode = "50 POINT + 500 USD";
+        break;
+    case "OM19190415":
+        $npcode = "100 POINT + 1,000 USD";
+        break;
+    case "OM19200415":
+        $npcode = "150 POINT + 2,000 USD";
+        break;
+    case "OM19210415":
+        $npcode = "200 POINT + 3,000 USD";
+        break;
+    case "OM19220415":
+        $npcode = "250 POINT + 4,000 USD";
+        break;
+	}
+    
+    
+		echo"
+    	  <div class='div-table-row'>
+          <div class='div-table-col1'>".$npcode."</div>
+          <div class='div-table-col2'>".$np['count']." </div>
+          <div class='div-table-col3'>". number_format($np['amount'], 2, '.', ',')." USD</div>
+		  </div>";
+    }
+  
+  
+    
+ 
+
+    $arr_billdata=$this->bill02_data;
+    if($arr_billdata){
+     echo"<br><b>Bill</b>";    
+    }
+    foreach($arr_billdata as $bill){     
+    echo"
+    	  <div class='div-table-row'>
+          <div class='div-table-col1'>".$bill['application_id']."</div>
+          <div class='div-table-col2'>".$bill['count']." </div>
+          <div class='div-table-col3'>". number_format($bill['amount'], 2, '.', ',')." USD</div>
+		  </div>";
+    }   
+    
+echo "</div>"; // </table>
+
+
+echo "<hr>";
+
+echo "<br>  EDC  = ".$sum_count ;
+echo "<br><br><br>Signature of sales staff  :  __________________________________" ;
+
+?>
+
+<br><br><br><br><br><br>
+
+<?php
+$dayfrom =$this->dayfrom;
+$tofrom =$this->tofrom;
+$day = $this->get_doc_date;
+$today = date('Y-m-d');
+
+//echo $this->get_printer ;
+
+if ($this->get_printer == 'Y'){
+	echo "<div align=right>
+<form action='/report/report/printreport' method='post'>
+<input type=hidden id=start_date name=start_date value='$dayfrom'>
+<input type=hidden id=end_date name=end_date value='$tofrom'>
+<input type=submit value= print  id=print>
+</form>";  // print thermal
+}else{
+	echo "<div align=right>
+<form action='/report/report/printreport' method='post'>
+<input type=hidden id=start_date name=start_date value='$dayfrom'>
+<input type=hidden id=end_date name=end_date value='$tofrom'>
+<input type=submit value= print  id=print>
+</form>"; // print dot matrix
+}
+
+/*echo $dayfrom;
+echo "<br>";
+echo $tofrom;
+
+ */
+
+
+/*if ($tofrom < $day ){
+    echo "<div align=right>
+<form action='/report/report/printmt' method='post'>
+<input type=hidden id=start_date name=start_date value='$dayfrom'>
+<input type=hidden id=end_date name=end_date value='$tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>
+
+</div><br><br>" ;
+}  else {
+echo "<div align=right>
+<form action='/report/report/printmt' method='post'>
+<input type=hidden id=start_date name=start_date value='$dayfrom'>
+<input type=hidden id=end_date name=end_date value='$tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>
+
+</div><br><br>" ;   
+}
+*/
+
+
+
+?>
+
+
+
+
+
+    
+    
+
+</div>

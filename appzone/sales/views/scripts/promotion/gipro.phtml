@@ -1,0 +1,535 @@
+<?php
+$dataDetailHotpro=$this->detailhotpro;
+$promo_des=$dataDetailHotpro[0]['promo_des'];
+$promo_code=$dataDetailHotpro[0]['promo_code'];
+$seq_pro=$dataDetailHotpro[0]['seq_pro'];
+$compare=$dataDetailHotpro[0]['compare'];
+$quantity=number_format($dataDetailHotpro[0]['quantity'],0,'.',',');
+$type_discount=$dataDetailHotpro[0]['type_discount'];
+$discount=$dataDetailHotpro[0]['discount'];
+$promo_tp=$dataDetailHotpro[0]['promo_tp'];
+$startSeq=$this->startSeq;
+$id_card=$this->id_card;
+
+//ห้ามขายสินค้าเลย ถ้าไม่เล่นผ่าน promotion
+if($promo_code=="OP03261115" || $promo_code=="OP03271115"){
+	
+	echo "<script>$('#btnstop').hide();</script>";
+}
+//chk pro ที่กำหนดให้เล่นได้ครั้งเดียว	
+include("/var/www/pos/htdocs/download_promotion/id_card/connect.php");
+	
+		
+$conn_local=mysql_connect($local_server,$local_user,$local_pass);
+mysql_select_db($local_db);	
+
+
+$arr_promocode = array("OS06270317", "OS06280317", "OL06290317", "OT06300317"  , "OT06310317", "OX06320317", "OX06330317");
+if (in_array($promo_code, $arr_promocode)) {		
+	//echo "<script>alert($('#csh_promo_code').val());</script>";
+	echo "<script>if( $('#csh_promo_code').val()!='OX02460217' ){if($('#csh_promo_code').val()!='OX02460217_2'){alert('โปรโมชั่นนี้ต้องเล่นร่วมกับโปรชาวต่างชาติ(OX02460217)เท่านั้น');$('#dialog-hotpro').dialog('close');$('#dialog-hotpro').dialog('destroy');initFieldPromt();}}</script>";
+	
+// 	$sql_tmp="SELECT * FROM `trn_promotion_tmp1` where computer_ip='$_SERVER[REMOTE_ADDR]' AND promo_code IN('OX02460217','OX02460217_2') ";
+// 	$res_tmp=mysql_query($sql_tmp,$conn_local);
+// 	$n_tmp=mysql_num_rows($res_tmp);
+// 	if($n_tmp<1){
+// 		echo "โปรโมชั่นนี้ต้องเล่นร่วมกับโปรชาวต่างชาติ(OX02460217) เท่านั้น";
+// 		return false;
+// 	}	
+	
+}//end if
+
+$arr_promocode = array("OT04210315");
+if (in_array($promo_code, $arr_promocode)) {
+	//echo "<script>alert($('#csh_promo_code').val());</script>";
+	echo "<script>if( $('#csh_promo_code').val()=='OX02460217' || $('#csh_promo_code').val()=='OX02460217_2'){alert('โปรโมชั่นนี้เล่นร่วมกับโปรชาวต่างชาติไม่ได้');$('#dialog-hotpro').dialog('close');$('#dialog-hotpro').dialog('destroy');initFieldPromt();}</script>";
+
+	}//end if
+
+
+// if($promo_code=="OS06270317"){
+// 	$sql_tmp="SELECT * FROM `trn_promotion_tmp1` where computer_ip='$_SERVER[REMOTE_ADDR]' AND promo_code='OX02460217' ";
+// 	$res_tmp=mysql_query($sql_tmp,$conn_local);
+// 	$n_tmp=mysql_num_rows($res_tmp);
+// 	if($n_tmp==0){
+// 		echo "โปรโมชั่นนี้ต้องเล่นร่วมกับโปรชาวต่างชาติเท่านั้น (OX02460217)";
+// 		return false;
+// 	}
+// }
+
+
+$finddata_center="select * from  trn_tdiary2_sl_val  where computer_ip='$_SERVER[REMOTE_ADDR]' ";
+$run_finddata_center=mysql_query($finddata_center,$conn_local);
+$rows_datacenter=mysql_num_rows($run_finddata_center);	
+if($rows_datacenter==0){
+	$send_member_no="";
+}else{
+	$datacenter=mysql_fetch_array($run_finddata_center);
+	$send_member_no=$datacenter['member_no'];
+}
+
+//chkProByLevel
+//echo "MemID=$send_member_no | promot_tp=$promo_tp";
+
+			
+$finddate="select * from com_doc_date limit 1";
+$run_finddate=mysql_query($finddate,$conn_local);
+$rows_finddate=mysql_num_rows($run_finddate);		
+if($rows_finddate>0){	
+	$datafinddate=mysql_fetch_array($run_finddate);
+	$doc_date=$datafinddate['doc_date'];
+}else{
+	$doc_date=date("Y-m-d");
+}
+
+
+$laststart="SELECT * FROM promo_permission WHERE promo_code='$promo_code' and '$doc_date' BETWEEN start_date AND end_date ";
+$run_laststart=mysql_query($laststart,$conn_local);
+$rows_laststart=mysql_num_rows($run_laststart);		
+if($rows_laststart>0){	
+	$dataconfig=mysql_fetch_array($run_laststart);
+	
+	if($id_card!=""){
+		mysql_select_db("ssup");
+		//chk id card
+		$chk_idcard="SELECT * FROM emp 	where numoffid='$id_card' and emp_active='1' 	";
+		//echo $chk_idcard;
+		$run_chk_idcard=mysql_query($chk_idcard,$conn_local);
+		if($run_chk_idcard){
+			$rows_chk_idcard=mysql_num_rows($run_chk_idcard);
+			if($rows_chk_idcard>0){
+					$dataemp=mysql_fetch_array($run_chk_idcard);
+					echo "<span style='color: #FF0000;	font-size: 24px;'>รหัสประชาชนนี้เป็นของพนักงาน SSUP ซึ่งทาง OP กำหนดไว้ว่า พนักงาน SSUP ไม่สามารถร่วมโปรโมชั่นนี้ได้ค่ะ</span>";
+					return false;
+			}
+		}
+	}
+	mysql_select_db($local_db);
+	
+	
+	if($doc_date=="2015-10-29" && $promo_code=="IT06300915"){
+			//chk online
+			$chkonline="select *  from com_branch_computer where online_status='0' limit 0,1";
+			$run_chkonline=mysql_query($chkonline,$conn_local);
+			$rows_chkonline=mysql_num_rows($run_chkonline);	
+			if($rows_chkonline>0){
+							echo "<span style='color: #FF0000;	font-size: 24px;'>Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>แต่ขณะนี้ Internet ของสาขาขัดข้อง จึงไม่อนุญาติให้เล่นโปรโมชั่นนี้ค่ะ</span>";
+							echo "<script>$('#btnstop').hide();</script>";
+							return false;
+			}
+		
+			
+			$findpeple="select * from  trn_tdiary2_sl_val  where computer_ip='$_SERVER[REMOTE_ADDR]' ";
+			$run_findpeple=mysql_query($findpeple,$conn_local);
+			$rows_findpeple=mysql_num_rows($run_findpeple);
+			if($rows_findpeple>0){
+				$datapeple=mysql_fetch_array($run_findpeple);
+				$member_no=$datapeple['member_no'];
+				if($member_no!=""){
+					echo "<span style='font-size:8px;'>MODE MEMBER ID CARD : $id_card & Member ID : $member_no</span><br>";
+					$ftp_missing = @fopen("http://$server_app/ims/joke/app_service_op/process/member_bypeple.php?member_no=$member_no", "r");
+					$missing_seq=@fgetss($ftp_missing, 4096);
+					
+					if($id_card!=""){
+						$cr_id_card1=" or x.idcard='$id_card' ";
+						$cr_id_card2=" or a.idcard='$id_card' ";
+					}else{
+						$cr_id_card1="";
+						$cr_id_card2="";
+					}
+					$prostop="select y.promo_code,count(y.promo_seq) as numplay from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date='$doc_date' and  x.doc_tp<>'CN' and y.doc_date='$doc_date' and  (x.member_id in($missing_seq) $cr_id_card1) and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' and x.doc_no not in(select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date='$doc_date' and b.doc_date='$doc_date'  and  a.doc_tp='CN' and (a.member_id in($missing_seq) $cr_id_card2) and a.flag<>'C' and b.promo_code='$promo_code' )
+							group by 
+							y.promo_code
+							having count(y.promo_seq)>='$dataconfig[play_member]'
+					";
+					//echo $prostop;
+					$run_prostop=mysql_query($prostop,$conn_local);
+					$rows_prostop=mysql_num_rows($run_prostop);	
+					//echo "Rows-Local : $rows_prostop<br>";
+					
+					//have cn at local 
+					if($id_card!=""){
+						$cr_id_card=" or a.idcard='$id_card' ";
+					}else{
+						$cr_id_card="";
+					}			
+					$havecn="
+		select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date='$doc_date' and b.doc_date='$doc_date'  and  a.doc_tp='CN' and (a.member_id in($missing_seq) $cr_id_card) and a.flag<>'C' and b.promo_code='$promo_code'			
+					";
+					$run_havecn=mysql_query($havecn,$conn_local);
+					$rows_havecn=mysql_num_rows($run_havecn);				
+		
+					if($rows_prostop>0){ 
+						if($id_card!=""){
+							$cr_id_card=" or x.idcard='$id_card' ";
+						}else{
+							$cr_id_card="";
+						}			
+						$find_des="
+		select x.* from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date='$doc_date'  and y.doc_date='$doc_date' and  (x.member_id in($missing_seq) $cr_id_card) and  x.doc_tp<>'CN' and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' group by doc_no
+					
+						";
+						$run_des=mysql_query($find_des,$conn_local);
+						$data=mysql_fetch_array($run_des);
+						$play_doc_no=$data['doc_no'];
+						$play_date=$data['doc_date'];
+						echo "<script>$('#btnstop').hide();</script>";
+						echo "<span style='color: #FF0000;	font-size: 24px;'>CheckLocal : Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>และลูกค้าได้เล่นไปแล้ว เมื่อวันที่ $play_date ด้วยบิลเลขที่ $play_doc_no</span>";
+						
+						return false;
+					}
+					
+					if($rows_havecn==0){ //ต้องไม่มีการทำ CN ที่เครื่อง
+						$conn_online=mysql_connect($server_service,$user_service,$pass_service);
+						mysql_select_db($db_service);
+						if($id_card!=""){
+							$cr_id_card=" or a.idcard='$id_card' ";
+						}else{
+							$cr_id_card="";
+						}	
+						
+						$prostoponline="				 
+							SELECT 
+								promo_code,count(doc_no)
+							FROM promo_play_history
+							
+							WHERE member_id in($missing_seq) and doc_date='$doc_date' and flag<>'C' and promo_code='$promo_code'  and doc_no not in(select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date='$doc_date' and b.doc_date='$doc_date'  and  a.doc_tp='CN' and (a.member_id in($missing_seq) $cr_id_card) and a.flag<>'C' and b.promo_code='$promo_code' )
+							group by promo_code
+							having count(doc_no)>='$dataconfig[play_member]'
+					
+						";
+						//echo $prostoponline;
+						$run_prostoponline=mysql_query($prostoponline,$conn_online);
+						$rows_prostoponline=mysql_num_rows($run_prostoponline);	
+						//echo "Rows-Online : $rows_prostoponline<br>";
+						if($rows_prostoponline>0){
+							$find_des="
+							SELECT 
+								*
+							FROM promo_play_history
+							
+							WHERE member_id in($missing_seq) and doc_date='$doc_date' and flag<>'C' and promo_code='$promo_code'
+							group by doc_no
+						
+							";
+							
+							$run_des=mysql_query($find_des,$conn_online);
+							$data=mysql_fetch_array($run_des);
+							$play_doc_no=$data['doc_no'];
+							$play_date=$data['doc_date'];
+							echo "<span style='color: #FF0000;	font-size: 24px;'>CheckOnline : Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>และลูกค้าได้เล่นไปแล้ว เมื่อวันที่ $play_date ด้วยบิลเลขที่ $play_doc_no</span>";
+							echo "<script>$('#btnstop').hide();</script>";
+							return false;
+						}	
+					
+					}		
+				}
+				
+				
+				//##################################################################################################
+				if($member_no==""){ //chk walkin
+					echo "<span style='font-size:8px;'>MODE WALKIN ID CARD : $id_card</span><br>";
+		
+					$conn_local=mysql_connect($local_server,$local_user,$local_pass);
+					mysql_select_db($local_db);	
+					
+					$prostop="select y.promo_code,count(y.promo_seq) as numplay from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date='$doc_date' and  x.doc_tp<>'CN' and y.doc_date='$doc_date' and  x.idcard='$id_card' and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' and x.doc_no not in(select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date='$doc_date' and b.doc_date='$doc_date'  and  a.doc_tp='CN' and a.idcard='$id_card' and a.flag<>'C' and b.promo_code='$promo_code' )
+										group by 
+										y.promo_code
+										having count(y.promo_seq)>='$dataconfig[play_member]'
+						";
+						//echo $prostop;
+						$run_prostop=mysql_query($prostop,$conn_local);
+						$rows_prostop=mysql_num_rows($run_prostop);	
+						//echo "Rows-Local : $rows_prostop<br>";
+						
+						//have cn at local 
+						$havecn="
+			select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date='$doc_date' and b.doc_date='$doc_date'  and  a.doc_tp='CN' and a.idcard ='$id_card' and a.flag<>'C' and b.promo_code='$promo_code'			
+						";
+						//echo $havecn;
+						$run_havecn=mysql_query($havecn,$conn_local);
+						$rows_havecn=mysql_num_rows($run_havecn);				
+			
+						if($rows_prostop>0){ 
+							$find_des="
+			select x.* from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date='$doc_date'  and y.doc_date='$doc_date' and  x.idcard='$id_card' and  x.doc_tp<>'CN' and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' group by doc_no
+						
+							";
+							$run_des=mysql_query($find_des,$conn_local);
+							$data=mysql_fetch_array($run_des);
+							$play_doc_no=$data['doc_no'];
+							$play_date=$data['doc_date'];
+							echo "<span style='color: #FF0000;	font-size: 24px;'>CheckLocal : Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>และลูกค้าได้เล่นไปแล้ว เมื่อวันที่ $play_date ด้วยบิลเลขที่ $play_doc_no</span>";
+							echo "<script>$('#btnstop').hide();</script>";
+							return false;
+						}
+						
+						//###############################
+						if($rows_havecn==0){ //ต้องไม่มีการทำ CN ที่เครื่อง
+								$conn_online=mysql_connect($server_service,$user_service,$pass_service);
+								mysql_select_db($db_service);
+			
+										 
+								$prostoponline="
+								select y.promo_code,count(y.promo_seq) as numplay from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date='$doc_date' and  x.doc_tp<>'CN' and y.doc_date='$doc_date' and  x.idcard='$id_card'  and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' and x.doc_no not in(select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date='$doc_date' and b.doc_date='$doc_date'  and  a.doc_tp='CN' and a.idcard='$id_card' and a.flag<>'C' and b.promo_code='$promo_code' )
+								group by 
+								y.promo_code
+								having count(y.promo_seq)>='$dataconfig[play_member]'
+							";
+								//echo $prostoponline;
+								$run_prostoponline=mysql_query($prostoponline,$conn_online);
+								$rows_prostoponline=mysql_num_rows($run_prostoponline);	
+								//echo "Rows-Online : $rows_prostoponline<br>";
+								if($rows_prostoponline>0){
+									$find_des="
+										select x.* from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date='$doc_date'  and y.doc_date='$doc_date' and  x.idcard='$id_card' and  x.doc_tp<>'CN' and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' group by doc_no
+		";
+									
+									$run_des=mysql_query($find_des,$conn_online);
+									$data=mysql_fetch_array($run_des);
+									$play_doc_no=$data['doc_no'];
+									$play_date=$data['doc_date'];
+									echo "<span style='color: #FF0000;	font-size: 24px;'>CheckOnline : Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>และลูกค้าได้เล่นไปแล้ว เมื่อวันที่ $play_date ด้วยบิลเลขที่ $play_doc_no</span>";
+									echo "<script>$('#btnstop').hide();</script>";
+									return false;
+								}	
+							
+						}		
+				}
+				
+			}	
+	
+	}else{/// Unlock
+			
+			//chk online
+			$chkonline="select *  from com_branch_computer where online_status='0' limit 0,1";
+			$run_chkonline=mysql_query($chkonline,$conn_local);
+			$rows_chkonline=mysql_num_rows($run_chkonline);	
+			if($rows_chkonline>0){
+							echo "<span style='color: #FF0000;	font-size: 24px;'>Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>แต่ขณะนี้ Internet ของสาขาขัดข้อง จึงไม่อนุญาติให้เล่นโปรโมชั่นนี้ค่ะ</span>";
+							echo "<script>$('#btnstop').hide();</script>";
+							return false;
+			}
+		
+			
+			$findpeple="select * from  trn_tdiary2_sl_val  where computer_ip='$_SERVER[REMOTE_ADDR]' ";
+			$run_findpeple=mysql_query($findpeple,$conn_local);
+			$rows_findpeple=mysql_num_rows($run_findpeple);
+			if($rows_findpeple>0){
+				$datapeple=mysql_fetch_array($run_findpeple);
+				$member_no=$datapeple['member_no'];
+				if($member_no!=""){
+					echo "<span style='font-size:8px;'>MODE MEMBER ID CARD : $id_card & Member ID : $member_no</span><br>";
+					$ftp_missing = @fopen("http://$server_app/ims/joke/app_service_op/process/member_bypeple.php?member_no=$member_no", "r");
+					$missing_seq=@fgetss($ftp_missing, 4096);
+					
+					if($id_card!=""){
+						$cr_id_card1=" or x.idcard='$id_card' ";
+						$cr_id_card2=" or a.idcard='$id_card' ";
+					}else{
+						$cr_id_card1="";
+						$cr_id_card2="";
+					}
+					$prostop="select y.promo_code,count(y.promo_seq) as numplay from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date>='$dataconfig[start_date]' and  x.doc_tp<>'CN' and y.doc_date>='$dataconfig[start_date]' and  (x.member_id in($missing_seq) $cr_id_card1) and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' and x.doc_no not in(select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date>='$dataconfig[start_date]' and b.doc_date>='$dataconfig[start_date]'  and  a.doc_tp='CN' and (a.member_id in($missing_seq) $cr_id_card2) and a.flag<>'C' and b.promo_code='$promo_code' )
+							group by 
+							y.promo_code
+							having count(y.promo_seq)>='$dataconfig[play_member]'
+					";
+					//echo $prostop;
+					$run_prostop=mysql_query($prostop,$conn_local);
+					$rows_prostop=mysql_num_rows($run_prostop);	
+					//echo "Rows-Local : $rows_prostop<br>";
+					
+					//have cn at local 
+					if($id_card!=""){
+						$cr_id_card=" or a.idcard='$id_card' ";
+					}else{
+						$cr_id_card="";
+					}			
+					$havecn="
+		select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date>='$dataconfig[start_date]' and b.doc_date>='$dataconfig[start_date]'  and  a.doc_tp='CN' and (a.member_id in($missing_seq) $cr_id_card) and a.flag<>'C' and b.promo_code='$promo_code'			
+					";
+					$run_havecn=mysql_query($havecn,$conn_local);
+					$rows_havecn=mysql_num_rows($run_havecn);				
+		
+					if($rows_prostop>0){ 
+						if($id_card!=""){
+							$cr_id_card=" or x.idcard='$id_card' ";
+						}else{
+							$cr_id_card="";
+						}			
+						$find_des="
+		select x.* from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date>='$dataconfig[start_date]'  and y.doc_date>='$dataconfig[start_date]' and  (x.member_id in($missing_seq) $cr_id_card) and  x.doc_tp<>'CN' and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' group by doc_no order by x.doc_date desc
+					
+						";
+						//echo $find_des;
+						$run_des=mysql_query($find_des,$conn_local);
+						$data=mysql_fetch_array($run_des);
+						$play_doc_no=$data['doc_no'];
+						$play_date=$data['doc_date'];
+						echo "<script>$('#btnstop').hide();</script>";
+						echo "<span style='color: #FF0000;	font-size: 24px;'>CheckLocal : Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>และลูกค้าได้เล่นไปแล้ว เมื่อวันที่ $play_date ด้วยบิลเลขที่ $play_doc_no</span>";
+						
+						return false;
+					}
+					
+					if($rows_havecn==0){ //ต้องไม่มีการทำ CN ที่เครื่อง
+						$conn_online=mysql_connect($server_service,$user_service,$pass_service);
+						mysql_select_db($db_service);
+						if($id_card!=""){
+							$cr_id_card=" or a.idcard='$id_card' ";
+						}else{
+							$cr_id_card="";
+						}	
+						
+						$prostoponline="				 
+							SELECT 
+								promo_code,count(doc_no)
+							FROM promo_play_history
+							
+							WHERE member_id in($missing_seq) and doc_date>='$dataconfig[start_date]' and flag<>'C' and promo_code='$promo_code'  and doc_no not in(select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date>='$dataconfig[start_date]' and b.doc_date>='$dataconfig[start_date]'  and  a.doc_tp='CN' and (a.member_id in($missing_seq) $cr_id_card) and a.flag<>'C' and b.promo_code='$promo_code' )
+							group by promo_code
+							having count(doc_no)>='$dataconfig[play_member]'
+					
+						";
+						//echo $prostoponline;
+						$run_prostoponline=mysql_query($prostoponline,$conn_online);
+						$rows_prostoponline=mysql_num_rows($run_prostoponline);	
+						//echo "Rows-Online : $rows_prostoponline<br>";
+						if($rows_prostoponline>0){
+							$find_des="
+							SELECT 
+								*
+							FROM promo_play_history
+							
+							WHERE member_id in($missing_seq) and doc_date>='$dataconfig[start_date]' and flag<>'C' and promo_code='$promo_code'
+							group by doc_no
+							order by doc_date desc
+							";
+							
+							$run_des=mysql_query($find_des,$conn_online);
+							$data=mysql_fetch_array($run_des);
+							$play_doc_no=$data['doc_no'];
+							$play_date=$data['doc_date'];
+							echo "<span style='color: #FF0000;	font-size: 24px;'>CheckOnline : Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>และลูกค้าได้เล่นไปแล้ว เมื่อวันที่ $play_date ด้วยบิลเลขที่ $play_doc_no</span>";
+							echo "<script>$('#btnstop').hide();</script>";
+							return false;
+						}	
+					
+					}		
+				}
+				
+				
+				//##################################################################################################
+				if($member_no==""){ //chk walkin
+					echo "<span style='font-size:8px;'>MODE WALKIN ID CARD : $id_card</span><br>";
+		
+					$conn_local=mysql_connect($local_server,$local_user,$local_pass);
+					mysql_select_db($local_db);	
+					
+					$prostop="select y.promo_code,count(y.promo_seq) as numplay from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date>='$dataconfig[start_date]' and  x.doc_tp<>'CN' and y.doc_date>='$dataconfig[start_date]' and  x.idcard='$id_card' and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' and x.doc_no not in(select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date>='$dataconfig[start_date]' and b.doc_date>='$dataconfig[start_date]'  and  a.doc_tp='CN' and a.idcard='$id_card' and a.flag<>'C' and b.promo_code='$promo_code' )
+										group by 
+										y.promo_code
+										having count(y.promo_seq)>='$dataconfig[play_member]'
+						";
+						//echo $prostop;
+						$run_prostop=mysql_query($prostop,$conn_local);
+						$rows_prostop=mysql_num_rows($run_prostop);	
+						//echo "Rows-Local : $rows_prostop<br>";
+						
+						//have cn at local 
+						$havecn="
+			select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date>='$dataconfig[start_date]' and b.doc_date>='$dataconfig[start_date]'  and  a.doc_tp='CN' and a.idcard ='$id_card' and a.flag<>'C' and b.promo_code='$promo_code'			
+						";
+						//echo $havecn;
+						$run_havecn=mysql_query($havecn,$conn_local);
+						$rows_havecn=mysql_num_rows($run_havecn);				
+			
+						if($rows_prostop>0){ 
+							$find_des="
+			select x.* from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date>='$dataconfig[start_date]'  and y.doc_date>='$dataconfig[start_date]' and  x.idcard='$id_card' and  x.doc_tp<>'CN' and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' group by doc_no order by x.doc_date desc
+						
+							";
+							//echo $find_des;
+							$run_des=mysql_query($find_des,$conn_local);
+							$data=mysql_fetch_array($run_des);
+							$play_doc_no=$data['doc_no'];
+							$play_date=$data['doc_date'];
+							echo "<span style='color: #FF0000;	font-size: 24px;'>CheckLocalx : Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>และลูกค้าได้เล่นไปแล้ว เมื่อวันที่ $play_date ด้วยบิลเลขที่ $play_doc_no</span>";
+							echo "<script>$('#btnstop').hide();</script>";
+							return false;
+						}
+						
+						//###############################
+						if($rows_havecn==0){ //ต้องไม่มีการทำ CN ที่เครื่อง
+								$conn_online=mysql_connect($server_service,$user_service,$pass_service);
+								mysql_select_db($db_service);
+			
+										 
+								$prostoponline="
+								select y.promo_code,count(y.promo_seq) as numplay from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date>='$dataconfig[start_date]' and  x.doc_tp<>'CN' and y.doc_date>='$dataconfig[start_date]' and  x.idcard='$id_card'  and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' and x.doc_no not in(select distinct refer_doc_no from trn_diary1 as a inner join trn_diary2 as b on a.doc_no=b.doc_no where a.doc_date>='$dataconfig[start_date]' and b.doc_date>='$dataconfig[start_date]'  and  a.doc_tp='CN' and a.idcard='$id_card' and a.flag<>'C' and b.promo_code='$promo_code' )
+								group by 
+								y.promo_code
+								having count(y.promo_seq)>='$dataconfig[play_member]'
+							";
+								//echo $prostoponline;
+								$run_prostoponline=mysql_query($prostoponline,$conn_online);
+								$rows_prostoponline=mysql_num_rows($run_prostoponline);	
+								//echo "Rows-Online : $rows_prostoponline<br>";
+								if($rows_prostoponline>0){
+									$find_des="
+										select x.* from trn_diary1 as x inner join trn_diary2 as y on x.doc_no=y.doc_no where x.doc_date>='$dataconfig[start_date]'  and y.doc_date>='$dataconfig[start_date]' and  x.idcard='$id_card' and  x.doc_tp<>'CN' and y.flag<>'C' and y.promo_code='$promo_code' and y.promo_seq='1' group by doc_no order by x.doc_date desc
+		";
+									
+									$run_des=mysql_query($find_des,$conn_online);
+									$data=mysql_fetch_array($run_des);
+									$play_doc_no=$data['doc_no'];
+									$play_date=$data['doc_date'];
+									echo "<span style='color: #FF0000;	font-size: 24px;'>CheckOnline : Promotion นี้ถูกกำหนดให้เล่นได้ $dataconfig[play_member] ครั้ง ต่อ 1 คน <br>และลูกค้าได้เล่นไปแล้ว เมื่อวันที่ $play_date ด้วยบิลเลขที่ $play_doc_no</span>";
+									echo "<script>$('#btnstop').hide();</script>";
+									return false;
+								}	
+							
+						}		
+				}
+				
+			}	
+	
+	}
+
+}		
+
+
+
+
+
+
+//header("Content-type:text/html; charset=tis-620"); 
+echo "<input type='hidden' name='manual_promo_code_hide' id='manual_promo_code_hide' value='$promo_code' >";
+echo "<input type='hidden' name='manual_promo_des_hide' size=2 id='manual_promo_des_hide' value='$promo_des'>";
+echo "<input type='hidden' name='manual_promo_seq_hide' size=2 id='manual_promo_seq_hide' value='$startSeq'>";
+echo "<input type='hidden' name='manual_maxPro_hide' size=2 id='manual_maxPro_hide' value='$this->maxPro'>";
+echo "<input type='hidden' name='manual_seq_quantity' size=2 id='manual_seq_quantity' value='$this->set_quantity'>";
+
+
+
+//echo "<br>";
+//echo "<span class='label_head'>$promo_code&nbsp;$promo_des</span>";
+
+?>
+<span class='start_left'>
+<span class='label'>จำนวน </span><input type="text"  class='text_scan' style='width:30px;' name="manual_input_quantity" id="manual_input_quantity"  size="1"  value=1 onKeyDown="if (event.keyCode == 13){$('#manual_input_product').focus();}">
+&nbsp;&nbsp;
+<span class='label'>รหัสสินค้า </span><input type="text"  class='text_scan'   name="manual_input_product" id="manual_input_product" size="12" onKeyDown="if (event.keyCode == 13){addproduct();}">
+
+</span>
+
+
+
+<?php 
+
+echo "<div id='viewpro'>";
+
+echo "</div>";
+?>

@@ -1,0 +1,103 @@
+<?php 
+	if(!empty($this->arr_chkbag)){
+		?>
+		<table width="100%" border="0" cellpadding="2" cellspacing="1">	
+		<?php 
+			$i=0;
+			foreach($this->arr_chkbag as $data){
+				if($data['lot_no']==''){
+					$i++;
+					$id_tmp=$i."_".$data['product_id'];
+					?>
+					<tr><td width="15%">ใบที่<?php echo $i;?>.</td>
+					<td><input type="text" size="25" id="<?php echo $id_tmp;?>" class=' bag_barcode inputkey_bag keybarcode input-text-pos ui-corner-all'></td></tr>
+					<?php 
+				}
+			}
+		?>
+		</table>
+		<script type="text/javascript">
+	//AREA LOCK KEY BARCODE OR KEY MANUAL
+	var clear_timer_keybarcode=null;
+	function stopTimerKeyBarcode(){
+		if(clear_timer_keybarcode){
+			clearTimeout(clear_timer_keybarcode);
+			clear_timer_keybarcode=null;
+		}
+	}//func
+	
+	function clsBarCode($obj){
+		$obj.val('');
+	}//func	
+		
+	function lockManualKey(){
+		$(document).bind("contextmenu",function(e){
+			e.preventDefault();
+			return false;
+		});	
+		
+		$(document).bind('cut copy paste', function(e){
+	        e.preventDefault();
+	        return false;
+	   }); 
+		
+	    $(".keybarcode").each(function(){
+	    	$(this).keypress( function(evt) {
+				var key = evt.keyCode ? evt.keyCode : evt.which ? evt.which : evt.charCode; 
+				var objBarcode=$(this);
+		        if(key == 13){
+		        	evt.preventDefault();
+		        	if($(this).val().length < 6 || $(this).val().length > 13){
+		        		//out of range for card between 6 to 13 character
+						return false;
+					}
+		        	stopTimerKeyBarcode();
+		        	return false;
+		        }else{
+		        	stopTimerKeyBarcode();
+				    clear_timer_keybarcode=setTimeout(function(){clsBarCode(objBarcode)},100);
+				} 
+			});
+		});//chkbarcode   
+	}//func
+
+	function unlockManualKey(){
+		$(document).bind("contextmenu",function(e){
+			return true;
+		});	
+		$(document).bind('cut copy paste', function(e){
+            return true;
+       }); 
+		
+		//unlock drag & drop
+		$( ".keybarcode" ).each(function(){
+    		$(this).draggable("destroy");
+    		$(this).droppable("destroy"); 
+    	});
+	}//func
+	//AREA LOCK KEY BARCODE OR KEY MANUAL
+	function getLockStatus(){
+		//GET LOCK STATUS
+		$.ajax({
+			type:'post',
+			url:'/sales/cashier/getlockstatus',
+			data:{
+				rnd:Math.random()
+			},success:function(data){
+				$("#csh_lock_status").val(data);
+				if(data=='Y'){
+					lockManualKey();
+				}else{
+					unlockManualKey();
+				}
+			}
+		});
+	}//func
+	$(function(){
+		//lock & unlock key manual
+		getLockStatus();
+	});
+	</script>
+		<?php
+	}//end if
+	?>	

@@ -1,0 +1,82 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=tis-620">
+<meta http-equiv="x-ua-compatible" content="ie=edge, chrome=1" />
+<meta name="description" content="Retail Soft" />
+<title>POS2011</title>
+<!--[if lt IE 7]>
+<script>
+window.top.location = 'http://desktop.sonspring.com/ie.html';
+</script>
+<![endif]-->
+<!-- 
+<link href='/sales/css/style1024.css' rel='stylesheet' type='text/css'>
+<link href="/sales/css/themes/mvabs/jquery.ui.all.css" rel="stylesheet" type="text/css"/>
+<link href="/sales/js/plugin/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen"/>
+<link href="/sales/css/flexigrid/flexigrid.css" rel="stylesheet" type="text/css">
+ -->
+	
+<link rel="stylesheet" href="/pos/assets/css/reset.css" />
+<link rel="stylesheet" href="/pos/assets/css/desktop.css" />
+
+
+<!--[if lt IE 9]>
+<link rel="stylesheet" href="assets/css/ie.css" />
+<![endif]-->
+
+
+</head>
+<body>
+<div class="abs" id="wrapper">
+  <div id="program_info">Program Name<BR>V.10.00.20</div>
+  <div id="msgmonitor"><a href="" class="hide_message"></a></div>
+  <div  id="logoretail" class="draggable" style="z-index:10"></div> 
+  <div id="ssup_logo" class="draggable" style="z-index:10"></div> 
+  <div id="desktop" class="abs">
+  	<?php 
+		echo $this->layout()->content;
+	?>
+  </div>   
+  <div class="abs" id="bar_bottom">
+    <a class="float_left" href="#" id="show_desktop" title="Desktop">
+      <img src="/pos/assets/images/icons/icon_22_desktop.png" />
+    </a>
+    <ul id="dock"></ul> 
+    <span class="float_right">USER LOGIN : ADMIN</span>
+  </div>  
+</div>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>-->
+
+<script src="/pos/assets/js/jquery-1.5.1.min.js"></script>
+<script src="/pos/assets/js/jquery-ui-1.8.12.custom.min.js"></script>
+<script src="/pos/assets/js/jquery.tools.min.js"></script>
+<!-- 
+<script type="text/javascript" src="/sales/js/jquery-1.4.4.min.js"></script>	
+<script type="text/javascript" src="/sales/js/jquery-ui-1.8.10.custom.min.js"></script>
+
+<script type="text/javascript" src="/sales/js/plugin/jquery.jclock.js.txt"></script>
+<script type="text/javascript" src="/sales/js/plugin/jquery.alerts.js"></script>
+<script type="text/javascript" src="/sales/js/plugin/flexigrid.js"></script>
+<script type="text/javascript" src="/sales/js/util/js_func.js"></script>
+<script type="text/javascript" src="/sales/js/shortcut.js"></script>
+ -->
+<script>
+  !window.jQuery && document.write(unescape('%3Cscript src="/pos/assets/js/jquery.js"%3E%3C/script%3E'));
+  !window.jQuery.ui && document.write(unescape('%3Cscript src="/pos/assets/js/jquery.ui.js"%3E%3C/script%3E'));
+</script>
+<script src="/pos/assets/js/jquery.desktop.js"></script>
+
+<script>
+  var _gaq = [['_setAccount', 'UA-166674-8'], ['_trackPageview']];
+
+  (function(d, t) {
+    var g = d.createElement(t),
+    s = d.getElementsByTagName(t)[0];
+    g.async = true;
+    g.src = '//www.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g, s);
+  })(this.document, 'script');
+</script>
+</body>
+</html>

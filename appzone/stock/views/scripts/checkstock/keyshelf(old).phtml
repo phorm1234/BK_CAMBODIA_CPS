@@ -1,0 +1,264 @@
+<script>
+$(function() {	
+//all hover and click logic for buttons
+	$(".fg-button")
+	.hover(
+		function(){ 
+			$(this).addClass("ui-state-hover"); 
+		},
+		function(){ 
+			$(this).removeClass("ui-state-hover"); 
+		}
+	)
+	.mousedown(function(){
+			$(this).parents('.fg-buttonset-single:first').find(".fg-button.ui-state-active").removeClass("ui-state-active");
+			if( $(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ $(this).removeClass("ui-state-active"); }
+			else { $(this).addClass("ui-state-active"); }	
+	})
+	.mouseup(function(){
+		if(! $(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+			$(this).removeClass("ui-state-active");
+		}
+	});
+
+	$( "#dialog_qty_shelf" ).dialog({
+		autoOpen: false,
+		height: 500,
+		width: 450,
+		modal: true,
+		open: function(event, ui) {
+	        $(".ui-widget-overlay").css('opacity',0.9);
+	    },
+		buttons: {
+			"พิมพ์": function() {
+	    		printqtyonshelf();
+			},
+			"ยกเลิก": function() {
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			
+		}
+	});
+
+	jQuery(document).bind('keydown', 'f4',
+	function (evt){
+		checkqtyonshelf();
+	});
+
+	jQuery(document).bind('keydown', 'f3',
+	function (evt){
+		frmaddshelf();
+	});
+
+});
+function process(event){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		save_shelf_ck();
+	}
+	event.stopPropagation("0");
+}
+
+function process2(event){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		save_shelf_ck();
+	}
+	event.stopPropagation("0");
+}
+
+function checkqtyonshelf(){
+	var doc_no=$("#doc_no").val();
+	$.ajax({type: "POST",url: "/stock/checkstock/checkqtyonshelf",data:{doc_no:doc_no},success:
+		function(data){
+			$("#dialog_qty_shelf").html(data);
+			$( "#dialog_qty_shelf" ).dialog( "open" );
+		}
+	});
+}
+
+function printqtyonshelf(){
+	jConfirm("ยืนยันการพิมพ์", 'ยืนยันการทำงาน', function(r) {
+		if(r==true){
+			var doc_no=$("#doc_no").val();
+			$.ajax({type: "POST",url: "/stock/checkstock/printqtyonshelf",data:{doc_no:doc_no},success:
+				function(data){
+				$( "#dialog_qty_shelf" ).dialog( "close" );
+				}
+			});
+		}
+	});
+	
+}
+
+function del_room_ck(doc_no,shlef,floor_no,room_no){
+	jConfirm("ยืนยันการลบ", 'ยืนยันการทำงาน', function(r) {
+		if(r==true){
+			$.ajax({type: "POST",url: "/stock/checkstock/delroomck",data:{doc_no:doc_no,room_no:room_no},success:
+				function(data){
+					if(data=="y"){
+						getshelfdata();
+					}else{
+						jAlert('ไม่สามารถทำรายการได้', 'แจ้งเตือน');
+					}
+				}
+			});
+		}
+	});
+}
+
+</script>
+<?php 
+$shelf=$this->viewshelf;
+$search_product_id=$this->search_product_id;
+//echo $search_product_id;
+echo "<pre>";
+//print_r($shelf);
+echo "</pre>";
+$doc_no=$this->doc_no;
+?>
+<div id="dialog_qty_shelf" title="จำนวนสินค้าใน Shelf"></div>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+<?php
+$i=0;
+$countShlef=count($shelf);
+if($shelf!="n"){?>	
+	<tr>
+		<td>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>
+					<a class="fg-button ui-state-default fg-button-icon-center ui-corner-all" onClick="return frmaddshelf();">เพิ่ม Shelf (F3)</a>
+					<a class="fg-button ui-state-default fg-button-icon-center ui-corner-all" onClick="return checkqtyonshelf();">สรุปรายงาน Inventory Tag (F4)</a>
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="shelf_desc" id="shelf_desc" value="">
+			<input type="hidden" name="shelf_no_up" id="shelf_no_up" value="n">
+			<input type="hidden" name="chk_func_save" id="chk_func_save" value="shelf">
+		</td>
+	</tr>
+<?php 
+asort($shelf);
+foreach($shelf as $val_shelf){
+	if($i=='0'){echo"<tr>";}
+?>
+	<td width="50%" valign="top">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table">
+	  <tr>
+		<td bgcolor="#CCCCCC" class="head_shelf">
+		<table width="100%" border="0" cellspacing="0" cellpadding="2">
+			<tr>
+			  <td width="54%" align="left" class="text_head">Shelf <?php echo $val_shelf['shelf_no'];?></td>
+			  <td width="46%" align="right"></td>
+			</tr>
+		</table>
+		</td>
+	  </tr>
+	  <?php
+	  $floor=$val_shelf['floor_no'];
+	  $countFloor=count($floor);
+	  foreach($floor as $val_floor){
+	  	  $count_room=count($val_floor['room_no']);
+	  	  if($count_room){
+	  	  	$room_arr_pro=array();
+	  	  	$room_chk_pro="";
+	  	  foreach($val_floor['room_no'] as $val_room_no){
+		  	  foreach($val_room_no['product_id'] as $val_pro_room_no){
+			  	$room_arr_pro[]=$val_pro_room_no['product_id'];
+			  }
+		  }
+	  	  if(in_array($search_product_id, $room_arr_pro)) {
+	    	$room_chk_pro="y";
+		  }
+		  if($search_product_id==""){
+			$room_chk_pro="y";
+		  }
+	  if($room_chk_pro=="y"){  
+	  ?>
+	  <tr>
+		<td bgcolor="#CCCCCC" class="head_sub_shelf">
+		<table width="100%" border="0" cellspacing="2" cellpadding="0">
+			<tr>
+			  <td width="54%" align="left" class="sub_text_head"><?php echo $val_floor['floor_no'];?></td>
+			  <td width="46%"></td>
+			</tr>
+		</table>
+		</td>
+	  </tr>
+	  <tr>
+		<td bgcolor="#EFEFEF" class="td_sub_shelf">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+			<?php  
+	  		 $room=$val_floor['room_no'];
+	  		 /*echo "<pre>";
+	  		 print_r($room);
+	  		 echo "</pre>";*/
+			 $countRoom=count($room);	
+			 foreach($room as $val_room){
+			 	$pro=$val_room['product_id'];
+			 	$arr_pro=array();
+			 	$chk_pro="";
+			 	foreach($pro as $val_pro){
+			 		$arr_pro[]=$val_pro['product_id'];
+			 	}
+			 	if(!empty($val_room['product_id'])){
+			 		$class="txt_bold_active";
+			 		$count_product=count($val_room['product_id']);
+			 		$txt_head_room="<b>(".$count_product." Item)</b>";
+			 	}else{
+			 		$class="txt_bold";
+			 		$txt_head_room=$val_room['room_no'];
+			 	}
+				if(in_array($search_product_id, $arr_pro)) {
+			    	$chk_pro="y";
+				}
+				if($search_product_id==""){
+					$chk_pro="y";
+				}
+				if($chk_pro=="y"){
+				?>
+				  <td class="td_sub_shelf_pord">
+				  <table width="100%" border="0" cellspacing="0" cellpadding="2">
+					  <tr>
+						<td align="left"><span class="<?php echo $class;?>"><?php echo $val_room['room_no'];?></span></td>
+					  </tr>
+					  <tr>
+						<td align="center" class="txt_bold">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	                      <tr>
+	                        <td align="right">
+	                        <a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return open_keyproduct('<?php echo $doc_no;?>','<?php echo $val_shelf['shelf_no'];?>','<?php echo $val_floor['floor_no'];?>','<?php echo $val_room['room_no'];?>');"><span class="ui-icon ui-icon-folder-open"></span>บันทึก</a>
+	                        <a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return del_room_ck('<?php echo $doc_no;?>','<?php echo $val_shelf['shelf_no'];?>','<?php echo $val_floor['floor_no'];?>','<?php echo $val_room['room_no'];?>');"><span class="ui-icon ui-icon-trash"></span>ลบ</a><?php echo $txt_head_room;?>
+	                        </td>
+	                      </tr>
+	                    </table>
+						</td>
+					  </tr>
+				  </table>			  
+				  </td>
+				<?php
+				}
+			 }
+			?>
+			</tr>
+		</table>
+		<?php
+				}
+			}
+	  	}
+		?>		
+		</td>
+	  </tr>
+	</table>	
+	</td>
+	<?php
+  	$i++;
+	if($i=='2'){echo"</tr>"; $i='0';}
+	}
+	}
+	?>
+</table>

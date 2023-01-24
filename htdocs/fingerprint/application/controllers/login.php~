@@ -1,0 +1,94 @@
+<?php
+	class Login extends CI_Controller{
+		public function __construct(){
+			parent::__construct();
+			$this->load->library("session");
+		}
+		
+		public function index(){
+			$data = array();
+			$data['error'] = "";
+			$url = "http://192.168.2.10/api/fingerprint.php?param=";
+			if($_POST){
+				$username 	=	trim($this->input->post('username'));
+				$password		=	trim($this->input->post("password"));
+
+				if($username != "" && $password != ""){
+				 	$this->db->where("username",$username);
+				 	$this->db->where("password",$password);
+				 	$this->db->where("status",1);
+				 	$temres = $this->db->get("admin");
+				 	if($temres->num_rows() > 0){
+				 			$res =$temres->row();
+							if($this->set_session($res->username, 1)){
+								redirect("register");
+							}
+
+				 	}else{
+				 		// ค้นหาไม่เจอในด้าต้าเบส  call api 
+				 		$param = base64_encode($username.":".$password);
+				 		$json = @file_get_contents($url.$param);
+				 		$obj = @json_decode($json);
+				 		if(@$obj->status == "1"){
+				 			// insert to admin 
+				 			$datain = array(
+				 					"name"=>$obj->emp_name,
+				 					"surname"=>$obj->emp_surname,
+				 					"user_id"=>$obj->user_id,
+				 					"username"=>$username,
+				 					"password"=>$password,
+				 					"dept_code"=>$obj->emp_dept_code,
+				 					"status"=>$obj->emp_active
+				 					);
+				 			$resin = $this->db->insert("admin",$datain);
+				 			if($resin){
+				 				//$lastid = $this->db->insert_id();
+				 				if($this->set_session($username, 1)){
+				 						redirect("register");
+				 				}
+				 			}else{
+				 				$data['error'] = "บันทึกข้อมูลผิดพลาด";
+				 			}
+				 		}else{
+				 			$data['error'] = "ไม่สามารถล็อกอินได้";
+				 		}
+				 	}
+			 }else{
+			 	//login fail
+			 	$data['error'] = "กรุณาล็อกอินเข้าระบบ";
+			 }
+			}//end post
+			//$this->load->view("login/login",$data);
+		}
+		
+		public function menu(){
+			if($this->session->userdata("status_login") != 'y'){
+				redirect("login/index");
+			}
+			//echo "session =".$this->session->userdata("status_login");
+			
+			$this->load->view("login/menu");
+		}
+		
+		public function set_session($user_id,$status){
+			$arr_ssession = array(
+					"userid"=>$user_id,
+					"status_login"=>'y',
+					"status"=>$status
+			);
+			$this->session->set_userdata($arr_ssession);
+			return true;
+		}
+		
+		public function jsontest(){
+			$json = @file_get_contents("http://192.168.2.10/api/fingerprint.php?param=MDAwNDcxOm11bmdraHVuZw==");
+			$obj = @json_decode($json);
+			//print_r($obj);
+			echo $obj->emp_name;
+			
+		}
+		
+		
+		
+	}
+?>

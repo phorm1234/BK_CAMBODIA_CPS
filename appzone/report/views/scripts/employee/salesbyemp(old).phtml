@@ -1,0 +1,236 @@
+<style type="text/css">
+	/* Button Gray Clean */
+a.btnGrayClean{
+		border:#BBB 1px solid;
+		color:#5f5e5e;
+		display:block;
+		float:left;
+		padding:2px 10px;
+		margin-right:10px;
+		cursor:pointer;
+		text-decoration:none;
+	}
+a:hover.btnGrayClean{text-decoration:none; background:#FFF;}
+
+/* Rounded Corners */
+.rounded, a.btnGrayClean{
+		-webkit-border-radius:6px;
+		-moz-border-radius:6px;
+		border-radius:6px;
+		-khtml-border-radius: 6px;
+}
+
+/* Drop Shadow */
+.shadow, a.btnGrayClean{
+		-moz-box-shadow: 0px 1px 3px #AAA;
+		-webkit-box-shadow: 0px 1px 3px #AAA;
+		box-shadow: 0px 1px 3px #AAA;
+}
+
+/* Default Grey Gradient */
+.gradient, a.btnGrayClean{
+		background: #FFF; /* for non-css3 browsers */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); /* for IE */
+		background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DDD)); /* for webkit browsers */
+		background: -moz-linear-gradient(top,  #FFF,  #DDD); /* for firefox 3.6+ */
+}
+a.btnGrayDisabled{
+		border:#BBB 1px solid;
+		color:#5f5e5e;
+		display:block;
+		float:left;
+		padding:2px 10px;
+		margin-right:10px;
+		cursor:pointer;
+		text-decoration:none;
+	}
+a:hover.btnGrayDisabled{text-decoration:none; background:#CCC;}
+
+/* Rounded Corners */
+.rounded, a.btnGrayDisabled{
+		-webkit-border-radius:6px;
+		-moz-border-radius:6px;
+		border-radius:6px;
+		-khtml-border-radius: 6px;
+}
+
+/* Drop Shadow */
+.shadow, a.btnGrayDisabled{
+		-moz-box-shadow: 0px 1px 3px #AAA;
+		-webkit-box-shadow: 0px 1px 3px #AAA;
+		box-shadow: 0px 1px 3px #AAA;
+}
+
+/* Default Grey Gradient */
+.gradient, a.btnGrayDisabled{
+		background: #FFF; /* for non-css3 browsers */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#CCCCCC', endColorstr='#222222'); /* for IE */
+		background: -webkit-gradient(linear, left top, left bottom, from(#CCC), to(#222)); /* for webkit browsers */
+		background: -moz-linear-gradient(top,  #FFF,  #DDD); /* for firefox 3.6+ */
+}
+
+/* TEST ACCORDION 05042012*/
+</style>
+<table width="100%" height="100%" bgcolor="#FFFFFF">
+	<tr>
+		<td>รายงานสรุปยอดขายพนักงาน</td>
+	</tr>
+</table>
+<table width="100%" height="100%" bgcolor="#FFFFFF">
+	<tr>
+		<td valign="TOP">
+			<!-- ######### start ##########-->
+			<table border="0" width="100%" cellpadding="2" cellspacing="3" style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+				<tr>
+					<td align="right" width="20%">รหัสพนักงาน&nbsp;:</td>
+					<td><input type="text" name="sale_id" id="sale_id" size="15" class="input-text-pos"></input></td>					
+				</tr>
+				<tr>
+					<td align="right" width="20%">เริ่มต้น&nbsp;:</td>
+					<td><input type="text" name="date_start" id="date_start" size="15" class="input-text-pos"></input></td>
+					<input type="hidden" name="date_start_alternate" id="date_start_alternate"></input>
+				</tr>
+				<tr>
+					<td align="right">ถึง&nbsp;:</td>
+					<td><input type="text" name="date_stop" id="date_stop" size="15" class="input-text-pos"></input></td>
+					<input type="hidden" name="date_stop_alternate" id="date_stop_alternate"></input>
+				</tr>
+				<tr height="35">		
+					<td>&nbsp;</td>		
+					<td>
+						<a href="#" name="btn_commit" id="btn_commit" class="btnGrayClean">ตกลง</a>
+						&nbsp;
+						<a href="#" name="btn_cancel" id="btn_cancel" class="btnGrayClean">ยกเลิก</a>
+					</td>
+					
+				</tr>
+			</table>
+			<!-- ######### stop ##########-->
+		</td>
+	</tr>
+</table>
+<input type="hidden" name="doc_type_question" id="doc_type_question" value="<?php echo $this->doc_tp;?>"></input>
+<div id="dlgRptPreviews"></div>
+<script type="text/javascript">
+
+	function popup(url,name,windowWidth,windowHeight){
+		/**
+		*@desc
+		*@param String url
+		*@param String name
+		*@param Integer windowWidth
+		*@param Integer windowHeight
+		*@return
+		*/
+	    myleft=(screen.width)?(screen.width-windowWidth)/2:100;
+	    mytop=(screen.height)?(screen.height-windowHeight)/2:100;
+	    properties = "width="+windowWidth+",height="+windowHeight;
+	    properties +=",scrollbars=yes, top="+mytop+",left="+myleft;
+	    window.open(url,name,properties);
+	} 
+	
+	function printBill(sale_id,date_start,date_stop){
+		/**
+		*@desc
+		*@param String doc_no
+		*@param String doc_tp
+		*@return
+		*/
+		//var aa=sale_id +" , "+ date_start +" , "+ date_stop;
+		//alert(aa);
+		var url2print="/report/employee/rptsalebyemp";
+		//popup(url2print+"?sale_id="+sale_id+"&date_start="+date_start+"&date_stop="+date_stop+"&rnd="+Math.random(),"",500,500);//for test print 		
+		//return false;
+		var opts_report={
+				type:'get',
+				url:url2print,
+				cache:false,
+				data:{
+					sale_id:sale_id,
+					date_start:date_start,
+					date_stop:date_stop,
+					rmd:Math.random()
+				},
+				success:function(){
+						
+				}
+			};
+		$.ajax(opts_report);
+	}//func
+	
+	function resSearch(date_start,date_stop){
+		var opts_QstDetail={
+				autoOpen:false,
+				width:'60%',
+				height:'650',
+				modal:true,
+				resizeable:true,
+				position:'top',
+				showOpt: {direction:'up'},		
+				closeOnEscape:true,	
+				title:"รายละเอียด",
+				open:function(){					
+					 $(this).parents(".ui-dialog:first").find(".ui-dialog-content").css({"padding":"0 .1em 0 .1em","margin":"0 0 0 0","background-color":"#FFFFFF"});
+					$("*:focus").blur();
+					$("#dlgRptPreviews").html("");					
+					var sale_id=$('#sale_id').val();
+					$.ajax({
+						type:'post',
+						url:'/report/employee/salesbyemppreviews',
+						cache:false,
+						data:{
+							sale_id:sale_id,
+						    date_start:date_start,
+						    date_stop:date_stop,
+							actions:'brows_docstatus',
+							now:Math.random()
+						},
+						success:function(data){
+							$("#dlgRptPreviews").html('');
+							$("#dlgRptPreviews").html(data);
+							$(this).parent().find('select, input, textarea').blur();
+						}//end success function
+					});//end ajax pos
+				},
+				buttons: {
+					"พิมพ์":function(){ 	
+							var sale_id=$('#sale_id').val();
+							printBill(sale_id,date_start,date_stop);
+							$(this).dialog("close");
+							return false;
+					}
+				},
+				close:function(){					
+				}
+		};
+		$("#dlgRptPreviews").dialog("destroy");
+		$("#dlgRptPreviews").dialog(opts_QstDetail);
+		$("#dlgRptPreviews").dialog("open");
+	}//func
+	
+	$(function(){
+		$("#date_start").datepicker({dateFormat: 'dd/mm/yy',altField: '#date_start_alternate',altFormat:'yy-mm-dd'});
+		$("#date_stop").datepicker({dateFormat: 'dd/mm/yy',altField: '#date_stop_alternate',altFormat:'yy-mm-dd'});
+		$("#btn_commit").click(function(evt){
+			evt.preventDefault();
+			var date_start=$("#date_start_alternate").val();
+			var date_stop=$("#date_stop_alternate").val();
+			if(date_start.length==0){
+					jAlert("กรุณาเลือกวันที่เริ่มต้น", 'ข้อความแจ้งเตือน',function(){
+    					$('#date_start').focus();
+						return false;
+					});
+					return false;
+			}
+			if(date_stop.length==0){
+				jAlert("กรุณาเลือกวันที่สิ้นสุด", 'ข้อความแจ้งเตือน',function(){
+					$('#date_stop').focus();
+					return false;
+				});
+				return false;
+		}
+			resSearch(date_start,date_stop);			
+		});
+	});//ready
+	
+</script>

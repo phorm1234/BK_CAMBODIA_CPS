@@ -1,0 +1,127 @@
+<script>
+$(document).ready( function() {
+	$("#invoice").focus();
+	$.ajax({type: "POST",url: "/stock/file/tranfer_inv_to_shop.php",data:{},success:
+		function(data){
+			
+		}
+	});
+});
+
+
+jQuery(document).bind('keydown', 'f1',
+function (evt){
+	search_invoice();
+});
+
+jQuery(document).bind('keydown', 'f2',
+function (evt){
+	inputinv();
+});
+
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	tranfer_tranin2shopheadtodiary();
+});
+
+jQuery(document).bind('keydown', 'f4',
+function (evt){
+	keytranfer_cancel();
+});
+
+function process(event){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		var doc_no=$("#invoice").val();
+		var check_doc = doc_no.substring(0, 3); 
+		if(check_doc!="INV"){
+			$.ajax({type: "POST",url: "/stock/stock/checkpl",data:{},success:
+			function(data){
+				if(data>0){
+					keyinv("s");
+				}else{
+					jAlert('ต้องบันทึกเลขที่ใบตรวจรับสินค้า...ก่อนการรับเข้า', 'แจ้งเตือน', function() {
+						$("#invoice").val("");
+						$("#invoice").focus();
+						return false;
+					});
+				}
+			}}); 
+		}else{
+			keyinv("s");
+		}
+		
+	}
+}
+
+function process_pwd(event){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		var doc_no=$("#invoice").val();
+		var check_doc = doc_no.substring(0, 3); 
+		if(check_doc!="INV"){
+			$.ajax({type: "POST",url: "/stock/stock/checkpl",data:{},success:
+			function(data){
+				if(data>0){
+					selinv("s");
+				}else{
+					jAlert('ต้องบันทึกเลขที่ใบตรวจรับสินค้า...ก่อนการรับเข้า', 'แจ้งเตือน', function() {
+						$("#invoice").val("");
+						$("#invoice").focus();
+						return false;
+					});
+				}
+			}}); 
+		}else{
+			selinv("s");
+		}
+	}
+}
+</script>
+<?php 
+$date=$this->date;
+?>
+<div id="dialog_invoice" title="Invoice No."></div>
+<div id="dialog_process" title="Process"></div>
+<form id="frm_tranferin">
+<table width="100%" border="0" cellpadding="0" cellspacing="2" bgcolor="#e9f2f8" background="/stock/img/bg_header.gif">
+  <tr>
+  	<td colspan="5" height="5"></td>
+  </tr>
+    <tr>
+    <td width="15%" align="right" class="servBodL_right">Transfer Type : </td>
+    <td width="5"><input type="text" name="type_tranfer" id="type_tranfer" size="20" value="61 - Tranfer In" class="NFText_hidden" disabled="disabled"></td>
+    <td width="2%"></td>
+ 	<td class="servBodL_right">Transfer Date : </td> 
+ 	<td><input type="text" name="date_tranfer" id="date_tranfer" size="12" value="<?php echo $date;?>" class="NFText_hidden" disabled="disabled"></td>
+  </tr>
+  <tr>
+  	<td colspan="5" height="2%"></td>
+  </tr>
+  <tr>
+    <td height="20" align="right" class="servBodL_right">Insert Invoice No. : </td>
+    <td width="10%"><input type="text" name="invoice" id="invoice" class="NFText" autocomplete="off" onkeypress="return process(event)"></td>
+    <td width="7%">
+    <a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_invoice();"><span class="ui-icon ui-icon-search"></span>(F1) </a>
+    </td>
+    <td width="8%" align="right" class="servBodL_right">Password : </td>
+    <td><input type="password" name="password" id="password" size="12" autocomplete="off" class="NFText" onkeypress="return process_pwd(event)"></td>
+  </tr>
+  <tr>
+  	<td colspan="5" height="2%"></td>
+  </tr>
+  <tr>
+    <td align="right" class="servBodL_right">Note :</td>
+    <td colspan="4"><input type="text" name="doc_remark" id="doc_remark" size="71" class="NFText" /></td>
+  </tr>
+  <tr>
+  	<td colspan="5" height="5"></td>
+  </tr>
+</table>
+<input type="hidden" name="doc_tp" id="doc_tp" value="TI"></input>
+<input type="hidden" name="status_no" id="status_no" value="61"></input>
+</form>
+
+<div id="viewproducttranfer"></div>

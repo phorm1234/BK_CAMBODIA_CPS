@@ -1,0 +1,124 @@
+<?php
+//@header("Content-type:text/html; charset=utf=8");
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->SetMargins( 0,2,0 );  // ซ้าย , บน , ขวา
+
+$pdf->AddPage();
+$pdf->SetFont('CordiaNew','',5);
+//$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' ,'วันที่ออกเอกสาร '.$this->print_time ) , 0 , 1,'R' );
+
+$pdf->Image('/var/www/pos/htdocs/report/img/logo/op/op-logo.gif',8 ,0,0);
+$pdf->SetFont('CordiaNew','B',10);
+//$title1=iconv('UTF-8','cp874',"รายงานสรุปโอนสินค้าเข้า");
+
+$line="----------------------------------------------------------------------------------------------";
+
+$pdf->Ln(7);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','รายงานลดหนี้'),0,0,'C');
+$pdf->Ln(3);
+$pdf->Cell(0,3,iconv('UTF-8','cp874',"ประจำวันที่  ".$this->s_date." - ".$this->e_date),0,1,'C');
+$pdf->Ln(2);
+$pdf->Cell( 40  , 3 , iconv( 'UTF-8','cp874' ,'วันที่พิมพ์เอกสาร '.$this->print_time ),0,0,'L');
+$pdf->Cell( 28  , 3 , iconv( 'UTF-8','cp874' ,'เวลา '.$this->ptime ),0,0,'R');
+$pdf->Ln(3);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','จุดขาย : '.$this->branch_id .' ('.$this->branch_name .')' ));
+$pdf->Ln(3);
+
+$pdf->SetFont('CordiaNew','',11);
+$pdf->Cell(0,3,$line);
+$pdf->Ln(4);
+
+$a = 7;
+$b = 10;
+$c = 15;
+$d = 20;
+
+/*$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'วดป.' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'เลขที่' ) , 0 , 0 ,'C' );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'เงินสด' ) , 0 , 0,'C' );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'เครดิต' ) , 0 , 0,'C' );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'vat' ) , 0 , 1,'C' );
+
+$pdf->Ln(1);
+$pdf->Cell(0,3,$line,0,1); 
+$pdf->Ln(1);*/
+
+$i=1;$ca=0;$cd=0;$e=0;$vt=0;$n=0; foreach ($this->get_data as $v){
+		$plus_vat = $v[net_amt] - $v[vat];
+		if($v[paid] == '0000'){
+			$p_cash = $v[net_amt];
+			$p_cd = '0';
+		}else{
+			$p_cd = $v[net_amt];
+			$p_cash = '0';
+		}
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'ว.ด.ป.' ) , 0 , 0 ,'L');
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , $v[doc_date] ) , 0 , 0  );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'เลขที่' ) , 0 , 0 ,'C' );
+	$pdf->Cell( $d  , 4 , iconv( 'UTF-8','cp874' , $v[doc_no] ) , 0 , 1 ,'L' );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'เงินสด' ) , 0 , 0,'L' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($p_cash,2)." บ." ) , 0 , 0,'L' );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'เครดิต' ) , 0 , 0,'C' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($p_cd,2) ." บ.") , 0 , 1,'L' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , 'มูลค่าสินค้า' ) , 0 , 0,'L' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($plus_vat,2) ." บ." ) , 0 , 0,'L' );
+	$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'Vat' ) , 0 , 0,'C' );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($v[vat],2)." บ." ) , 0 , 0,'L' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , 'เงินตามบิล' ) , 0 , 0,'L' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($v[net_amt],2)." บ." ) , 0 , 1,'L' );
+	$pdf->Cell(0,2,$line,0,1);
+	$i++; 
+	$ca = $ca + $p_cash ;
+	$cd = $cd + $p_cd ;
+	$e = $e + $plus_vat ;
+	$vt = $vt + $v[vat] ;
+	$n = $n + $v[net_amt] ;
+}
+	
+/*$pdf->Ln(2);
+$pdf->Cell(0,2,$line,0,1);*/
+$pdf->Ln(2);
+
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , 'สรุปยอดรวม' ) , 0 , 0 );
+	$pdf->Cell( $d  , 4 , iconv( 'UTF-8','cp874' , $this->s_date." - ".$this->e_date ) , 0 , 1  );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'เงินสด ' ) , 0 , 0 , 'L');
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($ca,2)." บ." ) , 0 , 0 );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'เครดิต' ) , 0 , 0,'C' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($cd,2)." บ." ) , 0 , 1 ,'R' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , 'มูลค่าสินค้า' ) , 0 , 0,'L' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($e,2) ." บ." ) , 0 , 0,'L' );
+	$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'Vat' ) , 0 , 0,'C' );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($vt,2)." บ." ) , 0 , 0,'L' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , 'เงินตามบิล' ) , 0 , 0,'L' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($n,2)." บ." ) , 0 , 1,'L' );
+$pdf->Ln(4);
+$pdf->Cell(0,2,$line,0,1);
+
+$pdf->Ln(8);
+
+$pdf->Cell( 28  , 4 , iconv( 'UTF-8','cp874' , 'ลายเซ็นต์พนักงานขาย  :  __________________________________' ) , 0 , 0 );
+
+//$pdf->Ln(20);
+//$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , '.' ) , 0 , 0 );
+//$pdf->Output();
+$name='printcn.pdf';
+$output="/var/www/pos/htdocs/reportshop/printreport/".$name;
+//$pdf->Output($output,'F');
+@chmod($output,0777);  
+if(@file_exists($output)){
+		 shell_exec("rm $output");
+		@unlink($output);
+	}
+ 
+$pdf->Output($output,'F'); 
+//shell_exec("lp -o media=Letter $output");
+	
+
+?>
+
+<script type="text/javascript">
+//self.close();
+</script>
+		

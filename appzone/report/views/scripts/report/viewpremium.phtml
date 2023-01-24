@@ -1,0 +1,120 @@
+<style type="text/css">   
+    .div-table{display:table; }
+    .div-table-row{display:table-row;}
+    .div-table-col1{display:table-cell; padding-right:  100px; }
+    .div-table-col2{display:table-cell; padding-right:  20px; }
+    .div-table-col3{display:table-cell; padding-left:  200px; }
+    
+
+</style>
+<p align="center">
+    <img src="/report/img/logo/op/op-logo.gif"><br>
+บริษัท   : บริษัท โอ.พี. เนเชอรัล โปรดักส์ จำกัด<br>
+วันที่พิมพ์ : <?php echo $this->print_time ;?></p> <br>        
+จุดขาย :  <?php echo $this->branch_name ;?><br>
+เงื่อนไข   : ตั้งแต่วันที่ <?php echo $this->branch_id.' '.$this->branch_name ;?><br>
+รหัสสินค้า : <?php echo $this->product_start. " - " .$this->product_end ; ?>
+<table border=0 width=550 >
+    
+<tr>
+    <td colspan=10>=====================================================================</td>
+          
+</tr>
+
+<tr align=center>
+    
+          <td>ลำดับ</td>
+          <td>รหัสสินค้า</td>
+          <td>รายละเอียด</td>
+          <td align=right>จำนวน</td>
+          <td align=right>ราคา</td>
+          <td align=right>จำนวนเงิน</td>
+          
+</tr>          
+<tr>
+          <td colspan=10>=====================================================================</td>
+          
+</tr>
+        
+
+
+<?php
+
+$i = 1;
+$sum_quan =0;
+$sum_price =0;
+$sum_total_price =0;
+$bi = 0;
+
+$trs_data = $this->getpremium_data ;
+    foreach($trs_data as $b){
+        $sum_quan += $b['quan'];
+        $sum_price += $b['price'];
+        $sum_total_price += $b['total_price'];
+        $bi = count($trs_data);
+       echo" <tr>
+    
+          <td align=center>".$i++.". </td>
+          <td align=center>".$b['product_id']."</td>
+          <td>".$b['name_print']."</td>
+          <td align=right>".number_format(($b['quan']), 0)."</td>
+          <td align=right>".number_format(($b['price']), 2, '.', ',')."</td>
+          <td align=right>".number_format(($b['total_price']), 2, '.', ',')."</td>
+          
+           </tr>  ";
+    }
+    
+echo "<tr><td colspan='6'>=====================================================================</td>
+    <tr>
+    <td colspan='3'>รวมจำนวนทั้งหมด ".$bi." รายการ</td> 
+    <td align=right>".number_format($sum_quan, 0)." </td>
+    <td></td>
+    <td align=right>".number_format($sum_total_price, 2, '.', ',')." </td>
+</tr>";
+                         
+echo "</tr></table>";
+
+echo "<div align=right>";
+if ($this->get_printer == 'Y'){
+	echo "
+<form action='/report/report/printpremium' method='post'>
+<input type=hidden  name=product1 value='$this->product_start'>
+<input type=hidden  name=product2 value='$this->product_end'>
+<input type=hidden  name=data1 value='$this->dayfrom'>
+<input type=hidden  name=data2 value='$this->tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>";  // print thermal
+}else{
+echo "<br>        
+<form action='/report/report/mtpremium' method='post'>
+<input type=hidden  name=product1 value='$this->product_start'>
+<input type=hidden  name=product2 value='$this->product_end'>
+<input type=hidden  name=data1 value='$this->dayfrom'>
+<input type=hidden  name=data2 value='$this->tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>";
+}
+echo "</div>";
+
+?>
+
+<?php
+/*$day = $this->tofrom;
+$today = date('Y-m-d');
+
+
+
+if ($day < $today ){
+    echo "<div align=right>
+<form action='/report/report/printreport' method='post'>
+<input type=hidden id=start_date name=start_date value='$this->dayfrom'>
+<input type=hidden id=end_date name=end_date value='$this->tofrom'>
+<input type=submit value= พิมพ์รายงาน  id=print>
+</form>
+
+</div>" ;
+}  else {
+echo "";    
+}*/
+
+?>

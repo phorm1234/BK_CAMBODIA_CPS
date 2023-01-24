@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<title>Product</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<link rel="stylesheet" href="/pos/plugin/fellowshiptech/assets/stylesheets/master.css" />
+<script src="/pos/plugin/fellowshiptech/assets/javascripts/iscroll.js"></script>
+<script src="/pos/js/jquery-1.7.1.min.js"></script>
+<script src="/pos/plugin/fellowshiptech/assets/javascripts/master.js"></script>
+
+<link rel="stylesheet" href="/pos/css/black-tie/jquery-ui-1.8.10.custom.css" />
+<script src="/pos/js/jquery-ui-1.8.18.custom.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/gray/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/icon.css"/>
+<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery.easyui.min.js"></script>
+
+<script src="/pos/js/flexigrid.js"></script>
+<link type="text/css" rel="stylesheet" media="screen" href="/pos/css/flexigrid/flexigrid.css" />	
+
+<script type="text/javascript" src="/pos/js/posconfig/posconfig.js?r=Math.random()"></script>
+<link rel="stylesheet" href="/pos/css/style.css" />
+
+</head>
+<body>
+<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1">
+
+<div id="main" class="abs">
+	<div class="abs header_upper chrome_dark">
+		Pos Config
+	</div>
+	<div id="main_content" class="abs">
+		<div id="main_content_inner">
+			<div class="easyui-layout" style="width:100%;height:260px;">
+					<div region="west" split="true" title="West" style="width:220px;">
+					<ul id="treeposconfic" ></ul>
+					</div>
+					<div region="center" title="Config Unit" style="background:#fafafa;">
+					<ul id="treeposconfiglist" ></ul>
+					</div>
+					
+					<div region="east" title="Config Detail" split="true" style="width:450px;">
+<fieldset>
+	<table border="0">
+							      <tr>
+							        <td>&nbsp;</td>
+							        <td><div align="right">corporation_id</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="corporation_id" style="background-color:#CCCCCC;" type="text" id="corporation_id" size="5"  readonly=""/></td>
+					                <td>&nbsp;</td>
+					                <td><div align="right">condition_status</div></td>
+					                <td>&nbsp;</td>
+					                <td><input name="condition_status"  type="text"  class='insert_form' id="condition_status" size="10" maxlength="10" /></td>
+				              </tr>
+							      <tr>
+							        <td>&nbsp;</td>
+							        <td><div align="right">company_id</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="company_id" style="background-color:#CCCCCC;" type="text" id="company_id" size="5" readonly=""/></td>
+							        <td>&nbsp;</td>
+							        <td><div align="right">default_day</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="default_day" type="text"  class='insert_form'  id="default_day" size="10" /></td>
+			                  </tr>
+							      <tr>
+							        <td>&nbsp;</td>
+							        <td><div align="right">branch_id</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="branch_id" style="background-color:#CCCCCC;" type="text" id="branch_id" size="10" readonly="" /></td>
+					                <td>&nbsp;</td>
+					                <td><div align="right">condition_day</div></td>
+					                <td>&nbsp;</td>
+					                <td><input name="condition_day" type="text"  class='insert_form'  id="condition_day" size="10" /></td>
+				              </tr>
+							      <tr>
+							        <td>&nbsp;</td>
+							        <td><div align="right">branch_no</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="branch_no" style="background-color:#CCCCCC;" type="text" id="branch_no" size="10" readonly="" /></td>
+							        <td>&nbsp;</td>
+							          <td><div align="right">start_date</div></td>
+							          <td>&nbsp;</td>
+							          <td><input name="start_date" type="text"  class='insert_form'  id="start_date" size="10" /></td>
+						          </tr>
+							      <tr>
+							        <td>&nbsp;</td>
+							        <td><div align="right">code_type</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="code_type" class='insert_form' type="text" id="code_type" size="10" /></td>
+							        <td>&nbsp;</td>
+							        <td><div align="right">end_date</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="end_date" type="text"  class='insert_form'  id="end_date" size="10" /></td>
+				          </tr>
+							      <tr>
+							        <td>&nbsp;</td>
+							        <td><div align="right">value_type</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="value_type" class='insert_form'  type="text" id="value_type" size="10" /></td>
+							        <td>&nbsp;</td>
+							        <td><div align="right">start_time</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="start_time" type="text"  class='insert_form'  id="start_time" size="10" /></td>
+				          </tr>
+							      <tr>
+							        <td>&nbsp;</td>
+							        <td><div align="right">default_status</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="default_status"  class='insert_form'  type="text" id="default_status" size="10" /></td>
+							        <td>&nbsp;</td>
+							        <td><div align="right">end_time</div></td>
+							        <td>&nbsp;</td>
+							        <td><input name="end_time" type="text"  class='insert_form'  id="end_time" size="10" /></td>
+				          </tr>
+							      <tr>
+							        <td>&nbsp;</td>
+							        <td>&nbsp;</td>
+							        <td>&nbsp;</td>
+							        <td>&nbsp;</td>
+							        <td>&nbsp;</td>
+							        <td>&nbsp;</td>
+				                    <td>&nbsp;</td>
+				                    <td><input type="button" name="Button" value="บันทึก"  onclick="savecomposconfig()"/>
+			                        <input name="BtDel_code_type" type="button" id="BtDel_code_type" value="  ลบ  " onclick="delcodetype()" /></td>
+					      </tr>
+					    </table>
+</fieldset>
+					</div>
+			</div>
+		
+		<input name="fTable" type="hidden" id="fTable" />
+		<table id="table_posconfig" ><tr><td>&nbsp;</td></tr></table>
+		</div>
+	</div>
+</div>
+
+<div id='alldialog' style="display:none">
+	
+		<div id="dialogAddCodeType" icon="icon-save" title="เพิ่ม  CodeType" >
+					<table border="0">
+					      <tr>
+					        <td>&nbsp;</td>
+					        <td><div align="right">code_type</div></td>
+					        <td>&nbsp;</td>
+					        <td><input name="code_type_add" class='insert_form' type="text" id="code_type_add" size="10" /></td>
+					        <td>&nbsp;</td>
+					                <td><div align="right">condition_day</div></td>
+					                <td>&nbsp;</td>
+					                <td><input name="condition_day_add" type="text"  class='insert_form'  id="condition_day_add" size="10" /></td>
+					              </tr>
+					      <tr>
+					        <td>&nbsp;</td>
+					        <td><div align="right">value_type</div></td>
+					        <td>&nbsp;</td>
+					        <td><input name="value_type_add" class='insert_form'  type="text" id="value_type_add" size="10" /></td>
+					        <td>&nbsp;</td>
+					        <td><div align="right">start_date</div></td>
+					        <td>&nbsp;</td>
+					        <td><input name="start_date_add" type="text"  class='insert_form'  id="start_date_add" size="10" /></td>
+					                  </tr>
+					      <tr>
+					        <td>&nbsp;</td>
+					        <td><div align="right">default_status</div></td>
+					        <td>&nbsp;</td>
+					        <td><input name="default_status_add"  class='insert_form'  type="text" id="default_status_add" size="10" /></td>
+					        <td>&nbsp;</td>
+					                <td><div align="right">end_date</div></td>
+					                <td>&nbsp;</td>
+					                <td><input name="end_date_add" type="text"  class='insert_form'  id="end_date_add" size="10" /></td>
+					              </tr>
+					      <tr>
+					        <td>&nbsp;</td>
+					        <td><div align="right">condition_status</div></td>
+					        <td>&nbsp;</td>
+					        <td><input name="condition_status_add"  type="text"  class='insert_form' id="condition_status_add" size="10" maxlength="10" /></td>
+					        <td>&nbsp;</td>
+					          <td><div align="right">start_time</div></td>
+					          <td>&nbsp;</td>
+					          <td><input name="start_time_add" type="text"  class='insert_form'  id="start_time_add" size="10" /></td>
+					          </tr>
+					      <tr>
+					        <td>&nbsp;</td>
+					        <td><div align="right">default_day</div></td>
+					        <td>&nbsp;</td>
+					        <td><input name="default_day_add" type="text"  class='insert_form'  id="default_day_add" size="10" /></td>
+					        <td>&nbsp;</td>
+					        <td><div align="right">end_time</div></td>
+					        <td>&nbsp;</td>
+					        <td><input name="end_time_add" type="text"  class='insert_form'  id="end_time_add" size="10" /></td>
+					          </tr>
+					    </table>
+		</div>
+	
+
+
+		<div id="mconfig_branch" class="easyui-menu" style="width:120px;">
+			<div onclick="AddConfigBranch()" iconCls="icon-sentper">Add Config Branch</div>
+			<div class="menu-sep"></div>
+		</div>
+		
+		<div id="mtree_company" class="easyui-menu" style="width:120px;">
+			<div onclick="Sent_All_Branch()" iconCls="icon-sentper">Sent All Branch</div>
+			<div class="menu-sep"></div>
+		</div>
+		
+		<div id="mtree_branch" class="easyui-menu" style="width:120px;">
+			<div onclick="SentBranch()" iconCls="icon-sentper">Sent Branch</div>
+			<div class="menu-sep"></div>
+		</div>
+		
+		<div id="m_id_config" class="easyui-menu" style="width:120px;">
+			<div onclick="DelConfig()" iconCls="icon-no">Del Config</div>
+			<div class="menu-sep"></div>
+			<div onclick="AddCodeType()" iconCls="icon-add">Add CodeType</div>
+			<div class="menu-sep"></div>
+			
+		</div>
+		
+		<div id="m_com_pos_config" class="easyui-menu" style="width:120px;">
+			<div onclick="CancelConfig()" iconCls="icon-undo">Cancel Config</div>
+			<div class="menu-sep"></div>
+		</div>
+</div>	
+  </form>
+</body>
+</html>

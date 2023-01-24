@@ -1,0 +1,274 @@
+<?php 
+$json_data=$this->jsondata;
+$shelf_no=json_decode($json_data,true);
+$shop_name=$this->branch_name;
+$doc_no=$this->doc_no;
+/*echo "<pre>";
+print_r($shelf_no);
+echo "</pre>";*/
+$doc_no=$this->doc_no;
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->AddPage();
+$pdf->SetAutoPageBreak("off",1);
+
+$startY=2;
+$startX=0;//4
+$pdf->SetY($startY);
+$pdf->SetX($startX);	
+//--------------------------------------------------------------------
+$title0=$this->brand_fullname;
+$title1="O.P. NATURAL PRODUCTS CO.,LTD";
+$title2="89/1 Soi Ratchataphan,Rachaprarop";
+$title2_1="Rd. Makkasun Rachatevee Bangkok 10400.";
+$title4="TAX INVOICE / RECEIPT";
+$head_form="INVENTORY TAG FORM";
+$shop="";
+$date=date("d/m/Y");
+$time=date("h:i:s");
+$line="---------------------------------------------------------------------------------------------------------------------";
+
+$startY=$startY+1;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(2,1,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','B',12);
+	$pdf->Cell(48,1,"$head_form",0,0,'L',0);
+	
+	$startY=$startY+5;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(2,1,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','B',12);
+	$pdf->Cell(50,1,"$title1",0,0,'L',0);
+	
+	$startY=$startY+5;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(2,1,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','B',12);
+	$pdf->Cell(45,1,"DATE : ".$date,0,0,'L',0);
+	$pdf->SetFont('CordiaNew','B',12);
+	$pdf->Cell(0,1,"TIME : ".$time,0,0,'L',0);
+	
+	$head_doc_no=iconv('UTF-8','cp874',"เลขที่เอกสาร  : ");
+	$startY=$startY+5;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(2,1,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','B',12);
+	$pdf->Cell(51,1,"$head_doc_no".$doc_no,0,0,'L',0);
+	
+	
+	$shop=$this->shop;
+	$line7_col_1=iconv('UTF-8','cp874',"รหัสจุดขาย : ");
+	$branch_name=iconv('UTF-8','cp874',$shop_name);
+	$shop_no=$shop."(".$branch_name.")";
+	$startY=$startY+5;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(2,1,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','B',12);
+	$pdf->Cell(50,1,$line7_col_1.$shop_no,0,0,'L',0);
+$sum_amt_all=null;
+$sum_qty_all=null;
+$start=1;
+$check_shelf=null;
+foreach($shelf_no as $val_shelf){
+	//if($start!=1){
+		//if($check_shelf!=$val_shelf['shelf_no']){
+			$pdf->AddPage();
+			$pdf->SetAutoPageBreak("off",1);
+			$startY=6;
+			$startX=0;//4
+			$pdf->SetY($startY);
+			$pdf->SetX($startX);
+		//}
+	//}
+	
+	$head_floor_no=iconv('UTF-8','cp874',"รหัสชั้นสินค้า  : ");
+	$startY=$startY+5;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(2,1,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','B',11);
+	$pdf->Cell(51,1,"$head_floor_no".$val_shelf['shelf_no'],0,0,'L',0);
+	
+	$startY=$startY+3;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->SetFont('CordiaNew','B',12);
+	$pdf->Cell(2,0,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','',8);
+	$pdf->Cell(51,0,$line,0,0,'L',0);
+	
+	$startY=$startY+3;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(2,0,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','B',9);
+	$pdf->Cell(9,0,iconv('UTF-8','cp874',"รหัสห้อง"),0,0,'L',0);
+	$pdf->Cell(11,0,iconv('UTF-8','cp874',"รหัสสินค้า"),0,0,'L',0);
+	$pdf->Cell(18,0,iconv('UTF-8','cp874',"รายละเอียด"),0,0,'L',0);
+	$pdf->Cell(7,0,iconv('UTF-8','cp874',"ราคา"),0,0,'C',0);
+	$pdf->Cell(9,0,iconv('UTF-8','cp874',"จำนวน"),0,0,'C',0);
+	$pdf->Cell(12,0,iconv('UTF-8','cp874',"จำนวนเงิน"),0,0,'C',0);
+	
+	$startY=$startY+3;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->SetFont('CordiaNew','B',12);
+	$pdf->Cell(2,0,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','',8);
+	$pdf->Cell(51,0,$line,0,0,'L',0);
+	
+	$sum_qty=null;
+	$sum_amt=null;
+	$count_page=null;
+	foreach($val_shelf['data'] as $data){
+		
+		if(empty($room)){
+			$room="start";
+		}
+		if($room==$data['room_no']){
+			$room_no="";
+		}else{
+			$room_no=$data['room_no'];
+			$room_no=explode("-",$room_no);
+			$room_no=$room_no[1]."-".$room_no[2];
+		}
+		
+		
+		$amt=$data['price']*$data['quantity'];
+		$sum_amt=$sum_amt+$amt;
+		$sum_amt_all=$sum_amt_all+$amt;
+		$format_amt_all=number_format($sum_amt_all,2);
+		$format_sum_amt=number_format($sum_amt,2);
+		$amt=number_format($amt,2);
+		
+		$qty=number_format($data['quantity']);
+		$sum_qty=$sum_qty+$data['quantity'];
+		$sum_qty_all=$sum_qty_all+$data['quantity'];
+		$format_sum_qty_all=number_format($sum_qty_all);
+		$sum_qty=number_format($sum_qty);
+		
+		$product_name=iconv('UTF-8','cp874',$data['name_product']);
+		//$product_name=substr($product_name,0,10);
+		
+		
+		$startY=$startY+5;
+		$pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->Cell(2,0,"",0,0,'L',0);
+		$pdf->SetFont('CordiaNew','',10);
+		$pdf->Cell(9,0,$room_no,0,0,'L',0);
+		$pdf->Cell(11,0,$data['product_id'],0,0,'L',0);
+		$pdf->SetFont('CordiaNew','',9);
+		$pdf->Cell(50,0,$product_name,0,0,'L',0);
+
+		$startY=$startY+4;
+		$pdf->SetY($startY);
+		$pdf->SetX($startX);
+		$pdf->Cell(2,0,"",0,0,'L',0);
+		$pdf->SetFont('CordiaNew','',10);
+		$pdf->Cell(9,0,"",0,0,'L',0);
+		$pdf->Cell(11,0,"",0,0,'L',0);
+		$pdf->SetFont('CordiaNew','',9);
+		$pdf->Cell(18,0,"",0,0,'L',0);
+		$pdf->SetFont('CordiaNew','',10);
+		$pdf->Cell(7,0,$data['price'],0,0,'R',0);
+		$pdf->Cell(9,0,$qty,0,0,'R',0);
+		$pdf->Cell(12,0,$amt,0,0,'R',0);
+
+
+
+		$room=$data['room_no'];
+		$count_page=$count_page+1;
+		if($count_page==23){
+			$pdf->AddPage();
+			$pdf->SetAutoPageBreak("off",1);
+			$startY=6;
+			$startX=0;//4
+			$pdf->SetY($startY);
+			$pdf->SetX($startX);	
+			$count_page=0;
+		}
+	}
+	
+	$startY=$startY+5;
+	$pdf->SetY($startY);
+	$pdf->SetX($startX);
+	$pdf->Cell(2,0,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','',9);
+	$pdf->Cell(9,0,"",0,0,'L',0);
+	$pdf->Cell(2,0,"",0,0,'L',0);
+	$pdf->Cell(11,0,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','',8);
+	$pdf->Cell(15,0,"",0,0,'L',0);
+	$pdf->SetFont('CordiaNew','',9);
+	$pdf->Cell(7,0,iconv('UTF-8','cp874','รวม : '),0,0,'R',0);
+	$pdf->Cell(9,0,$sum_qty,0,0,'R',0);
+	$pdf->Cell(12,0,$format_sum_amt,0,0,'R',0);
+}
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','B',12);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(51,0,$line,0,0,'L',0);
+
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',9);
+$pdf->Cell(9,0,"",0,0,'L',0);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->Cell(11,0,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',9);
+$pdf->Cell(15,0,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',9);
+$pdf->Cell(7,0,iconv('UTF-8','cp874','รวมทั้งหมด : '),0,0,'R',0);
+$pdf->Cell(9,0,$format_sum_qty_all,0,0,'R',0);
+$pdf->Cell(12,0,$format_amt_all,0,0,'R',0);
+
+$startY=$startY+3;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->SetFont('CordiaNew','B',12);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','',8);
+$pdf->Cell(51,0,$line,0,0,'L',0);
+	
+$startY=$startY+10;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',11);
+$pdf->Cell(18,0,iconv('UTF-8','cp874',"หัวหน้าจุดขาย : "),0,0,'L',0);
+$pdf->Cell(20,0,iconv('UTF-8','cp874',"_____________"),0,0,'L',0);
+$pdf->Cell(15,0,iconv('UTF-8','cp874',"ผู้ตรวจสอบ : "),0,0,'L',0);
+$pdf->Cell(20,0,iconv('UTF-8','cp874',"_____________"),0,0,'L',0);
+
+$startY=$startY+5;
+$pdf->SetY($startY);
+$pdf->SetX($startX);
+$pdf->Cell(2,0,"",0,0,'L',0);
+$pdf->SetFont('CordiaNew','B',11);
+$pdf->Cell(18,0,"",0,0,'L',0);
+$pdf->Cell(20,0,iconv('UTF-8','cp874',"(......./......./........)"),0,0,'C',0);
+$pdf->Cell(15,0,"",0,0,'L',0);
+$pdf->Cell(20,0,iconv('UTF-8','cp874',"(......./......./........)"),0,0,'C',0);
+
+$name="countstock.pdf";
+$output=REPORT_PATH.$name;
+$output="/var/www/pos/htdocs/stock/report/".$name;
+@chmod(REPORT_PATH,0777);
+$pdf->Output($output,'F');
+echo shell_exec("lp -o media=Letter $output");
+if(@file_exists($output)){
+	echo shell_exec("rm $output");
+}
+?>

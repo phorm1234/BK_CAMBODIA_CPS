@@ -1,0 +1,48 @@
+<?php
+$arr_data=$this->arr_data;
+$page=$this->page;
+$total=$this->total;
+if(empty($arr_data)){
+	$data=array();
+}else{
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+	foreach($arr_data as $val){
+		if($val['check']==$val['onhand']){
+			$dif_over="-";
+			$dif_lower="-";
+			$price_value="";
+		}else{
+			if($val['dif']>0){
+				$dif_over=$val['dif'];
+				$dif_lower="-";
+				$price_value=$val['price']*$dif_over;
+				$price_value=number_format($price_value,2);
+			}else{
+				$dif_lower=$val['dif']*-1;
+				$dif_over="-";
+				$price_value=$val['price']*$dif_lower;
+				$price_value=$price_value*-1;
+				$price_value=number_format($price_value,2);
+			}
+		}
+		$onhand=number_format($val['onhand']);
+		$check=number_format($val['check']);
+		$data['rows'][] = array(
+			'id' => $val['product_id'],
+			'cell' => array(
+							$val['product_id'], 
+							$val['name_product'], 
+							$val['price'], 
+							$onhand, 
+							$check, 
+							$dif_lower, 
+							$dif_over,
+							$price_value)
+		);
+	}
+}
+echo json_encode($data);
+?>

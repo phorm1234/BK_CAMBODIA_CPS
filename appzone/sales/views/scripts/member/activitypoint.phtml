@@ -1,0 +1,95 @@
+<style type="text/css">
+
+#tbl_body { 
+	/*CCE9FD*/
+    min-height: 100%;
+	background:white;
+	background-image: -moz-linear-gradient(top, #F3FDF9, #FFF);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F3FDF9), to(#FFF));
+	background-image: -webkit-linear-gradient(top, #F3FDF9, #FFF);
+	filter: progid:DXImageTransform.Microsoft.Gradient(
+	gradientType=0,startColorStr=#F3FDF9,
+	endColorStr=#FFF);
+}
+
+</style>
+<table id="tbl_body" width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#EFFFFF">
+<tr height="200">
+	<td valign="top">
+	<table width="100%" border="0" cellspacing="1" cellpadding="3" style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+		<tr>
+			<td width="20%" align="right">
+				รหัสสมาชิก
+			</td>
+			<td width="40%">
+				<table width="100%">
+				<tr>
+					<td width="30%">
+						<input type="text" name="act_member_no" id="act_member_no" size="20"  class="input-text-pos  ui-corner-all keybarcode"></input>
+					</td>
+					<td>
+							<a href="#" name="bws_idcard" id="bws_idcard" class='btnBwsIdCard'></a>
+					</td>
+				</tr>
+			  </table>
+			</td>
+			<td width="6%" align="right">
+				คะแนนสะสม
+			</td>
+			<td>
+				<input type="text" name="act_point" id="act_point" size="5"  class="input-text-pos-disabled ui-corner-all" readonly></input>&nbsp;คะแนน
+			</td>
+		</tr>
+		<tr>
+			<td width="20%" align="right">
+				ชื่อ-นามสกุล
+			</td>
+			<td colspan="2">
+				<input type="text" name="act_fullname" id="act_fullname" size="20"  class="input-text-pos ui-corner-all"></input>
+			</td>
+		</tr>
+		<tr>
+			<td width="20%" align="right" valign="top">
+				ที่อยู่
+			</td>
+			<td colspan="2">
+				<textarea rows="3" cols="45" name="act_address" id="act_address" class="ui-corner-all"></textarea>
+			</td>
+		</tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+		<td valign="top">
+			<div id="txt_promo_description"></div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table width="100%" border="0" cellspacing="0" cellpadding="5">
+				<tr>
+					<td width="20%" align="right">
+						&nbsp;
+					</td>
+					<td width="12%" align="Right">
+						<a href="#" name="btnSave" id="btnSave" class="btnGrayCleanCmd">ยืนยันการใช้คะแนน</a>
+					</td>
+					<td width="20%" align="Left">
+						<a href="#" name="btnCancel" id="btnCancel" class="btnGrayCleanCmd">ยกเลิก</a>
+					</td>
+					<td width="" align="right">
+						&nbsp;
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+<div id="dlgActivityPoint"></div>
+<div id="dlgActivityPointDetail"></div>
+<div id="dlgActivityPointCashier"></div>
+<input type="hidden" name="act_promo_code_hidden" id="act_promo_code_hidden"></input>
+<input type="hidden" name="act_redeempoint_hidden" id="act_redeempoint_hidden"></input>
+<input type="hidden" name="act_amount_hidden" id="act_amount_hidden"></input>
+<script type="text/javascript" src="/sales/js/member/activitypoint.js"></script>

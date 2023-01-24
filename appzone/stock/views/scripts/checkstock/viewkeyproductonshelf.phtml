@@ -1,0 +1,147 @@
+<?php 
+$productData=$this->productdata;
+/*echo "<pre>";
+print_r($productData);
+echo "</pre>";*/
+$room_no=$this->room_no;
+$chk_focus=$this->chk_focus;
+$page_seq=$this->page_seq;
+$product_focus="prod_".$productData[0]['product_id']."_".$productData[0]['seq'];
+echo "<input type='hidden' id='prod_focus' value='$product_focus'>";
+echo "<input type='hidden' id='page_seq' value='$page_seq'>";
+$qty=$this->qty;
+$doc_no=$this->doc_no;
+$json_productData=json_encode($productData);
+?>
+<script type="text/javascript">
+
+$('document').ready(function(){
+	var prod_focus=$("#prod_focus").val();
+	var page_seq=$("#page_seq").val();
+	if(page_seq=="1"){
+		$("#"+prod_focus).focus().select();
+	}else if(page_seq=="0"){
+		$("#enter").focus().select();
+	}else{
+		$("#enter").focus().select();
+	}
+	$(".nexttxt").click(function() {
+		$(".nexttxt").keypress(function(event) {
+			var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+			keyCode = event.which; // Firefox  
+	
+			if(keyCode == 13){
+				
+			}
+			
+			if ((keyCode < 7) || (keyCode > 8) &&  (keyCode < 48) || (keyCode > 57)){
+				keyCode = event.preventDefault();
+				return false;
+			}else
+			return true;
+			
+		});
+	});
+
+	$( "#dialog_s_product" ).dialog({
+		autoOpen: false,
+		width: 300,
+		height: 200,
+		modal: true
+	});
+});
+
+function jqCheckAll2( id, name )
+{
+   $("INPUT[@name=" + name + "][type='checkbox']").attr('checked', $('#' + id).is(':checked'));
+}
+
+jQuery(document).bind('keydown', 'f1',
+function (evt){
+	$("#enter").focus();
+});
+
+
+jQuery(document).bind('keydown', 'f2',
+function (evt){
+	var prod_focus=$("#prod_focus").val();
+	$("#"+prod_focus).focus().select();
+});
+
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	get_s_product();
+});
+
+jQuery(document).bind('keydown', 'f8',
+		function (evt){
+			deletelisttag();
+		});
+
+
+function get_s_product(){
+	$( "#dialog_s_product" ).dialog( "open" );
+}
+
+
+</script>
+<div id="dialog_s_product" name="Search Product"></div>
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr>
+  	<td width="5%" height="25" background="/stock/img/bg_header_blue.gif" align="center">ลำดับ</td>
+    <td width="15%" height="25" background="/stock/img/bg_header_blue.gif" align="center">รหัสสินค้า</td>
+    <td background="/stock/img/bg_header_blue.gif">ชื่อสินค้า</td>
+    <td width="12%" background="/stock/img/bg_header_blue.gif" align="center">จำนวนนับ</td>
+    <td background="/stock/img/bg_header_blue.gif" width="7%" align="center"><input type="checkbox" name="checker" id="checker" onclick="jqCheckAll2( this.id, 'myCB' )"></td>
+  </tr>
+  <tr bgcolor="#e0dfdf">
+  	<td></td>
+    <td height="20" align="right"></td>
+    <td></td>
+    <td align="center"><a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" title="Refresh" onClick="return reflisttag('<?php echo $room_no;?>');"><span class="ui-icon ui-icon-refresh"></span> Refresh</a></td>
+    <td align="center"><a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" title="ลบ" onClick="return deletelisttag();"><span class="ui-icon ui-icon-trash">F8</span> ลบ</a></td>
+   </tr>
+  <?php 
+  $i=0;
+  $j=1;
+  if(!empty($productData)){
+	  foreach($productData as $valProduct){
+	  if($i%2){$color="#eaebeb";}else{$color="#f2f3f3";}
+	  $quantity=null;
+	  if(!empty($qty[$i]['product_id'])){
+		  if($valProduct['product_id']==$qty[$i]['product_id']){
+		  	if($qty[$i]['quantity']=="0.00"){
+		  		$quantity="";
+		  	}else{
+		  		//$quantity=number_format($qty[$i]['quantity']);
+		  		$quantity=number_format($qty[$i]['quantity']);
+		  	}
+		  }
+	  }
+	  ?>
+	  <?php 
+	  $next_id="prod_".$valProduct['product_id']."_".$valProduct['seq'];
+	  ?>
+	  <tr bgcolor="<?php echo $color;?>" ref="2">
+	  	<td><?php echo $j;?></td>
+	    <td height="20" align="center"><?php echo $valProduct['product_id'];?></td>
+	    <td><?php echo $valProduct['name_product'];?></td>
+	    <td ref="1" align="center"><input type="text" id="<?php echo $next_id;?>" name="<?php echo $next_id;?>" value="<?php echo $quantity;?>" size="3" onKeyUp="return savelisttag('<?php echo $next_id;?>')"  class="nexttxt"></td>
+	    <td align="center"><input type="checkbox" name="delproductid[]" id="delproductid[]" value="<?php echo $valProduct['product_id'];?>" class="sel_checkbox"></td>
+	  </tr>
+	  <?php 
+	  $i++;
+	  $j++;
+	  }
+  }
+  ?>
+  	  <tr bgcolor="#e0dfdf">
+  		<td>&nbsp;</td>
+    	<td height="20" align="right">&nbsp;</td>
+    	<td align="right">เพิ่มเลขที่สินค้า : <input id="enter" name="enter" onKeyPress="return next_pqty(event);" size="15"> <font color="blue">(F2) สินค้าตัวแรก</font></td>
+    	<td align="center"><input type="text" name="aqty" id="aqty" value="" size="3" onKeyPress="return addproduct(event);"></td>
+    	<td align="center">&nbsp;</td>
+   	  </tr>
+</table>
+<?php 
+echo "<input type='hidden' id='arr_product_id' name='arr_product_id' value='".$json_productData."' size='100'>" ?>

@@ -1,0 +1,161 @@
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+	<tr bgcolor="#B9E7CF" height="40">
+		<td colspan="6"><span style='font-size:23px;color:#000000;'>&nbsp;Reduce customer debt</span></td>
+	</tr>
+	<tr height="32">
+		<td width="10%" align="right" >Insert Doc. No.&nbsp;:</td>
+		<td width="10%">
+			<input type="text" id="cn_doc_no" name="cn_doc_no" size="25" class="input-text-pos"></input>
+		</td>
+		<td width="3%">
+			<a href="#" name="bws_cndocno" id="bws_cndocno" class='btnGrayClean'>...</a>
+		</td>
+		<td colspan="3">&nbsp;</td>
+	</tr>
+	<tr height="32">
+		<td width="10%" align="right">Type of reduce debt&nbsp;:</td>
+		<td>
+			<select id="cn_status_no" name="cn_status_no" class="input-text-pos">
+			<?php 
+				if(!empty($this->arr_docstatus)){
+					foreach($this->arr_docstatus as $status_no=>$description){
+						switch($status_no){
+							case "40": //ลูกค้าเปลี่ยนสินค้า
+							$description="Customer change the product";
+							break;
+							case "41": //คืนเงินลูกค้า
+							$description="Refund to customer";
+							break;
+							default: //default
+							$description=$description;
+						}
+						?>
+						<option value="<?php echo $status_no;?>"><?php echo $description;?></option>
+						<?php 
+					}
+				}
+			?>				
+			</select>
+		</td>
+		<td colspan="4">&nbsp;</td>
+	</tr>
+	<tr height="32">
+		<td width="10%" align="right">Members No.&nbsp;:</td>
+		<td>
+			<input type="text" id="cn_member_no" id="cn_member_no" size="25" class="input-text-pos keybarcode"></input>
+			<input type="hidden" id="cn_member_no_hide" id="cn_member_no_hide" size="25"></input>			
+		</td>
+		<td>
+			<button class="btnBwsIdCard" id="bws_cnidcard"></button>	
+		</td>
+		<td align="center" width="3%">
+			Discount&nbsp;:
+		</td>
+		<td  width="8%">
+			<input type="text" id="cn_discount" name="cn_discount" size="10" value="0"  style="text-align:center;" class="input-text-pos-disabled"></input>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr height="32">
+		<td width="10%" align="right">Name - Surname&nbsp;:</td>
+		<td>
+			<input type="text" id="cn_fullname" name="cn_fullname" size="20" class="input-text-pos"></input>
+		</td>
+		<td colspan="4">&nbsp;Address&nbsp;<input type="text" id="cn_address" name="cn_address" size="60" class="input-text-pos"></input></td>
+	</tr>
+	<tr height="32">
+		<td width="10%" align="right">Note&nbsp;:</td>
+		<td colspan="4">
+			<input type="text" id="cn_remark" name="cn_remark" size="45" class="input-text-pos"></input>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr height="32">
+		<td width="10%" align="right">Quantity&nbsp;:</td>
+		<td width="3%"><input type="text" id="cn_quantity" name="cn_quantity" size="2" class="input-text-pos"></td>
+		<td width="7%" align="right">Product ID&nbsp;:</td>
+		<td  colspan="2"><input type="text" id="cn_product_id" name="cn_product_id" size="20" class="input-text-pos"></td>
+		<td width="">
+			<a href="#" name="bws_cnproduct" id="bws_cnproduct" class='btnGrayClean'>...</a>
+		</td>
+	</tr>
+</table>
+<input type="hidden" id="cn_lot_expire"></input>
+<input type="hidden" id="cn_lot_no"></input>
+<input type="hidden" id="cn_lot_remark"></input>
+<input type="hidden" id="cn_tp"></input>
+<input type="hidden" id="cn_seq"></input>
+<input type="hidden" id="cn_price"></input>
+<input type="hidden" id="cn_member_id_ref"></input>
+
+<input type="hidden" id="cn_acc_name"></input>
+<input type="hidden" id="cn_bank_acc"></input>
+<input type="hidden" id="cn_bank_name"></input>
+<input type="hidden" id="cn_tel1"></input>
+<input type="hidden" id="cn_tel2"></input>
+<input type="hidden" id="cn_cashier_id" value="<?php echo $this->SESSION_EMPLOYEE_ID;?>"></input>
+</td>
+</tr>
+<tr>
+<td>
+<table id="tbl_cn"></table>
+<table width="100%" border="0" cellpadding="0" cellspacing="2" bgcolor="#FFFFFF">
+	<tr>
+		<td>&nbsp;</td>
+		<td width="7%" align="right">Quantity&nbsp;</td>
+		<td width="7%"><input type="text" size="10" id="cn_sum_quantity" class="input-text-pos-disabled"></td>
+		<td width="5%">&nbsp;Piece</td>	
+		<td width="10%">&nbsp;</td>	
+	</tr>
+	<tr>
+		<td>&nbsp;</td>		
+		<td width="7%" align="right">Amount&nbsp;</td>
+		<td width="7%"><input type="text" size="10" id="cn_sum_amount" class="input-text-pos-disabled"></td>
+		<td width="5%">&nbsp;Baht</td>
+		<td width="10%">&nbsp;</td>	
+	</tr>
+	<tr>
+		<td>&nbsp;</td>	
+		<td width="7%" align="right">Discount&nbsp;</td>
+		<td width="7%"><input type="text" size="20" id="cn_sum_discount" class="input-text-pos-disabled"></td>
+		<td width="5%">&nbsp;Baht</td>
+		<td width="10%">&nbsp;</td>	
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td width="7%" align="right">Total Amount&nbsp;</td>
+		<td width="7%"><input type="text" size="10" id="cn_sum_net_amt" class="input-text-pos-disabled"></td>
+		<td width="5%">&nbsp;Baht</td>
+		<td width="10%">&nbsp;</td>		
+	</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table width="100%" height="80" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+	<tr>
+		<td>&nbsp;</td>
+		<td width="5%">
+			<a href="#" name="btn_cn_submit" id="btn_cn_submit" class='btnGrayClean'>Save</a>
+		</td>
+		<td width="1%">&nbsp;</td>
+		<td width="5%">
+			<a href="#" name="btn_cn_cancel" id="btn_cn_cancel" class='btnGrayClean'>Cancle</a>
+		</td>
+		<td width="10%">&nbsp;</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<div id="dlg_cndocno"></div>
+<div id="dlg_cnproduct"></div>
+<div id="dlg_cntp"></div>
+<div id="dlg_cntp_desc"></div>
+<div id="dlg_cnrefund"></div>
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+<script type="text/javascript" src="/sales/js/cn/index.js"></script>

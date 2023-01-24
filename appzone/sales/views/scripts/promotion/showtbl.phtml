@@ -1,0 +1,41 @@
+<?php
+//echo header("content-type: application/x-javascript; charset=tis-620");
+if(count($this->tmppro)>0){
+		echo '<table border=0>';		
+			echo '<tr>';
+			echo "<td>Seq</td>";
+			echo "<td>promo_code</td>";
+			echo "<td width='200'>promo_detail</td>";
+			echo "<td>promo_seq</td>";
+			echo "<td>promo_pos</td>";
+			echo "<td>promo_st</td>";
+			echo "<td>promo_tp</td>";
+			echo "<td>Product</td>";
+			echo "<td>Price</td>";
+			echo "<td>Quantity</td>";
+			echo "<td>Amount</td>";
+			echo "<td>Net_amt</td>";
+			echo '</tr>';
+			
+		foreach($this->tmppro as $datatmppro) {
+			echo '<tr>';
+			echo "<td>$datatmppro[seq]</td>";
+			echo "<td>$datatmppro[promo_code]</td>";
+			echo "<td width='200'>$datatmppro[promo_des]</td>";
+			echo "<td>$datatmppro[promo_seq]</td>";
+			echo "<td>$datatmppro[promo_pos]</td>";
+			echo "<td>$datatmppro[promo_st]</td>";
+			echo "<td>$datatmppro[promo_tp]</td>";
+			echo "<td>$datatmppro[product_id]</td>";
+			echo "<td>$datatmppro[price]</td>";
+			echo "<td>$datatmppro[quantity]</td>";
+			echo "<td>$datatmppro[amount]</td>";
+			echo "<td>$datatmppro[net_amt]</td>";
+			echo '</tr>';
+		}
+		echo '</table>';
+		
+}
+		
+
+?>

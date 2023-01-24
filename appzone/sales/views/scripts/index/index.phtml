@@ -1,0 +1,283 @@
+<div id="mytabs"> 
+   <ul>
+	  <li><a href="#tabs-home">ระบบงานประจำวัน</a></li>
+   </ul>
+   <div id="tabs-home">
+	  <!-- <h3>ระบบงานประจำวัน</h3> -->
+	  <p>
+	  	<div  id="div_mainmenu" style="position:relative;width:100%;height:550px;overflow:hidden;border:1pt solid #ccc;">
+			<!-- start left -->
+							
+							<div id="btn_sale" class="boxmenux" 
+								style="position:absolute;								
+								width:180px;height:120px;padding-left:5px;								
+								left:150px;top:80px;cursor:pointer;" >
+								<p class='txtmenubox'>บิลเงินสด</p>
+							</div>			
+						    <!-- 
+							<div id="sys_02" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:300px;top:80px;cursor:pointer;" >
+								<p class='txtmenubox'>เปิดบิลระหว่างเช็คสต๊อก</p>
+							</div>			
+						
+							<div id="sys_03" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:550px;top:80px;cursor:pointer;" >
+								<p class='txtmenubox'>โอนข้อมูลเปิดบิล<br/>เพื่อเช็คสต๊อก</p>
+							</div>	
+							
+							<div id="sys_04" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:800px;top:80px;cursor:pointer;" >
+							<p class='txtmenubox'>โอนข้อมูลเปิดบิล<br>ระหว่างเช็คสต๊อกกลับ</p>
+							</div>	
+							 -->	
+							 
+							<div id="btn_ti_confirm" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:400px;top:80px;cursor:pointer;" >
+							<p class='txtmenubox'>ยืนยันการโอนสินค้าเข้า</p>
+							</div>	
+							
+							<div id="btn_ti_keyin" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:650px;top:80px;cursor:pointer;" >
+								<p class='txtmenubox'>คีย์บันทึกสินค้าเข้า</p>
+							</div>		
+							
+							<!-- /////////////////////////////////////////////////// -->	
+							
+							<div id="btn_ti_keyin_audit" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:150px;top:230px;cursor:pointer;" >
+								<p class='txtmenubox'>ปรับปรุงสต๊อกเพิ่ม</p>
+							</div>	
+							
+							<div id="btn_to_keyin_audit" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:400px;top:230px;cursor:pointer;" >
+								<p class='txtmenubox'>ปรับปรุงสต๊อกลด</p>
+							</div>	
+							
+							<div id="sys_07" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:650px;top:230px;cursor:pointer;" >
+								<p class='txtmenubox'>ลดหนี้ลูกค้า</p>
+							</div>			
+							
+							<!-- /////////////////////////////////////////////////// -->
+						
+							<div id="sys_08" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:150px;top:380px;cursor:pointer;" >
+								<p class='txtmenubox'>สั่งสินค้า</p>
+							</div>			
+						
+							<div id="sys_09" class="boxmenux" 
+								style="position:absolute;width:180px;height:120px;padding-left:5px;left:400px;top:380px;cursor:pointer;">
+								<p class='txtmenubox'>สั่งวัสดุสิ้นเปลือง<br/>และอุปกรณ์สำนักงาน</p>
+							</div>
+						
+				<!-- end left -->
+				</div>
+			</p>
+   </div>  
+   <div id="tabs-sale" style="display:none;">
+		 <h3>Loading...</h3>
+	</div>
+	
+	<div id="tabs-confirmtransfer" style="display:none;">
+		 <h3>Loading...</h3>
+	</div>
+	
+	<div id="tabs-keyintransfer" style="display:none;">
+		 <h3>Loading...</h3>
+	</div>
+	
+	<div id="tabs-keyinaudit_transfer" style="display:none;">
+		 <h3>Loading...</h3>
+	</div>
+	
+	<div id="tabs-keyinaudittransferout" style="display:none;">
+		 <h3>Loading...</h3>
+	</div>	
+</div>
+        		
+  <script type='text/javascript'>
+ 
+   $(function(){	   
+	   $(".boxmenux").each(function(){
+		   $(this).addClass(" ui-widget ui-corner-all");/*box_menu_nav*/
+		   //$(this).animate({border: "3px solid #cccccc"}, 100);
+		   $(this).animate({ borderTopColor: '#59b4de', borderLeftColor: '#59b4de', borderRightColor: '#59b4de', borderBottomColor: '#59b4de' }, 'fast');
+
+		   
+		    
+			//hover fortest animation
+			/*sample1*/
+		   $(this).hover(function() {	
+			   $(this).removeClass('boxmenux').addClass('boxmenuy');	
+			   /*
+			   $(this).css({background:"#DAE9FF"}).animate({background:"transparent"}, 2000, null, 
+			    	    function() { this.style.background='transparent'; });*/
+			  
+			    $(this).stop().animate({ marginTop: "-10px" }, 'fast');//200
+			    $(this).parent().find("span").stop().animate({ marginTop: "18px", opacity: 0.25 },'fast');//200
+
+			    highlight($(this),'#ff0000',null);
+			    
+			    //return animate_bg($(this), 0, 10)
+			    
+			    /*
+			    $(this).css({backgroundColor:"#f00"})
+			    .animate({backgroundColor:"transparent"}, 2000, null, 
+			    	    function() { this.style.backgroundColor='transparent'; });
+	    	    */
+			    				    
+			},function(){
+				$(this).removeClass('boxmenuy').addClass('boxmenux');	
+				/*
+				$(this).css({background:"#f4f4f4"}).animate({background:"transparent"}, 2000, null, 
+			    	    function() { this.style.background='transparent'; });*/
+				
+			    $(this).stop().animate({ marginTop: "0px" },'fast');//300
+			    $(this).parent().find("span").stop().animate({ marginTop: "1px", opacity: 1 },'fast');//300
+			});
+
+		   /*sample2*/
+		   /*
+		   $(this).mouseover(function() {
+		        $(this).animate({ border: "3px solid #ADDAFF",borderTopColor: "#ADDAFF" }, 'fast');
+		   }).mouseout(function() {
+	            $(this).animate({ border: "1px solid #59b4de",borderTopColor: "#59b4de" }, 'fast');
+		   });
+		   */
+		});
+		
+ 		//tabs
+ 		//------------------------  start init tab-------------------------------
+	   
+	    var $tabs = $("#mytabs").tabs({
+	       tabTemplate: '<li><a href="#{href}">#{label}</a> <span class="ui-test"><img src="/sales/img/cross02.png" /></span></li>'
+			,cache:false
+	   	    });
+	 
+	    // close icon: removing the tab on click
+	    // note: closable tabs gonna be an option in the future - see http://dev.jqueryui.com/ticket/3924
+	    $('#mytabs span.ui-test').live('click', function(e) {	
+	       e.preventDefault();	   
+	       var index = $('li',$tabs).index($(this).parent());
+		   $tabs.tabs('remove', index);
+	       //$("#mytabs").tabs('select',index-1);
+	       return false;
+	    });
+	
+ 		//------------------------  end init tab --------------------------------- 
+ 	
+		$('#btn_sale')
+		    .click(function(e){	
+		    	e.preventDefault();
+			    addTab('sale','เปิดบิลอย่างย่อ', 'RadGrid1','/sales/sale/index');			    
+		        return false;
+		    });
+		//---------------		
+		$('#btn_ti_confirm').click(function(e){
+			e.preventDefault();
+			addTab('confirmtransfer','ยืนยันการโอนสินค้า', 'RadGrid1','/sales/transfer/index');			
+			return false;
+		});
+	    //---------------	
+		$('#btn_ti_keyin').bind('click',function(e){
+			e.preventDefault();
+			addTab('keyintransfer','คีย์สินค้าเข้า', 'RadGrid1','/sales/transfer/keyin');			
+       		return false;		
+	  	});		
+		//----------------
+		$('#btn_ti_keyin_audit').bind('click',function(e){
+			e.preventDefault();
+       		addTab('keyinaudit_transfer','ปรับปรุงสต๊อกเพิ่ม', 'RadGrid1','/sales/transfer/keyinaudit');       		
+   			return false;
+		});	
+		//---------------	
+		$('#btn_to_keyin_audit').bind('click',function(e){			
+			e.preventDefault();
+		    addTab('keyinaudittransferout','ปรับปรุงสต๊อกลด', 'RadGrid1','/sales/transferout/keyinaudit');		    
+		   	return false;
+		});	
+		//---------------
+   	});//ready
+
+	//test 1
+   function animate_bg(ele, from, to) {
+	    from += from > to ? -1 : 1;
+	    if(!$.support.opacity){
+	        if(from != to){
+	            var opStr = (Math.round(from * 25.5)).toString(16);
+	            //alert(opStr)
+	            ele.css({background:'transparent',filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=#" + opStr + "FFFF00, endColorstr=#" + opStr + "FFFF00)"});   
+	        }else{
+	            ele.css({background:'transparent',filter:"none"});   
+	        }
+	    }else{
+	        ele.css("backgroundColor", "rgba(255, 255, 0, " + (from) / 10 + ")"); 
+	    }
+
+	    if(from != to)  
+	        setTimeout(function() { animate_bg(ele, from, to) }, 50);
+	}//func
+
+	//test 2
+   function highlight(element, color, speed) {
+	   if (speed == null) speed = "fast";
+	   var e;
+	   var position;
+	   element.each(function() {
+	       e = $(this);
+	       position = e.css('position');
+	       if (position != 'absolute')
+	           e.css('position', 'relative');
+	       log(position);
+	       e.append($("<div>")
+	           .css({
+	               backgroundColor: color,
+	               position: 'absolute',
+	               top: 0,
+	               left: 0,
+	               zIndex: -1,
+	               display: "none",
+	               width: e.width(),
+	               height: e.height()
+	           }).fadeIn(speed).fadeOut(speed, function() { $(this).remove(); e.css('position', position); })
+
+	         );
+	   }); 
+	 }//func
+	   	
+		
+
+   	//------------- start tabs ----------------------
+   	function addTab(tabID, tabName, grid,tabUrl) 
+	{
+   		var currentTabID = tabID;
+	    // double check to see if tab is already open
+	    if($("a[href^=#tabs-"+ tabID +"]").length > 0)
+	    {
+		    //alert("a[href^=#tabs-"+ tabID +"]");
+	        $("a[href^=#tabs-"+ tabID +"]").parent().show();
+	    }else{
+	        //currentTabID = tabID;
+			var tabLoad="#tabs-" + tabID;
+	        $("#mytabs").tabs("add",tabLoad,tabName);
+			$(tabLoad).load(tabUrl,function(){
+				 //$("#mytabs").tabs('select', tabID);
+				 switch(tabID){				 	
+				    case 'sale':$('#inv_employee_id').focus();break;
+				 	case 'confirmtransfer':$('#doc_no').focus();break;
+				 	case 'keyintransfer':$('#ki_th_doc_no').focus();break;
+				 	case 'keyinaudit_transfer':$('#ai_password').focus();break;
+				 	case 'keyinaudittransferout':$('#ao_password').focus();break;				 	
+				 }//
+			});
+	        $("#tabs-" + tabID).css("display","block");
+	    }
+
+	    $("#mytabs").tabs('select', currentTabID);
+	   // $("#mytabs").tabs('select', tabID); //original
+	}//func
+	
+   	//------------- end tabs -----------------------
+   
+   	
+   </script>

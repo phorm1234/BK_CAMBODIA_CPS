@@ -1,0 +1,5 @@
+ALTER TABLE `member_register` ADD `application_id` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `doc_date` ,
+ADD `pro1` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `application_id` ,
+ADD `pro2` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `pro1` 
+
+ALTER TABLE `member_register` ADD INDEX ( `application_id` )

@@ -1,0 +1,179 @@
+<?php
+$apps[0] = Array(
+    'Settings',
+   // 'Clock',
+   // 'Mail',
+    //'iMovie',
+    //'Camera',
+	//'Messages'
+);
+
+$apps[1] = Array(
+    'Company',
+    'Permission',
+    'User',
+	//'Member',
+    'Branch',
+	//'Group Branch',
+	//'Product',
+	//'Process Config',
+	//'Pos Config',
+	//'Transfer',
+	//'Maptable',
+	//'Version',
+    //'Maps',
+	//'Notes'
+);
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Admin Pos</title>
+    <link rel="icon" type="image/png" href="/pos/plugin/ipad/favicon.ico"/>
+    <link rel="stylesheet" href="/pos/plugin/ipad/style/ipad.css" type="text/css" media="screen"/>
+    
+    <link rel="image_src" href="/pos/plugin/ipad/apps/facebook.jpg" />
+    
+	<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/gray/easyui.css"/>
+	<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/icon.css"/>
+	
+	<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery-1.7.1.min.js"></script>
+
+	<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery.easyui.min.js"></script>
+		
+	<link rel="stylesheet" href="/pos/plugin/xhtml/css/screen.css" type="text/css" media="screen" title="default" />
+	
+	<!-- 
+    <script type="text/javascript" src="/pos/plugin/ipad/js/jquery-ui-1.8.1.custom.min.js"></script>
+    <script type="text/javascript" src="/pos/plugin/ipad/js/plugins.js"></script>
+    <script type="text/javascript" src="/pos/plugin/ipad/js/jquery.ui.ipad.js"></script>
+    <script type="text/javascript" src="/pos/plugin/ipad/js/ipad.js"></script>
+    -->
+   
+</head>
+<body id="ipad">
+<input name="hiddentime" type="hidden" id="hiddentime" value="<?php echo date("H:i:s");?>" />
+
+<div id="externalContainer">
+    <div id="content_overflow">
+    <div id="content" class="hide_spring">
+        <div id="window"></div>
+        <div id="iframe_holder"></div>
+        <div id="black"></div>
+        <div class="topbar">
+            <span class="time">--:--</span>
+            <span class="percentage">99%</span>
+        </div>
+        
+        <div id="general_wrap">
+            <div id="drag" style="left:0">
+                <div id="page0" class="page">
+                    <form>
+                        <input type="text" id="search" autocomplete="off" name="app_search"/>
+                    </form>
+                    <div id="search_result_wrapper">
+                        <ul id="search_result">
+
+                        </ul>
+                    </div>
+                    <div id="tr" class="corner"></div>
+                    <div id="tl" class="corner"></div>
+                    <div id="br" class="corner"></div>
+                    <div id="bl" class="corner"></div>
+                    <div id="whiteSep"></div>
+                    <div id="noResults">No Results</div>
+                </div>
+                <?php
+                foreach($apps as $k=>$v){
+                if($k != 0 && count($v)){
+                    echo '<ul id="page'.$k.'" class="apps page">'."\n";
+                        foreach($v as $kk=>$vv){
+                        echo '<li id="'.str_replace(' ','',strtolower($vv)).'" class="app">
+                                <div class="delete">x</div>
+                                <div class="app_logo" style="background-image:url(\'/pos/plugin/ipad/apps/'.str_replace(' ','',strtolower($vv)).'.jpg\')"></div>
+                                <span>'.$vv.'</span>
+                            </li>'."\n";
+                        }
+                    echo '</ul>'."\n";
+                    }
+                }
+                ?>
+            </div>
+        </div>
+        
+        <ul id="pages">
+            <li class="first">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAJCAYAAADkZNYtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAKVJREFUeNpi+P//PwMQSwDxfCB+AsRvgXgmEHNC5eCYiYGBgRmItzNAgAMQmwCxEFSMjQEZAHV4APEZNFOYgfgGEIegm6wOxBcYUMFfIL4GxKLIgiDFp4DYHog5kcRBbEsg/o7uDBDeCMR7gdgeiAOB+OR/BJgA8yxMMRsQV0DdfhiIc4DYFRoyIHAeiIUY0IMHDcsB8TGoBg9GsPGEAcgP3wECDACpaMIIrgD3fQAAAABJRU5ErkJggg==" width="11" height="9" />
+            </li>
+            <li class="active"> . </li>
+            <?php
+                for($i = 0;$i<count($apps)-2; $i++){
+                    echo '<li> . </li>';
+                }
+            ?>
+
+        </ul>
+        <ul id="dock" class="apps">
+            <?php
+                foreach($apps[0] as $kk=>$vv){
+                        echo '<li id="'.str_replace(' ','',strtolower($vv)).'" class="app">
+                                <div class="delete">x</div>
+                                <div class="app_logo" style="background-image:url(\'/pos/plugin/ipad/apps/'.str_replace(' ','',strtolower($vv)).'.jpg\')"></div>
+                                <span>'.$vv.'</span>
+                            </li>'."\n";
+                        }
+            ?>
+        </ul>
+        
+        <div id="lockscreen">
+            <div class="topbar">
+                <img class="icon_lock" src="/pos/plugin/ipad/apps/lock.png" alt=""/>
+                <span class="percentage">99%</span>
+            </div>
+    
+            <div id="lockscreentime" class="time">--:--</div>
+				<div id="loginbox" >
+					<div id="login-inner">
+					<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+					  <th>environment</th>
+					  <td>
+					 <?php echo $this->login_for;?> 
+					</td>
+					  </tr>
+					<tr>
+					<th>Username</th>
+					<td><input type="text" name="user_id" id="user_id" class="login-inp"  value='' /></td>
+					</tr>
+					<tr>
+					<th>Password</th>
+					<td><input type="password" name="password_id" id="password_id"  value=""  onfocus="this.value=''" class="login-inp" /></td>
+					</tr>
+					<tr>
+					<th></th>
+					<td><input type="button" onclick='checkLogin()' class="submit-login" /></td>
+					</tr>
+					</table>
+					</div>
+					<div class="clear"></div>
+				</div>
+            <div id="slide_here">
+                    <div id="slider"></div>
+                    <div id="drop"></div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="multitask_bar">
+        <ul class="apps">
+            
+        </ul>
+    </div>
+    <div id="home"></div>
+    <div id="sleep"></div>
+</div>
+
+</body>
+</html>

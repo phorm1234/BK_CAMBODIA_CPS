@@ -1,0 +1,13 @@
+<?php	
+	if(!empty($this->arr_json)){
+		echo json_encode($this->arr_json);
+	}else{
+		$row=array();
+		$arr_data=array(
+				    "page"=>1,
+				    "total"=>0,
+				    "rows"=>$row
+				);
+		echo json_encode($arr_data);
+	}
+?>

@@ -1,0 +1,13 @@
+<?php 
+$data=$this->data;
+$month_amount=number_format($data[0]['month_amount'], 2, '.', ',');
+$month_order=number_format($data[0]['month_order'], 2, '.', ',');
+$balance_amount=number_format($data[0]['balance_amount'], 2, '.', ',');
+$data = array(
+    		'month_amount'=>$month_amount,
+    		'month_order'=>$month_order,
+    		'balance_amount'=>$balance_amount
+    	);
+$ex=json_encode($data);
+echo $ex;
+?>

@@ -1,0 +1,127 @@
+<?php 	
+	$arr_date_show=explode("-", $this->doc_date);
+	$date_show=$arr_date_show[2]."/".$arr_date_show[1]."/".$arr_date_show[0];
+?>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+	<tr bgcolor="#B9E7CF" height="40">
+		<td colspan="7"><span style='font-size:23px;color:#000000;'>&nbsp;บันทึกสินค้า Expire</span></td>
+	</tr>
+	<tr height="32">
+	<td>
+	
+	  <table width="830" border="0" cellpadding="0" cellspacing="2">
+	  <tr>
+		
+		<td width="15%" align="right">ป้อนเลขที่เอกสาร</td>
+		<td width="15%"><input type="text" size="20" id="doc_no" class="input-text-pos-disabled"></td>
+		<td width="5%">
+			<a href="#" name="bws_cnproduct" id="bws_pdtexpire" class='btnGrayClean'>...</a>
+		</td>		
+		<td width="17%" colspan="2">
+			&nbsp;
+		</td>
+		<td width="8%" align="right">วันที่</td>
+		<td width="10%">
+			<input type="text" size="15" id="doc_date" value="<?php echo $date_show;?>" class="input-text-pos-disabled">
+			<input type="hidden" id="doc_date_alternate" size="15" value="<?php echo $this->doc_date;?>"></input>
+		</td>
+		<td width="15%" align="right">&nbsp;</td>
+	  </tr>
+		
+		<tr height="32">
+		<td align="right">หมายเหตุ</td>
+		<td colspan="6"><input type="text" size="77" id="remark" class="input-text-pos"></td>
+		<td width="15%" align="right">&nbsp;</td>
+		</tr>
+		
+		<tr height="32">
+			<td align="right">รหัสสินค้า</td>
+			<td><input type="text" size="20" id="product_id" class="input-text-pos"></td>
+			<td>&nbsp;</td>
+			<td width="8%" align="right">จำนวน</td>
+			<td><input type="text" size="2" id="quantity" class="input-text-pos"></td>
+			<td width="8%" align="right">วันผลิต</td>
+			<td>
+				<input type="text" size="15" id="manufac_date" class="input-text-pos">
+				<input type="hidden" id="sel_manufac_date_alternate" size="15"></input>
+			</td>
+			<td width="15%">
+				&nbsp;&nbsp;<a href="#" name="btn_addpdtexpire" id="btn_addpdtexpire" class='btnGrayClean'>ตกลง</a>
+			</td>		
+		</tr>
+		
+		
+		</table>
+		
+	</td>	
+	</tr>
+	
+</table>
+
+<input type="hidden" id="cashier_id" value="<?php echo $this->SESSION_EMPLOYEE_ID;?>"></input>
+</td>
+</tr>
+<tr>
+<td>
+	<table id="tbl_product_expire" ></table>
+</td>
+</tr>
+
+
+<tr>
+	<td>
+			<table width="800" border="0" cellpadding="0" cellspacing="2" bgcolor="#FFFFFF">
+				<tr>
+					<td>&nbsp;</td>
+					<td width="7%" align="right">จำนวน&nbsp;</td>
+					<td width="7%"><input type="text" size="10" id="sum_quantity" class="input-text-pos-disabled"></td>
+					<td width="5%">&nbsp;ชิ้น</td>	
+						
+				
+					<td width="3%">&nbsp;</td>
+					<td width="7%" align="right">รวมเงิน&nbsp;</td>
+					<td width="7%"><input type="text" size="10" id="sum_amount" class="input-text-pos-disabled"></td>
+					<td width="5%">&nbsp;บาท</td>
+						
+				</tr>
+			</table>
+	</td>
+</tr>
+<tr>
+
+
+<td>
+<table width="800" align="right" height="80" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+	<tr>
+		<td width="50%">&nbsp;</td>
+		<td width="5%">
+			<a href="#" name="btn_confirm" id="btn_confirmpdtexpire" class='btnGrayClean'>Confirm</a>
+		</td>
+		
+		<td width="1%">&nbsp;</td>
+		<td width="5%">
+			<a href="#" name="btn_submitpdtexpire" id="btn_submitpdtexpire" class='btnGrayClean'>บันทึก</a>
+		</td>
+		
+		<td width="1%">&nbsp;</td>
+		<td width="5%">
+			<a href="#" name="btn_cancel" id="btn_cancel" class='btnGrayClean'>ยกเลิก</a>
+		</td>
+		
+		<td width="10%">&nbsp;</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<input type="hidden" id="doc_date" value="<?php echo $this->doc_date;?>">
+<input type="hidden" id="doc_status" value="">
+<div id="dlg_pdtexpire"></div>
+<div id="dlgFormConfirmDoc"></div>
+<div id="dlgFormCancelDoc"></div>
+<div id="dlgRosArom"></div>
+<input type="hidden" id="csh_lock_status" name="csh_lock_status"></input>
+<script type="text/javascript" src="/sales/js/productexpire/productexpire.js"></script>

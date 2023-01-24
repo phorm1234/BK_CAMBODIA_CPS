@@ -1,0 +1,39 @@
+<?php
+$data=$this->data;
+?>
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tr bgcolor="#b5fdda">
+    <td>Product Id</td>
+    <td>Product Name</td>
+    <td>Quantity</td>
+    <td>Price</td>
+  </tr>
+<?php 
+$i=1;
+$sum_price="";
+$sum_qty="";
+foreach($data as $val){
+	if($i%2){$bgcolor="#f1f2f2";}else{$bgcolor="#fdfdfd";}
+	$produc_name=substr($val['name_product'],1,25);
+	$price=number_format($val['price'], 2, '.', ',');
+	$qty=number_format($val['quantity'], 0, '.', ',');
+	$sum_price=$sum_price+$price;
+	$sum_qty=$sum_qty+$qty;
+?>
+  <tr bgcolor="<?php echo $bgcolor;?>">
+    <td><?php echo $val['product_id'];?></td>
+    <td><?php echo $produc_name;?></td>
+    <td><?php echo $qty;?></td>
+    <td><?php echo $price;?></td>
+  </tr>
+ <?php 
+}
+$sum_all_price=number_format($sum_price, 2, '.', ',');
+$sum_all_qty=number_format($sum_qty, 0, '.', ',');
+ ?>
+ <tr>
+    <td colspan="2" align="right">Total : </td>
+    <td><?php echo $sum_all_qty;?></td>
+    <td><?php echo $sum_all_price;?></td>
+  </tr>
+</table>

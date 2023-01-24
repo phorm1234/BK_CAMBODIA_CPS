@@ -1,0 +1,23 @@
+<?php
+$status_no=$this->status_no;
+$dat=$this->data;
+$qty=$this->qty;
+$check=count($dat);
+if($dat[0]['quantity']=="NULL"){
+	$dat[0]['quantity']=0;
+}
+$allocat=$dat[0]['allocate']+$dat[0]['quantity']+$qty;
+
+if($check>0){
+	if($allocat>$dat[0]['qty']){
+		$status="o";
+	}else{
+		$status="y";
+	}
+	
+}else{
+	$status="n";
+}
+
+echo $status;
+?>

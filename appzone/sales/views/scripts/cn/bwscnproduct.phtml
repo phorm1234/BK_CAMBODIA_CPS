@@ -1,0 +1,133 @@
+     <style type="text/css">  
+			.tableNavCnProduct
+				{
+					width:100%;
+					background:#333;
+				}
+			.tableNavCnProduct ul
+				{
+					float:right;
+					width:100%;
+					margin:0;
+					padding:0;
+					border:1px solid #C9C9C9;
+				}
+         
+          .tableNavCnProduct ul li{
+          		cursor:pointer;
+					line-height:40px;
+					font-family:"PSLKittithadaBold","Garuda","Tahoma", "Geneva", "Arial", sans-serif;
+				
+					font-weight: normal;
+					font-size:20px;/*16*/
+					text-decoration:none;
+					color:#303030;
+					padding-left:1em;
+					
+					border-bottom:1px solid  #78777C;
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(     #D4D7E0,     #B0B0B0);;
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0,      #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.active {
+            cursor:pointer;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold", "Garuda","Tahoma", "Geneva", "Arial", sans-serif;
+				
+					font-weight: normal;
+					font-size:20px;/*16*/
+					text-decoration:none;
+					color:#ffffff;/*#303030*/
+					padding-left:1em;
+					border-bottom:1px solid  #000;/*78777C*/
+					text-shadow: 0px 1px 0px #dddddd;
+					vertical-align: middle;
+					white-space:nowrap;
+          			/*
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(#9DDCCF,#265541);*/
+          			background:#B2B2B8;
+					background:  -moz-linear-gradient(#99CCCC,#669999);
+          	
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          
+		ul li.nokeyboard {
+	           			cursor:pointer;
+	          			list-style-type:none;
+						line-height: 40px;
+						font-family:"PSLKittithadaBold", "Garuda","Helvetica World","Tahoma", "Geneva", "Arial", sans-serif;
+						font-weight: normal;
+						font-size:25px;/*16*/
+						text-decoration:none;
+						color:#FFFFFF;/*#303030*/
+						padding-left:1em;
+						border-bottom:1px solid  #000;/*78777C*/
+						text-shadow: 0px 1px 0px #dddddd;
+						vertical-align: middle;
+						white-space:nowrap;
+						background:#B2B2B8;
+						background:  -moz-linear-gradient(#009999,#006666);
+						background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #B0B0B0), color-stop(1, #D4D7E0));
+						-moz-user-select:none;
+						-moz-user-select:-moz-none;/*latest ff*/
+						-webkit-user-select:none;
+	          }
+        </style>
+    <div class="tableNavCnProduct" >
+	        <ul>
+	        <?php 
+	        	if(!empty($this->arr_cnproduct)){
+		        	$i=1;
+		        	echo "<li class='nokeyboard'>
+	        			<table width='100%'><tr height='35'>
+	        				<td align='center' style='width:5%;color:#ffffff;font-size:24px;'>ลำดับ</td>
+	        				<td align='center'  style='width:20%;color:#ffffff;font-size:24px;'>รหัสสินค้า</td>
+	        				<td align='center'  style='width:25%;color:#ffffff;font-size:24px;'>รายละเอียด</td>
+	        				<td align='center'  style='width:10%;color:#ffffff;font-size:24px;'>จำนวน</td>
+	        				<td align='center'  style='width:10%;color:#ffffff;font-size:24px;'>ราคา</td>
+	        				<td align='center'  style='width:10%;color:#ffffff;font-size:24px;'>Net</td>
+	        				<td align='center'  style='width:10%;color:#ffffff;font-size:24px;'>คืน</td>
+	        				<td align='center'  style='width:10%;color:#ffffff;font-size:24px;'>คงเหลือ</td>
+	        				</tr></table></li>";
+		        	$str_cn="";
+		        	foreach($this->arr_cnproduct as $data){	        	
+		        		$rows_product=json_encode($data);
+		  				$id_tmp="n_".$i;
+		  				$unit="ชิ้น";
+		  				if($data['unit']!=''){
+		  					$unit=$data['unit'];
+		  				}
+		  				echo "<li id='$id_tmp' name='$id_tmp'  idproduct='".$rows_product."'>";
+		  				echo "<table border='0' height='30' width='100%'>
+		  							<tr>
+		  								<td align='center' style='width:5%;font-size:22px;'>".$data['seq']."</td>".
+		  									"<td align='center'  style='width:20%;font-size:22px;'>".$data['product_id']."</td>".
+		  									"<td align='center'  style='width:25%;font-size:22px;'>".substr($data['name_product'],0,16)."</td>".
+		  									"<td align='center'  style='width:10%;font-size:22px;'>".intval($data['quantity'])."</td>".
+		  									
+		  									"<td align='center'  style='width:10%;font-size:22px;'>".number_format($data['price'],'2','.',',')."</td>".
+		  									"<td align='center'  style='width:10%;font-size:22px;'>".number_format($data['net_amt'],'2','.',',')."</td>".
+		  				
+		  									"<td align='center'  style='width:10%;font-size:22px;'>".intval($data['cn_qty'])."</td>".
+		  									"<td align='center'  style='width:10%;font-size:22px;'>".intval($data['balance_qty'])."</td>
+		  							</tr></table>";
+			  			echo "</li>";		  			
+			  			$i++;
+		  			}//foreach
+	        	}else{
+	        		echo "<li id='n_1' name='n_1' class='btn_sel' idproduct='nodata'>ไม่พบรายการสินค้า</li>";
+	        	}
+	        ?>
+	        </ul>
+     </div>

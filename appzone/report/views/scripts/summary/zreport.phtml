@@ -1,0 +1,206 @@
+<style type="text/css">
+	/* Button Gray Clean */
+a.btnGrayClean{
+		border:#BBB 1px solid;
+		color:#5f5e5e;
+		display:block;
+		float:left;
+		padding:2px 10px;
+		margin-right:10px;
+		cursor:pointer;
+		text-decoration:none;
+	}
+a:hover.btnGrayClean{text-decoration:none; background:#FFF;}
+
+/* Rounded Corners */
+.rounded, a.btnGrayClean{
+		-webkit-border-radius:6px;
+		-moz-border-radius:6px;
+		border-radius:6px;
+		-khtml-border-radius: 6px;
+}
+
+/* Drop Shadow */
+.shadow, a.btnGrayClean{
+		-moz-box-shadow: 0px 1px 3px #AAA;
+		-webkit-box-shadow: 0px 1px 3px #AAA;
+		box-shadow: 0px 1px 3px #AAA;
+}
+
+/* Default Grey Gradient */
+.gradient, a.btnGrayClean{
+		background: #FFF; /* for non-css3 browsers */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); /* for IE */
+		background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DDD)); /* for webkit browsers */
+		background: -moz-linear-gradient(top,  #FFF,  #DDD); /* for firefox 3.6+ */
+}
+a.btnGrayDisabled{
+		border:#BBB 1px solid;
+		color:#5f5e5e;
+		display:block;
+		float:left;
+		padding:2px 10px;
+		margin-right:10px;
+		cursor:pointer;
+		text-decoration:none;
+	}
+a:hover.btnGrayDisabled{text-decoration:none; background:#CCC;}
+
+/* Rounded Corners */
+.rounded, a.btnGrayDisabled{
+		-webkit-border-radius:6px;
+		-moz-border-radius:6px;
+		border-radius:6px;
+		-khtml-border-radius: 6px;
+}
+
+/* Drop Shadow */
+.shadow, a.btnGrayDisabled{
+		-moz-box-shadow: 0px 1px 3px #AAA;
+		-webkit-box-shadow: 0px 1px 3px #AAA;
+		box-shadow: 0px 1px 3px #AAA;
+}
+
+/* Default Grey Gradient */
+.gradient, a.btnGrayDisabled{
+		background: #FFF; /* for non-css3 browsers */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#CCCCCC', endColorstr='#222222'); /* for IE */
+		background: -webkit-gradient(linear, left top, left bottom, from(#CCC), to(#222)); /* for webkit browsers */
+		background: -moz-linear-gradient(top,  #FFF,  #DDD); /* for firefox 3.6+ */
+}
+
+/* TEST ACCORDION 05042012*/
+</style>
+<table width="100%" height="100%" bgcolor="#FFFFFF">
+	<tr>
+		<td valign="TOP">
+			<!-- ######### start ##########-->
+			<table border="0" width="100%" cellpadding="5" cellspacing="3" style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+				<tr>
+					<td colspan="2">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+							<tr bgcolor="#B9E7CF" height="40">
+								<td>
+								<img src="http://localhost/sales/img/icon_bag_32x32.png" align="absmiddle"/>
+								&nbsp;<span style='font-size:24px;color:#454545;'>Z Report</span>		
+								</td>
+							</tr>							
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
+					<td align="right" width="20%">Document Date&nbsp;:</td>
+					<td><input type="text" name="date_start" id="date_start" size="15" class="input-text-pos"></input></td>
+					<input type="hidden" name="date_start_alternate" id="date_start_alternate"></input>
+				</tr>
+			
+				<tr height="35">		
+					<td>&nbsp;</td>		
+					<td>
+						<a href="#" name="btn_commit" id="btn_commit" class="btnGrayClean">Submit</a>
+					</td>
+					
+				</tr>
+			</table>
+			<!-- ######### stop ##########-->
+		</td>
+	</tr>
+</table>
+<input type="hidden" name="doc_type_question" id="doc_type_question" value="<?php echo $this->doc_tp;?>"></input>
+<div id="dlgRptPreviews"></div>
+<script type="text/javascript">
+	function popup(url,name,windowWidth,windowHeight){
+		/**
+		*@desc
+		*@param String url
+		*@param String name
+		*@param Integer windowWidth
+		*@param Integer windowHeight
+		*@return
+		*/
+	    myleft=(screen.width)?(screen.width-windowWidth)/2:100;
+	    mytop=(screen.height)?(screen.height-windowHeight)/2:100;
+	    properties = "width="+windowWidth+",height="+windowHeight;
+	    properties +=",scrollbars=yes, top="+mytop+",left="+myleft;
+	    window.open(url,name,properties);
+	} 
+	
+	function printBill(date_start){
+		/**
+		*@desc
+		*@param String doc_no
+		*@param String doc_tp
+		*@return
+		*/
+		var opts_report={
+				type:'post',
+				url:'/report/summary/rptzreport',
+				cache:false,
+				data:{
+					date_start:date_start,
+					rmd:Math.random()
+				},
+				success:function(){
+						
+				}
+			};
+		$.ajax(opts_report);
+	}//func
+	function resSearch(date_start){
+		var opts_QstDetail={
+				autoOpen:false,
+				width:'60%',
+				height:'650',
+				modal:true,
+				resizeable:true,
+				position:'top',
+				showOpt: {direction:'up'},		
+				closeOnEscape:true,	
+				title:"Report Details",
+				open:function(){					
+					 $(this).parents(".ui-dialog:first").find(".ui-dialog-content").css({"padding":"0 .1em 0 .1em","margin":"0 0 0 0","background-color":"#FFFFFF"});
+					$("*:focus").blur();
+					$("#dlgRptPreviews").html("");
+					$.ajax({
+						type:'post',
+						url:'/report/summary/zreportpreviews',
+						cache:false,
+						data:{
+						    date_start:date_start,
+							actions:'brows_docstatus',
+							now:Math.random()
+						},
+						success:function(data){
+							$("#dlgRptPreviews").html('');
+							$("#dlgRptPreviews").html(data);
+							$(this).parent().find('select, input, textarea').blur();
+						}//end success function
+					});//end ajax pos
+				},
+				buttons: {
+					"พิมพ์":function(){ 	
+							printBill(date_start);
+							$(this).dialog("close");
+							return false;
+					}
+				},
+				close:function(){					
+				}
+		};
+		$("#dlgRptPreviews").dialog("destroy");
+		$("#dlgRptPreviews").dialog(opts_QstDetail);
+		$("#dlgRptPreviews").dialog("open");
+	}//func
+	
+	$(function(){
+		$("#date_start").datepicker({dateFormat: 'dd/mm/yy',altField: '#date_start_alternate',altFormat:'yy-mm-dd'});
+		$("#btn_commit").click(function(evt){
+			evt.preventDefault();
+			var date_start=$("#date_start_alternate").val();
+			resSearch(date_start);			
+		});
+	});//ready
+</script>

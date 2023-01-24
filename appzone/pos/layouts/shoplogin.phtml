@@ -1,0 +1,162 @@
+<?php
+	$remote = $_SERVER['REMOTE_ADDR'];	
+	$ip = $_SERVER['SERVER_ADDR'];
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Shop Login</title>
+<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/gray/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="/pos/plugin/jquery-easyui-1.2.5/themes/icon.css"/>
+<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery.easyui.min.js"></script>
+<script src="/pos/js/login/login.js"></script>
+<script type="text/javascript">
+	var cinterval="";
+	function reloadcompare(){
+			$(window).load("/pos/login/getuserid",function(response,status,xhr){
+				if(status=="success"){
+					var json =JSON.parse(response);
+					//alert(json.num);
+					if(json.status != ""){
+						if(json.status == "y"){
+							clearInterval(cinterval);
+							$("#user_id").val(json.userid);
+							$("#password").val(json.password);
+							$("#btn_login_submit").trigger('click');
+						}else if(json.status == "sk"){
+							$( "#fingerscan" ).html('<iframe src="http://<?php echo $ip;?>/finger_shop/index.php/idcard/" width="490" height="350">');
+						}else if(json.status == "f"){
+							$( "#fingerscan" ).html('<iframe src="http://<?php echo $ip;?>/finger_shop/index.php/compare/" width="500" height="350">');
+							jAlert("คุณไม่มีสิทธิ์เข้าใช้ระบบ");
+						}
+					}
+				}
+			});
+	}//func
+	$(document).ready(function(){
+		<?php 
+		if($this->lockfingerscan=='N'){
+		}else{?>
+			$( "#login_frm" ).hide();
+			$( "#fingerscan" ).html('<iframe src="http://<?php echo $ip;?>/finger_shop/index.php/compare/" width="500" height="350">');
+			cinterval = setInterval('reloadcompare()',1000);
+		<?php 
+		}?>
+	});	
+</script>
+<style type="text/css">  
+html,body{  
+	width: 100%; 
+    height: 100%; 
+    position: absolute;  
+    overflow: auto;
+	padding:0;
+	margin:0;
+   
+} 
+.background {
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	z-index:-1;
+}
+#wallpaper {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+#login_frm {
+	top:50%; left:50%; margin-top:-300px; margin-left:-225px;
+	width:450px; height:600px; border:0px solid #111;
+	position:absolute;
+}
+#login_frm1 {
+	top:50%; left:50%; margin-top:-300px; margin-left:-225px;
+	width:490px; height:600px; border:0px solid #111;
+	position:absolute;
+}
+</style> 
+<link rel='stylesheet' type='text/css' href='/stock/css/style.css'/>
+<link href="/sales/js/plugin/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen"/>
+<script type="text/javascript" src="/sales/js/plugin/jquery.alerts.js"></script>
+</head>
+<body ondragstart="return false"
+    draggable="false"
+    ondragenter="event.dataTransfer.dropEffect='none'; event.stopPropagation(); event.preventDefault();"
+    ondragover="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();"
+    ondrop="event.dataTransfer.dropEffect='none';event.stopPropagation(); event.preventDefault();" >
+<img src=" /pos/theme/assets/images/misc/wallpaper5.jpg" id="wallpaper"/>
+<div id="login_frm1">
+	<p id="title_sys"></p>
+	<p id="fingerscan">&nbsp;</p>
+</div>
+<div id="login_frm">
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	    <table width="20%" border="0" align="center" cellpadding="0" cellspacing="0">
+	  <tr>
+	    <td><img src="/pos/images/templete_login/body_login_01.png" /></td>
+	    <td><img src="/pos/images/templete_login/body_login_02.png" /></td>
+	    <td><img src="/pos/images/templete_login/body_login_03.png" /></td>
+	  </tr>
+	  <tr>
+	    <td><img src="/pos/images/templete_login/body_login_04.png" /></td>
+	    <td><img src="/pos/images/templete_login/body_login_05.png" /></td>
+	    <td><img src="/pos/images/templete_login/body_login_06.png" /></td>
+	  </tr>
+	  <tr>
+	    <td style="background:url(/pos/images/templete_login/body_login_07.png);"></td>
+	    <td valign="top" style="background:url(/pos/images/templete_login/body_login_08.png);">
+	   <form name="login" id="login" method="post" action="/pos/login/checkuser">
+	    <table width="100%" border="0" cellspacing="2" cellpadding="2">
+	      <tr>
+	        <td></td>
+	        <td></td>
+	      </tr>
+	      <tr>
+	        <td height="18" align="right"><span class="font_login">User :</span> </td>
+	        <td>
+	            <input name="user_id" id="user_id" type="text" autocomplete='off' class="ui-widget-content"  value ='' size="10" maxlength="20" />        </td>
+	      </tr>
+	      <tr>
+	        <td height="18" align="right"><span class="font_login">Password :</span> </td>
+	        <td>
+	        <input name="password" id="password" type="password" autocomplete='off' class="ui-state-highlight" value ='' size="10" maxlength="20" />        </td>
+	      </tr>
+	      <tr>
+	        <td align="right"><span class="font_login">For:</span></td>
+	        <td><?php echo $this->login_for;?></td>
+	      </tr>
+	      <tr>
+	        <td></td>
+	        <td>
+	          <input name="btn_login_submit"  id="btn_login_submit" type="button" class="ui-state-active" value="Login" onclick="checkversion()" />  
+			  <input type="button" name="Button" onclick="killall()"  value="  Exit " />
+			 </td>
+	      </tr>
+	    </table>
+	    </form>
+	    </td>
+	    <td style="background:url(/pos/images/templete_login/body_login_09.png);"></td>
+	  </tr>
+	  <tr>
+	    <td><img src="/pos/images/templete_login/body_login_10.png" /></td>
+	    <td><img src="/pos/images/templete_login/body_login_11.png" /></td>
+	    <td><img src="/pos/images/templete_login/body_login_12.png" /></td>
+	  </tr>
+	</table>
+</div>
+<!--  
+<img class="background" src="/pos/theme/assets/images/misc/wall_green_01.jpg"/>
+-->
+</body>
+</html>

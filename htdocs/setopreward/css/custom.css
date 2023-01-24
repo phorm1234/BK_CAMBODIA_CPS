@@ -1,0 +1,77 @@
+/* CSS Document */
+body
+{
+	
+	height: 100%;
+}
+.navbar-inner
+{
+	padding-left:20px !important;
+}
+.menu
+{
+    height: 100%;
+	overflow:auto;
+	position:fixed;
+	float:left;
+	padding:5px;
+	background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+  background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+  background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#fff2f2f2', GradientType=0);
+  border: 1px solid #d4d4d4;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+  *zoom: 1;
+}
+
+.content
+{
+	height: 100%;
+	width: 100%;
+	overflow:auto;
+}
+.span9 {
+	padding-left:290px;
+}
+.content-head{
+	text-align:center;
+	margin-bottom:20px;
+}
+#accordionMenu p
+{
+	
+}
+.accordion-heading
+{
+	background-color:#E6E6FA;
+}
+.accordion-body
+{
+	background-color:#FFF;
+}
+.on-right{
+	float:right;
+	margin-right:10px;
+}
+.d-5{
+	margin-top:5px;
+	margin-bottom:-5px;
+}
+.u-10
+{
+margin-top:8px;
+}
+.magin-top-20
+{
+	padding-top:20px;
+}
+.magin-top-40
+{
+	padding-top:40px;
+}
+

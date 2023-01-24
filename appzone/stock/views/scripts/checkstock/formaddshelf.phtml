@@ -1,0 +1,39 @@
+<script>
+$(document).ready( function() {
+	$("#shelf_no").focus();
+});
+function process(event,chk){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		if(chk=="shelf_name"){
+			$("#shelf_desc").focus();
+		}
+
+		if(chk=="shelf_desc"){
+			save_shelf();
+		}
+	}
+	event.stopPropagation();
+}
+</script>
+<?php
+$checkedtishelf=$this->checkeditshelf;
+if($checkedtishelf=="n"){
+	$shelf_no_up=$checkedtishelf;
+}else{
+	$shelf_no_up=$checkedtishelf[0]['shelf_no'];
+}
+?>
+<table width="100%" border="0" cellspacing="0" cellpadding="3">
+  <tr>
+	<td width="20%" class="sub_text_head_form">Shelf ID : </td>
+	<td width="80%"><span class="sub_text_head_form"><input name="shelf_no" id="shelf_no" type="text" class="input" value="<?php if(!empty($checkedtishelf[0]['shelf_no'])){echo $checkedtishelf[0]['shelf_no'];}?>" onKeyPress="return process(event,'shelf_name');"></span></td>
+  </tr>
+  <tr>
+	<td valign="top" class="sub_text_head_form">Description : </td>
+	<td><span class="sub_text_head_form">
+	<input name="shelf_desc" id="shelf_desc" type="text" class="input" value="<?php if(!empty($checkedtishelf[0]['desc'])){echo $checkedtishelf[0]['desc'];}?>" onKeyPress="return process(event,'shelf_desc');" size="50"></td>
+  </tr>
+</table>
+<input type="hidden" name="shelf_no_up" id="shelf_no_up" value="<?php echo $shelf_no_up;?>">
+<input type="hidden" name="chk_func_save" id="chk_func_save" value="shelf">

@@ -1,0 +1,664 @@
+<div id="dlg-credit"></div>
+<div id="container">
+	<div id="top-header"></div>
+	<div id="top-content" ><!-- class="ui-corner-all" -->	
+		<table width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td width="50%" valign="TOP">
+				<table align="center" width="100%" height="80" border="0"  cellpadding="2" cellspacing="0" border="0" class="ui-corner-top" style="border:1pt solid#666;border-bottom:0;border-right:0;border-left:0;">
+					<tr style="height:47px;">
+						<td colspan="2" align="left">
+							<div id="csh_doc_tp_show" 
+								class="label-text-disable2 ui-corner-all" style="text-align:center;">
+								บิลเงินสดอย่างย่อ
+								<span id="flgbill"></span>
+							</div>			
+							<input type="hidden" name="csh_doc_tp" id="csh_doc_tp"></input>
+							<input type="hidden" name="csh_status_no" id="csh_status_no"></input>
+							<input type="hidden" name="csh_doc_tp_vt" id="csh_doc_tp_vt"></input>
+							<input type="hidden" name="csh_application_id" id="csh_application_id"></input>
+							<input type="hidden" name="csh_refer_member_id" id="csh_refer_member_id"></input>
+							<input type="hidden" name="csh_max_product_no" id="csh_max_product_no"></input>
+							<input type="hidden" name="csh_expire_date" id="csh_expire_date"></input>
+							<input type="hidden" name="csh_gift_set" id="csh_gift_set"></input>
+							<input type="hidden" name="csh_gift_set_amount" id="csh_gift_set_amount"></input>
+							<input type="hidden" name="csh_register_free" id="csh_register_free"></input>
+							
+							<input type="hidden" name="csh_free_product" id="csh_free_product"></input>
+							<input type="hidden" name="csh_free_product_amount" id="csh_free_product_amount"></input>
+							<input type="hidden" name="csh_product_amount_type" id="csh_product_amount_type"></input>							
+							<input type="hidden" name="csh_free_premium" id="csh_free_premium"></input>
+							<input type="hidden" name="csh_free_premium_amount" id="csh_free_premium_amount"></input>
+							<input type="hidden" name="csh_premium_amount_type" id="csh_premium_amount_type"></input>	
+							<!-- bill 01 14072015 -->
+							<input type="hidden" name="csh_application_type" id="csh_application_type"></input>
+							<input type="hidden" name="csh_card_type" id="csh_card_type"></input>							
+														
+							<!-- firstbuy -->
+							<input type="hidden" name="csh_first_sale" id="csh_first_sale"></input>
+							<input type="hidden" name="csh_first_percent" id="csh_first_percent"></input>
+							<input type="hidden" name="csh_xpoint" id="csh_xpoint"></input>
+							<input type="hidden" name="csh_play_main_promotion" id="csh_play_main_promotion"></input>
+							<input type="hidden" name="csh_play_last_promotion" id="csh_play_last_promotion"></input>
+							<input type="hidden" name="csh_first_limited" id="csh_first_limited"></input>
+							
+							<input type="hidden" name="csh_add_first_percent" id="csh_add_first_percent"></input>
+							<input type="hidden" name="csh_start_date1" id="csh_start_date1"></input>
+							<input type="hidden" name="csh_end_date1" id="csh_end_date1"></input>						
+							
+							<!-- card lost -->
+							<input type="hidden" name="csh_card_status" id="csh_card_status"></input>
+							<!-- redeem point -->
+							<input type="hidden" name="csh_promo_code" id="csh_promo_code"></input>
+							<input type="hidden" name="csh_promo_id" id="csh_promo_id"></input>
+							<input type="hidden" name="csh_get_promotion" id="csh_get_promotion"></input>
+							<input type="hidden" name="csh_start_baht" id="csh_start_baht"></input>
+							<input type="hidden" name="csh_end_baht" id="csh_end_baht"></input>
+							<input type="hidden" name="csh_discount_member" id="csh_discount_member"></input><!-- ได้รับส่วนลดสมาชิกหรือไม่ -->
+							<input type="hidden" name="csh_get_point" id="csh_get_point"></input><!-- ได้รับคะแนนหรือไม่ -->
+							<!-- lock unlock -->
+							<input type="hidden" name="csh_lock_status" id="csh_lock_status" value="<?php echo $this->lock_status;?>"></input>
+							<!-- other promotion -->
+							<input type="hidden" name="csh_gap_promotion" id="csh_gap_promotion"></input>
+							<input type="hidden" name="csh_promo_tp" id="csh_promo_tp"></input>
+							<input type="hidden" name="csh_promo_st" id="csh_promo_st"></input>
+							
+							<input type="hidden" name="csh_member_tp" id="csh_member_tp"></input>	
+							<input type="hidden" name="csh_promo_discount" id="csh_promo_discount"></input>	
+							<input type="hidden" name="csh_promo_amt" id="csh_promo_amt"></input>
+							<input type="hidden" name="csh_promo_amt_type" id="csh_promo_amt_type"></input>
+							<input type="hidden" name="csh_bal_discount" id="csh_bal_discount"></input>
+							
+							<input type="hidden" name="csh_promo_point" id="csh_promo_point"></input>
+							<input type="hidden" name="csh_promo_point_to_discount" id="csh_promo_point_to_discount"></input>		
+							
+							<input type="hidden" name="csh_buy_type" id="csh_buy_type"></input>
+							<input type="hidden" name="csh_buy_status" id="csh_buy_status"></input>
+							
+							<input type="hidden" name="csh_trn_diary2_sl" id="csh_trn_diary2_sl"></input>	
+							<input type="hidden" name="csh_member_vip" id="csh_member_vip"></input>
+							<input type="hidden" name="csh_vip_limited" id="csh_vip_limited"></input>
+							<input type="hidden" name="csh_vip_limited_type" id="csh_vip_limited_type"></input>
+							<input type="hidden" name="csh_vip_sum_amt" id="csh_vip_sum_amt"></input>
+							
+							<input type="hidden" name="csh_web_promo" id="csh_web_promo"></input>
+							<input type="hidden" name="csh_limite_qty" id="csh_limite_qty"></input>
+							<input type="hidden" name="csh_check_repeat" id="csh_check_repeat"></input>
+							
+							<input type="hidden" name="csh_ecp_amount_balance" id="csh_ecp_amount_balance"></input>
+							<input type="hidden" name="csh_ecp_percent_discount" id="csh_ecp_percent_discount"></input>
+							
+							<input type="hidden" name="cn_member_no" id="cn_member_no"></input>
+							<input type="hidden" name="cn_doc_no" id="cn_doc_no"></input>
+							<input type="hidden" name="cn_amount" id="cn_amount"></input>
+							
+							<input type="hidden" name="csh_customer_id" id="csh_customer_id"></input>
+							<input type="hidden" name="csh_promo_year" id="csh_promo_year"></input>
+							
+							<input type="hidden" name="csh_refer_doc_no" id="csh_refer_doc_no"></input>
+								
+						</td>
+						<td width="60" align="right" style="color:#ffffff;">ผู้เปิดบิล&nbsp;:</td>
+						<td width="200">
+							<div id="employee_name"
+								class="label-text-disable2 ui-corner-all"
+								style="text-align:center;">&nbsp;</div>
+							<input type="hidden" name="csh_user_id" id="csh_user_id" value="<?php echo $this->session_employee_id;?>"></input>
+							<input type="hidden" name="csh_cashier_id" id="csh_cashier_id" value="<?php echo $this->session_employee_id;?>"></input>
+							<input type="hidden" name="csh_saleman_id" id="csh_saleman_id" value=""></input>
+						</td>
+					</tr>
+					<tr style="height:35px;">
+						<td>						
+							<select class="select" id="status_pro" title="เลือกโปรโมชั่น">
+								<option value="0">เล่นโปรโมชั่น</option>
+								<option value="1">งดเล่นโปรโมชั่น</option>
+							</select>								
+						</td>		
+						<td align="right">
+							<table width="100%" border="0">
+							<tr>
+								<td width="65%" align="right">
+									<span style="color:#FFFFFF;">จำนวน&nbsp;:</span>
+								</td>
+								<td align="right">
+									<input type="text" size="3" style="text-align:center;padding:3px;" class="input-text-enable ui-corner-all" id="csh_quantity" value="1"></input>
+								</td>
+							</tr>
+							</table>						
+						</td>				
+						<td width="100" align="right" style="color:#fff;">รหัสสินค้า&nbsp;:</td>
+						<td width="200" >
+							<input type="text" size="25" class="input-text-enable ui-corner-all" id="csh_product_id" ></input>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td width="50%" valign="TOP">
+				<table align="left" width="100%" height="80"   border="0" cellspacing="0" class="ui-corner-top" style="border:1pt solid#666;border-bottom:0;border-right:0;">				
+					<tr class="ui-corner-all" style="height:47px;">
+						<td width="80" align="right" style="color:#ffffff;">รหัสสมาชิก&nbsp;:</td>
+						<td width="200">
+							<input type="text" size="15" id="csh_member_no" 
+									class="keybarcode input-text-enable ui-corner-all"></input>
+									<button class="btnBwsIdCard" id="btnBwsIdCard"></button>		
+						</td>
+						<td width="" align="left">
+							<span class="ui-corner-all" style="text-align:center;color:#ffffff;padding:5px;background:transparent;" id="csh_member_fullname">&nbsp;</span>
+						</td>
+						<td width="5" colspan="3" align="center">
+							<div id="csh_doc_date" class="label-text-disable2 ui-corner-all" 	style="text-align:center;">
+								<?php echo $this->doc_date_show;?>
+							</div>
+						</td>
+						<td colspan="3" width="5" align="left" style="color:#fff;">&nbsp;</td>
+					</tr>
+					<tr style="height:35px;">
+						<td  width="80" align="right" style="color:#fff;">&nbsp;ประเภท&nbsp;:</td>
+						<td width="200"><div style="color:#FFF372;width: 100%;border-bottom: 0px solid #cccccc;"  id="csh_member_type">&nbsp;</div></td>
+						<td  align="left" style="color:#ffffff;">
+							<span id='xxx'>คะแนนสะสม</span>&nbsp;:
+							<span style="color:#FFF372;border-bottom: 0px solid #cccccc;" id="csh_point_total"></span>
+							<span style="color:#FFF372;border-bottom: 0px solid #cccccc;" id="csh_expire_transfer_point_show"></span>
+						</td>						
+						<td width="40" align="right" style="color:#ffffff;">ส่วนลด&nbsp;:</td>
+						<td width="35"><div style="text-align:center;color:#FFF372;width: 100%;border-bottom: 0px solid #cccccc;" id="csh_percent_discount">&nbsp;</div></td>
+						<td width="5" align="left" style="color:#fff;">%</td>
+						<td width="5" align="left" style="color:#fff;">&nbsp;</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		</table>
+	</div>
+	<div id="center_content"  class="ui-corner-all">
+		<!-- center content -->
+		<div id="left_content" class="ui-corner-all">
+			<!-- left content grid nav_bg.png  #669999 url(/sales/img/bg-bar-gray.png) repeat-x;-->
+			<table width="100%" height="45" border="0" class="ui-corner-top" style="background:#eaeaeb url(/sales/img/bg-bar-gray.png) repeat-x;">
+				<tr>
+					<td>
+							<div id="other_promotion_title" class="ui-corner-all">&nbsp;</div>
+<!--						<input type="text" size="30" id="other_promotion_title" readonly  style="border:0;background:transparent;">-->
+						<div id="other_promotion_cmd" class="ui-corner-all"></div>
+						<div id="box_icon_cmd_info" >
+						 <p class="field switch">		
+							<label  class="cb-enable selected"><span>ONLINE</span></label>
+							<label  class="cb-disable"><span>OFFLINE</span></label>		
+							<input type="checkbox" id="sys_on" class="sys_on" name="sys_on"  style="display:none;" />							
+						  </p>
+						 
+<!--							 <a href="#" name="btnBwsMemberBuy" id="btnBwsMemberBuy" class="btnGrayCleanIco">รายการซื้อ</a>-->
+<!--							 <a href="#" name="btnBwsMemberScoreOfDay" id="btnBwsMemberScoreOfDay" class="btnGrayCleanIco">คะแนนวันนี้</a>-->
+							
+						</div>
+					</td>
+				</tr>
+			</table>
+			<table id="tbl_cashier"></table>
+			<table width="100%"  border="0" class="ui-corner-bottom" style="height:5px;background:url(/sales/img/nav_bg.png) repeat-x;">
+				<tr style="height:5px;">
+					<td style="height:5px;"></td>
+				</tr>
+			</table>
+			<!-- left content grid-->
+			<!-- xxxxxxxxx -->
+			<div id="sub-other" class="ui-widget-content ui-corner-all"></div>
+			<div id="sub-total" class="ui-widget-content ui-corner-all"><!-- ui-state-focus -->
+				<div id="sub-total-content">
+					<table align="left" width="100%" border="0">
+						<tr>
+							<td ROWSPAN="4" align="center">
+								<div  id="csh_sum_qty"></div>
+							</td>
+						</tr>
+						<tr>
+							<td align="right"><span style="color:#ffffff;">คะแนนที่ได้รับ</span></td>
+							<td width="50">
+								<input type="text" id='csh_point_receive' size="5" readonly class="input-text-subtotal ui-corner-all" style='text-align:center;'></input>
+								</td>
+							<td align="right"><span style="color:#ffffff;">รวมเงิน</span></td>
+							<td><input type="text" id="csh_sum_amount" size="10" readonly class="input-text-subtotal ui-corner-all" style='text-align:right;'></input></td>
+						</tr>
+						<tr>
+							<td align="right"><span style="color:#ffffff;">คะแนนที่ใช้</span></td>
+							<td width="50">
+								<input type="text" id='csh_point_used' size="5" readonly class="input-text-subtotal ui-corner-all" style='text-align:center;'></input>
+							</td>
+							<td align="right"><span style="color:#ffffff;">ส่วนลด</span></td>
+							<td><input type="text" id="csh_sum_discount" readonly size="10" class="input-text-subtotal ui-corner-all" style='text-align:right;'></input></td>
+						</tr>
+						<tr>
+							<td align="right"><span style="color:#ffffff;">คะแนนสุทธิ</span></td>
+							<td width="50">
+								<input type="text" id='csh_point_net' size="5" readonly class="input-text-subtotal ui-corner-all" style='text-align:center;'></input>
+							</td>
+							<td align="right"><span style="color:#ffffff;">สุทธิ</span></td>							
+							<td width="50">
+								<input type="text"  id='csh_net' size="10" readonly class="input-text-subtotal ui-corner-all" style='text-align:right;'></input>
+							</td>
+						</tr>					
+		   			</table>
+		   			</div>
+			</div>
+			<!-- xxxxxxxxx -->
+		</div>
+		
+		<!-- tab container -->
+		<div id="right_content">
+				<div id="csh_accordion">
+					<h3><a href="#">ข้อมูลสมาชิก</a></h3>
+					<div class="box_member_info">
+						<!-- member -->
+							<table width="100%"	border="0" cellpadding="0" cellspacing="2">
+								<tr>
+									<td width="45%"><div class="wrapinfo ui-corner-all">อ้างถึงรหัส&nbsp;:</div></td>
+									<td width="55%">
+										<div id="info_refer_member_id"
+												class="wrapinfo_items ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td width="45%"><div class="wrapinfo ui-corner-all">ชื่อ-นามสกุล&nbsp;:</div></td>
+									<td width="55%">
+										<div id="info_member_fullname"
+												class="wrapinfo_items ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><div class="wrapinfo ui-corner-all">วันสมัคร&nbsp;:</div></td>
+									<td>
+										<div id="info_member_applydate" class="wrapinfo_items ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><div class="wrapinfo ui-corner-all">บัตรหมดอายุ&nbsp;:</div></td>
+									<td>
+										<div id="info_member_expiredate" class="wrapinfo_items ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><div class="wrapinfo ui-corner-all">วันเกิด&nbsp;:</div></td>
+									<td>
+										<div id="info_member_birthday" class="wrapinfo_items ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><div class="wrapinfo ui-corner-all">OPS DAY&nbsp;:</div></td>
+									<td>
+										<div id="info_member_opsday" class="wrapinfo_items ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><div class="wrapinfo ui-corner-all">รหัสชุดสมัคร&nbsp;:</div></td>
+									<td>
+										<div id="info_apply_promo" class="wrapinfo_items ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div id="info_apply_promo_detail" class="wrapinfo_items2 ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>					
+								<tr>
+									<td><div class="wrapinfo ui-corner-all">&nbsp;ที่อยู่&nbsp;:</div></td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td colspan="2" >
+										<div id="info_member_address" class="wrapinfo_items3 ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+									<br>
+									<div>
+<!--										<a href="#" name="btnBwsMemberBuy" id="btnBwsMemberBuy" class="btnGrayCleanIco">รายการซื้อ</a>-->
+<!--							 			<a href="#" name="btnBwsMemberScoreOfDay" id="btnBwsMemberScoreOfDay" class="btnGrayCleanIco">คะแนนวันนี้</a>-->
+							 			
+							 			<a href="#" name="btnBwsMemberBuy" id="btnBwsMemberBuy" class="btnGrayCleanIco">รายการซื้อและคะแนนวันนี้</a>
+							 		</div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<div id="info_notify" class="wrapinfo_items2 ui-corner-all">
+											&nbsp;
+										</div>
+									</td>
+								</tr>								
+							</table>
+						<!-- member -->
+					</div>
+					<h3><a href="#">ฟังก์ชัน</a></h3>
+					<div>
+						<!-- payment -->
+						<table align="center" width="100%" border="0">
+							<tr>
+								<td>
+						 			<button class="btnDelRowSelect" id="btnDelRowSelect">
+						 				ลบรายการ
+						 			</button>
+						 		</td>
+						 		<td>
+						 			<button class="btnCancle" id="btnCancle">
+						 				ยกเลิกการขาย
+						 			</button>
+						 		</td>
+						 	</tr>
+						 	<tr>
+						 		<td>&nbsp;</td>
+						 		<td>&nbsp;</td>
+						 	</tr>
+							<tr>								
+								<td>
+						 			<button class="btnDocType" id="btnDocType">
+						 				ประเภทบิล
+						 			</button>
+						 		</td>
+						 		<td>
+						 			<button class="btnCoupon" id="btnCoupon">
+										Coupon/SMS
+									</button>
+									<input type="hidden" id="status_couponpromo" name="status_couponpromo"></input>
+									<input type="hidden" id="csh_coupon_code" name="csh_coupon_code"></input>
+						 		</td>
+							</tr>
+							<tr>
+								<td>
+						 			<button class="btnVT" id="btnVT">
+						 				ใบกำกับภาษี/Passport
+						 			</button>
+						 		</td>								
+						 		<td>
+						 			<button class="btnOther" id="btnOther">
+						 				อื่นๆ
+						 			</button>
+						 		</td>
+							</tr>
+							<tr>
+								<td>
+						 			<button class="btnSmsPro" id="btnSmsPro">
+						 				Call Survey
+						 			</button>
+						 			<input type="hidden"  id="status_smspromo" name="status_smspromo"></input>
+						 			<input type="hidden"  id="id_smspromo" name="id_smspromo"></input>
+						 			<input type="hidden"  id="id_sms_promo_code" name="id_sms_promo_code"></input>
+						 			<input type="hidden"  id="id_sms_mobile" name="id_sms_mobile"></input>
+						 			<input type="hidden"  id="id_redeem_code" name="id_redeem_code"></input>						 			
+						 		</td>								
+						 		<td>
+						 			<button class="btnCoOperation" id="btnCoOperation">
+										Co Promotion
+									</button>&nbsp;
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<div id="bill_vt_show">
+										<input type="hidden"  id="vt_name_val"></input>
+										<input type="hidden"  id="vt_address_val1"></input>
+										<input type="hidden"  id="vt_address_val2"></input>
+										<input type="hidden"  id="vt_address_val3"></input>
+										<input type="hidden"  id="vt_passport_no_val"></input>
+										<!-- WR 24122013 POINT EXPIRE -->
+										<input type="hidden" id="vt_taxid"></input>
+										<input type="hidden" id="vt_taxid_branch_seq"></input>
+										<input type="hidden" id="csh_transfer_point"></input>
+										<input type="hidden" id="csh_expire_transfer_point"></input>
+										<input type="hidden" id="csh_curr_point"></input>
+										<input type="hidden" id="csh_balance_point"></input>
+									</div>
+								</td>
+							</tr>
+					 	</table>			 	
+					 	<div>&nbsp;</div>
+					 	<div id="box-payment"  style="bottom: 50px; border: 0px solid red; position: absolute; height:auto;">
+					 		<button class="btn_cal_promotion" id="btn_cal_promotion">
+					 			ชำระเงิน<br/>(<U>F10</U>)
+					 		</button><br/>
+					 		<!-- vv -->
+					 	</div>
+						<!-- payment -->
+					</div>
+				
+					<h3><a href="#">อื่นๆ</a></h3>
+					<div>
+							<!-- tool -->
+							<table width="100%" cellpadding="2" border="0">
+							<tr>
+								<td align="center">
+									<div id="btnPaySummary" class="btnPaySummary">
+										สรุปการชำระเงิน
+									</div>
+								</td>
+								<td align="center">
+									<div id="btnBillDetail" class="btnBillDetail">
+										รายละเอียดบิล
+									</div>
+								</td>
+							</tr>	
+							<tr>
+								<td align="center">
+									<button class="btnCheckStock" id="btnCheckStock">
+						 				สินค้าคงเหลือ
+						 			</button>
+								</td>								
+								<td align="center">
+									<button class="btnPromotionData" id="btnPromotionData">
+						 				รายการโปรโมชั่น
+						 			</button>
+								</td>
+							</tr>	
+							<tr>
+								<td align="center">
+									<button class="btnMemberData" id="btnMemberData">
+						 				ข้อมูลสมาชิก
+						 			</button>
+								</td>
+								<td align="center">
+									<button class="btnQstPdtOfBill" id="btnQstPdtOfBill">
+						 				สินค้ารายบิล
+						 			</button>
+								</td>
+							</tr>			
+							<tr>
+								<td align="center">									
+									<button class="btnContact" id="btnContact">
+						 				ติดต่อ
+						 			</button>
+								</td>
+								<td align="center">
+									<button class="btnReloadPageCashier" id="btnReloadPageCashier">
+						 				Refresh
+						 			</button>
+									<!--  
+									<button class="btnProductData" id="btnProductData">
+						 				ข้อมูลสินค้า
+						 			</button>
+						 			-->
+								</td>
+							</tr>				
+							<tr>
+								<td align="center">
+						 			<button class="btnUp2Pdy" id="btnUp2Pdy">
+						 				อัพเดทข้อมูล
+						 			</button>
+						 		</td>								
+						 		<td align="center">
+						 			<button class="btn_trn_alipay" id="btn_trn_alipay">
+						 				Alipay
+						 			</button>
+						 		</td>
+							</tr>	
+							<tr>
+								<td align="center">
+									<!-- 
+						 			<button class="btnClosePageCashier" id="btnClosePageCashier">
+						 				ปิดหน้าขาย
+						 			</button>
+						 			 -->
+						 		</td>								
+						 		<td>
+						 			&nbsp;
+						 		</td>
+							</tr>	
+							</table>
+							<!-- tool -->
+					</div>				
+			</div>
+		</div>
+		<!-- tab container -->
+	</div><!-- center content -->
+	<div id="bottom_content"></div>
+</div><!-- end container -->
+<!-- diglog popup -->
+<div id="dlgPromoItems" style="display:none;">
+	<div id="tabs-promo-items">
+		<ul>
+			<li><a href="/sales/cashier/promoitems" style="font-size:18px;">โปรโมชั่นวันนี้</a></li>
+			<li><a href="/sales/cashier/promoitemsnextweek" style="font-size:18px;">โปรโมชั่นล่วงหน้า 7 วัน</a></li>
+		</ul>
+	</div>	
+</div>
+<div id="dlgBrowsDocStatus"></div>
+<div id="dlgPayment"></div>
+<div id="dlgPromotionDetail"></div>
+<div id="dlgVatTotal"></div>
+<div id="dlgBrowsProduct"></div>
+<div id="dlgSwapCashier"></div>
+<div id="dlgSaleMan"></div>
+<div id="dlgCredit" style="display:none;"></div>
+<div id="dlgCheckStock" style="display:none;"></div>
+<div id="dlgMemberCatalog" style="display:none;"></div>
+<div id="dlgMemberCatalogList" style="display:none;"></div>
+<div id="dlgMemberRef" style="display:none;">
+	<input type="text" id="refer_member_st" name="refer_member_st" class="keybarcode input-text-pos ui-corner-all" size="25"></input>
+</div>
+<div id="dlgFrmCardLost" style="display:none;">
+	<table width="100%" border="0" cellpadding="0" cellspacing="3" bgcolor="#CFE2E5"><!-- #CCD3D5 -->
+		<tr>
+			<td width="80" align="right"><span style="color:#000;">ID Card&nbsp;</span></td>
+			<td width="180">
+				<input type="text" id="lost_id_card"  size="25" class="input-text-pos"></input>
+			</td>
+			<td width="80" align="right"><span style="color:#000;">เบอร์โทรศัพท์&nbsp;</span></td>
+			<td>
+				<input type="text" id="lost_mobile_no"  size="25" class="input-text-pos"></input>
+			</td>
+		</tr>
+		<tr>
+			<td width="80" align="right"><span style="color:#000;">ชื่อ&nbsp;</span></td>
+			<td width="180">
+				<input type="text" id="lost_member_name" size="25" class="input-text-pos"></input>
+			</td>
+			<td width="80" align="right"><span style="color:#000;">นามสกุล&nbsp;</span></td>
+			<td>
+				<input type="text" id="lost_member_surname" size="25" class="input-text-pos"></input>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			</td>
+		</tr>
+	</table>
+	<div id="card_lost_content"></div>
+</div>
+<input type="hidden" id="csh_promo_pos"></input>
+<input type="hidden" id="csh_type_discount"></input>
+<!-- *WR24122014 -->
+<input type="hidden" id="csh_ops_day"></input>
+<input type="hidden" name="csh_id_card" id="csh_id_card" value="">
+<input type="hidden" name="csh_mobile_no" id="csh_mobile_no" value="">
+<!-- *WR10032015 -->
+<input type="hidden" name="csh_bill_manual_no" id="csh_bill_manual_no" value="">
+<input type="hidden" name="csh_ticket_no" id="csh_ticket_no" value="">
+<!-- *WR16032017 for suport alipay -->
+<input type="hidden" name="payment_channel" id="payment_channel"></input>
+<input type="hidden" name="payment_transid" id="payment_transid"></input>
+<!-- 
+<div id="dlgPromoItems"></div>
+ -->
+
+<div id="dlgCardLost"></div>
+<div id="dlgRedeemPoint"></div>
+<div id="dlgRedeemPointDetail"></div>
+<div id="dlgPromoPercentRange"></div>
+<div id="dlgOtherPromotion"></div>
+<div id="dlgSelCN"></div>
+<!-- สำหรับโปรโมชั่นสมาชิกใหม่ -->
+<div id="dlgRegPromo"></div>
+<div id="dlgNewCard" style="display:none;">
+		<input type="text" id="csh_new_card" name="csh_new_card" size="22" class="keybarcode input-text-pos ui-corner-all"></input>
+</div>
+<div id="dlgGiftSetAmount" style="display:none;"></div>
+<div id="dlgFreeProduct" style="display:none;"></div>
+<div id="dlgFreePremium" style="display:none;"></div>
+<div id="dlgMemberPrivilege" style="display:none;">		
+		<div id="tabs-priv">
+			<ul class="tabs-priv-nav">
+				<li><a href="/sales/member/memberprivilege">Birthday</a></li>
+				<li><a href="/sales/member/memberprivilege">Magazine</a></li>
+				<li><a href="/sales/member/memberprivilege">โปรสมัครใหม่</a></li>
+				<li><a href="/sales/member/memberprivilege">โปรต่ออายุ</a></li>
+				<li><a href="/sales/member/memberprivilege">โปรเปลี่ยนบัตรเป็น ID Card</a></li>
+			</ul>
+		</div>
+</div>
+
+<div id="dlgMemberProductFree" style="display:none"></div>
+<div id="dlgRptSummary" style="display:none"></div>
+<div id="divdelay"></div>
+<div id="dlgEcpEmployee" style="display:none">
+	<p align="center">
+	<span>จำนวนเงินใช้สิทธิพนักงาน</span>&nbsp;:&nbsp;<input type='text' id='ecp_amount' size='5' class='input-text-pos'/>&nbsp;บาท
+	</p>
+</div>
+<div id="dlgCopromotion" style="display:none">
+	<table border="0" width="100%" cellpadding="2" cellspacing="0">
+		<tr>
+			<td align="right" width="20%">รหัสสินค้า&nbsp;</td>
+			<td width="40%"><input type='text' id='co_product_id' size='25' class='input-text-pos'/></td>
+			<td>&nbsp;</td>
+		</tr>
+	</table>
+</div>
+<!--<div id="dlgGreenBag" style="display:none;">-->
+<!--	<p><input type="text" id="txt_greenbag1" class="keybarcode" size="15"/><br/></p>-->
+<!--</div>-->
+<div id="dlgSmsPro" style="display:none;"></div>
+<div id="dlgSmsMobile" style="display:none;"></div>
+<div id="dlgMemberData" style="display:none;"></div>
+<div id="dlgBillDetail" style="display:none;"></div>
+<div id="dlgContact" style="display:none;"></div>
+<div id="dlgDocNoTemp" style="display:none;"></div>
+<div id="dlgbillProfiles" style="display:none;"></div>
+<!-- joke -->
+<div id="dialog-promotion" title="โปรโมชั่น"><div id='promotion'></div></div>
+<div id="dialog-modal" title="เลือกโปรโมชั่น"><div id='listPro'></div></div>
+<div id="dialog-hotpro" align='center' title="Hot Promotion"><div id='hotpro' align='center'></div></div> 
+<div id="dialog-lastpro" title="เลือกโปรโมชั่นท้ายบิล"><div id='lastpro'></div></div> 
+<div id="dialog-lastpro_select" title="เลือกโปรโมชั่นท้ายบิล"><div id='lastpro_select'></div></div>
+<div id="dialog-lastpro_play" title="เลือกโปรโมชั่นท้ายบิล"><div id='lastpro_play'></div></div> 
+<div id="dialog-viewproduct" title="รายการสินค้าที่ร่ามโปรโมชั่น"><div id='viewproduct'></div></div>
+<div id='fromchkmobile'></div> 
+<!-- joke -->
+<script type="text/javascript" src="/sales/js/cashier/index.js"></script>

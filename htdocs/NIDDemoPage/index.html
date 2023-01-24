@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Cache-Control" content="no-store"> 
+<meta http-equiv="Content-Language" content="th"> 
+<!meta http-equiv="content-Type" content="text/html; charset=window-874"> 
+<meta http-equiv="content-Type" content="text/html; charset=UTF-8"> 
+<title>R&D NIDApplet Demonstration</title>
+
+<script type="text/javascript"><!--
+// create the XMLHttpRequest object, according browser
+function get_XmlHttp() {
+  // create the variable that will contain the instance of the XMLHttpRequest object (initially with null value)
+  var xmlHttp = null;
+
+  if(window.XMLHttpRequest) {		// for Forefox, IE7+, Opera, Safari, ...
+    xmlHttp = new XMLHttpRequest();
+  }
+  else if(window.ActiveXObject) {	// for Internet Explorer 5 or 6
+    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  return xmlHttp;
+}
+
+// sends data to a php file, via POST, and displays the received answer
+function ajaxrequest(php_file, tagID) {
+  var request =  get_XmlHttp();		// call the function for the XMLHttpRequest instance
+
+  // create pairs index=value with data that must be sent to server
+
+  var    photo = 'Photo='+document.getElementById('nidPhoto').value;
+
+  
+  var    cardID = 'NIDNumber='+document.getElementById('nidNationalCardID').value;		
+  var    nidCardData =  'nidCardData=' +	document.getElementById("nidCardData").value;
+  
+
+  the_data = photo+'&'+cardID + '&'+ nidCardData;
+  request.open("POST", php_file, true);			// set the request
+  // adds  a header to tell the PHP script to recognize the data as is sent via POST
+   request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+   request.setRequestHeader("Cache-Control", "no-cache");
+   request.send(the_data);		// calls the send() method with datas as parameter
+
+  // Check request status
+  // If the response is received completely, will be transferred to the HTML tag with tagID
+  request.onreadystatechange = function() {
+    if (request.readyState == 4) {
+      document.getElementById(tagID).innerHTML = request.responseText;
+    }
+  }
+}
+</script>
+</head>
+
+
+<body>
+	<script type="text/javascript">
+		
+		function onreadid() {
+			
+			if(document.NIDApplet.isCardInsertRD()==false)
+				{
+					alert( "NID card not inserted or smart card reader not found."); return;
+				}	
+			
+			var vers = document.NIDApplet.getAppletInfoRD();
+			if(vers==null)
+				{
+					alert('Can not get Applat info')
+					return ;
+				}			
+			var pgVersion = document.getElementById("nidCardVers");
+            		pgVersion.value = vers;			
+			
+				
+			
+			var idNationalCard   = document.NIDApplet.getNIDNumberRD();
+			if(idNationalCard  == null)		
+				{
+					alert('Can not get getNIDNumberRD')
+					return ;
+				}
+
+			var pgNationalCardID = document.getElementById("nidNationalCardID");
+            		pgNationalCardID.value = idNationalCard;
+
+			var data = document.NIDApplet.getNIDDataRD();
+			if(data==null)
+				{
+					alert('Can not get nidNationalCardID')
+					return ;
+				}
+            		var pgAllData = document.getElementById("nidCardData");
+            		pgAllData.value = data;			
+
+			var photo = document.NIDApplet.getNIDPictureRD();
+			if(photo==null)
+				{
+					alert('Can not get getNIDPictureRD')
+					return ;
+				}
+			var pgPhoto = document.getElementById("nidPhoto");
+            		pgPhoto.value = photo;  
+			document.getElementById('idphoto').innerHTML = photo;	
+		}
+
+		function onreadidcheck() {		
+			if(document.NIDApplet.isCardInsertRD()==false)
+			{
+				alert( "NID card not inserted or smart card reader not found."); return;
+			}			
+			
+			var vers = document.NIDApplet.getAppletInfoRD();
+			if(vers==null)
+				{
+					alert('Can not get Applat info')
+					return ;
+				}
+			var pgVersion = document.getElementById("nidCardVers");
+            		pgVersion.value = vers;
+
+                 	
+		}
+
+		function onreadidnumber() {
+			var idNationalCard   = document.NIDApplet.getNIDNumberRD();			
+			if(idNationalCard  == null)		
+				{
+					alert('Can not get getNIDNumberRD')
+					return ;
+				}
+			var pgNationalCardID = document.getElementById("nidNationalCardID");
+            		pgNationalCardID.value = idNationalCard;			
+		}
+
+
+		function onreadiddata() {
+			var data = document.NIDApplet.getNIDDataRD();
+			if(data==null)
+				{
+					alert('Can not get getNIDDataRD')
+					return ;
+				}  
+			var pgAllData = document.getElementById("nidCardData");
+            		pgAllData.value = data;    		
+		}
+
+		
+		function onreadidpicture() {
+			var photo = document.NIDApplet.getNIDPictureRD();
+			
+			if(photo==null)
+				{
+					alert('Can not get getNIDPictureRD')
+					return ;
+				}
+			var pgPhoto = document.getElementById("nidPhoto");
+            		pgPhoto.value = photo;   
+			document.getElementById('idphoto').innerHTML = photo;	
+			
+		}		
+		
+	</script>
+
+<h3>[ R&D NIDApplet Demo ]</h3>
+R130214</br>
+Copyright 2013 R&D Computer System Co., Ltd.</br>
+<a href="http://www.rd-comp.com" target="_blank"> www.rd-comp.com </a></br>
+
+
+<APPLET CODE = 'idcard.RdNationalCardID' archive='RdNIDApplet090DL.jar' name='NIDApplet' WIDTH = "100" HEIGHT = "40">
+</APPLET>
+
+</br>
+<!***>
+
+<!***>
+    <div style="width:400px;">
+        <table>
+        <tr>
+	    <td style="width:150px"> Applet Info:</td>
+            <td>
+                <input id="nidCardVers" type="text" style="width:600px;"/></td>            
+        </tr>
+        <tr>
+            <td style="width:150px"> NID_No.:</td>
+            <td>
+                <input id="nidNationalCardID" type="text" style="width:150px;"/></td>
+        </tr>
+        <tr>
+            
+ 	    <td style="width:150px"> NID_All_Data:</td>
+            <td>
+                <input id="nidCardData" type="text" style="width:800px;"/></td>
+        </tr>
+   	<tr>            
+ 	    <td style="width:150px"> Picture Data:</td>
+            <td>
+                <input id="nidPhoto" type="text" style="width:800px;"/></td>
+        </tr>
+        </table>
+    </div>
+
+
+</div>
+
+</br>
+<input type="button" value="Check Card, Applet Info" style="width:180px;" onclick="onreadidcheck()"/>
+<input type="button" value="Read Card Number" style="width:180px;" onclick="onreadidnumber()"/>
+<input type="button" value="Read Card Data" style="width:180px;" onclick="onreadiddata()"/>
+<input type="button" value="Read Picture" style="width:180px;" onclick="onreadidpicture()"/>
+</br>
+<input type="button" value="Read All" style="width:735px;" onclick="onreadid()"/>
+
+
+<h4 style="cursor:pointer;" onclick="ajaxrequest('PostTest.php', 'context')"><u> Save to HOST via PHP script</u></h4>
+<div id="idphoto" style="display:none;"> </div>
+<div id="context">Response from php script:</div>
+
+</body>
+
+</html>

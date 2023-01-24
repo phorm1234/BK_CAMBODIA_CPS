@@ -1,0 +1,39 @@
+<?php 
+
+$onhand=$this->data_onhand;
+$product=$this->data_product;
+$product_max=$this->data_product_max;
+$qty=$this->qty;
+$sum=$qty+$product;
+if($qty<=0){
+	$status="0";
+}else{
+	if($sum>$onhand[0]['onhand']){
+		$status="1";
+	}else{
+		echo "3";
+		exit();
+		/*
+		if($qty>$product_max[0]['quantity']){
+			//$status="2";
+			$status="3";
+		}else{
+			if($product[0]['refer_doc_no']=="0"){
+				$status="3";
+			}else{
+				$sum=$product_max[0]['quantity']-$product[0]['qty'];
+				if($qty>$sum){
+					//$status="2";
+					$status="3";
+				}else{
+					$status="3";
+				}
+			}
+		}
+		/**/
+		
+	}
+}
+
+echo $status;
+?>

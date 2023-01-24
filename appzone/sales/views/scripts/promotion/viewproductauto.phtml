@@ -1,0 +1,53 @@
+<?php 
+$data=$this->dataDetailSeq;
+
+echo '<center>';
+echo '<br>';
+echo '<table width="95%" border="0" cellpadding="0" cellspacing="0" align=\"center\">';	
+
+
+echo '<tr>';
+echo "<td  class='colum' align='center'><span  align='center'>PRODUCT ID</span></td>";
+echo "<td  class='colum' align='center'><span >PRODUCT NAME</span></td>";
+echo "<td  class='colum' align='right'><span >PRICE</span></td>";
+echo "<td  class='colum' align='right'><span >ONHAND</span></td>";
+echo "<td  class='colum' align='right'><span >SHELF</span></td>";
+echo '</tr>';
+
+$num=1;
+foreach($data as $data) {
+	$product_id=$data['product_id'];
+	$name_product=$data['name_product'];
+	$price=$data['price'];
+	$price=number_format($price,2,'.',',');
+	$stock=$data['stock'];
+	$stock=number_format($stock,0,'.',',');
+	$shelf_no=$data['shelf_no'];
+	
+
+
+			if($num%2>0) {
+				$class="class='line_product'";
+				
+			}else if($num%2==0){
+				$class="class='line_product2'";
+			}
+			
+
+			if($stock>0){
+				echo "<tr onclick=\"addproductautoclick('$product_id');\">";
+			}else{
+				echo '<tr >';
+			}
+			echo "<td  $class align='center'><span >$product_id</span></td>";
+			echo "<td  $class align='left'><span >$name_product</span></td>";
+			echo "<td  $class align='right'><span >$price</span></td>";
+			echo "<td  $class align='right'><span >$stock</span></td>";
+			echo "<td  $class align='right'><span >$shelf_no</span></td>";
+
+			echo '</tr>';
+			
+			$num++;
+}
+echo '</center>';
+?>

@@ -1,0 +1,56 @@
+<?php $json_obj=json_decode($this->arr_sum);?>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" bgcolor="#cccccc">
+	<tr height="35" bgcolor="#868A86">
+		<td align="center" colspan="8"><span style="color:#FFF372;font-size:25px;font-weight:normal;">&nbsp;</span></td>
+		<td align="center" width="100"><span style="color:#FFF372;font-size:25px;font-weight:normal;"><?php echo intval($json_obj->sumcsh[0]->sum_quantity);?></span></td>
+		<td align="center" width="100"><span style="color:#FFF372;font-size:25px;font-weight:normal;"><?php echo $json_obj->sumcsh[0]->sum_discount;?></span></td>
+		<td align="center" width="120"><span style="color:#FFF372;font-size:25px;font-weight:normal;"><?php echo $json_obj->sumcsh[0]->sum_net_amt;?></span></td>
+	</tr>
+	<tr height="35" bgcolor="#324F51"><!-- #D5EBFF -->
+		<td align="center" width="20"><span style="color:#ffffff;">#</span></td>
+		<td align="center" width="80"><span style="color:#ffffff;">STATUS</span></td>
+		<td align="center" width="80"><span style="color:#ffffff;">PROMOTION</span></td>
+		<td align="center" width="100"><span style="color:#ffffff;">PRODUCT ID</span></td>
+		<td align="center"><span style="color:#ffffff;">DETAIL</span></td>
+		
+		<td align="center" width="50"><span style="color:#ffffff;">POINT</span></td>
+		<td align="center" width="50"><span style="color:#ffffff;">MEMBER</span></td>
+		<td align="center" width="100"><span style="color:#ffffff;">PRICE</span></td>
+		<td align="center" width="100"><span style="color:#ffffff;">QUANTITY</span></td>
+		<td align="center" width="100"><span style="color:#ffffff;">DISCOUNT</span></td>
+		<td align="center" width="120"><span style="color:#ffffff;">NET TOTAL</span></td>
+	</tr>
+	<?php
+		if($this->arr_data){
+			$i=1;
+			foreach($this->arr_data as $data){
+				$discount=$data['discount']+$data['member_discount1']+$data['member_discount2'];
+				($i%2==0)?$bg_color="#e2e2e2":$bg_color="#FFFFFF";
+				?>
+					<tr height="35" bgcolor="<?php echo $bg_color;?>">
+						<td width="10" align="center"><?php echo $i;?></td>
+						<td align="center" width="80"><?php echo $data['promo_st'];?></td>
+						<td align="center" width="80"><?php echo $data['promo_code'];?></td>
+						<td align="center" width="100"><?php echo $data['product_id'];?></td>
+						<td align="left">&nbsp;<?php echo $data['name_product'];?></td>
+				
+						<td align="center" width="50"><?php echo $data['get_point'];?></td>
+						<td align="center" width="50"><?php echo $data['discount_member'];?></td>
+						<td align="center" width="100"><?php echo number_format($data['price'],'2','.',',');?></td>
+						<td align="center" width="50"><?php echo intval($data['quantity']);?></td>
+						<td align="center" width="100"><?php echo number_format($discount,'2','.',',');?></td>
+						<td align="center" width="120"><?php echo number_format($data['net_amt'],'2','.',',');?></td>
+					</tr>
+				<?php 
+				$i++;
+			}
+		}
+		
+	?>
+	<tr height="35" bgcolor="#868A86">
+		<td align="center" colspan="8"><span style="color:#FFF372;font-size:25px;font-weight:normal;">TOTAL</span></td>
+		<td align="center" width="100"><span style="color:#FFF372;font-size:25px;font-weight:normal;"><?php echo intval($json_obj->sumcsh[0]->sum_quantity);?></span></td>
+		<td align="center" width="100"><span style="color:#FFF372;font-size:25px;font-weight:normal;"><?php echo $json_obj->sumcsh[0]->sum_discount;?></span></td>
+		<td align="center" width="120"><span style="color:#FFF372;font-size:25px;font-weight:normal;"><?php echo $json_obj->sumcsh[0]->sum_net_amt;?></span></td>
+	</tr>
+</table>

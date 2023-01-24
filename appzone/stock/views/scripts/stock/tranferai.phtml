@@ -1,0 +1,108 @@
+<script>
+$(document).ready( function() {
+	$("#qty").bind('keypress', function(e) {
+    	return ( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57)) ? false : true ;
+    })
+	$("#invoice").focus();
+	viewproducttemp();
+});
+
+
+jQuery(document).bind('keydown', 'f1',
+function (evt){
+	search_docno_ai('AO');
+});
+
+jQuery(document).bind('keydown', 'f2',
+function (evt){
+	inputinv();
+});
+
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	tranfer_tranin2shopheadtodiary_checkstock();
+});
+
+jQuery(document).bind('keydown', 'f4',
+function (evt){
+	keytranfer_cancel();
+});
+
+function process(event,p){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		if(p=="invoice"){
+			$("#password").focus();
+		}
+		if(p=="check_doc_remark"){
+			$("#product_id").focus();
+		}
+		if(p=="check_product"){
+			check_product();
+		}
+		if(p=="gen_tmpdiary"){
+			gen_tmpdiary_aiao();
+		}
+	}
+}
+
+function process_pwd(event){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		selinv_ck("s");
+	}
+}
+</script>
+<?php 
+$doc_no=$this->doc_no;
+?>
+<div id="dialog_invoice" title="Invoice No."></div>
+<div id="dialog_process" title="Process"></div>
+<form id="frm_tranferkeyin">
+<table width="100%" border="0" cellpadding="0" cellspacing="2" bgcolor="#e9f2f8" background="/stock/img/bg_header.gif">
+  <tr>
+  	<td colspan="5" height="5"></td>
+  </tr>
+  <tr>
+    <td width="15%" align="right" class="servBodL_right">Tranfer In Type : </td>
+    <td width="5"><input type="text" name="type_tranfer" id="type_tranfer" size="25" value="69 - Adjust Stock" class="NFText_hidden" disabled="disabled" onkeypress=""></td>
+    <td width="2%">&nbsp;</td>
+ 	<td>&nbsp;</td> 
+  </tr>
+  <tr>
+  	<td colspan="5" height="2%"></td>
+  </tr>
+  <tr>
+    <td height="20" align="right" class="servBodL_right">Insert Invoice No. : </td>
+    <td width="10%"><input type="text" name="invoice" id="invoice" size="25" class="NFText" autocomplete="off" value="<?php if(!empty($doc_no[0]['doc_number'])){echo $doc_no[0]['doc_number'];}?>" onkeypress="return process(event,'invoice')"></td>
+    <td width="5%">
+    <a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_docno_ai('AI');"><span class="ui-icon ui-icon-search"></span>(F1) </a>
+    </td>
+    <td width="8%" align="right" class="servBodL_right">Password : </td>
+    <td><input type="password" name="password" id="password" size="15" class="NFText" autocomplete="off" onkeypress="return process_pwd(event)"></td>
+  </tr>
+  <tr>
+  	<td colspan="5" height="2%"></td>
+  </tr>
+  <tr>
+    <td align="right" class="servBodL_right">Note :</td>
+    <td colspan="4"><input type="text" name="doc_remark" id="doc_remark" onkeypress="return process(event,'check_doc_remark')" size="60" class="NFText" /></td>
+  </tr>
+  <tr>
+    <td width="17%" align="right" class="servBodL_right">Product ID : </td>
+    <td width="5"><input type="text" name="product_id" id="product_id" size="25" onkeypress="return process(event,'check_product')" class="NFText" onkeypress=""></td>
+    <td width="10%" align="right" class="servBodL_right">Quantity : </td>
+    <td width="3%" colspan="2"><input type="text" name="qty" id="qty" size="3" class="NFText" onkeypress="return process(event,'gen_tmpdiary')"></td>
+  </tr>
+  <tr>
+  	<td colspan="5" height="5"></td>
+  </tr>
+</table>
+<input type="hidden" name="type_product" id="type_product" value="N">
+<input type="hidden" name="doc_tp" id="doc_tp" value="AI"></input>
+<input type="hidden" name="status_no" id="status_no" value="69"></input>
+</form>
+
+<div id="viewproducttemp"></div>

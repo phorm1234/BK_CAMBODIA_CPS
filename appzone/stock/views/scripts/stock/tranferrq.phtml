@@ -1,0 +1,249 @@
+<!--
+//v.1.1 ขยายการทำ RQ 1-31 27/11/12
+//v.1 ปล๊ดล๊อกให้ทำ Testter ได้ 3/11/12
+-->
+<style type="text/css">
+.disabled{
+    background-color:#ebeaea;
+}
+
+.select_disabled{
+	ackground-color:#ebeaea;
+}
+
+</style>
+<script>
+$(document).ready( function() {
+	$("#qty").bind('keypress', function(e) {
+    	return ( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57)) ? false : true ;
+    })
+	$("#invoice").focus();
+});
+
+function select_disabled(){
+	$("#doc_status").attr({disabled:true});
+	$("#inv").attr({disabled:true});
+}
+
+function select_enable(){
+	$("#doc_status").attr({disabled:false});
+	$("#inv").attr({disabled:false});
+}
+
+function process(event,p){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		if(p=="check_docno"){
+			//check_docno();
+			$("#doc_remark").focus();
+		}
+		if(p=="check_doc_remark"){
+			$("#product_id").focus();
+		}
+		if(p=="check_product"){
+			/*var product_id=$("#product_id").val();
+			var product_id = product_id.substring(0,1);
+			if(product_id=="1"){
+				jAlert("ไม่สามารถทำรายการสินค้า Tester ได้", 'Alert!', function() {
+					$("#product_id").focus();
+				});
+			}else{*/
+				check_product();
+			//}
+		}
+		if(p=="gen_tmpdiary"){
+			var product_id=$("#product_id").val();
+			var qty=$("#qty").val();
+			//var product_id = product_id.substring(0,1);
+			/*if(product_id=="1"){
+				jAlert("ไม่สามารถทำรายการสินค้า Tester ได้", 'Alert!', function() {
+					$("#product_id").focus();
+				});
+			}else{*/
+				
+				var doc_status=$("#doc_status").val();
+				if(doc_status=="20"){
+					check_qty_rq();
+				}else{
+					if(qty>0){
+						$.ajax({type: "POST",url: "/stock/stock/checkqtyproductrq",data:{product_id:product_id,qty:qty},success:
+							function(data){
+								if(data=="y"){
+									create_tmpdiary_rq();
+								}else{
+									jAlert("Can not process 'Product in stock have not enough'", 'Alert!', function() {
+										$("#qty").focus();
+									});
+								}
+							}
+						});
+					}else{
+						jAlert("Quantity must more than 0 piece'", 'Alert!', function() {
+							$("#qty").focus();
+						});
+					}
+				}
+			//}
+		}
+	}
+}
+
+jQuery(document).bind('keydown', 'f1',
+function (evt){
+	search_docno_rq();
+});
+
+jQuery(document).bind('keydown', 'f2',
+function (evt){
+	insertinputinv();
+});
+
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	keytranfer_tranin2shopheadtodiary_rq();
+});
+
+jQuery(document).bind('keydown', 'f4',
+function (evt){
+	keytranferrq_cancel();
+});
+</script>
+<?php 
+$data=$this->data;
+$date=date("d");
+if($date>=1 and $date<=31){
+	$check_date="y";	
+}else{
+	$check_date="n";	
+}
+?>
+<div id="dialog_inv" title="Invoice No."></div>
+<div id="dialog_disable" title=""></div>
+<form id="frm_tranferkeyin">
+<table width="100%" border="0" cellpadding="0" cellspacing="3" bgcolor="dbfaed" background="/stock/img/bg_header.gif">
+  <tr>
+  	<td colspan="6" height="5"></td>
+  </tr>
+  <tr>
+    <td width="18%" align="right" class="servBodL_right">Transfer Out Type : </td>
+    <td width="5">
+    <select id="doc_status" name="doc_status" class="NFText" onChange="return gendocto();">
+    <?php 
+    foreach($data as $val){
+		switch($val[status_no]){
+			case "20": //สินค้าขาดส่ง
+			$val[description]="Out of Product";
+			break;
+			default: //default
+			$val[description]=$val[description];
+		}
+    	echo "<option value='$val[status_no]'>$val[status_no] - $val[description]</option>";
+    }
+    ?>
+    </select>
+    </td>
+    <td width="2%">&nbsp;</td>
+    <td width="12%" align="right" class="servBodL_right">Product Type : </td>
+    <td width="3%"><input type="text" name="type_product" id="type_product" value="N" size="2" disabled="disabled" class="NFText" onkeypress=""></td>
+ 	<td>&nbsp;</td> 
+  </tr>
+  <tr>
+    <td align="right" class="servBodL_right">Invoice No. :</td>
+    <td colspan="5">
+	    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+	    	<tr>
+	    		<td width="21"><input type="text" name="inv" id="inv" size="25 " onkeypress="return process(event,'check_docno')" class="NFText" /></td>
+	    		<td><div id="botton_f1"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return search_docno_rq();"><span class="ui-icon ui-icon-search"></span>(F1)</a></div></td>
+	    	</tr>
+	    </table>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" class="servBodL_right">Note :</td>
+    <td colspan="5"><input type="text" name="doc_remark" id="doc_remark" size="50" onkeypress="return process(event,'check_doc_remark')" class="NFText" /></td>
+  </tr>
+  <tr>
+    <td width="15%" align="right" class="servBodL_right">Product ID : </td>
+    <td width="5" colspan="2"><input type="text" name="product_id" id="product_id" size="25" onkeypress="return process(event,'check_product')" class="NFText" onkeypress=""></td>
+    <td width="8%" align="right" class="servBodL_right">Quantity : </td>
+    <td width="3%" colspan="2"><input type="text" name="qty" id="qty" size="3" class="NFText" onkeypress="return process(event,'gen_tmpdiary')"></td>
+  </tr>
+  <tr>
+	 <td colspan="6" height="5"></td>
+  </tr>
+</table>
+<input type="hidden" name="start_status_no" id="start_status_no" value="<?php echo $data[0]['status_no'];?>"></input>
+<input type="hidden" name="doc_tp" id="doc_tp" value="RQ"></input>
+<input type="hidden" name="status_no" id="status_no" value=""></input>
+<input type="hidden" name="check_date" id="check_date" value="<?php echo $check_date;?>"></input>
+
+</form>
+<div id="viewproducttranfer"></div>
+<script>
+gendocto();
+function gendocto(){
+	var check_date=$("#check_date").val();
+	var doc_status=$("#doc_status").val();
+	var desc=get_desc_rq(doc_status);
+	if(check_date=="y"){
+		if(doc_status==undefined){
+			var start_status_no=$("#start_status_no").val();
+			$("#status_no").val(start_status_no);
+		}else{
+			$("#status_no").val(doc_status);
+		}
+		var status_no=$("#status_no").val();
+	
+		
+		if(desc!=""){
+			jAlert(desc, 'Alert!', function() {
+				input_action(status_no);
+			});
+		}else{
+			input_action(status_no);
+		}
+	}else{
+		page_disable("<center>ทำรายการในช่วงวันที่ 1-25 เท่านั้น</center>");
+	}
+}
+
+function input_action(status_no){
+	if(status_no=="20" || status_no=="26" || status_no=="27"){
+		$("#inv").removeClass('disabled').removeAttr('disabled');
+		$("#botton_f1").html("<a class=\"fg-button ui-state-default fg-button-icon-left ui-corner-all\" onClick=\"return search_docno_rq();\"><span class=\"ui-icon ui-icon-search\"></span>(F1)</a>");
+		$("#inv").focus();
+		
+	}else{
+		$("#inv").val("").addClass('disabled').attr('disabled', true);
+		$("#botton_f1").html("");
+		$("#doc_remark").focus();
+	}
+}
+
+function get_desc_rq(doc_status){
+	if(doc_status=="20"){
+		var txt_desc="Out of product from KM";
+	}else if(doc_status=="22"){
+		var txt_desc="Expired product";
+	}else if(doc_status=="23"){
+		var txt_desc="Can not sale product";
+	}else if(doc_status=="26"){
+		var txt_desc="Return product or cash";
+	}else if(doc_status=="28"){
+		var txt_desc="Defective product (broken lid, defective label and not over 1 year.)";
+	}else if(doc_status=="29"){
+		var txt_desc="Defective package (crush lightly package,Torn plastic wrap and not over 1 year.)";
+	}else if(doc_status=="31"){
+		var txt_desc="Return SUPPLIER";
+	}else if(doc_status=="32"){
+		var txt_desc="Transfer between branch";
+	}else if(doc_status=="33"){
+		var txt_desc="For close point of sale only";
+	}else{
+		var txt_desc="";
+	}
+	return txt_desc;
+}
+
+</script>

@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>Geo explorer</title>
+	
+	<link rel="STYLESHEET" type="text/css" href="/pos/plugin/dhtmlxGeo/codebase/dhtmlx.css">
+	<link rel="STYLESHEET" type="text/css" href="/pos/plugin/dhtmlxGeo/codebase/dhtmlx_custom.css">
+	
+	<script src="/pos/plugin/dhtmlxGeo/codebase/dhtmlx.js" type="text/javascript"></script>
+	<script src="/pos/plugin/dhtmlxGeo/codebase/touch.js" type="text/javascript"></script>
+	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript" ></script>
+
+</head>
+<style>
+	html, body {
+		width: 100%;
+		height: 100%;
+	}
+
+	div#dataview {
+		width: 100%;
+		height: 100%;
+	}
+
+	div.img_cont {
+		width: 120px;
+		float: left;
+	}
+
+	img.flag {
+		border: 1px solid #dfdfdf;
+	}
+
+	div.country_info {
+		float: left;
+		padding-left: 10px;
+	}
+
+	span.hint {
+		display: block;
+		width: 64px;
+		font-weight: bold;
+		float: left;
+		color: #777777;
+	}
+	
+	div#dsc {
+		padding: 10px;
+		font-family:Tahoma;
+		font-size:13px;
+		height: 100%;
+		
+	}
+	
+	div#data_template {
+		display: none;
+	}
+
+</style>
+<script>
+
+	//swith for non-touch version 
+	if (navigator.userAgent.match(/iPad/i) == null)
+		document.location.href="index.html";
+		
+	
+	var dhxLayout, GMaps, data, tabbar, grid;
+	var chart = null;
+
+	function doOnLoad() {
+		/*! initialization main layout */
+		layout = new dhtmlXLayoutObject(document.body, "3L");
+		layout.setSkin("dhx_web");
+		layout.cells("a").setText("Countries");
+		layout.cells("a").setWidth(450);
+		layout.cells("a").attachObject("dataview");
+		layout.cells("b").setText("Map");
+		layout.cells("c").setText("Description");
+		layout.cells("c").setHeight(300);
+
+		/*! initialization countries list*/
+		data = new dhtmlXDataView({
+			container: "dataview",
+			type:{
+				template: "html->data_template",
+				height: 56,
+				width: 420
+			},
+			height:"auto"
+		});
+		//activate touch scroll for dataview
+		var scroll = new TouchScroll(document.getElementById("dataview").parentNode, true);
+		scroll.axisX = false;
+		
+		data.attachEvent("onItemClick", country_selected);
+		data.load("/pos/plugin/dhtmlxGeo/places.xml");
+
+		/*! initialization tabbar with country map, cities list and chart */
+		tabbar = layout.cells("b").attachTabbar();
+		tabbar.setImagePath("/pos/plugin/dhtmlxGeo/codebase/imgs/");
+		tabbar.addTab("a", "Map", 150, 0);
+		tabbar.addTab("b", "Cities", 150, 1);
+		tabbar.addTab("c", "Economic", 150, 2);
+		tabbar.setTabActive("a");
+		
+		/*! initialization grid for list of cities */
+		grid = tabbar.cells("b").attachGrid();
+		grid.setImagePath("/pos/plugin/dhtmlxGeo/codebase/imgs/");
+		grid.setHeader("Name, Population,C(n),R(n)");
+		grid.setInitWidths("*,200,50,50")
+		grid.setColAlign("left,right,center,center")
+		grid.setColTypes("ro,ro,ro,ro");
+		grid.init();
+		grid.setSkin("dhx_web");
+		
+		/*! initialization GoogleMaps */
+		GMaps = tabbar.cells("a").attachMap();
+		set_position(0.105, 131.074, 1);
+
+		/*! attaching country description container */
+		layout.cells("c").attachObject("dsc");
+	}
+
+
+	/*! item in DataView is selected*/
+	function country_selected(id, ev, html) {
+		var country = data.get(id);
+		var lat = country.lat;
+		var lng = country.lng;
+		var zoom = parseInt(country.zoom);
+		var dsc = country.dsc;
+		var cities = country.cities;
+		var graph = country.chart;
+		set_position(lat, lng, zoom);
+		document.getElementById("dsc").innerHTML = dsc;
+		load_cities(cities);
+		load_chart(graph);
+	}
+
+
+	/*! sets position of GoogleMaps object
+	*/
+	function set_position(lat, lng, zoom) {
+		var myLatlng = new google.maps.LatLng(lat, lng);
+		var myOptions = {
+			zoom: zoom,
+			center: myLatlng,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		}
+		GMaps.setOptions(myOptions);
+	}
+
+
+	/*! loads cities list in grid
+		@param country
+	*/
+	function load_cities(cities) {
+		grid.clearAll();
+		grid.loadXMLString(cities);
+	}
+
+
+	/*! creates new chart and load xml
+		@param xml
+			xml in string variable
+	*/
+	function load_chart(xml) {
+		if (chart != null) {
+			chart.destructor();
+		}
+		var bar_width = tabbar.cells("c").offsetWidth/20;
+
+		chart = tabbar.cells("c").attachChart({
+			view: "bar",
+			value: "#sales#",
+			label: "",
+			width: bar_width,
+			gradient: true,
+			border: true,
+			xAxis:{
+				title:"Sales per year",
+				template:"#year#"
+			},
+			yAxis:{
+				title:"Sales,million"
+			}
+		});
+		chart.parse(xml);
+	}
+
+</script>
+
+<body onload="doOnLoad();">
+	<div id="dataview">&nbsp;</div>
+	<div id="dsc">&nbsp;</div>
+	<div id="data_template">
+		<div class='img_cont'>
+			<img src='/pos/plugin/dhtmlxGeo/common/flags/#img#' class='flag' />
+		</div>
+		<div class='country_info'>
+			<div class='country_name'><span class='hint'>Name:</span>#name#</div>
+			<div class='country_area'><span class='hint'>Area:</span>#area#</div>
+			<div class='country_capital'><span class='hint'>Capital:</span>#capital#</div>
+			<div class='country_language'><span class='hint'>Language:</span>#language#</div>
+		</div>
+	</div>
+</body>
+</html>

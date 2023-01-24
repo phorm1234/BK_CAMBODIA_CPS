@@ -1,0 +1,35 @@
+<script>
+function process(event){
+	var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
+	keyCode = event.which; // Firefox    
+	if (keyCode == 13) {
+		insertinpugp();
+	}
+}
+</script>
+<?php 
+$data=$this->data;
+?>
+<form name="frm_inv" id="frm_inv">
+<table width="100%" border="0" cellpadding="2" cellspacing="2">
+  <tr>
+  	<td height="25" width="3%" background="/stock/img/bg_header_blue.gif" align="center">#</td>
+    <td height="25" background="/stock/img/bg_header_blue.gif" align="center">Barcode</td>
+    <td background="/stock/img/bg_header_blue.gif" align="center">รายละเอียด</td>
+  </tr>
+ <?php 
+ $i=1;
+ foreach($data as $val){
+ 	if($i%2){$color="#eaebeb";}else{$color="#f2f3f3";}
+		 ?>
+		  <tr bgcolor="<?php echo $color;?>">
+		  	<td align="center" height="20"><input type="radio" name="getbarcode" id="getbarcode" value="<?php echo $val['barcode'];?>" <?php if($i==1){echo "checked='checked'";}?> onkeypress="return process(event)"></td>
+		    <td align="center" height="20"><?php if(!empty($val['barcode'])){echo $val['barcode'];}?></td>
+		    <td align="center"><?php if(!empty($val['description'])){echo $val['description'];}?></td>
+		  </tr>
+		 <?php 
+ 	$i++;
+ }
+ ?>
+</table>
+</form>

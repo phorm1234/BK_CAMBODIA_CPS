@@ -1,0 +1,13 @@
+<?php
+$tambon=$this->tambon;
+
+    echo "<select class='list1' name='send_tambon_id' id='send_tambon_id' onchange=\"findpostcode('send_postcode');\" style='width:200px;'>";
+    foreach($tambon as $tambon){
+    	$tambon_id=$tambon['tambon_id'];
+    	$tambon_name=$tambon['tambon_name'];
+    	
+      	echo "<option value=\"$tambon_id\">$tambon_name</option>";
+      
+    }
+    echo "</select>";
+?>

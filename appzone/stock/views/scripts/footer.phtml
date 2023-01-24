@@ -1,0 +1,48 @@
+<script type="text/javascript">
+/* STEP 1 */
+/* Create the data model for the panes */
+var paneModel = new DHTMLSuite.paneSplitterModel();
+DHTMLSuite.commonObj.setCssCacheStatus(false)
+var paneWest = new DHTMLSuite.paneSplitterPaneModel( { position : "west", id:"westPane",size:200,minSize:100,maxSize:300,scrollbars:false } );
+paneWest.addContent( new DHTMLSuite.paneSplitterContentModel( { id:"westContent",htmlElementId:'westContent',title:'West',tabTitle:'West pane' } ) );
+
+var paneEast = new DHTMLSuite.paneSplitterPaneModel( { position : "east", id:"eastPane",size:150,minSize:100,maxSize:200 } );
+paneEast.addContent( new DHTMLSuite.paneSplitterContentModel( { id:"eastContent",htmlElementId:'eastContent',title:'East',tabTitle: 'Tab 1' } ) );
+paneEast.addContent( new DHTMLSuite.paneSplitterContentModel( { id:"eastContent2",htmlElementId:'eastContent2',title:'East 2',tabTitle:'Tab 2' } ) );
+
+var paneSouth = new DHTMLSuite.paneSplitterPaneModel( { position : "south", id:"southPane",size:80,minSize:50,maxSize:200,resizable:true } );
+paneSouth.addContent( new DHTMLSuite.paneSplitterContentModel( { id:"southContent",htmlElementId:'southContent',title:'South pane' } ) );
+
+var paneNorth = new DHTMLSuite.paneSplitterPaneModel( { position : "north", id:"northPane",size:40,scrollbars:false,resizable:false } );
+paneNorth.addContent( new DHTMLSuite.paneSplitterContentModel( { id:"northContent",htmlElementId:'northContent',title:'' } ) );
+
+var paneCenter = new DHTMLSuite.paneSplitterPaneModel( { position : "center", id:"centerPane",size:150,minSize:100,maxSize:200 } );
+paneCenter.addContent( new DHTMLSuite.paneSplitterContentModel( { id: 'center',htmlElementId:'center',title:'หน้าหลัก',tabTitle: 'หน้าหลัก',closable:false } ) );
+paneCenter.addContent( new DHTMLSuite.paneSplitterContentModel( { id:'center3', htmlElementId:'center3',title:'ตั้งค่าเริ่มต้นระบบ',tabTitle: 'ตั้งค่าเริ่มต้นระบบ' } ) );
+
+paneModel.addPane(paneSouth);
+paneModel.addPane(paneEast);
+paneModel.addPane(paneNorth);
+paneModel.addPane(paneWest);
+paneModel.addPane(paneCenter);
+
+/* STEP 2 */
+/* Create the pane object */
+var paneSplitter = new DHTMLSuite.paneSplitter();
+paneSplitter.addModel(paneModel);	// Add the data model to the pane splitter
+paneSplitter.init();	// Add the data model to the pane splitter
+
+// This function opens a new tab - called by the menu items
+function openPage(position,id,contentUrl,title,tabTitle,closable)
+{
+	var inputArray = new Array();
+	inputArray['id'] = id;
+	inputArray['position'] = position;
+	inputArray['contentUrl'] = contentUrl;
+	inputArray['title'] = title;
+	inputArray['tabTitle'] = tabTitle;
+	inputArray['closable'] = closable;
+	paneSplitter.addContent(position, new DHTMLSuite.paneSplitterContentModel( inputArray ) );
+	paneSplitter.showContent(id);		
+}
+</script>

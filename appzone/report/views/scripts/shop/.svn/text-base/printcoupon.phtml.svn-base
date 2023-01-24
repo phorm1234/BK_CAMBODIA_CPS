@@ -1,0 +1,97 @@
+<?php
+//@header("Content-type:text/html; charset=utf=8");
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->SetMargins( 0,2,0 );  // ซ้าย , บน , ขวา
+
+$pdf->AddPage();
+$pdf->SetFont('CordiaNew','',5);
+//$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' ,'วันที่ออกเอกสาร '.$this->print_time ) , 0 , 1,'R' );
+
+$pdf->Image('/var/www/pos/htdocs/report/img/logo/op/op-logo.gif',8 ,0,0);
+$pdf->SetFont('CordiaNew','B',10);
+//$title1=iconv('UTF-8','cp874',"รายงานสรุปโอนสินค้าเข้า");
+
+$line="----------------------------------------------------------------------------------------------";
+
+$pdf->Ln(7);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','รายงานสรุปยอดคูปอง'),0,0,'C');
+$pdf->Ln(3);
+$pdf->Cell(0,3,iconv('UTF-8','cp874',"ประจำวันที่  ".$this->s_date." - ".$this->e_date),0,1,'C');
+$pdf->Ln(2);
+$pdf->Cell( 40  , 3 , iconv( 'UTF-8','cp874' ,'วันที่พิมพ์เอกสาร '.$this->print_time ),0,0,'L');
+$pdf->Cell( 28  , 3 , iconv( 'UTF-8','cp874' ,'เวลา '.$this->ptime ),0,0,'R');
+$pdf->Ln(3);
+$pdf->Cell(0,3,iconv('UTF-8','cp874','จุดขาย : '.$this->branch_id .' ('.$this->branch_name .')' ));
+$pdf->Ln(3);
+
+$pdf->SetFont('CordiaNew','',11);
+$pdf->Cell(0,3,$line);
+$pdf->Ln(4);
+
+$a = 5;
+$b = 10;
+$c = 20;
+$d = 30;
+
+$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , '#' ) , 0 , 0 );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'รหัสคูปอง' ) , 0 , 0 ,'C' );
+$pdf->Cell( $d  , 4 , iconv( 'UTF-8','cp874' , 'รายละเอียด' ) , 0 , 0,'C' );
+$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , 'จำนวน' ) , 0 , 0,'C' );
+$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , 'จำนวนเงิน' ) , 0 , 1,'C' );
+
+$pdf->Ln(1);
+$pdf->Cell(0,3,$line,0,1);
+$pdf->Ln(1);
+
+$i=1;$bl=0;$ds=0; foreach ($this->get_data as $v){
+	$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , $i ) , 0 , 0  );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , $v[co_promo_code] ) , 0 , 0 ,'L' );
+	$pdf->Cell( $d  , 4 , iconv( 'UTF-8','cp874' , '' ) , 0 , 0,'L' );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($v[bill]) ) , 0 , 0,'C' );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($v[dis],2) ) , 0 , 1,'R' );
+	$i++;
+	$bl = $bl + $v[bill] ;
+	$ds = $ds + $v[dis] ;
+}
+	
+$pdf->Ln(2);
+$pdf->Cell(0,2,$line,0,1);
+$pdf->Ln(2);
+
+	$pdf->Cell( $a  , 4 , iconv( 'UTF-8','cp874' , 'รวม' ) , 0 , 0 );
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , $i-1 ) , 0 , 0  );
+	$pdf->Cell( $d  , 4 , iconv( 'UTF-8','cp874' , 'รายการ ' ) , 0 , 0 , 'L');
+	$pdf->Cell( $b  , 4 , iconv( 'UTF-8','cp874' , number_format($bl) ) , 0 , 0 );
+	$pdf->Cell( $c  , 4 , iconv( 'UTF-8','cp874' , number_format($ds,2) ) , 0 , 1 ,'R' );
+
+$pdf->Ln(4);
+$pdf->Cell(0,2,$line,0,1);
+
+$pdf->Ln(8);
+
+$pdf->Cell( 28  , 4 , iconv( 'UTF-8','cp874' , 'ลายเซ็นต์พนักงานขาย  :  __________________________________' ) , 0 , 0 );
+
+//$pdf->Ln(20);
+//$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , '.' ) , 0 , 0 );
+//$pdf->Output();
+$name='printcoupon.pdf';
+$output="/var/www/pos/htdocs/reportshop/printreport/".$name;
+//$pdf->Output($output,'F');
+@chmod($output,0777);  
+if(@file_exists($output)){
+		 shell_exec("rm $output");
+		@unlink($output);
+	}
+ 
+$pdf->Output($output,'F'); 
+//shell_exec("lp -o media=Letter $output");
+	
+
+?>
+
+<script type="text/javascript">
+//self.close();
+</script>
+		

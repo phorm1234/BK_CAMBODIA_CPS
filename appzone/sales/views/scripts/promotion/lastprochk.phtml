@@ -1,0 +1,26 @@
+<?php
+$dataChkPro=$this->dataChkPro;
+if($dataChkPro){
+	echo "<table width='90%' border='1' id='newspaper-b' >";
+	$i=0;
+	foreach($dataChkPro as $data){    
+		$promo_code=$data['promo_code'];
+		$promo_des=$data['promo_des'];
+		$level=$data['level'];
+		$textName="radio0".++$i;
+		$active = $i==1?"active":"";
+		
+		echo "<input type='hidden' id='promo_code_this' value='$promo_code'>";
+		  echo "<tr>";
+    		echo "<td onclick=\"lastgipro('$promo_code','1');\">$promo_code=>$promo_des.</td>";
+  			echo "</tr>";
+		
+		//echo "	<li class='$active' var1='$promo_code'><input name='test' class='test' id='$textName' type='radio' value='1' checked ><div var1='$promo_code'>".$promo_code."=>".$promo_des."</div></li>";
+		//echo "<input type='button' onclick=\"lastgipro('$promo_code','1');\" value=\"$promo_code=>$promo_des\"><br>";
+	
+	}
+	echo '</table>';
+}
+
+
+?>

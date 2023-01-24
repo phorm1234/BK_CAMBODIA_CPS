@@ -1,0 +1,490 @@
+<style type="text/css">
+	.flexigrid div.fbutton .view_product {
+		background: url(/stock/img/view_choose.png) no-repeat center left;
+	}	
+	.flexigrid div.fbutton .delete {
+		background: url(/stock/img/delete.png) no-repeat center left;
+	}
+</style>
+<center>
+<form id="frm_tranferkeyin">
+<table width="100%" cellspacing="3" cellpadding="0" border="0" bgcolor="dbfaed" background="/stock/img/bg_header.gif">
+<tbody>
+<tr>
+<td height="5" colspan="6"></td>
+</tr>
+<tr>
+<td class="servBodL_right" width="18%" align="right">เลขที่เอกสาร : </td>
+<td width="5">
+<span id="doc_number">
+<select id="doc_status" class="NFText_hidden" onchange="gendocto();" name="doc_status">
+	<?php echo $this->doc_no;?>
+</select>
+</span>
+</td>
+<td width="2%"> </td>
+<td class="servBodL_right" width="12%" align="right">วงเงินสินค้า : </td>
+<td width="3%">
+<input id="quota" class="NFText_hidden" type="text" onkeypress=""  size="10" value="0.00" name="type_product">
+</td>
+<td> </td>
+</tr>
+<tr>
+	<td class="servBodL_right" width="18%" align="right">ยอดสินค้า :</td>
+	<td><input id="totalproduct" class="NFText_hidden" type="text" onkeypress=""  size="10" value="0.00" name="type_product"></td>
+	<td></td>
+	<td class="servBodL_right" width="12%" align="right">คงเหลือ :</td>
+	<td><input id="amt" class="NFText_hidden" type="text" onkeypress=""  size="10" value="0.00" name="type_product"></td>
+</tr>
+<tr>
+	<td class="servBodL_right" width="18%" align="right">ประเภทสินค้า :</td>
+	<td><input id="type_product" class="NFText_hidden" type="text" onkeypress=""  size="10" value="สินค้า Tester" name="type_product"></td>
+	<td></td>
+	<td class="servBodL_right" width="12%" align="right">วันที่ :</td>
+	<td>
+		<input id="type_product" class="NFText_hidden" type="text" onkeypress=""  size="10" name="date" value="<?php echo date('d/m/Y');?>">
+	</td>
+</tr>
+
+<tr>
+<td class="servBodL_right" align="right">หมายเหตุ :</td>
+<td colspan="5">
+<input id="doc_remark" class="NFText" type="text" onkeypress="return process(event,'check_doc_remark')" size="46" name="doc_remark">
+</td>
+</tr>
+
+<tr>
+<td height="5" colspan="6"></td>
+</tr>
+</tbody>
+</table>
+<input id="start_status_no" type="hidden" value="20" name="start_status_no">
+<input id="doc_tp" type="hidden" value="RQ" name="doc_tp">
+<input id="status_no" type="hidden" value="20" name="status_no">
+<input id="check_date" type="hidden" value="y" name="check_date">
+<input id="status_cpass" type="hidden" value="n" >
+</form>
+
+<table width="100%" bgcolor="#d1d1d1">
+	<tr>
+		<td><table id="flex1" style="display:none"></table></td>
+	</tr>
+	<tr>
+		<td>
+			<table align="center">
+				<tr>
+					<td align="center">
+					อนุมัติทั้งหมด <input type="checkbox" id="s_all" name="s_all">
+					
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<table width="100%" border="0" cellpadding="2" cellspacing="2" bgcolor="#e9f2f8" align="center">
+				<tr>
+					<td width="5%" height="30"></td>
+					<td width="10%"></td>
+					<td width="21%"></td>
+					<td width="10%" align="right"><b>รวม</b></td>
+					<td width="10%" align="center"><input type="text" id="qt" value="<?php echo number_format($sum[0]['quantity'], 0, '.', ',');?>" size="10" class="NFText" disabled="disabled"></td>
+					<td width="10%" align="center"><input type="text" id="am" value="<?php echo number_format($sum[0]['price'], 2, '.', ',');?>" size="10" class="NFText" disabled="disabled"></td>
+					<td width="10%"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td width="5%" height="30"></td>
+					<td width="10%"></td>
+					<td width="21%"></td>
+					<td width="10%" align="right"></td>
+					<td width="10%" colspan="2">
+						<table width="100%" border="0" cellpadding="2" cellspacing="2">
+							<tr>
+								<td align="right"><a id="save" class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="save_data();"><span id="saves" class="ui-icon ui-icon-disk"></span>บันทึก  (F3)</a></td>
+								<td align="left"><a id="cancel" class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="order_cancel();"><span class="ui-icon ui-icon-cancel"></span>ยกเลิก (F4)</a></td>
+							</tr>
+						</table>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<input type="hidden" name="doc_no" id="doc_no" value="">
+<input type=hidden name="chk" id="chk" value="">
+</center>
+<div id="dialog" title="ยืนยันรหัสผ่าน">
+<p style="text-align:center">
+<input type="password" id="cpass" name="cpass" value="" placeholder="รหัสผ่าน">
+</p>
+<p style="text-align:center">
+<input type="button" id="confirm" value="ตกลง" onclick="check_password();">
+</p>
+</div>
+<script type="text/javascript">
+
+$( document ).keydown(function(event) {
+	if(event.which ==114){
+		save_data();
+		//return false;
+	}else if(event.which == 115){
+		order_cancel();
+		//return false;
+	}	
+});
+
+function check_password(){
+	var chk_cpass = $("#cpass").val();
+	if(chk_cpass == ""){
+		jAlert("กรุณาใส่รหัสผ่าน");
+	}else{
+		$.ajax({
+			type: "POST",
+			url: "/order/order/otcheckcpass",
+			data:{chk_cpass:chk_cpass},
+			dataType:'json',
+			success:
+			function(data){
+				if(data.status == 'y'){
+					 $("#status_cpass").val('y');	
+					 $( "#dialog" ).dialog( "close" );
+					 save_data();
+				}else{
+					alert("รหัสผ่านไม่ถูกต้อง");
+				}
+			}
+		});
+	}
+}
+
+$(function() {
+	$( "#dialog" ).dialog({
+	    autoOpen: false,  
+	 });
+});	 
+
+
+var pWidth=(screen.width-(screen.width*(20/100)))-10;
+var pWidth=(screen.width-(screen.width*(2/100)))-10;
+var pWidth=(screen.width-(screen.width*(3/100)))-10;
+var txt="สั่งสินค้า";
+
+showamount();
+$("#flex1").flexigrid({
+	url: '/order/order/otlist',
+	dataType: 'json',
+	colModel : [
+		{display: 'ลำดับ', name : 'seq', width : 40, sortable : true, align: 'center'},
+		{display: 'รหัสสินค้า', name : 'product_id', width : 95, sortable : true, align: 'center'},
+		{display: 'รายละเอียด', name : 'product_name', width : 190, sortable : false, align: 'left'},
+		{display: 'ราคา', name : 'price', width : 90, sortable : false, align: 'center'},
+		{display: 'จำนวน', name : 'quantity', width : 65, sortable : false, align: 'center'},
+		{display: 'จำนวนเงิน', name : 'dif', width : 90, sortable : false, align: 'center'},
+		{display: 'คืนครั้งสุดท้าย', name : 'dif', width : 90, sortable : false, align: 'center'},
+		{display: 'ยอดขาย', name : 'dif', width : 90, sortable : false, align: 'center'},
+		{display: 'อนุมัติ', name : 'dif', width : 90, sortable : false, align: 'center'}
+		],
+		buttons : [
+      	{name: 'ลบ', bclass: 'delete', onpress : productaction},
+      	{separator: true}
+      	],
+		searchitems : [
+		{display: 'รหัสสินค้า', name : 'procuct_id'}
+		],
+	sortname: "seq",
+	sortorder: "asc",
+	usepager: true,
+	title: txt,
+	useRp: true,
+	rp: 30,
+	showTableToggleBtn: true,
+	onSubmit: addFormData,
+	height: 300
+});
+
+$( document ).ready(function() {
+	$.ajax({type: "POST",url: "/order/order/checkstatusrt",data:{checkstatus:'',str_status:''},success:
+		function(data){
+		 if(data == "0"){
+				jAlert("ไม่สามารถทำรายการได้ เนื่องจากได้ทำรายการเดือนนี้ไปแล้ว");
+			}	
+		}
+	});
+});
+
+function productaction(com, grid) {
+	/*
+	var doc_no=$("#doc_no").val();
+	var chk = $("#chk").val();
+	if(chk == ""){
+		if($('.trSelected',grid).length>0){
+			var items = $('.trSelected',grid);
+			var itemlist ='';
+			for(i=0;i<items.length;i++){
+				itemlist+= items[i].id.substr(3)+",";
+				//itemlist= items[i].id.substr(3);
+			}
+		}
+		if (com == 'ลบ') {
+			if(itemlist==undefined){
+				jAlert('คุณยังไม่เลือกรายการสินค้า!', 'แจ้งเตือน');;
+			}else{
+				jConfirm('ยืนยันการลบสินค้า', 'แจ้งเตือน', function(r) {
+					if(r==false){
+						return false;
+					}else{
+						$.ajax({type: "POST",url: "/order/order/deletetmplist",data:{seq:itemlist},success:
+							function(data){
+								if(data=="y"){
+									vieworder("s");
+								}
+							}
+						});
+					}
+				});
+			} 
+		}
+	}else if(chk == "C"){
+		jAlert("รายการนี้ได้ทำการยกเลิกไปแล้ว");
+	}else if(chk =="T"){
+		jAlert("รายการนี้ได้ทำการอนุมัติไปแล้ว");
+	}	*/
+}
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+	
+$('#sform').submit(function (){
+	$('#flex1').flexOptions({newp: 1}).flexReload();
+	return false;
+});
+
+function showamount(){
+	  var total = 0;
+	  var quota = $("#quota").val();
+	  var doc_status = $("#doc_no").val();
+	  //alert(quota);
+	  $.ajax({type: "POST",url: "/order/order/showamountto",data:{checkstatus:doc_status},dataType:'json',success:
+			function(data){
+				if(data.am !=""){
+					$("#am").val(data.am);
+					$("#qt").val(data.qty);
+					//alert(data.am);
+					total = quota-data.amt;
+					$("#totalproduct").val(data.am);
+					$("#quota").val(data.quota);
+					$("#amt").val(data.amt);
+					$("#doc_remark").val(data.remark);
+				}else{
+					alert("เชื่อมต่อล้มเหลว");
+				}
+			}
+		});
+}	
+
+function gendocto(){
+	var doc_status = $("#doc_status").val();
+	//alert("doc_status : " + doc_status);
+	$("#doc_no").val(doc_status);
+	var str_doc = "";
+	var str_status = "";
+	var tmp;
+	if(doc_status != ""){
+		tmp = doc_status.split(",");
+		doc_status = tmp[0];
+		str_status = tmp[1];
+		//alert("str_status=>" + str_status);
+		//alert("doc_status=>" + doc_status);
+		$("#chk").val(str_status);
+		if(str_status=="C"){
+			//alert(str_status);
+			$('#saves').attr('disabled', 'disabled');
+			$('#s_all').attr('disabled', 'disabled');
+		}else if(str_status=="T"){
+			//$("#chk").val();
+			$('#save').attr('disabled', false);
+			$('#s_all').attr('disabled', 'disabled');
+		}
+
+	}else{
+		$('#s_all').attr('disabled', false);
+	
+	}		
+	//alert(doc_status);
+	$('#flex1').flexOptions({query:doc_status}).flexReload();
+	$("#doc_no").val(doc_status);
+	showamount();
+}
+
+$("#s_all").click(function() {
+	var doc_status = $("#doc_status").val();
+	var str_check = "";
+	doc_status = doc_status.substr(0,20);
+	if($('input:checkbox[name=s_all]').is(':checked')) {
+		if(doc_status != ""){
+			str_check = doc_status+"=s_all";
+			$('#flex1').flexOptions({query:str_check}).flexReload();
+		}
+	} else {
+		str_check = doc_status;
+		$('#flex1').flexOptions({query:str_check}).flexReload();
+	}
+});
+
+function save_data(){
+	var doc_status = $("#doc_status").val();
+	//alert("doc_status=>" + doc_status);
+	var chk	= $("#chk").val();
+	var chk_cpass = $("#status_cpass").val();
+	var tmp;
+	//*WR20012017 check select list item
+	var arr_chklist=doc_status.split(",");
+	var doc_no_chklist =arr_chklist[0];
+	$.ajax({
+		type:'post',
+		url:'/order/order/chksellistitem',
+		cache:false,
+		data:{								
+			doc_no:doc_no_chklist,
+			now:Math.random()
+		},success:function(data){
+					if(data=='1'){
+						jAlert('กรุณาเลือกรายการที่ต้องการอนุมัติหรือคลิกอนุมัติทั้งหมด','ข้อความแจ้งเตือน',function(){								        		
+							 return false;
+						  });
+						  return false;
+					}else{
+						//--------------------------------- START ---------------------------						
+						if(chk_cpass != "y"){
+								$( "#dialog" ).dialog( "open" );	
+						}else{
+						
+							$.ajax({type: "POST",url: "/order/order/checkstatusrt",data:{checkstatus:'',str_status:''},success:
+								function(data){
+									 //alert(data);
+									 if(data == "0"){
+											jAlert("ไม่สามารถทำรายการได้ เนื่องจากได้ทำรายการเดือนนี้ไปแล้ว");
+									 }else{
+										 //alert("chk=>" + chk);
+										 if(chk == ""){
+												jConfirm('ยืนยันการบันทึกสินค้า', 'แจ้งเตือน', function(r) {
+													if(r==false){
+														return false;
+													}else{
+														//doc_status = doc_status.substr(0,20);
+														tmp = doc_status.split(",");
+														doc_status = tmp[0];
+														//alert("doc_status===>" + doc_status);
+														//return false;
+														
+														$.ajax({type: "POST",url: "/order/order/save2diaryrq",data:{doc_no:doc_status},success:
+														function(data){
+															//alert("data => " + data);
+															if(data =="1"){
+																jAlert("บันทึกข้อมูลสำเร็จ");
+																$("#chk").val("T");
+																$("#doc_status").val("");
+																gendocto();
+															}else if(data =="2"){
+																jAlert('กรุณาเลือกรายการที่ต้องการอนุมัติหรือคลิกอนุมัติทั้งหมด','ข้อความแจ้งเตือน',function(){								        		
+																	 return false;
+																  });
+																  return false;
+															}else{
+																jAlert("ไม่สามารถทำรายการได้");
+															}
+														}
+														});
+													}
+												});
+										}else if(chk == "C"){
+											jAlert("รายการนี้ได้ทำการยกเลิกไปแล้ว");
+										}else if(chk == "T"){
+											jAlert("รายการนี้ได้ทำการอนุมัติไปแล้ว");
+										}	
+										 
+									 }//end if 
+								}
+							});
+						}			
+						//--------------------------------- START ---------------------------
+					}//end if
+					
+		}
+	});
+	
+}//func
+
+
+function showid(id,status){
+	if($('input:checkbox[name=rowid'+id+']').is(':checked')) {
+		$.ajax({type: "POST",url: "/order/order/checkapprove",data:{approve:id,status:"1"},success:
+			function(data){
+				if(data =="1"){
+					//add_data();
+				}else{
+					jAlert("fail");
+				}
+			}
+			});
+	}else{
+		$.ajax({type: "POST",url: "/order/order/checkapprove",data:{approve:id,status:""},success:
+			function(data){
+				if(data =="1"){
+					//add_data();
+				}else{
+					jAlert("fail");
+				}
+			}
+		});
+	}	
+}
+
+function order_cancel(){
+	var doc_no = $("#doc_no").val();
+	var chk = $("#chk").val();
+	if(chk == ""){
+		if(doc_no == ""){
+				jAlert("คุณยังไม่ได้เลือกหมายเลขเอกสาร");
+		}else{
+			$.ajax({type: "POST",url: "/order/order/cancelto",data:{doc_no:doc_no},success:
+				function(data){
+					if(data =="1"){
+						jAlert("ได้ทำการยกเลิกเลขที่เอกสาร:"+doc_no);
+						$("#doc_status").val("");
+						$("#chk").val("C");
+						gendocto();
+						doc_number();
+					}else{
+						jAlert("fail");
+					}
+				}
+			});
+		}
+	}else if(chk =="C"){
+		jAlert("รายการนี้ได้ทำการยกเลิกไปแล้ว");
+	}else if(chk == "T"){
+		jAlert("รายการนี้ได้ทำการอนุมัติไปแล้ว");
+	}				
+}
+
+function doc_number(){
+	 $.ajax({type: "POST",url: "/order/order/docnumber",data:{checkstatus:'cancel'},success:
+			function(data){
+				if(data !=""){
+					$("#doc_number").html(data);
+				}else{
+					//jAlert("");
+				}	
+			}
+		});
+	 } 
+
+
+</script>

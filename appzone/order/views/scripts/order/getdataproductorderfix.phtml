@@ -1,0 +1,37 @@
+<?php
+$arr_data=$this->arr_data;
+$page=$this->page;
+$total=count($arr_data);
+if(empty($arr_data)){
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+}else{
+	$data = array();
+	$data['page'] = $page;
+	$data['total'] = $total;
+	$data['rows'] = array();
+	$i=1;
+	foreach($arr_data as $val){
+		$fix=number_format($val['fix'], 0, '.', ',');
+		$onhand=number_format($val['test'], 0, '.', ',');
+		$price=number_format($val['price'], 2, '.', ',');
+		$qty=number_format($val['quantity'], 0, '.', ',');
+		$amount=number_format($val['amount'], 2, '.', ',');
+		$suggest_qty = number_format($val['short_qty'], 0, '.', ',');
+		$order_qty = number_format($val['short_qty'], 0, '.', ',');
+		if($val['refer_doc_no']!=""){
+			$transit="-";
+		}else{
+			$transit=number_format($val['transit'], 0, '.', ',');
+		}
+		$data['rows'][] = array(
+			'id' => $val['seq'],
+			'cell' => array($i,$val['product_id'], $val['name_product'], $price , $suggest_qty, $qty, $amount, $onhand, $fix)
+		);
+		$i++;
+	}
+}
+echo json_encode($data);
+?>

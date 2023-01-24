@@ -1,0 +1,20 @@
+<?php 
+$promo_code=$this->promo_code;
+$promo_des=$this->promo_des;
+?>
+<br>
+<br>
+<center>
+<table border="0">
+<tr><td colspan='2'><span style='color:#000000;font-weight: bold;font-size:30px'><?php echo $promo_des; ?></span></td></tr>
+  <tr>
+    <td><span style='color:#000000;font-weight: bold;font-size:40px'>ยิงบาร์โค๊ด</span></td>
+    <td>
+    <?php 
+      //echo "<input type='text' class='keybarcode ui-corner-all' style='height:50px;  font-size:40px;background-color:#49777A;color:#CCCCCC;' name='scan_barcode' id='scan_barcode' >";
+      echo "<input type='text' class='keybarcode ui-corner-all' style='height:50px;  font-size:40px;background-color:#49777A;color:#CCCCCC;' name='code_check' id='code_check' onKeyDown=\"if (event.keyCode == 13){codechk('$promo_code')}\">";
+      ?>
+    </td>
+  </tr>
+</table>
+</center>

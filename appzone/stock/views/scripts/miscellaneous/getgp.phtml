@@ -1,0 +1,137 @@
+
+<style>
+.flexigrid div.fbutton .view_product {
+	background: url(/stock/img/view_choose.png) no-repeat center left;
+}
+
+.flexigrid div.fbutton .delete {
+	background: url(/stock/img/delete.png) no-repeat center left;
+}
+
+.flexigrid div.fbutton .edit {
+	background: url(/stock/img/edit.png) no-repeat center left;
+}
+
+.flexigrid div.fbutton .add {
+	background: url(/stock/img/add.png) no-repeat center left;
+}
+
+</style>
+<?php
+$txt=$this->txt;
+$barcode=$this->barcode;
+?>
+<center>
+<table width="10%">
+	<tr>
+		<td><table id="flex1" style="display:none"></table></td>
+	</tr>
+</table>
+</center>
+<script type="text/javascript">
+var pWidth=(screen.width-(screen.width*(20/100)))-10;
+var pWidth=(screen.width-(screen.width*(2/100)))-10;
+var pWidth=(screen.width-(screen.width*(3/100)))-10;
+var txt="<?php echo $txt;?>";
+$("#flex1").flexigrid({
+	url: 'getdatagp?barcode=<?php echo $barcode;?>',
+	dataType: 'json',
+	colModel : [
+		{display: 'รหัส Barcode', name : 'seq', width : 120, sortable : true, align: 'center'},
+		{display: 'รายละเอียด', name : 'product_name', width : 250, sortable : true, align: 'left'},
+		{display: '%GP', name : 'price', width : 110, sortable : true, align: 'center'},
+		{display: 'วันที่เริ่มต้น', name : 'quantity', width : 110, sortable : true, align: 'center'},
+		{display: 'วันที่สิ้นสุด', name : 'dif', width : 110, sortable : false, align: 'center'}
+		],
+		buttons : [
+      	{name: 'เพิ่ม', bclass: 'add', onpress : productaction},
+      	{name: 'แก้ไข', bclass: 'edit', onpress : productaction},
+      	{name: 'ลบ', bclass: 'delete', onpress : productaction},
+      	{separator: true}
+      	],
+		searchitems : [
+		{display: 'รหัสสินค้า', name : 'procuct_id'}
+		],
+	sortname: "start_date",
+	sortorder: "asc",
+	usepager: true,
+	title: txt,
+	useRp: true,
+	rp: 30,
+	showTableToggleBtn: true,
+	width: pWidth,
+	onSubmit: addFormData,
+	height: 300,
+	singleSelect: true
+});
+
+function productaction(com, grid) {
+	var doc_no=$("#doc_no").val();
+	if($('.trSelected',grid).length>0){
+		var items = $('.trSelected',grid);
+		var itemlist ='';
+		for(i=0;i<items.length;i++){
+			itemlist+= items[i].id.substr(3)+",";
+			//itemlist= items[i].id.substr(3);
+		}
+	}
+
+	if (com == 'เพิ่ม') {
+		$.ajax({type: "POST",url: "/stock/miscellaneous/formgp",data:{},success:
+			function(data){
+				$( "#dialog_frm_gp" ).html(data);
+				$( "#dialog_frm_gp" ).dialog( "open" );
+			}
+		});
+	}
+
+	if (com == 'แก้ไข') {
+		if(itemlist==undefined){
+			jAlert('คุณยังไม่เลือกรายการสินค้า!', 'แจ้งเตือน');
+		}else{
+			$.ajax({type: "POST",url: "/stock/miscellaneous/formgp",data:{barcode:itemlist},success:
+				function(data){
+					$( "#dialog_frm_gp" ).html(data);
+					$( "#dialog_frm_gp" ).dialog( "open" );
+				}
+			});
+		} 
+	}
+	
+	if (com == 'ลบ') {
+		if(itemlist==undefined){
+			jAlert('คุณยังไม่เลือกรายการสินค้า!', 'แจ้งเตือน');
+		}else{
+			jConfirm('ยืนยันการลบสินค้า', 'แจ้งเตือน', function(r) {
+				if(r==false){
+					return false;
+				}else{
+					$.ajax({type: "POST",url: "/stock/miscellaneous/deletegp",data:{barcode:itemlist},success:
+						function(data){
+							if(data=="y"){
+								viewgp();
+							}else{
+								var txt="เกิดการผิดพลาดไม่สามารถทำรายการได้";
+								jAlert(txt, 'แจ้งเตือน', function() {
+									
+								});
+							}
+						}
+					});
+				}
+			});
+		} 
+	}
+}
+
+function addFormData(){
+	var dt = $('#sform').serializeArray();
+	$("#flex1").flexOptions({params: dt});
+	return true;
+}
+	
+$('#sform').submit(function (){
+	$('#flex1').flexOptions({newp: 1}).flexReload();
+	return false;
+});
+</script>

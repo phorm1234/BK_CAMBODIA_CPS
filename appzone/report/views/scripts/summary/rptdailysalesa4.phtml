@@ -1,0 +1,335 @@
+<?php	
+	include(FPDF_PATH."/fpdf.php");       
+	$textColour = array( 0, 0, 0 );
+	$headerColour = array( 100, 100, 100 );
+	$tableHeaderTopTextColour = array( 255, 255, 255 );
+	$tableHeaderTopFillColour = array( 125, 152, 179 );
+	$tableHeaderTopProductTextColour = array( 0, 0, 0 );
+	$tableHeaderTopProductFillColour = array( 143, 173, 204 );
+	$tableHeaderLeftTextColour = array( 99, 42, 57 );
+	$tableHeaderLeftFillColour = array( 184, 207, 229 );
+	$tableBorderColour = array( 50, 50, 50 );
+	$tableRowFillColour = array( 213, 170, 170 );
+	$reportName = "DAILY SALES REPORT";
+	$reportNameYPos =2;//160
+	$logo="/aeon_logo.jpg";
+	$logoFile = LOGO_PATH.$logo;
+	$logoXPos = 10;
+	$logoYPos = 12;
+	$logoWidth = 20;
+	// End configuration
+	
+	/**
+	 Create the title page
+	 **/
+	
+	$pdf = new FPDF( 'P', 'mm', 'A4' );
+	$pdf->SetTextColor( $textColour[0], $textColour[1], $textColour[2] );
+	$pdf->AddPage();
+	// Report Name
+	$pdf->SetFont( 'Arial', 'B',16 );
+	$pdf->Ln( $reportNameYPos );
+	$pdf->Cell( 0, 15, $reportName, 0, 0, 'C' );
+	
+	// Logo
+	$pdf->Ln( $reportNameYPos );
+	$pdf->Image( $logoFile, $logoXPos, $logoYPos, $logoWidth );
+	
+	//title2	
+	$pdf->Ln(10);
+	$pdf->SetFont( 'Arial', 'B', 11 );
+	$pdf->Cell( 22,7,"", 0, 0, 'C', false );
+	//$pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
+	//$pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
+	$pdf->Cell( 40,7,$this->arrBranchDetail['title_line2'], 0, 0, 'L', false );	
+	
+	
+	/**
+	 Create the table
+	 **/
+	
+	$pdf->SetDrawColor( $tableBorderColour[0], $tableBorderColour[1], $tableBorderColour[2] );
+	$pdf->Ln(15);//15//20
+	
+	// Create the table header row
+	$pdf->SetFont( 'Arial', 'B', 11 );
+	
+	
+	
+	// Remaining header cells
+	$pdf->SetTextColor( $tableHeaderTopTextColour[0], $tableHeaderTopTextColour[1], $tableHeaderTopTextColour[2] );
+	$pdf->SetFillColor( $tableHeaderTopFillColour[0], $tableHeaderTopFillColour[1], $tableHeaderTopFillColour[2] );
+	
+	$pdf->Cell( 55,7,"Tenant code", 1, 0, 'C', true );
+	$pdf->Cell( 55,7,"Tenant name", 1, 0, 'C', true );
+	$pdf->Cell( 45,7,"Date", 1, 0, 'C', true );
+	$pdf->Cell( 35,7,"Signature/Tel", 1, 0, 'C', true );
+	$pdf->Ln(7);
+	
+	
+	// Create the left header cell
+	$arr_docdate=explode("-",date("Y-m-d"));
+	$doc_date_show=$arr_docdate[2]."/".$arr_docdate[1]."/".$arr_docdate[0];
+	
+	//date start
+		
+	
+	$fill = false;
+	$row = 0;
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
+	$pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
+	$pdf->Cell( 55, 8, " " . $this->arrBranchDetail['title_line3'], 1, 0, 'C', $fill );
+	$pdf->Cell( 55, 8,$this->arrBranchDetail['branch_name_e'], 1, 0, 'C', $fill );//SSUP(CAMBODIA) CO.LTD.
+	$pdf->Cell( 45, 8,$this->date_start, 1, 0, 'C', $fill );//." to ".$this->date_stop
+	$pdf->Cell( 35, 8,$this->arrBranchDetail['branch_phone'], 1, 0, 'C', $fill );
+	$pdf->Ln(8);
+	$pdf->Ln(2);
+	
+	
+	// Create the table data rows
+	
+	$fill = true;
+	$row = 0;
+	
+	// Create the left header cell
+	$pdf->SetFont( 'Arial', 'B', 11 );
+	$pdf->SetTextColor( $tableHeaderLeftTextColour[0], $tableHeaderLeftTextColour[1], $tableHeaderLeftTextColour[2] );
+	$pdf->SetFillColor( $tableHeaderLeftFillColour[0], $tableHeaderLeftFillColour[1], $tableHeaderLeftFillColour[2] );
+	$pdf->Cell( 70, 8, " Cash receipt ( Daily Close Report ) ", 1, 0, 'C', $fill);
+	$pdf->Cell( 120, 8, "                 Daily sale report                                          Amount ", 1, 0, 'L', $fill);
+	$pdf->Ln( 8 );	
+	$fill = false;
+	// Test colum	
+	$ln_h=8;
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "1", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Total Sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, $this->total_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "2", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "VAT", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h,$this->vat_show, 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "3", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Net Sales (1-2)", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h,$this->net_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "4", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Number of customers", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, $this->total_bill, 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "5", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Settlement number", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, '1', 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "6", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Cash sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, $this->total_cash_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "7", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Credit/Debit Sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, $this->total_credit_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "8", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Number of Credit/Debit Sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, $this->total_credit_bill, 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	//new---------------------------------------------------------
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "9", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "E-Money/Mobile Money", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, "", 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+
+	//AUTO OTHER CREDIT PM2023-01-20
+	if(sizeof($this->other_credit)>0){
+		// print_r($this->other_credit);
+		// die;
+		foreach($this->other_credit as $data_sub){
+			$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );
+			$pdf->SetFont( 'Arial', '', 10 );
+			$pdf->Cell( 10, $ln_h, "-", 1, 0, 'C', $fill );
+			$pdf->Cell( 50, $ln_h, $data_sub['description'], 1, 0, 'L', $fill );
+			$pdf->Cell( 60, $ln_h, $data_sub['amount'], 1, 0, 'R', $fill );
+			$pdf->Ln($ln_h);
+		}
+	}
+	//AUTO OTHER CREDIT PM2023-01-20
+
+	// $pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );
+	// $pdf->SetFont( 'Arial', '', 10 );
+	// $pdf->Cell( 10, $ln_h, "-", 1, 0, 'C', $fill );
+	// $pdf->Cell( 50, $ln_h, "ToanChet", 1, 0, 'L', $fill );
+	// $pdf->Cell( 60, $ln_h, "0.00", 1, 0, 'R', $fill );
+	// $pdf->Ln($ln_h);
+	
+	// $pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );
+	// $pdf->SetFont( 'Arial', '', 10 );
+	// $pdf->Cell( 10, $ln_h, "-", 1, 0, 'C', $fill );
+	// $pdf->Cell( 50, $ln_h, "Pi Pay", 1, 0, 'L', $fill );
+	// $pdf->Cell( 60, $ln_h, "0.00", 1, 0, 'R', $fill );
+	// $pdf->Ln($ln_h);
+	
+	// $pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );
+	// $pdf->SetFont( 'Arial', '', 10 );
+	// $pdf->Cell( 10, $ln_h, "-", 1, 0, 'C', $fill );
+	// $pdf->Cell( 50, $ln_h, "", 1, 0, 'L', $fill );
+	// $pdf->Cell( 60, $ln_h, "", 1, 0, 'R', $fill );
+	// $pdf->Ln($ln_h);
+	//new---------------------------------------------------------
+	
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "10", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Sales by other means", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, "0.00", 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	$pdf->SetFont( 'Arial', 'B', 11 );
+	$pdf->Cell( 70, $ln_h, "Credit/Debit settlement receipt", 1, 0, 'C', true );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "-", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Number of cash voucher sales", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, "0.00", 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	$pdf->Cell( 70, $ln_h, "", 'LR', 0, 'L', $fill );	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "11", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Refund/Return Amount", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h, $this->total_cn_sales_show, 1, 0, 'R', $fill );
+	$pdf->Ln($ln_h);
+	
+	$pdf->Cell( 70,25, "", 'LR', 0, 'L', $fill );//$ln_h	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, $ln_h, "12", 1, 0, 'C', $fill );
+	$pdf->Cell( 50, $ln_h, "Number of Refund/Return", 1, 0, 'L', $fill );
+	$pdf->Cell( 60, $ln_h,$this->total_cn, 1, 0, 'R', $fill );
+	$pdf->Ln(13);//$ln_h
+	
+	$pdf->Cell(70,8, "",0, 0, 'L', $fill );//$ln_h LR		
+	$pdf->Cell(105,8, "      Input of 'Web sales report ' completed.         Check 'Yes' ---> " ,0, 0, 'L', $fill );	//:LT
+	$pdf->Cell(15,8, " " ,1, 0, 'L', $fill );	//:LT
+	$pdf->Ln(8);//$ln_h
+	
+	$pdf->Ln(2);
+	$pdf->Cell( 70, 24, "", 'LR', 0, 'L', $fill );	
+	$pdf->Cell( 10, 22, "", 'R', 0, 'C', $fill );	
+	$pdf->Cell( 50,22, " ",'TB', 0, 'C', $fill );
+	$pdf->Cell( 60,22, "", 'RTB', 0, 'R', $fill );
+	//$pdf->Cell( 70,24, "",0, 0, 'L', $fill );	
+	//$pdf->Cell( 10,24, " ",'R', 0, 'C', $fill );
+	//$pdf->Cell( 110,24, "", 1, 0, 'R', $fill );
+	
+	$pdf->SetY(208);//215
+	$pdf->SetX(90);
+	$pdf->Cell(50,8, " Messege from tenant",0, 0, 'L', $fill );
+	
+	
+	
+	
+	
+	$pdf->Ln(22);//26
+	
+	//$pdf->Ln(2);
+	$pdf->Cell( 70, 22, "", 'LRB', 0, 'L', $fill );
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 10, 22, "", 'R', 0, 'C', $fill );
+	$pdf->Cell( 50,22, " ",'TB', 0, 'C', $fill );
+	$pdf->Cell( 60,22, "", 'RTB', 0, 'R', $fill );
+	//$pdf->Cell( 70,24, "",0, 0, 'L', $fill );
+	//$pdf->Cell( 10,24, " ",'R', 0, 'C', $fill );
+	//$pdf->Cell( 110,24, "", 1, 0, 'R', $fill );
+	
+	$pdf->SetY(232);//237
+	$pdf->SetX(90);
+	$pdf->Cell(50,8, " Message from AEONMALL  ",0 ,0, 'L', $fill );
+	
+	$pdf->SetFont( 'Arial', 'B', 11 );
+	$pdf->Cell(65,8,$this->arrBranchDetail['title_line2'],0, 0, 'L', false );
+	
+	
+	
+	//FOOTER
+	$pdf->Ln(24);
+// 	$pdf->Cell(150,15, "*Please attach the [GOODS RETURN FORM] to the reverse side of this paper.", 1, 0, 'L', $fill );		
+// 	$pdf->Cell(40,15, " paper.", 1, 0, 'L', $fill );
+	
+	$pdf->SetFont( 'Arial', '', 10 );
+	$pdf->Cell( 130,6, "*Please attach the [GOODS RETURN FORM] to the reverse side of this paper.",'LT', 0, 'L', $fill );
+	$pdf->SetFont( 'Arial', '', 8 );
+	$pdf->Cell( 15,6, "AEONMALL(Check coulum for account)",'LTB', 0, 'L', $fill );
+	$pdf->Cell( 15,6, " ",'TB', 0, 'C', $fill );
+	$pdf->Cell( 15,6, " ",'TB', 0, 'C', $fill );
+	$pdf->Cell( 15,6, " ",'RTB', 0, 'R', $fill );
+	$pdf->Ln(6);
+	
+	$pdf->Cell( 130,9, " ",'LB', 0, 'L', $fill );
+	$pdf->Cell( 15,9, "", 'LB', 0, 'C', $fill );
+	$pdf->Cell( 15,9, " ",'LB', 0, 'C', $fill );
+	$pdf->Cell( 15,9, " ",'LB', 0, 'C', $fill );
+	$pdf->Cell( 15,9, " ",'LBR', 0, 'R', $fill );
+	
+	
+
+	/***
+	 Serve the PDF
+	 ***/
+	
+	
+	//START TO PRINT
+	$rpt_name='/rptdailysalesa4.pdf';
+	$output=REPORT_PATH.$rpt_name;
+	@chmod(REPORT_PATH,0777);
+
+    // $pdf->Output();
+	// die;
+
+	// exit;
+	// $pdf->Output('D', $output);
+	// $aa="lp -d $this->printer_name $output";
+	// echo $aa;exit();
+	
+	$pdf->Output($output,'F');
+	$print2ip=$this->arr_h[0]['print2ip'].":631";
+	
+	if($this->print2ip=='LOCAL'){		
+		echo shell_exec("lp -d {$this->printer_name} $output");
+		//echo "lp -d $this->printer_name $output";
+		//echo shell_exec("lp -d ML-2950-Series $output");
+	}else{
+		echo shell_exec("lpr -H {$this->printer_name} $this->print2ip $output");
+	}
+	if(@file_exists($output)){
+		echo shell_exec("rm $output");
+		//@unlink($output);
+	}
+	
+       
+?>

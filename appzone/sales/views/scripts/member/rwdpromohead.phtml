@@ -1,0 +1,91 @@
+    <?php
+    	if(!empty($this->arr_promo)){ 
+    ?>
+     <style type="text/css">  
+			.tableNavRwdPromo
+				{
+					width:100%;
+					background:#333;
+				}
+			.tableNavRwdPromo ul
+				{
+					float:right;
+					width:100%;
+					margin:0;
+					padding:0;
+					border:1px solid #C9C9C9;
+				}
+         
+          .tableNavRwdPromo ul li{
+          		cursor:pointer;
+					list-style-type:none;
+					line-height:40px;
+					font-family:"PSLKittithadaBold","Garuda","Tahoma", "Geneva", "Arial", sans-serif;
+				
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#303030;
+					padding-left:1em;
+					
+					border-bottom:1px solid  #78777C;
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(     #D4D7E0,     #B0B0B0);;
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          ul li.active {
+            cursor:pointer;
+          			list-style-type:none;
+					line-height: 40px;
+					font-family:"PSLKittithadaBold", "Garuda","Helvetica World","Tahoma", "Geneva", "Arial", sans-serif;
+				
+					font-weight: normal;
+					font-size:25px;/*16*/
+					text-decoration:none;
+					color:#ffffff;/*#303030*/
+					padding-left:1em;
+					
+					border-bottom:1px solid  #000;/*78777C*/
+					text-shadow: 0px 1px 0px #dddddd;
+				
+					vertical-align: middle;
+					white-space:nowrap;
+					background:#B2B2B8;
+					background:  -moz-linear-gradient(#9DDCCF,#265541);/*#D4D7E0, #B0B0B0||#777777,#444444*/
+					background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #D4D7E0), color-stop(1, #B0B0B0));
+					-moz-user-select:none;
+					-moz-user-select:-moz-none;/*latest ff*/
+					-webkit-user-select:none;
+          }
+          
+          ul li.nokeyboard {
+            color: #999;
+            background:#0000ff;
+          }
+        </style>
+    <div class="tableNavRwdPromo">
+    	<ul>
+	        <?php 
+	        	$i=1;
+	        	$str_promo="";
+	        	foreach($this->arr_promo as $data){
+	  				$id_tmp="n_".$i;
+	  				$rows_json=json_encode($data);
+		  			echo "<li id='$id_tmp' name='$id_tmp'  idpromo='".$rows_json."'>".$data['promo_code']."&nbsp;&nbsp;".$data['promo_des']."</li>";  
+	  				$i++;
+	  			}//foreach
+	        ?>
+	    </ul>
+     </div>
+     <?php 
+    	}else{
+    		echo "<p align='center'>ไม่พบข้อมูล</p>";
+    	}
+     ?>

@@ -1,0 +1,39 @@
+<script>
+$(function() {	
+	getdifcheck();
+});
+</script>
+<div id="view_productcheckdif" title="รายการสินค้า"></div>
+<div id="view_orderby" title="รายงานสินค้าขาด/เกิน"></div>
+<div id="view_password" title="Password"></div>
+<div id="dialog_process" title="Process"></div>
+<?php 
+$json_doc_no=$this->jsondata;
+$doc_no=json_decode($json_doc_no,true);
+
+echo "
+<table width='100%' border='0'>
+	<tr>
+		<td class='sub_text_head'>สอบถาม ยอด ขาดเกิน</td>
+		<td align='right' width='35%'>
+		เอกสาร : 
+		<select id='doc_no' onChange='return getdifcheck();'>
+		";
+			foreach($doc_no as $val_doc_no){
+				echo "<option value='".$val_doc_no['doc_no']."'>".$val_doc_no['doc_no']."</option>";
+			}
+		echo "
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<td colspan='2'><hr size='1'></td>
+	</tr>
+	<tr>
+		<td colspan='2'><div id='view_difcheck'></div></td>
+	</tr>
+</table>
+
+";
+?>
+<?php

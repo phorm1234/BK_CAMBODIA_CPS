@@ -1,0 +1,169 @@
+<?php 		
+	if(isset($this->arr_data) && count(@$this->arr_data['data'])>0){
+		if($this->arr_data['action']=='brows_product'){			
+			echo "
+			<div class='ui-widget'>
+			    <label for='auto_product_id'><span style='color:#000000'>รหัสสินค้า:</span> </label>
+			    <input id='auto_product_id' size='15' class='ui-corner-all input-text-pos'/>
+			</div>";
+			/*
+			echo "<table width='100%' border='0' cellpadding='2' cellspacing='1' bgcolor='#e7e7e7' style='font-size:11px;'>
+			  <tr height='25' bgcolor='#666666'>
+			    <th><span style='color:#ffffff;'>รหัส</span></th>
+			    <th><span style='color:#ffffff;'>รายละเอียด</span></th>
+			    <th><span style='color:#ffffff;'>ราคา</span></th>
+			    <th><span style='color:#ffffff;'>ประเภทสินค้า</span></th>    
+			    <th><span style='color:#ffffff;'>Action</span></th>
+			  </tr>";
+			$i=0;
+  			foreach($this->arr_data['data'] as $data){
+  				($i%2==0)?$bg_color='#ffffff':$bg_color='f4f4f4';//bgcolor='$bg_color'
+	  			echo "<tr bgcolor='$bg_color'>  	
+					    <td align='center'>".$data['product_id']."</td>
+					    <td align='left'>&nbsp;".$data['name_product']."</td>
+					    <td align='center'>".$data['price']."</td>
+					    <td align='center'>".$data['product_status']."</td>
+					    <td align='center'>
+					    	 <button idd='".$data['product_id']."' class=\"btn_sel ui-button-size-small  ui-widget ui-state-default ui-corner-all\"><!--ui-button-text-only-->
+							   <span class=\"ui-button-text\">เลือก</span>
+							</button>
+					    </td>
+					  </tr>";  	
+	  			$i++;		
+  			}//foreach
+  			echo "</table>";
+  			*/
+		}//if
+		
+		if($this->arr_data['action']=='brows_docstatus'){			
+			echo "
+			<table width='100%' border='0' cellpadding='2' cellspacing='1' bgcolor='#e7e7e7'>
+			  <tr height='25' bgcolor='#5FB0CD'>
+			    <th><span style='color:#ffffff;'>รหัส</span></th>
+			    <th><span style='color:#ffffff;'>รายละเอียด</span></th>		    
+			    <th><span style='color:#ffffff;'>Action</span></th>
+			  </tr>";
+			$i=0;
+  			foreach($this->arr_data['data'] as $status_no=>$description){
+  				($i%2==0)?$bg_color='#ffffff':$bg_color='f4f4f4';
+  				$p_tmp=$status_no."-".$description;
+	  			echo "<tr bgcolor='$bg_color'>  	
+					    <td align='center'><span style='color:#000000;'>".$status_no."</span></td>
+					    <td align='left'>&nbsp;<span style='color:#000000;'>".$description."</span></td>
+					    <td align='center'>					    
+						    <button idd='".$p_tmp."' class=\"btn_sel ui-button-size-small  ui-widget ui-state-default ui-corner-all\"><!--ui-button-text-only-->
+							   <span class=\"ui-button-text\">เลือก</span>
+							</button>
+					    </td>
+					  </tr>";  	
+	  			$i++;		
+  			}//foreach
+  			echo "</table>";
+		}//if
+		
+		if($this->arr_data['action']=='brows_promo'){	
+			echo "
+			<style type='text/css'>
+				.row_{
+					font-family:Verdana, Geneva, sans-serif;
+					font-size:11px;
+					color:#333;
+					background:#FFF url('/sales/img/icons/bg_title01.gif');
+					text-align:left;
+				}
+				.row-highlight_{
+					font-family:Verdana, Geneva, sans-serif;
+					font-size:11px;
+					color:#333;		
+					/*background:#FFF url('/sales/img/icons/bg_title02.png');*/
+					/*background:#FFF url('/sales/img/icons/bg-green.gif');*/
+					background:#FFF url('/sales/img/icons/bar_bg.png');
+					/*background-color:#ff0000;*/
+					border:1pt solid#ff0000;
+					text-align:left;
+					color:#0000ff;
+				}
+				
+				.row-highlight_2{
+					font-family:Verdana, Geneva, sans-serif;
+					font-size:11px;
+					color:#333;		
+					/*background:#FFF url('/sales/img/icons/bg_title02.png');*/
+					background:#FFF url('/sales/img/icons/bg-green.gif');
+					/*background:#FFF url('/sales/img/icons/bar_bg.png');*/
+					/*background-color:#ff0000;*/
+					border:1pt solid#ff0000;
+					text-align:left;
+					color:#0000ff;
+				}
+				.btn_nav_arrow{
+					border:0;
+					background:transparent;
+				}
+			</style>
+			<div class='nav_arrow'>
+			<table  width='100%' border='0' cellpadding='2' cellspacing='1' bgcolor='#e7e7e7'  style='font-size:11px;'>
+			  <thead>
+				<tr height='25' bgcolor='#666666'>
+			    <th><span style='color:#ffffff;'>รหัส</span></th>
+			    <th><span style='color:#ffffff;'>รายละเอียด</span></th>		    
+			    <th><span style='color:#ffffff;'>Action</span></th>
+			  </tr>
+			  </thead>
+			  <tbody>";
+				$i=1;
+  				($i%2==0)?$bg_color='#ffffff':$bg_color='#f4f4f4';
+  				
+  				foreach($this->arr_data['data'] as $row){
+  					$p_tmp=$row['promo_code']."#".$row['promo_tp']."#".$row['promo_des'];
+  					
+		  			echo "<tr class='row_' id='row_$i'  onmouseover=\"this.className='row-highlight_'; current_row=1\" onmouseout=\"this.className='row_'\">  	
+						    <td align='center'>".$row['promo_code']."</td>
+						    <td align='left' style='width:310px;'>&nbsp;<button id='row_x$i' class='btn_nav_arrow' iddx='".$p_tmp."' style='width:300px;'>".$row['promo_des']."</button></td>
+						    <td align='center' class='activation'>					    
+							    <button idd='".$p_tmp."' class=\"btn_sel ui-button-size-small  ui-widget ui-state-default ui-corner-all\"><!--ui-button-text-only-->
+								   <span class=\"ui-button-text\">เลือก</span>
+								</button>
+						    </td>
+						  </tr>";  	
+		  			$i++;		
+  				}	  			
+  			
+  			echo "</tbody></table></div>";    			
+		}//if
+		
+		if($this->arr_data['action']=='brows_paid'){	
+			echo "
+			<table width='100%' border='0' cellpadding='2' cellspacing='1' bgcolor='#e7e7e7' class='navigateable' style='font-size:11px;'>
+			  <thead>
+				<tr height='25' bgcolor='#666666'>
+			    <th><span style='color:#ffffff;'>รหัส</span></th>
+			    <th><span style='color:#ffffff;'>รายละเอียด</span></th>		    
+			    <th><span style='color:#ffffff;'>Action</span></th>
+			  </tr>
+			  </thead>
+			  <tbody>";
+				$i=0;
+  				($i%2==0)?$bg_color='#ffffff':$bg_color='#f4f4f4';
+  				foreach($this->arr_data['data'] as $row){
+  					$p_tmp=$row['paid']."-".$row['description'];
+  					
+		  			echo "<tr background='/sales/img/icons/bg_title01.gif'>  	
+						    <td align='center'>".$row['paid']."</td>
+						    <td align='left'>&nbsp;".$row['description']."</td>
+						    <td align='center' class='activation'>					    
+							    <button idd='".$p_tmp."' class=\"btn_sel ui-button-size-small  ui-widget ui-state-default ui-corner-all\"><!--ui-button-text-only-->
+								   <span class=\"ui-button-text\">เลือก</span>
+								</button>
+						    </td>			    
+						  </tr>";  	
+  				}
+	  			$i++;
+  			echo "</tbody></table>";  
+		}//if
+		
+	 }else{
+	 	echo "<p><br/></p><p align='center'>ไม่พบรายการ</p>";
+	 } 
+?>
+

@@ -1,0 +1,63 @@
+<?php
+//@header("Content-type:text/html; charset=utf=8");
+include(FPDF_PATH."/fpdf.php");
+$pdf=new FPDF('P','mm','a23');
+$pdf->SetThaiFont();
+$pdf->SetMargins( 0,10,0 );  // ซ้าย , บน , ขวา
+$pdf->AddPage();
+$pdf->Image('/var/www/pos/htdocs/report/img/logo/op/op-logo.gif',8 ,0,0);
+$pdf->SetFont('CordiaNew','',12);
+//$title1=iconv('UTF-8','cp874',"สรุปการชำระเงินจากลูกค้า");
+$line="------------------------------------------";
+$pdf->Cell(0,6,iconv('UTF-8','cp874','รายงาน Commission'),0,1,'L');
+//$pdf->Ln(7);
+$pdf->Cell(0,6,iconv('UTF-8','cp874',"ประจำวันที่  ".$this->s_date." - ".$this->e_date),0,1,'L');
+//$pdf->Ln(7);
+$pdf->Cell( 50  , 6 , iconv( 'UTF-8','cp874' ,'วันที่พิมพ์เอกสาร '.$this->print_time ),0,0,'L');
+$pdf->Cell( 30  , 6 , iconv( 'UTF-8','cp874' ,$this->ptime ),0,1,'L');
+$pdf->Cell( 40  , 6 , iconv( 'UTF-8','cp874' ,'เงื่อนไข '.$this->dayfrom.' - '.$this->tofrom ),0,1,'L');
+//$pdf->Ln(7);
+$pdf->Cell(0,6,iconv('UTF-8','cp874','จุดขาย : '.$this->branch_id.' '.$this->branch_name ));
+$pdf->Ln(7);
+$a = 19;
+$y = 6;
+$pdf->Cell( 1  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+$pdf->Cell( 15  , $y , iconv( 'UTF-8','cp874' , 'วันที่' ) , 1 , 0 ,'C');
+$pdf->Cell( $a  , $y , iconv( 'UTF-8','cp874' , 'ยอดขาย' ) , 1 , 0 ,'C');
+$pdf->Cell( 15  , $y , iconv( 'UTF-8','cp874' , 'ส่วนลด' ) , 1 , 0 ,'C');
+$pdf->Cell( $a  , $y , iconv( 'UTF-8','cp874' , 'ยอดขายสุทธิ' ) , 1 , 1 ,'C');
+foreach($this->getcomm_data as $comm){ 
+  	$sum_amount+=$comm['sum(`amount`)']; 
+  	$sum_discount+=$comm['discount'];
+  	$sum_net_amt+=$comm['sum(`net_amt`)'];
+  	$pdf->Cell( 1  , $y , iconv( 'UTF-8','cp874' , ' ') , 0 , 0 );
+	$pdf->Cell( 15  , $y , iconv( 'UTF-8','cp874' , $comm['doc_date'] ) , 1 , 0 ,'C');
+	$pdf->Cell( $a  , $y , iconv( 'UTF-8','cp874' , number_format($comm['sum(`amount`)'], 2, '.', ',') ) , 1 , 0 ,'R');
+	$pdf->Cell( 15  , $y , iconv( 'UTF-8','cp874' , number_format($comm['discount'], 2, '.', ',') ) , 1 , 0 ,'R');
+	$pdf->Cell( $a  , $y , iconv( 'UTF-8','cp874' , number_format($comm['sum(`net_amt`)'], 2, '.', ',') ) , 1 , 1 ,'R');  	
+}
+$pdf->Cell( 1  , $y );
+$pdf->Cell( 15  , $y ,   iconv( 'UTF-8','cp874' , 'รวม '), 1 , 0 ,'C');
+$pdf->Cell( $a  , $y , number_format($sum_amount, 2, '.', ',') , 1 , 0 ,'R');
+$pdf->Cell( 15  , $y , number_format($sum_discount, 2, '.', ',') , 1 , 0 ,'R');
+$pdf->Cell( $a  , $y ,  number_format($sum_net_amt, 2, '.', ',') , 1 , 1 ,'R');
+$pdf->Ln(5);
+$pdf->Cell(30  , 10 , iconv( 'UTF-8','cp874' , 'ชื่อ - นามสกุล ') , 0 , 1 ,'L');
+$pdf->Cell(30,10,'1. '.$line , 0 , 1 );
+$pdf->Cell(30,10,'2. '.$line , 0 , 1 );
+$pdf->Cell(30,10,'3. '.$line , 0 , 1 );
+$pdf->Cell(30,10,'4. '.$line , 0 , 1 );
+$pdf->Cell( 50  , 15 ,iconv( 'UTF-8','cp874' ,'ลายเซ็นต์พนักงาน  (                                   )'), 0 , 1 ,'L');
+$pdf->Ln(20);	
+$pdf->Cell( 0  , 4 , iconv( 'UTF-8','cp874' , '.' ) , 0 , 0 );
+$name='printcomm.pdf';
+$output="/var/www/pos/htdocs/report/printreport/".$name;
+//$pdf->Output($output,'F');
+@chmod($output,7777); 
+if(@file_exists($output)){
+	 shell_exec("rm $output");
+	@unlink($output);
+}
+$pdf->Output($output,'F'); 
+shell_exec("lp -o media=Letter $output");
+?>

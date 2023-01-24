@@ -1,0 +1,102 @@
+<style type="text/css">
+<!--
+	.ord_text_box_disble{
+			background:transparent;
+			width:200px !important;
+			border-top:0;
+			border-left:0;
+			border-right:0;
+			border-bottom:1pt solid#999 !important;
+			color:#000;
+		}
+	.ord_text_box_summary_disble{
+		background:transparent;
+		width:100px !important;
+		border-top:0;
+		border-left:0;
+		border-right:0;
+		border-bottom:1pt solid#999 !important;
+		color:#000;
+	}
+	.ord_text_box_summary_disble{
+		text-align:right;
+	}
+-->
+</style>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+<tr>
+<td>
+<table width="100%" border="0" cellspacing="0" cellpadding="2"  style="background:#F3FDF9 url(/stock/img/bg_header.gif) repeat-x;">
+	<tr bgcolor="#B9E7CF" height="40">
+		<td colspan="4">&nbsp;
+		<img src="http://localhost/sales/img/icon_bag_32x32.png" align="absmiddle"/>
+		&nbsp;<span style='font-size:24px;color:#454545;'>กำหนดสต๊อกสินค้าสำหรับใบสั่งซื้อ(Order Ecommerce)</span></td>		
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td  align="right"><span style='font-size:24px;color:#454545;'>วันที่เอกสาร :</span> <span style='font-size:23px;color:#000000;'><?php echo $this->doc_date_show;?>&nbsp;</span></td>
+	</tr>
+	<tr height="10">
+		<td colspan="8" align="right"><span style='font-size:11px;color:#000000;'>&nbsp;</span></td>
+	</tr>
+
+	
+	<tr height="32">
+		<td width="10%" align="right">รหัสสินค้า&nbsp;:</td>
+		<td width="10%">
+			<input type="text" id="product_id" id="product_id" size="20" class="input-text-pos"   />			
+		</td>
+		<td width="10%" align="right">จำนวน&nbsp;:</td>
+		<td width="5%">
+			<input type="text" id="quantity" name="quantity" size="2" class="input-text-pos" ></input>
+		</td>
+		
+		<td width="5%">
+			<a href="#" name="btn_stk_submit" id="btn_stk_submit" class='btnGrayClean'>บันทึก</a>
+		</td>
+		<td align="center" width="3%">&nbsp;</td>	
+		<td>&nbsp;</td>
+		
+		<td width="35%">&nbsp;</td>
+	</tr>
+	
+</table>
+<input type="hidden" id="ord_cashier_id" value="<?php echo $this->session_employee_id;?>"></input>
+</td>
+</tr>
+<tr>
+<td>
+<table id="tbl_ord"></table>
+<table width="100%" border="0" cellpadding="0" cellspacing="2" bgcolor="#FFFFFF">
+	<tr height="30">
+		<td width="">&nbsp;</td>
+		<td width="10%" align="right">จำนวน&nbsp;</td>
+		<td width="10%"><input type="text" size="10" id="ord_sum_quantity" class="ord_text_box_disble  ord_text_box_summary_disble"/ readonly></td>
+		<td width="7%">&nbsp;ชิ้น</td>			
+	</tr>
+	
+</table>
+</td>
+</tr>
+<tr>
+<td>
+<table width="100%" height="80" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+	<tr>
+		<td>&nbsp;</td>
+		<td width="5%">
+			<a href="#" name="btn_stk_submit" id="btn_stk_submit" class='btnGrayClean'>บันทึก</a>
+		</td>
+		<td width="1%">&nbsp;</td>
+		<td width="5%">
+			<a href="#" name="btn_stk_cancel" id="btn_stk_cancel" class='btnGrayClean'>ยกเลิก</a>
+		</td>
+		<td width="10%">&nbsp;</td>
+	</tr>
+</table>
+</td>
+</tr>
+</table>
+<input type="hidden" name="csh_user_id" id="csh_user_id" value="<?php echo $this->session_employee_id;?>"></input>
+<input type="hidden" name="csh_cashier_id" id="csh_cashier_id" value="<?php echo $this->session_employee_id;?>"></input>
+<input type="hidden" name="csh_saleman_id" id="csh_saleman_id" value=""></input>
+<script type="text/javascript" src="/sales/js/ecommerce/adjuststockecom.js"></script>

@@ -1,0 +1,74 @@
+#popup_container {
+	font-family:PSLKittithadaBold,Arial, sans-serif;
+	font-size: 120%;
+	min-width: 300px; /* Dialog will be no smaller than this */
+	max-width: 600px; /* Dialog will wrap after this width */
+	background: #FFF;
+	/*border: solid 5px #999;*/
+	border: solid 5px #336666;/*bbb 003147*/
+	color: #000;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#popup_title {
+	font-size:110%;
+	font-weight: normal;
+	text-align: left;/*default center*/
+	line-height: 1.75em;
+	color:#fff;
+	/*background:#0b93d5;*/
+	background: #fff url(/sales/img/op/acor_hd_op_active_green.png) top repeat-x;
+	border: solid 1px #fff;
+	/*border-bottom: solid 1px #999;*/
+	cursor: default;
+	padding:0.05em;/*0.5em*/
+	padding-left:10px;
+	/*padding-left:30px;*/
+	margin: 0em;
+}
+
+h1#popup_title{
+	line-height: 1.89em;
+}
+
+#popup_content {
+	background: 16px 16px no-repeat url(images/info.gif);
+	padding: 1em 1.75em;
+	margin: 0em;
+}
+
+#popup_content.alert {
+	background-image: url(/sales/img/icon_attention_48x48.png);
+}
+
+#popup_content.confirm {
+	background-image: url(/sales/img/icon_attention_48x48.png);
+}
+
+#popup_content.prompt {
+	background-image: url(/sales/img/icon_help_32x32.png);
+}
+
+#popup_message {
+	padding-left: 48px;
+}
+
+#popup_panel {
+	text-align: center;
+	margin: 1em 0em 0em 1em;
+}
+
+#popup_prompt {
+	margin: .5em 0em;
+}
+
+#popup_ok{
+	font-family:PSLKittithadaBold,Arial, sans-serif;
+	font-size: 90%;
+}
+#popup_cancel{
+	font-family:PSLKittithadaBold,Arial, sans-serif;
+	font-size: 90%;
+}

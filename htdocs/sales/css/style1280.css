@@ -1,0 +1,1349 @@
+/*
+	main color code #b9a3e3
+	main color dark #a091ba
+	main color light #cabee0
+	
+*/
+
+.top-sale-screen{
+	box-shadow: 0px 1px 0px 0px rgb(239, 220, 251) inset; 
+	background: #b9a3e3 linear-gradient(to bottom, #a091ba 10%, #b9a3e3 100%) repeat scroll 0% 0%; 
+	border: 1px solid rgb(197, 132, 243); 
+	text-decoration: none; 
+}
+
+#sub-total{
+	float:left;
+	margin-left:5px;
+	height:145px;
+	width:47%;
+	margin-top:2px;/*2*/
+	margin-bottom:3px;
+	
+	box-shadow: 0px 1px 0px 0px rgb(239, 220, 251) inset; 
+	background: #b9a3e3 linear-gradient(to bottom, #a091ba 10%, #b9a3e3 100%) repeat scroll 0% 0%; 
+	border: 1px solid rgb(197, 132, 243); 
+	text-decoration: none; 
+}
+
+#sub-other{
+	float:left;
+	width:51.58%;/*52   =>10/04/2013 51.58 for support 7449 screen*/
+	height:145px;/*145,140*/
+	margin-top:2px;
+	text-align:center;
+	/* background:#111 url(/sales/img/base-bottom.png) repeat-x 0 0; */
+	box-shadow: 0px 1px 0px 0px rgb(239, 220, 251) inset; 
+	background: #b9a3e3 linear-gradient(to bottom, #a091ba 1%, #efefef 100%) repeat scroll 0% 0%; 
+	border: 1px solid rgb(197, 132, 243); 
+	text-decoration: none; 
+}
+
+.button {
+    background: rgba(0, 0, 0, 0) -moz-linear-gradient(center top , #3e779d, #65a9d7) repeat scroll 0 0;
+    border-radius: 8px;
+    border-top: 1px solid #96d1f8;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 1);
+    color: white;
+    font-family: Georgia,serif;
+    font-size: 14px;
+    padding: 5px 10px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+    vertical-align: middle;
+}
+
+html, body, div, span, object,
+form, input, h1, h2, button, label, a, img {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  /* this will work for QtWebKit in future */
+  -webkit-user-drag: none;
+}
+body,html{
+		margin:0;
+		overflow:none;
+		margin:0; padding:0; width:100%; height:100%
+		/* -moz-user-select: none; */
+		background:#ffffff;
+	}
+	body,th,td
+	{ 
+		font:105% PSLKittithadaBold,Garuda,ms sans serif,tahoma;/*!important;95%*/
+		color:#333333; 
+		font-weight: bold;
+	}
+	
+	.date_time {
+		font-family:PSLKittithadaBold,Garuda,Geneva, Arial, Helvetica, sans-serif;
+		font-size: 16px;
+		font-weight: bold;
+		color: #1E6B88;
+	}
+	
+	.btnBwsIdCard{
+		height:32px;!important;/*29 27*/
+	    width:32px;!important;/*42*/
+		vertical-align: middle;
+  		background:url(/sales/img/icon_bws_icard_32x32.png) !important;
+		display:table-cell;
+		vertical-align:middle;
+		padding-top:-2px;
+		margin-left:5px;
+		border:none;
+	}
+
+	/*WR11052011*/
+	.input-text-enable{
+		color:#333333;
+		font:120% PSLKittithadaBold,Garuda,ms sans serif,Tahoma !important;
+	    box-shadow: inset 3px 10px 10px -10px #aaaaaa;
+		background:#f5f5f5;
+		border:1pt solid #837f8c;
+		padding:0px 5px;
+		height:30px !important;
+	}
+
+	.label-text-disable{
+		color:#666777;
+		font:120% PSLKittithadaBold,Garuda,ms sans serif,Tahoma !important;
+		background: #b9a3e3 linear-gradient(to bottom, #f5f5f5 10%, #b9a3e3 100%) repeat scroll 0% 0%;
+		border: 1px solid #a091ba; 
+		height:30px !important;
+	}
+	
+	.input-text-enable2{
+		color:#333333;
+		font:120% PSLKittithadaBold,Garuda,ms sans serif,Tahoma !important;/*TH SarabunPSK,*/
+		color:#ffffff;
+		background:#644E4E;/*#644E4E*/
+		border:1pt solid #432F2D;
+		height:35px !important;
+	}
+	
+
+	
+	.label-text-disable2{
+		font:120% PSLKittithadaBold,Garuda,ms sans serif,Tahoma !important;/*TH SarabunPSK,110%*/
+		/*color:#FFF372;*/
+		color:#666777;
+		background: #b9a3e3 linear-gradient(to bottom, #f5f5f5 10%, #b9a3e3 100%) repeat scroll 0% 0%;
+		border: 1px solid #a091ba; 
+		height:30px !important;
+	}
+	.input-text-disable{
+		font:120% PSLKittithadaBold,Garuda,ms sans serif,Tahoma !important;/*TH SarabunPSK,*/
+		color:#FFFFFF;
+		background:#444;/**/
+		border:1pt solid #333;
+		padding:2px 5px 2px;		
+		height:35px !important;
+	}		
+	.input-text-subtotal{
+		font:120% PSLKittithadaBold,Garuda,ms sans serif,Tahoma !important;/*TH SarabunPSK,110%*/
+		color:#666777;
+		background-color:#f5f5f5;
+		box-shadow: inset 3px 10px 10px -10px #aaaaaa;
+		border:1pt solid #a091ba;
+		padding:0px 2px;
+		height:30px !important;
+	}	
+	.input-textarea-pos{
+		color:#333333;
+	    font:100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma;
+	    background:#f5f5f5 url(/sales/img/text-bg.gif) repeat-x 0 0;
+	    border:1px solid #bfbfbf;
+	    padding:0px 5px;
+	}	
+	.input-text-pos{
+		height:35px;
+		color:#333333;
+	    font:100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma;
+	    background:#fff url(/sales/img/text-bg.gif) repeat-x 0 0;
+	    border:1px solid #bfbfbf;
+	    padding:0px 5px;
+	}
+	
+	.input-text-pos-disabled{
+		height:35px;
+		color:#333333;
+	    font:100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma;
+		background:#fff url(/sales/img/bg_disabled_gray02.jpg) repeat-x 0 0;
+	    border:1px solid #bfbfbf;
+	    padding:0px 5px;
+	}
+	
+	.input-text-payment-gifset{
+			color:#333333;
+			font:120% PSLKittithadaBold,Garuda,ms sans serif,Tahoma !important;/*TH SarabunPSK,*/
+			color:#fff;
+			background:#644E4E;
+			border:1pt solid#432F2D;
+			/*padding:0px 5px;*/
+			width:140px !important;
+	
+			padding:2px 5px 2px;		
+			height:35px !important;
+	
+			/*height:30px !important;*/
+			border:0pt solid#ffffff;
+	}
+	
+	.input-text-payment-cash{
+			color:#333333;
+			font:120% PSLKittithadaBold,Garuda,ms sans serif,Tahoma !important;/*TH SarabunPSK,*/
+			color:#fff;
+			background:#644E4E;
+			border:1pt solid#432F2D;
+			/*padding:0px 5px;*/
+			width:215px !important;
+			/*height:30px !important;*/
+			padding:2px 5px 2px;		
+			height:35px !important;
+	
+			border:0pt solid#ffffff;
+	}
+
+	textarea {
+	    color:#333333;
+	    font:100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma;
+	    background:#fff url(/sales/img/text-bg.gif) repeat-x 0 0;
+	    border:1px solid #bfbfbf;
+	    padding:0px 5px;
+	}
+
+	select {
+	    color:#333333;
+	    font:100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma;
+	    background:#fff url(/sales/img/text-bg.gif) repeat-x 0 0;
+	    border:1px solid #bfbfbf;
+	}
+	
+	.ui-dialog-titlebar {font-weight:normal !important}
+	.ui-dialog-titlebar {font-size:22px !important}
+	.ui-dialog-titlebar {padding-top:3px !important}
+	.ui-dialog-titlebar {padding-left:10px !important}
+	.ui-dialog-titlebar {padding-bottom:2px !important} 	
+	 
+	/*WR routine layout*/   
+	table.ui-corner-all{
+		border:1pt solid #cccccc;
+	}	
+	.ui-widget-overlay {
+	    background: #dfdfdf;
+		/*background:transparent*/;
+	    opacity: 0.5;
+	    filter: alpha(opacity = 50);
+	    /*filter: alpha(opacity =100);*/
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	}
+	
+	#box-payment{
+		width:236px;
+		height:50px;
+		border:0pt solid#000;
+		font-family: PSLKittithadaBold,Garuda,ms sans serif,tahoma;
+		font-size:110%;
+		font-weight:bold;
+		color:#000000;	
+	}
+	
+	#container{		
+	  	position:relative;
+	    top:0;
+	    left:0;
+	 	right:0;
+	 	bottom:0;	
+	    width:auto;
+	 	padding:0; margin:0;
+		height:100%;/*550px*/	
+		border:0pt solid #FF0000;
+	 	/* background:url(/sales/img/bg_black02.png); */
+	}	
+	#top-header{
+		positon:absolute;
+		top:0px;
+		width:0;
+		height:2px;
+		/*background:url(/sales/img/bg-top-header.gif) repeat-x;*/
+		/*background:url(/sales/img/bg_black.png) repeat-x;*/
+		padding:0;
+	}	
+	#top-content{
+		position:relative;
+		float:left;
+		padding-top:0px;
+		width:99.5%;
+		height:85px;/*95*/
+		padding:0;
+		padding-bottom:5px;
+		/*background:url(/sales/img/op/bar_top_op_green.png) repeat-x; */
+	}	
+	#center_content{
+		position:relative;
+		float:left;	
+		width:100%;	
+		padding:0px;
+		background:url(/sales/img/op/bg_op_green.png);	
+	}
+	
+	#left_content{
+		float:left;
+		position:relative !important;
+		width:72.2%;/*72.5*/
+		padding:2px;		
+	}
+	
+	#right_content{
+		float:left;
+		position:relative !important;
+		width:27%;
+		padding-left:1px;
+		border:0px solid#ff0000;
+		overflow:hidden;/*resolve by containner of accordion*/
+	}
+	
+	.ui-accordion{
+		width:100%;
+		
+	}
+	.ui-accordion .ui-accordion-content{
+		overflow:hidden !important;
+		border:1pt solid#ccc;
+		height:495px;
+	}		
+		
+	#sub-total-content{
+			position:relative;
+			height:145px;
+			width:100%;
+			margin-top:10px;/*2*/
+		}
+		
+	#other_promotion_title{
+		position:absolute;
+		/*height:38px;*/
+		height:32px;
+		padding-top:6px;		
+		/*background:url(/sales/img/bg_title_black1.jpg);*/
+		width:100%;/*55*/
+		color:#006666;
+		font-size:21px;
+		padding-left:15px;
+		display:table-cell;
+		vertical-align:middle;
+	}
+	
+	#other_promotion_cmd{
+		position:absolute !important;
+		height:32px;
+		padding-top:6px;
+		width:20%;
+		color:#FF0000;
+		font-size:21px;
+		float:right;	   
+	    right:200px;
+		display:table-cell;
+		vertical-align:middle;
+		text-align:center;	
+		border:0pt solid#ff0000;
+	}
+	
+	#box_icon_cmd_info{
+		position:relative !important;	
+		height:32px;
+		padding-top:6px;	
+		/*width:18%;/*20%*/
+		color:#777;
+		font-size:25px;		
+		float:right;		
+		display:table-cell;
+		vertical-align:middle;
+		text-align:center;	
+		border:0pt solid#ff0000;		
+	}
+	
+	/************** button ***************/
+		  
+	.btn_style{
+			border-style: inset;
+	        border-color: #ff6633;
+	        background-color: #CC3300;
+	        text-decoration: none;   
+	        width: 80px;
+	        text-align: center;
+			color: white; 
+            text-decoration: none;   
+            font: bold 12pt Verdana;
+            cursor:pointer;
+	  }
+	  
+	.buttontext{
+			color: white; 
+            text-decoration: none;   
+            font: bold 12pt Verdana;
+            cursor: hand;
+	}
+	
+   .buttonover{
+		color: yellow; 
+        text-decoration: none;
+        font: bold 12pt Verdana;
+        cursor: hand;
+	}
+	 button#btn-payment-bbbb{
+		display: table-cell;
+		vertical-align: middle;
+  		background:transparent url("/sales/img/visa-64.png") no-repeat;
+	}
+		
+	.btn-cmd-brows-2{
+			display:block;
+			display: table-cell;
+			vertical-align: middle;
+	}
+	
+	.btndelete
+       {
+           background: url(/sales/css/flexigrid/images/trash07.png) no-repeat center left;
+       } 
+       
+    .btnSelUp
+       {
+       	   width:16px;
+       	   height:16px;
+           background: url(/sales/img/arrow_up-16*16.png) no-repeat center left;
+       		
+       } 
+       
+    .btnSelDown
+       {
+           background: url(/sales/css/flexigrid/images/load.png) no-repeat center left;
+       		
+       } 
+       
+     /*WR05072011*/
+	ui-widget input,textbox{
+		font:100% PSLKittithadaBold,Garuda,ms sans serif,Tahoma !important;
+		padding:5px;
+	}
+	.tblMemberInfo{
+		border:1pt solid#5CC7DC;
+	 	background:#AFD3F4;
+	 }
+	 
+	 div.inputMemberInfo
+	{
+		scrollbar-3dlight-color:#009900;
+		scrollbar-arrow-color:orange;
+		scrollbar-base-color:#00CC00;
+		scrollbar-darkshadow-color:#009900;
+		scrollbar-face-color:teal;
+		scrollbar-highlight-color:palegreen;
+		scrollbar-shadow-color:#000000;
+		color:#000;
+		height:28px;
+		padding:2px;
+		border:1pt solid#aaa;/*454651*/
+		background:#D9DBDC;/*#292a30*/		
+		overflow: auto;
+	} 
+	
+	div.inputMemberInfoBox
+	{
+		scrollbar-3dlight-color:#009900;
+		scrollbar-arrow-color:orange;
+		scrollbar-base-color:#00CC00;
+		scrollbar-darkshadow-color:#009900;
+		scrollbar-face-color:teal;
+		scrollbar-highlight-color:palegreen;
+		scrollbar-shadow-color:#000000;
+		color:#000;
+		height:100px;
+		padding:2px;
+		border:1pt solid#bbb;/*454651*/
+		background:#ddd;/*#292a30*/		
+		overflow: auto;
+	} 
+	
+	div.inputMemberInfoBox2
+	{
+		scrollbar-3dlight-color:#009900;
+		scrollbar-arrow-color:orange;
+		scrollbar-base-color:#00CC00;
+		scrollbar-darkshadow-color:#009900;
+		scrollbar-face-color:teal;
+		scrollbar-highlight-color:palegreen;
+		scrollbar-shadow-color:#000000;
+		color:#000;
+		height:50px;
+		padding:2px;
+		border:1pt solid#bbb;/*454651*/
+		background:#ddd;/*#292a30*/		
+		overflow: auto;
+	} 
+	
+	.ui-autocomplete.ui-menu
+	{
+	     opacity: 0.8;/*0.4*/
+	     filter: alpha(opacity=40); /* for mozilla */
+	}
+	
+	.wrapinfo{
+		text-align:right;
+		
+		/*#FFF372*/
+		
+		/*background-color:#436C72;*/
+		/* background:url(/sales/img/lbl_disable_green.png); */
+		border: 1px solid #a091ba; 
+		background: #b9a3e3 linear-gradient(to bottom, #f5f5f5 10%, #b9a3e3 100%) repeat scroll 0% 0%; 
+		font-weight: normal; 
+		color: #666777; 
+		
+		height:28px;
+		padding:2px;
+	}
+	
+	.wrapinfo_items{
+		box-shadow: inset 3px 10px 10px -10px #aaaaaa;
+		text-align:left;
+		font-weight:normal;
+		height:28px;
+		padding:2px 3px;
+		overflow:auto;
+		border: 1px solid #a091ba; 
+		background: #f5f5f5; 
+		font-weight: normal; 
+		color: #666777; 
+	}
+	.wrapinfo_items2{
+			text-align:left;
+			border: 1px solid #a091ba; 
+			background: #f5f5f5; 
+			font-weight: normal; 
+			color: #666777; 
+			font-weight:normal;
+			height:70px;
+			padding:2px 3px;
+			overflow:auto;
+			box-shadow: inset 3px 10px 10px -10px #aaaaaa;
+		}
+	.wrapinfo_items3{
+			text-align:left;
+			border: 1px solid #a091ba; 
+			color: #666777; 
+			font-weight:normal;
+			background: #f5f5f5; 
+			height:100px;
+			padding:2px 3px;
+			overflow:auto;
+			box-shadow: inset 3px 10px 10px -10px #aaaaaa;
+		}
+		
+	/*for button in accordion*/
+	.ui-button .ui-icon.btn_payment_confirm {
+	    background-image:url(/sales/img/confirm-32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;/*10px 0 2em -16px;*/
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+	}
+	
+	.ui-button-text-icon-primary .ui-button-text {
+	    display: block;
+	    position: static;
+		width:82px;
+		border:0pt solid#0000ff;
+	    padding: 40px 10px 5px 10px;/*50px 10px 5px 10*/
+		font-size:150% PSLKittithadaBold,TH SarabunPSK,ms san serif,tahoma !important;
+	}
+	
+	.ui-button .ui-icon.btn_payment_cancel {
+	    background-image:url(/sales/img/cancel-32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+	}	
+	
+	.ui-button .ui-icon.btn_payment_alipay {
+	    background-image:url(/sales/img/alipay_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+	}
+	
+	.ui-button .ui-icon.btn_payment_kalipay {
+	    background-image:url(/sales/img/alipay_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+	}
+	
+	.ui-button .ui-icon.btn_payment_mobilepayment {
+	    background-image:url(/sales/img/payment_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+	}
+	
+	
+	.ui-button .ui-icon.btn_payment_wechat {
+	    background-image:url(/sales/img/wechat_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+	}
+
+	
+	.ui-button .ui-icon.btn_payment_credit {
+	    background-image:url(/sales/img/credit_cards-32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+	}
+	
+	.ui-button .ui-icon.btn_vat_total {
+	    background-image:url(/sales/img/icon_invoice_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+	}
+	
+.ui-button .ui-icon.btn_key_manual {
+	    background-image:url(/sales/img/icon_doctype_32x32.png) !important;
+		height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+	}
+	
+	.ui-button .ui-icon.btnDelRowSelect{
+		background-image:url(/sales/img/icon_recycle_bin_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	
+	.ui-button .ui-icon.btnCancle{
+		background-image:url(/sales/img/cancel-32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+		border:0pt solid#Ff0000;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+.ui-button .ui-icon.btnCoOperation{
+		background-image:url(/sales/img/icons_coop_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;		
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnCoupon{
+		background-image:url(/sales/img/icon_co-promotion_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;		
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnDocType{
+		background-image:url(/sales/img/icon_doc_file_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnOther{
+		background-image:url(/sales/img/icon_other_promotion_32x32.png) !important;
+	    height: 32px !important;
+	    width: 32px !important;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnClosePageCashier{
+			background-image:url(/sales/img/icon_door_out_32x32.png) !important;
+		    height: 32px !important;
+		    width: 32px !important;
+		    margin: 0px 0 -2em -16px;
+		    text-align: center;
+		    left: 50%;
+		    top: 10px;
+			display:table-cell;
+			vertical-align:middle;
+			padding:0px;
+		}
+		
+	.ui-button .ui-icon.btnContact{
+		background-image:url(/sales/img/icon_telephone_32x32.png) !important;
+	    height: 32px !important;
+	    width: 32px !important;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnReloadPageCashier{
+		background-image:url(/sales/img/icon_repeat_32x32.png) !important;
+	    height: 32px !important;
+	    width: 32px !important;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-icon.btnUp2Pdy{
+		background-image:url(/sales/img/icon_up_32x32.png) !important;
+	    height: 32px !important;
+	    width: 32px !important;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnVT{
+		background-image:url(/sales/img/icon_invoice_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnGreenBag{
+		background-image:url(/sales/img/icon_bag_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnSmsPro{
+		background-image:url(/sales/img/icon_sms_32x32.png) !important;
+	    height: 32px;
+	    width: 32px;
+	    margin: 0px 0 -2em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	
+	.ui-button .btn_cal_promotion{
+	    height:32px;
+	    width:48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .btn_hot_promotion{
+	    height:32px;
+	    width:20%;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .btn_cancel_promotion{
+	    height:32px;
+	    width:20%;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnBrowsProduct{
+		background-image:url(/sales/img/icon_cart_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnSwapCashier{
+		background-image:url(/sales/img/icon_people_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnPaySummary{
+		background-image:url(/sales/img/icon_invoice_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	#btnPaySummary{
+		font-size:16px;
+	}	
+	
+	.ui-button .ui-icon.btnBillDetail{
+		background-image:url(/sales/img/icon_billing_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnAlipayinfo{
+		background-image:url(/sales/img/alipay_32x32.png) !important;
+	   	height: 32px !important;
+	    width: 32px !important;
+	    margin: 0px 0 -6em -16px;
+	    text-align: center;
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	#btnBillDetail{
+		font-size:16px;
+	}
+	
+	.ui-button .ui-icon.btnCheckStock{
+		background-image:url(/sales/img/icon_stock_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	#btnCheckStock{
+		font-size:16px;
+	}
+	
+	
+	.ui-button .ui-icon.btnPromotionData{
+		background-image:url(/sales/img/icon_promo_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	#btnPromotionData{
+		font-size:16px;
+	}
+	
+	.ui-button .ui-icon.btnRegNewCard{
+		background-image:url(/sales/img/icon_back_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	.ui-button .ui-icon.btnMemberData{
+		background-image:url(/sales/img/icon_members_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	#btnMemberData{
+		font-size:16px;
+	}
+	
+	.ui-button .ui-icon.btnProductData{
+		background-image:url(/sales/img/icon_items_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	#btnProductData{
+		font-size:16px;
+	}
+	
+	.ui-button .ui-icon.btnQstPdtOfBill{
+		background-image:url(/sales/img/icon_items_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}
+	
+	#btnQstPdtOfBill{
+		font-size:16px;
+	}
+	.ui-button .ui-icon.btnSelMemberCatalog{
+		background-image:url(/sales/img/icon_stock1_32x32.png) !important;
+	    height: 32px;
+	    width: 48px;
+	    margin: 0px 0 -2em -16px;	   
+	    left: 50%;
+	    top: 10px;
+		display:table-cell;
+		vertical-align:middle;
+		padding:0px;
+	}	
+	/*for button in accordion*/
+	.ui-autocomplete { height:350px; overflow-y: scroll; overflow-x: hidden;}
+	
+	/* Button Gray Clean Icon */
+	a.btnGrayCleanIco{
+		border:#BBB 1px solid;
+		color:#5f5e5e;
+		display:block;
+		/*float:left;*/
+		float:right;
+		padding:2px 8px;
+		margin-right:10px;
+		cursor:pointer;
+		text-decoration:none;
+		font-size:20px;
+	}
+	
+	a:hover.btnGrayCleanIco{text-decoration:none; background:#FFF;}
+	
+	/* Rounded Corners */
+	.rounded, a.btnGrayCleanIco{
+			-webkit-border-radius:6px;
+			-moz-border-radius:6px;
+			border-radius:6px;
+			-khtml-border-radius: 6px;
+	}
+	
+	/* Drop Shadow */
+	.shadow, a.btnGrayCleanIco{
+			-moz-box-shadow: 0px 1px 3px #AAA;
+			-webkit-box-shadow: 0px 1px 3px #AAA;
+			box-shadow: 0px 1px 3px #AAA;
+	}
+	
+	/* Default Grey Gradient */
+	.gradient, a.btnGrayCleanIco{
+			background: #FFF; /* for non-css3 browsers */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DDD)); /* for webkit browsers */
+			background: -moz-linear-gradient(top,  #FFF, #DDD); /* for firefox 3.6+ */
+	}
+	
+	/****************** ONLINE GREEN *************************/
+	a.btnOnlineIco{
+		border:#BBB 1px solid;
+		color:#5f5e5e;
+		display:block;
+		/*float:left;*/
+		float:right;
+		padding:2px 8px;
+		margin-right:10px;
+		cursor:pointer;
+		text-decoration:none;
+		font-size:20px;
+	}
+	
+	a:hover.btnOnlineIco{text-decoration:none; background:#FFF;}
+	
+	/* Rounded Corners */
+	.rounded, a.btnOnlineIco{
+			-webkit-border-radius:6px;
+			-moz-border-radius:6px;
+			border-radius:6px;
+			-khtml-border-radius: 6px;
+	}
+	
+	/* Drop Shadow */
+	.shadow, a.btnOnlineIco{
+			-moz-box-shadow: 0px 1px 3px #AAA;
+			-webkit-box-shadow: 0px 1px 3px #AAA;
+			box-shadow: 0px 1px 3px #AAA;
+	}
+	
+	/* Default Green Gradient */
+	.gradient, a.btnOnlineIco{
+			background: #FFF; /* for non-css3 browsers */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DDD)); /* for webkit browsers */
+			background: -moz-linear-gradient(top,  #FFF, #DDD); /* for firefox 3.6+ */
+	}
+	/**************************** ONLINE GREEN *******************************************/
+	/**************************** OFFLINE RED *********************************************/
+	a.btnOfflineIco{
+			border:#BBB 1px solid;
+			color:#5f5e5e;
+			display:block;
+			/*float:left;*/
+			float:right;
+			padding:2px 8px;
+			margin-right:10px;
+			cursor:pointer;
+			text-decoration:none;
+			font-size:20px;
+		}
+		
+		a:hover.btnOfflineIco{text-decoration:none; background:#FFF;}
+		
+		/* Rounded Corners */
+		.rounded, a.btnOfflineIco{
+				-webkit-border-radius:6px;
+				-moz-border-radius:6px;
+				border-radius:6px;
+				-khtml-border-radius: 6px;
+		}
+	
+	/* Drop Shadow */
+	.shadow, a.btnOfflineIco{
+			-moz-box-shadow: 0px 1px 3px #AAA;
+			-webkit-box-shadow: 0px 1px 3px #AAA;
+			box-shadow: 0px 1px 3px #AAA;
+	}
+	
+	/* Default Green Gradient */
+	.gradient, a.btnOfflineIco{
+			background: #FFF; /* for non-css3 browsers */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DDD)); /* for webkit browsers */
+			background: -moz-linear-gradient(top,  #FFF, #DDD); /* for firefox 3.6+ */
+	}
+	/********************************** OFFLINE RED *************************************/
+	
+	/* Button Gray Clean Command */
+	a.btnGrayCleanCmd{
+			border:#BBB 1px solid;
+			color:#5f5e5e;
+			display:block;
+			float:left;
+			padding:8px 16px;
+			margin-right:10px;
+			cursor:pointer;
+			text-decoration:none;
+		}
+	
+	a:hover.btnGrayCleanCmd{text-decoration:none; background:#FFF;}
+
+	/* Rounded Corners */
+	.rounded, a.btnGrayCleanCmd{
+			-webkit-border-radius:6px;
+			-moz-border-radius:6px;
+			border-radius:6px;
+			-khtml-border-radius: 6px;
+	}
+
+	/* Drop Shadow */
+	.shadow, a.btnGrayCleanCmd{
+			-moz-box-shadow: 0px 1px 3px #AAA;
+			-webkit-box-shadow: 0px 1px 3px #AAA;
+			box-shadow: 0px 1px 3px #AAA;
+	}
+	
+	/* Default Grey Gradient */
+	.gradient, a.btnGrayCleanCmd{
+			background: #FFF; /* for non-css3 browsers */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DDD)); /* for webkit browsers */
+			background: -moz-linear-gradient(top,  #FFF,  #DDD); /* for firefox 3.6+ */
+	}
+	
+	a.btnGrayClean{
+			border:#BBB 1px solid;
+			color:#5f5e5e;
+			display:block;
+			float:left;
+			padding:2px 10px;
+			margin-right:10px;
+			cursor:pointer;
+			text-decoration:none;
+		}
+	a:hover.btnGrayClean{text-decoration:none; background:#FFF;}
+
+	/* Rounded Corners */
+	.rounded, a.btnGrayClean{
+			-webkit-border-radius:6px;
+			-moz-border-radius:6px;
+			border-radius:6px;
+			-khtml-border-radius: 6px;
+	}
+
+	/* Drop Shadow */
+	.shadow, a.btnGrayClean{
+			-moz-box-shadow: 0px 1px 3px #AAA;
+			-webkit-box-shadow: 0px 1px 3px #AAA;
+			box-shadow: 0px 1px 3px #AAA;
+	}
+
+	/* Default Grey Gradient */
+	.gradient, a.btnGrayClean{
+			background: #FFF; /* for non-css3 browsers */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#DDD)); /* for webkit browsers */
+			background: -moz-linear-gradient(top,  #FFF,  #DDD); /* for firefox 3.6+ */
+	}
+	a.btnGrayDisabled{
+			border:#BBB 1px solid;
+			color:#5f5e5e;
+			display:block;
+			float:left;
+			padding:2px 10px;
+			margin-right:10px;
+			cursor:pointer;
+			text-decoration:none;
+		}
+	a:hover.btnGrayDisabled{text-decoration:none; background:#CCC;}
+
+	/* Rounded Corners */
+	.rounded, a.btnGrayDisabled{
+			-webkit-border-radius:6px;
+			-moz-border-radius:6px;
+			border-radius:6px;
+			-khtml-border-radius: 6px;
+	}
+
+	/* Drop Shadow */
+	.shadow, a.btnGrayDisabled{
+			-moz-box-shadow: 0px 1px 3px #AAA;
+			-webkit-box-shadow: 0px 1px 3px #AAA;
+			box-shadow: 0px 1px 3px #AAA;
+	}
+
+	/* Default Grey Gradient */
+	.gradient, a.btnGrayDisabled{
+			background: #FFF; /* for non-css3 browsers */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#CCCCCC', endColorstr='#222222'); /* for IE */
+			background: -webkit-gradient(linear, left top, left bottom, from(#CCC), to(#222)); /* for webkit browsers */
+			background: -moz-linear-gradient(top,  #FFF,  #DDD); /* for firefox 3.6+ */
+	}
+
+/* TEST ACCORDION 05042012*/
+.ui-dialog .ui-dialog-title .ui-icon {
+    float: left;
+    margin-right: 4px;
+	margin-top:3px;
+}
+/*tab promotion items*/
+#tabs-promo-items {
+	border:1px solid #636363; width:99%;
+	background:#F7F7F7 none; padding:0px;
+	margin-left: auto ;
+  	margin-right: auto 
+}
+.ui-tabs-nav{
+	background:#F4F4F4;
+	border-top:0;
+	border-left:0;
+	border-right:0;
+}
+/*form dialog*/
+.dlg_input{
+	font:120% PSLKittithadaBold,Garuda,ms sans serif,tahoma;/*!important;95%*/
+	color:#333333; 
+}
+/*********************************SWAP BUTTON ONLINE OFFLINE *****************/
+.field { width: 100%; float:left; margin: 0 0 20px; }
+.field input { margin: 0 0 0 20px;}
+/* Used for the Switch effect: */
+.cb-enable, .cb-disable, .cb-enable span, .cb-disable span { background: url(/sales/img/switch_button.gif) repeat-x; display: block; float: left; font:70% tahoma;!important; }
+.cb-enable span, .cb-disable span { line-height: 29px; display: block; background-repeat: no-repeat; font-weight: bold;font-size:70%;}
+.cb-enable span { background-position: left -90px; padding: 0 10px;font-size:70%;}
+.cb-disable span { background-position: right -180px;padding: 0 10px;font-size:70%;}
+.cb-disable.selected { background-position: 0 -30px;font-size:70%;}
+.cb-disable.selected span { background-position: right -210px; color:#fff;font-size:70%;}
+.cb-enable.selected { background-position: 0 -60px; }
+.cb-enable.selected span { background-position: left -150px; color:#fff;font-size:70%;}
+.switch label { cursor: pointer; }
+/*********************************TAB PRIVILLAGE ****************************************/
+#tabs-priv {
+	zoom: 1;
+}
+#tabs-priv #tabs-priv-nav {
+	list-style: none;
+	position: relative;
+	padding: 0;
+	margin: 0;
+}
+#tabs-priv #tabs-priv-nav li {
+	position: relative;
+	float: left;
+	margin: 0 3px -2px 0;
+	padding: 0;
+}
+#tabs-priv #tabs-priv-nav li a {
+	display: block;
+	padding: 10px 20px;
+	background: #f0f0f0;
+	border: 2px #ccc solid;
+	border-bottom-color: #ccc;
+	outline: none;
+}
+#tabs-priv #tabs-priv-nav li#tabs-priv-selected a {
+	padding: 10px 20px 12px 20px;
+	background: #fff;
+	border-bottom-style: none;
+}
+#tabs-priv #tabs-priv-nav li#tabs-priv-selected a,
+#tabs-priv #tabs-priv-nav li.ui-state-disabled a,
+#tabs-priv #tabs-priv-nav li.ui-state-processing a {
+	cursor: default;
+}
+#tabs-priv #tabs-priv-nav li a,
+#tabs-priv#tabs-priv-collapsible #tabs-priv-nav li#tabs-priv-selected a {
+	cursor: pointer;
+}
+#tabs-priv #tabs-priv-panel {
+	display: block;
+	clear: both;
+	border: 2px #ccc solid;
+	padding: 10px;
+}
+#tabs-priv #tabs-priv-hide {
+	display: none;
+}
+
+/* Component containers
+----------------------------------*/
+#tabs-priv .ui-tabs-nav li {
+	margin-top: 0.6em;
+	font-size: 80%;
+}
+#tabs-priv .ui-tabs-nav li.ui-tabs-selected {
+	margin-top: 0em;
+	font-size: 100%;
+}
+#tabs-priv #tabs-priv-hide {
+	display: none;
+}

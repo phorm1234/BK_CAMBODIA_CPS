@@ -1,0 +1,13 @@
+<?php 
+	if(!empty($this->arr_member)){
+		
+		$arr_json=array();
+		foreach($this->arr_member as $data){
+			
+			$array_json['value'] = $data[$this->fieldauto];
+			$array_json['label'] = "{$data['name']} {$data['surname']}";
+			$matches[] = $array_json;
+		}
+		echo json_encode($matches);		
+	}
+?>

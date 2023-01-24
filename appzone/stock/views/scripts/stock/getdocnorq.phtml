@@ -1,0 +1,118 @@
+<script>
+$(document).ready( function() {
+	$("#cashier_id").focus();
+});
+jQuery(document).bind('keydown', 'f3',
+function (evt){
+	var doc_no_rq=$("#doc_no_rq").val();
+	tranfer_rq_to(doc_no_rq);
+});
+function tranfer_rq_to(doc_no_rq){
+	var cashier_id=$("#cashier_id").val();
+	if(cashier_id==""){
+		$("#cashier_id").focus();
+		jAlert('กรุณาระบุรหัสพนักงาน!', 'แจ้งเตือน');
+	}else{
+		
+		$.ajax({type: "POST",url: "/stock/stock/checkcashier",data:{cashier_id:cashier_id},success:
+			function(data){
+				if(data=="y"){
+					var txt="ยืนยันการโอนออก!";
+					jConfirm(txt, 'ยืนยันการทำงาน', function(r) {
+						if(r==true){
+
+							//*WR19012017 for rt document
+// 							var n_rt = doc_no_rq.indexOf("RT");
+// 							alert("doc_no_rq => " + doc_no_rq + "n_rt=>" + n_rt);
+// 							if(doc_no_rq>1){
+// 								//print rt
+// 								$.ajax({
+// 									type:'get',
+// 									url:'/sales/report/billrt',
+// 									cache:false,
+// 									data:{
+// 											doc_no:doc_no_rq,
+// 											point_total_today:'0',
+// 											transfer_point:'0',
+// 											expire_transfer_point:'0',
+// 											curr_point:'0',
+// 											balance_point:'0',
+// 											actions:'print',
+// 											rnd:Math.random()
+// 										},
+// 									success:function(){
+// 											return false;
+// 									}
+// 								});
+// 							}else{
+
+// 								$.ajax({type: "POST",url: "/stock/stock/tranferrqto",data:{doc_no_rq:doc_no_rq,cashier_id:cashier_id},success:
+// 									function(data){
+// 										if(data=="y"){
+// 											$( "#dialog_get_docrq" ).dialog( "close" );
+// 											viewproductinventories();
+// 											$.ajax({type: "POST",url: "/stock/stock/printto",data:{doc_no_refer:doc_no_rq},success:
+// 												function(data){
+												
+// 												}
+// 											});
+// 										}else if(data=='t'){
+// 											alert("Fail!");
+// 										}
+// 									}
+// 								});
+								
+// 							}//end if
+							
+							$.ajax({type: "POST",url: "/stock/stock/tranferrqto",data:{doc_no_rq:doc_no_rq,cashier_id:cashier_id},success:
+								function(data){
+									if(data=="y"){
+										$( "#dialog_get_docrq" ).dialog( "close" );
+										viewproductinventories();
+										
+										/*var page="printto?doc_no_refer="+doc_no_rq;
+										window.open(page, '_blank');*/
+										$.ajax({type: "POST",url: "/stock/stock/printto",data:{doc_no_refer:doc_no_rq},success:
+											function(data){
+											
+											}
+										});
+									}else if(data=='t'){
+									}
+								}
+							});
+							
+						}
+					});
+				}else{
+					$("#cashier_id").focus();
+					jAlert('ไม่พบรหัสพนักงาน : '+cashier_id, 'แจ้งเตือน');
+				}
+			}
+		});
+	}
+}
+</script>
+<?php
+$doc_no_rq=$this->doc_no_rq;
+$doc_no_to=$this->doc_no_to;
+?>
+<table width="100%" border="0" cellspacing="5" cellpadding="5">
+  <tr>
+    <td class="servBodL_right">เลขที่เอกสารใบโอนออก : </td>
+    <td align=""left""><?php echo $doc_no_rq;?></td>
+  </tr>
+  <tr>
+    <td class="servBodL_right">เลขที่เอกสารโอนออก : </td>
+    <td align="left"><font color="#0646ca"><?php echo $doc_no_to;?></font></td>
+  </tr>
+  <tr>
+    <td class="servBodL_right">รหัสพนักงาน : </td>
+    <td align="left"><input type="text" name="cashier_id" id="cashier_id" class="NFText"></input></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td align="left"><a class="fg-button ui-state-default fg-button-icon-left ui-corner-all" onClick="return tranfer_rq_to('<?php echo $doc_no_rq;?>');"><span class="ui-icon ui-icon-disk"></span>บันทึก  (F3)</a></td>
+  </tr>
+</table>
+<input type="hidden" name="doc_no_rq" id="doc_no_rq" value="<?php echo $doc_no_rq;?>"></input>

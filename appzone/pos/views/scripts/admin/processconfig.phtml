@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>Ipad simulator</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="/pos/plugin/ipad/style/grid.css" type="text/css" media="screen"/>
+        <link rel="stylesheet" href="/pos/plugin/ipad/style/main.css" type="text/css" media="screen"/>
+        <script type="text/javascript" src="/pos/plugin/jquery-easyui-1.2.5/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="/pos/plugin/ipad/js/cookies.js"></script>
+
+		<script type="text/javascript" src="/pos/plugin/jstree_pre1.0_fix_1/_lib/jquery.cookie.js"></script>
+		<script type="text/javascript" src="/pos/plugin/jstree_pre1.0_fix_1/_lib/jquery.hotkeys.js"></script>
+		<script type="text/javascript" src="/pos/plugin/jstree_pre1.0_fix_1/jquery.jstree.js"></script>
+		<link type="text/css" rel="stylesheet" href="/pos/plugin/jstree_pre1.0_fix_1/_docs/syntax/!style.css"/>
+		<link type="text/css" rel="stylesheet" href="/pos/plugin/jstree_pre1.0_fix_1/_docs/!style.css"/>
+		<script type="text/javascript" src="/pos/plugin/jstree_pre1.0_fix_1/_docs/syntax/!script.js"></script>
+    	<script type="text/javascript" src="/pos/js/processconfig/processconfig.js"></script>
+    
+    
+    </head>
+    <body>
+    <div id="safari">
+        <div id="navbar">
+            <div id="title"> Process Config </div>
+            <div id="back" class="icon">&lt;</div>
+            <div id="forward" class="icon">&gt;</div>
+            <div id="tabs" class="icon">0</div>
+            <div id="bookmarks" class="icon">book</div>
+            <div id="add" class="icon">+</div>
+            <div id="urlCont">
+                <form id="urlgo">
+                    <input type="text" id="url"  placeholder="Process Name"  value=""/>
+                </form>
+                <div id="refresh">R</div>
+                <div id="stop">S</div>
+            </div>
+            <div id="searchCont">
+                <form id="searchgo">
+                    <input type="text" id="search" placeholder="Process Id"  />
+                </form>
+            </div>
+        </div>
+        <div id="tabs_cont">
+            <div id="browser_overlay">
+                <div src="" width="884" height="591" scrolling="no">
+                
+  
+						<div id="description">
+							<div id="mmenu" style="height:30px; overflow:auto;">
+							<input type="button" id="add_folder" value="add folder" style="display:block; float:left;"/>
+							<input type="button" id="add_default" value="add file" style="display:block; float:left;"/>
+							<input type="button" id="rename" value="rename" style="display:block; float:left;"/>
+							<input type="button" id="remove" value="remove" style="display:block; float:left;"/>
+							<input type="button" id="cut" value="cut" style="display:block; float:left;"/>
+							<input type="button" id="copy" value="copy" style="display:block; float:left;"/>
+							<input type="button" id="paste" value="paste" style="display:block; float:left;"/>
+							<input type="button" id="clear_search" value="clear" style="display:block; float:right;"/>
+							<input type="button" id="search" value="search" style="display:block; float:right;"/>
+							<input type="text" id="text" value="" style="display:block; float:right;" />
+							</div>
+							<!-- the tree container (notice NOT an UL node) -->
+							<div id="demo" class="demo" style="height:200px;"></div>
+							<div style="height:30px; text-align:center;">
+							<input type="button" style='width:170px; height:24px; margin:5px auto;' value="reconstruct" onclick="$.get('./server.php?reconstruct', function () { $('#demo').jstree('refresh',-1); });" />
+							<input type="button" style='width:170px; height:24px; margin:5px auto;' id="analyze" value="analyze" onclick="$('#alog').load('./server.php?analyze');" />
+							<input type="button" style='width:170px; height:24px; margin:5px auto;' value="refresh" onclick="$('#demo').jstree('refresh',-1);" />
+							</div>
+						</div>
+						                
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
