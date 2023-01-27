@@ -176,7 +176,7 @@
 			$pdf->SetFont( 'Arial', '', 10 );
 			$pdf->Cell( 10, $ln_h, "-", 1, 0, 'C', $fill );
 			$pdf->Cell( 50, $ln_h, $data_sub['description'], 1, 0, 'L', $fill );
-			$pdf->Cell( 60, $ln_h, $data_sub['amount'], 1, 0, 'R', $fill );
+			$pdf->Cell( 60, $ln_h,number_format($data_sub['amount'],2,".",""), 1, 0, 'R', $fill );
 			$pdf->Ln($ln_h);
 		}
 	}

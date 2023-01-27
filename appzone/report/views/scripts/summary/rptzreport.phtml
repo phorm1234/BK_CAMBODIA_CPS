@@ -190,13 +190,13 @@
         $pdf->Cell(5,$hl1,"",0,0,'L',0);
         $pdf->Cell(29,$hl1,number_format($this->pay_cash,2,".",""),0,0,'R',0);
         
-        $startY+=$l2br;
-        $pdf->SetY($startY);
-        $pdf->SetX($startX);
-        $pdf->Cell(18,$hl1,"CREDIT ",0,0,'L',0);
-        $pdf->Cell(20,$hl1,"",0,0,'L',0);
-        $pdf->Cell(5,$hl1,"",0,0,'L',0);
-        $pdf->Cell(29,$hl1,number_format($this->pay_credit,2,".",""),0,0,'R',0);
+        // $startY+=$l2br;
+        // $pdf->SetY($startY);
+        // $pdf->SetX($startX);
+        // $pdf->Cell(18,$hl1,"CREDIT ",0,0,'L',0);
+        // $pdf->Cell(20,$hl1,"",0,0,'L',0);
+        // $pdf->Cell(5,$hl1,"",0,0,'L',0);
+        // $pdf->Cell(29,$hl1,number_format($this->pay_credit,2,".",""),0,0,'R',0);
 
         if(sizeof($this->other_credit)>0){
             foreach($this->other_credit as $data_sub){
@@ -280,7 +280,7 @@
         $name='/billvatshort.pdf';
 	    $output=REPORT_PATH.$name;    	    
 	    @chmod(REPORT_PATH,0777);
-        // $pdf->Output();
+        $pdf->Output();
         // die;
 
 

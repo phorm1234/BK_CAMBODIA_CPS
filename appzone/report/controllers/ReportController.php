@@ -432,11 +432,11 @@
                         
                         $fday = substr($dayfrom, -2);
                         $fmonth = substr($dayfrom, 5, 2);
-                        $fyear = substr($dayfrom, 0,4)+543;
+                        $fyear = substr($dayfrom, 0,4);
                         
                         $tday = substr($tofrom,-2);
                         $tmonth = substr($tofrom, 5, 2);
-                        $tyear = substr($tofrom, 0,4)+543;
+                        $tyear = substr($tofrom, 0,4);
 
                         $get_othercredit = $obj->getOtherCredit($dayfrom,$tofrom);
                         $this->view->othercredit_data = $get_othercredit;
